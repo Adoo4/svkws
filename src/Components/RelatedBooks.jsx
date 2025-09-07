@@ -39,7 +39,7 @@ export default function BookDetail() {
   const fetchRelatedBooks = (id, category) => {
     axios
       .get(
-        `http://192.168.0.15:5000/api/books/related/${id}?category=${encodeURIComponent(
+        `https://backendsvkwbshp.onrender.com/api/books/related/${id}?category=${encodeURIComponent(
           category
         )}`
       )
