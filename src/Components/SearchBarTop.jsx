@@ -22,9 +22,12 @@ const SearchBarTop = ({ booksCopy, setBooks, books, setCart }) => {
   const [fuse, setFuse] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
    const navigate = useNavigate();
-
+console.log("booksCopy:", booksCopy);
 useEffect(() => {
-  if (!Array.isArray(booksCopy) || booksCopy.length === 0) return;
+  if (!Array.isArray(booksCopy) || booksCopy.length === 0) {
+    console.log("No booksCopy data yet");
+    return;
+  }
 
   const fuseInstance = new Fuse(
     booksCopy.map((b) => ({
@@ -33,22 +36,28 @@ useEffect(() => {
     })),
     { keys: ["title", "author", "isbn", "publisher"], threshold: 0.3 }
   );
+
+  console.log("Fuse instance created with items:", fuseInstance);
   setFuse(fuseInstance);
 }, [booksCopy]);
 
- const handleSearch = (e) => {
+const handleSearch = (e) => {
   const value = e.target.value;
   setQuery(value);
+  console.log("Search query:", value);
 
   if (value.trim() === "") {
     setSuggestions([]);
-    setBooks(booksCopy); // reset to all books when input is empty
+    setBooks(booksCopy);
     return;
   }
 
   if (fuse) {
     const results = fuse.search(value).map((res) => res.item);
-    setSuggestions(results.slice(0, 6)); // only show suggestions
+    console.log("Search results:", results);
+    setSuggestions(results.slice(0, 6));
+  } else {
+    console.log("Fuse not ready yet");
   }
 };
 
