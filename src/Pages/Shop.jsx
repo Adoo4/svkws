@@ -31,12 +31,14 @@ let CategoryMenu = ({ cart, setCart, cartMenu, setCartMenu, wishlist, setWishlis
   const [books, setBooks] = useState([]);
   const [booksCopy, setBooksCopy] = useState([]);
 
-  useEffect(() => {
-    if (fetchedBooks.length > 0) {
-      setBooks(fetchedBooks);
-      setBooksCopy(fetchedBooks);
-    }
-  }, [fetchedBooks]);
+
+
+useEffect(() => {
+  if (fetchedBooks.length > 0) {
+    setBooks(fetchedBooks);
+    setBooksCopy(fetchedBooks);
+  }
+}, [fetchedBooks]);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) return;
@@ -52,11 +54,11 @@ let CategoryMenu = ({ cart, setCart, cartMenu, setCartMenu, wishlist, setWishlis
     <Box sx={{ minHeight: "100lvh", display: "flex", flexDirection: "column", justifyContent: "center", background: "#262626", alignItems: "center" }}>
       <Box sx={{ width: "100%", height: "15lvh", background: "#262626", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <SearchBarTop
-          booksCopy={booksCopy}
-          setBooks={setBooks}
-          books={filteredBooks}
-          setCart={setCart}
-        />
+  booksCopy={booksCopy}
+  setBooks={setBooks}
+  books={filteredBooks}
+  setCart={setCart}
+/>
       </Box>
 
       <Box sx={{ marginTop: "1rem", marginBottom: "1rem", width: "100%", display: "flex", gap: "0.25rem", flexDirection: "row", justifyContent: "center", alignItems: "start" }}>

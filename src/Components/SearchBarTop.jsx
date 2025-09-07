@@ -55,12 +55,11 @@ const handleSearch = (e) => {
   }
 
   if (fuse) {
-    const results = fuse.search(value).map((res) => res.item);
-    console.log("Search results:", results);
-    setSuggestions(results.slice(0, 6));
-  } else {
-    console.log("Fuse not ready yet");
-  }
+  const results = fuse.search(value).map((res) => res.item);
+  setSuggestions(results.slice(0, 6));
+} else {
+  console.log("Fuse not ready yet");
+}
 };
 
   const handleSelect = (book) => {
