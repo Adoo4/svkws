@@ -114,18 +114,19 @@ const handleSearch = (e) => {
         position: "relative",
       }}
     >
-      <div
-        
+      <motion.div
+        whileHover={{ scale: 1.01 }}
         style={{
           flexGrow: 1,
           maxWidth: "900px",
           width: "100%",
+          zIndex:"99999999999"
         }}
       >
         <TextField
           size="small"
           value={query}
-           onChange={(e) => alert(e.target.value)}
+          onChange={handleSearch}
           placeholder="Pretraži knjige, autore, ISBN..."
           fullWidth
           variant="outlined"
@@ -160,7 +161,7 @@ const handleSearch = (e) => {
             ),
           }}
         />
-      </div>
+      </motion.div>
 
       {/* Suggestions dropdown */}
       {suggestions.length > 0 && (
