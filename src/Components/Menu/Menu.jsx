@@ -135,13 +135,13 @@ const kategorije = [
 ];
 
 export default function SelectedListItem({
-  desktop,
+ 
   setFilter,
   filter,
-  filterFunction,
-  setBooks,
-  booksCopy,
-  books,
+ 
+
+ 
+ 
   allBooks
 }) {
   const [selectedIndex, setSelectedIndex] = React.useState(() => {
@@ -174,70 +174,16 @@ export default function SelectedListItem({
 });
 
   // Safe filtering helper
-  const filterBooks = ({ category, subcategory }) => {
-    if (!Array.isArray(booksCopy)) {
-      setBooks([]); // no data yet
-      return;
-    }
-
-    const cat = category?.toString().trim();
-    const sub = subcategory?.toString().trim();
-
-    // reset when category empty or "Sve Knjige"
-    if (!cat || cat.toLowerCase() === "sve knjige".toLowerCase()) {
-      if (!sub) {
-        setBooks(booksCopy);
-        return;
-      }
-      // if only subcategory provided (rare), filter across all books
-      const resBySub = booksCopy.filter(
-        (b) => b.subCategory?.toString().toLowerCase() === sub.toLowerCase()
-      );
-      setBooks(resBySub);
-      return;
-    }
-
-    // filter by category first
-    let updated = booksCopy.filter(
-      (b) => b.mainCategory?.toString().toLowerCase() === cat.toLowerCase()
-    );
-
-    // then by subcategory if provided
-    if (sub) {
-      updated = updated.filter(
-        (b) => b.subCategory?.toString().toLowerCase() === sub.toLowerCase()
-      );
-    }
-
-    setBooks(updated);
-  };
+  
 
 const handleCategoryClick = (kategorija) => {
-  if (!allBooks || !Array.isArray(allBooks)) return; // <-- guard
-
   const selectedCategory = kategorija.naziv;
 
-  const newFilter = {
-    ...filter,
+  setFilter((prev) => ({
+    ...prev,
     bookCategory: selectedCategory === "Sve Knjige" ? "" : selectedCategory,
     bookSubCategory: "",
-  };
-
-  const filteredBooks = allBooks.filter((b) => {
-    if (newFilter.bookCategory && newFilter.bookCategory.toLowerCase() !== "sve knjige") {
-      if (b.mainCategory?.toLowerCase() !== newFilter.bookCategory.toLowerCase()) return false;
-    }
-    if (newFilter.bookSubCategory) {
-      if (b.subCategory?.toLowerCase() !== newFilter.bookSubCategory.toLowerCase()) return false;
-    }
-    if (newFilter.bookLanguage) {
-      if (b.language?.toLowerCase() !== newFilter.bookLanguage.toLowerCase()) return false;
-    }
-    return true;
-  });
-
-  setBooks(filteredBooks);
-  setFilter(newFilter);
+  }));
 
   setSelectedIndex(null);
   toggleOpen(kategorija.naziv);
@@ -245,24 +191,21 @@ const handleCategoryClick = (kategorija) => {
 
 
   // SUBCATEGORY button handler (inside the Collapse grid)
-  const handleSubcategoryClick = (kategorija, pod, index) => {
-    setSelectedIndex(index);
+const handleSubcategoryClick = (kategorija, pod, index) => {
+  setSelectedIndex(index);
 
-    setFilter((prev) => ({
-      ...prev,
-      bookCategory: kategorija.naziv,
-      bookSubCategory: pod,
-    }));
+  setFilter((prev) => ({
+    ...prev,
+    bookCategory: kategorija.naziv,
+    bookSubCategory: pod,
+  }));
 
-    filterBooks({ category: kategorija.naziv, subcategory: pod });
-
-    // ensure category stays open
-    setOpenMap((prev) => ({
-      ...prev,
-      [kategorija.naziv]: true,
-    }));
-  };
-
+  // ensure category stays open
+  setOpenMap((prev) => ({
+    ...prev,
+    [kategorija.naziv]: true,
+  }));
+};
   const toggleOpen = (categoryName) => {
     setOpenMap((prev) => {
       const isOpen = !!prev[categoryName];
@@ -340,27 +283,24 @@ const handleCategoryClick = (kategorija) => {
   }}
   onClick={() => {
     // Reset books
-    setBooks(booksCopy);
-
     // Close all categories
-    const closedMap = {};
-    kategorije.forEach((k) => {
-      closedMap[k.naziv] = false;
-    });
-    setOpenMap(closedMap);
+  const closedMap = {};
+  kategorije.forEach((k) => {
+    closedMap[k.naziv] = false;
+  });
+  setOpenMap(closedMap);
 
-    // Reset selected category/subcategory
-    setSelectedIndex(null);
+  // Reset selected category/subcategory
+  setSelectedIndex(null);
 
-    // Reset filters including language
-    setFilter((prev) => ({
-      ...prev,
-      bookCategory: "",
-      bookSubCategory: "",
-      bookLanguage: "",  // <-- reset language here
-      newBook: false,
-      bookDiscount: false,
-    }));
+  // Reset filters
+  setFilter({
+    bookCategory: "",
+    bookSubCategory: "",
+    bookLanguage: "",
+    newBook: false,
+    bookDiscount: false,
+  });
   }}
 >
   <RestartAltIcon />

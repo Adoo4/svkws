@@ -2,18 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useMemo } from "react";
 
+// useBooks.js
 const useBooks = (filter) => {
-  // React Query fetch
   const { data: allBooks = [], isLoading, isError } = useQuery({
     queryKey: ["books"],
     queryFn: async () => {
-      const res = await axios.get("https://backendsvkwbshp.onrender.com/api/books");
+      const res = await axios.get("http://192.168.0.15:5000/api/books");
       return res.data;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    staleTime: 5 * 60 * 1000,
   });
 
-  // Filtering logic
   const filteredBooks = useMemo(() => {
     if (!Array.isArray(allBooks)) return [];
     return allBooks.filter((b) => {

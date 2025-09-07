@@ -11,10 +11,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
-
 const ProductGallery = ({
-  books, // <-- always the filtered array (from CategoryMenu filters/SearchBar)
-  loading,
+  books = [],         // default to empty array if undefined
+  loading = false,
   toggleDrawer,
   drawerData,
   setDrawerData,
@@ -28,26 +27,29 @@ const ProductGallery = ({
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  // Safe fallback
+  const safeBooks = Array.isArray(books) ? books : [];
+
+  // Reset to page 1 whenever books change
+  React.useEffect(() => {
+    setPage(1);
+  }, [safeBooks]);
+
+  // Pagination applied after filtering
+  const paginatedBooks = useMemo(() => {
+    return safeBooks.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  }, [safeBooks, page]);
+
   const handlePageChange = (event, value) => {
     setPage(value);
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // smooth scrolling effect
+      behavior: "smooth",
     });
   };
 
-  // ✅ reset to page 1 whenever "books" changes (so filter starts from first page)
-  React.useEffect(() => {
-    setPage(1);
-  }, [books]);
-
-  // ✅ pagination applied AFTER filtering (books is already filtered)
-  const paginatedBooks = useMemo(() => {
-    return books.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-  }, [books, page]);
-
   return (
-      <Box
+    <Box
       sx={{
         marginTop: 0,
         minHeight: { xs: "100lvh", md: "100lvh" },
@@ -61,42 +63,44 @@ const ProductGallery = ({
         boxShadow: "1px 0 10px rgba(0, 0, 0, 0.1)",
       }}
     >
-{loading && (
-  <Grid container spacing={2} justifyContent="center">
-    {Array.from({ length: itemsPerPage }).map((_, index) => (
-      <Grid item xs key={index} sx={{ display: "flex" }}>
-        <BookCardSkeleton />
-      </Grid>
-    ))}
-  </Grid>
-)}
+      {/* Loading Skeleton */}
+      {loading && (
+        <Grid container spacing={2} justifyContent="center">
+          {Array.from({ length: itemsPerPage }).map((_, index) => (
+            <Grid item xs key={index} sx={{ display: "flex" }}>
+              <BookCardSkeleton />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
-{!loading && books.length === 0 && (
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "100%",
-      py: 10,
-      color: "gray",
-      textAlign: "center",
-    }}
-  >
-    <SearchIcon fontSize="large" />
-    <Typography variant="h6" fontWeight={500}>
-      U odabranoj kategoriji ne postoje proizvodi
-    </Typography>
-    <Typography variant="body2">
-      Pokušaj promijeniti filter ili pretragu.
-    </Typography>
-  </Box>
-)}
+      {/* Empty State */}
+      {!loading && safeBooks.length === 0 && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            py: 10,
+            color: "gray",
+            textAlign: "center",
+          }}
+        >
+          <SearchIcon fontSize="large" />
+          <Typography variant="h6" fontWeight={500}>
+            U odabranoj kategoriji ne postoje proizvodi
+          </Typography>
+          <Typography variant="body2">
+            Pokušaj promijeniti filter ili pretragu.
+          </Typography>
+        </Box>
+      )}
 
-      {/* Book grid */}
-      {!loading && books.length > 0 && (
+      {/* Book Grid */}
+      {!loading && safeBooks.length > 0 && (
         <Grid
           container
           spacing={{ xs: 0.5, sm: 2, xl: 3 }}
@@ -122,7 +126,7 @@ const ProductGallery = ({
       )}
 
       {/* Pagination */}
-      {!loading && books.length > itemsPerPage && (
+      {!loading && safeBooks.length > itemsPerPage && (
         <Box
           sx={{
             px: 3,
@@ -136,7 +140,7 @@ const ProductGallery = ({
           }}
         >
           <Pagination
-            count={Math.ceil(books.length / itemsPerPage)}
+            count={Math.ceil(safeBooks.length / itemsPerPage)}
             page={page}
             onChange={handlePageChange}
             shape="rounded"
