@@ -96,6 +96,7 @@ useEffect(() => {
               }
             />
              <Route path="/" element={<Navigate to="/home" />} />
+             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
        
       </main>
