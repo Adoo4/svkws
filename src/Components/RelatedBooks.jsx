@@ -37,17 +37,17 @@ export default function BookDetail() {
   }, [id]);
 
   const fetchRelatedBooks = (id, category) => {
-    axios
-      axios.get(
-  `https://backendsvkwbshp.onrender.com/api/books/related/${id}?category=${encodeURIComponent(category)}`,
-  { withCredentials: false }
-)
-.then(res => {
-  setRelatedBooks(res.data);
-  setLoadingRelated(false);
-})
-.catch(err => console.error("Related books fetch error:", err));
-  };
+  axios
+    .get(
+      `https://backendsvkwbshp.onrender.com/api/books/related/${id}?category=${encodeURIComponent(category)}`,
+      { withCredentials: false }
+    )
+    .then((res) => {
+      setRelatedBooks(res.data);
+      setLoadingRelated(false);
+    })
+    .catch((err) => console.error("Related books fetch error:", err));
+};
 
   if (!book) return <Typography>Loading book...</Typography>;
 
