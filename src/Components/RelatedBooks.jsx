@@ -40,8 +40,7 @@ export default function BookDetail() {
   const fetchRelatedBooks = (id, category) => {
   axios
     .get(
-      `https://backendsvkwbshp.onrender.com/api/books/related/${id}?category=${encodeURIComponent(category)}`,
-      { withCredentials: false }
+      `https://backendsvkwbshp.onrender.com/api/books/related/${id}?category=${encodeURIComponent(category)}`
     )
     .then((res) => {
       setRelatedBooks(res.data);
