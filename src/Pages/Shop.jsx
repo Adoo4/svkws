@@ -54,7 +54,7 @@ let CategoryMenu = ({ cart, setCart, cartMenu, setCartMenu, wishlist, setWishlis
         <SearchBarTop
           booksCopy={booksCopy}
           setBooks={setBooks}
-          books={books}
+          books={filteredBooks}
           setCart={setCart}
         />
       </Box>
