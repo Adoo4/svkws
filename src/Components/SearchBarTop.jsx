@@ -125,7 +125,7 @@ const handleSearch = (e) => {
         <TextField
           size="small"
           value={query}
-          onChange={handleSearch}
+           onChange={(e) => alert(e.target.value)}
           placeholder="Pretraži knjige, autore, ISBN..."
           fullWidth
           variant="outlined"
