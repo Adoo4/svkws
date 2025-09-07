@@ -38,7 +38,7 @@ useEffect(() => {
   setBook(null); // reset state
    window.scrollTo(0, 0); // scroll to top
   axios
-    .get(`http://192.168.0.15:5000/api/books/${id}`)
+    .get(`https://backendsvkwbshp.onrender.com/api/books/${id}`)
     .then((res) => {setBook(res.data); setLoading(false)})
     .catch((err) => console.error("Book fetch error:", err));
 }, [id]);

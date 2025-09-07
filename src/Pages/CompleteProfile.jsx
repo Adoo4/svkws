@@ -23,7 +23,7 @@ export default function CompleteProfile() {
     if (!user) return;
 
     try {
-      await axios.put("http://localhost:5000/api/users/update-profile", {
+      await axios.put("https://backendsvkwbshp.onrender.com/api/users/update-profile", {
         userId: user.id,
         form
       });

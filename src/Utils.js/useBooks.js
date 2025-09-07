@@ -7,7 +7,7 @@ const useBooks = (filter) => {
   const { data: allBooks = [], isLoading, isError } = useQuery({
     queryKey: ["books"],
     queryFn: async () => {
-      const res = await axios.get("http://192.168.0.15:5000/api/books");
+      const res = await axios.get("https://backendsvkwbshp.onrender.com/api/books");
       return res.data;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes cache
