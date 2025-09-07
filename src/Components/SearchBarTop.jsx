@@ -115,7 +115,7 @@ const handleSearch = (e) => {
       }}
     >
       <div
-        whileHover={{ scale: 1.01 }}
+        
         style={{
           flexGrow: 1,
           maxWidth: "900px",
