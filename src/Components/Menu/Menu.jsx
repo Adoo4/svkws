@@ -213,16 +213,16 @@ export default function SelectedListItem({
   };
 
 const handleCategoryClick = (kategorija) => {
+  if (!allBooks || !Array.isArray(allBooks)) return; // <-- guard
+
   const selectedCategory = kategorija.naziv;
 
-  // merge with existing filter
   const newFilter = {
     ...filter,
     bookCategory: selectedCategory === "Sve Knjige" ? "" : selectedCategory,
     bookSubCategory: "",
   };
 
-  // filter immediately
   const filteredBooks = allBooks.filter((b) => {
     if (newFilter.bookCategory && newFilter.bookCategory.toLowerCase() !== "sve knjige") {
       if (b.mainCategory?.toLowerCase() !== newFilter.bookCategory.toLowerCase()) return false;
@@ -239,10 +239,10 @@ const handleCategoryClick = (kategorija) => {
   setBooks(filteredBooks);
   setFilter(newFilter);
 
-  // reset UI states
   setSelectedIndex(null);
   toggleOpen(kategorija.naziv);
 };
+
 
   // SUBCATEGORY button handler (inside the Collapse grid)
   const handleSubcategoryClick = (kategorija, pod, index) => {

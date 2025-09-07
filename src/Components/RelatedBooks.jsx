@@ -27,7 +27,8 @@ export default function BookDetail() {
   useEffect(() => {
     // Fetch the main book
     axios
-      .get(`https://backendsvkwbshp.onrender.com/api/books/${id}`)
+      .get(`https://backendsvkwbshp.onrender.com/api/books/
+        ${id}`)
       .then((res) => {
         setBook(res.data);
         // After fetching the main book, fetch related books
