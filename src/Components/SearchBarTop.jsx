@@ -114,7 +114,7 @@ const handleSearch = (e) => {
         position: "relative",
       }}
     >
-      <motion.div
+      <div
         whileHover={{ scale: 1.01 }}
         style={{
           flexGrow: 1,
@@ -160,7 +160,7 @@ const handleSearch = (e) => {
             ),
           }}
         />
-      </motion.div>
+      </div>
 
       {/* Suggestions dropdown */}
       {suggestions.length > 0 && (
