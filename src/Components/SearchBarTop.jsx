@@ -44,6 +44,7 @@ useEffect(() => {
 }, [booksCopy]);
 
 const handleSearch = (e) => {
+  console.log(e.target.value);
   const value = e.target.value;
   setQuery(value);
   console.log("Search query:", value);
