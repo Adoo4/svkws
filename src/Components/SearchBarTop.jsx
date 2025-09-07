@@ -24,19 +24,16 @@ const SearchBarTop = ({ booksCopy, setBooks, books, setCart }) => {
    const navigate = useNavigate();
 
 useEffect(() => {
-  if (booksCopy.length > 0) {
-    const fuseInstance = new Fuse(
-      booksCopy.map((b) => ({
-        ...b,
-        isbn: String(b.isbn || ""), // ensure ISBN is a string
-      })),
-      {
-        keys: ["title", "author", "isbn", "publisher"],
-        threshold: 0.3,
-      }
-    );
-    setFuse(fuseInstance);
-  }
+  if (!Array.isArray(booksCopy) || booksCopy.length === 0) return;
+
+  const fuseInstance = new Fuse(
+    booksCopy.map((b) => ({
+      ...b,
+      isbn: String(b.isbn || ""),
+    })),
+    { keys: ["title", "author", "isbn", "publisher"], threshold: 0.3 }
+  );
+  setFuse(fuseInstance);
 }, [booksCopy]);
 
  const handleSearch = (e) => {
@@ -172,17 +169,17 @@ useEffect(() => {
           <List sx={{background: "#f9f9f9"}}> 
             {suggestions.map((book) => (
               <ListItem
-                button
-                key={book._id}
-                onClick={() => handleSelect(book)}
-              >
-                <ListItemAvatar>
-                  <Avatar
-                    src={book.coverImage}
-                    variant="square"
-                    sx={{ width: 40, height: 60 }}
-                  />
-                </ListItemAvatar>
+  button
+  key={book._id || book.isbn || Math.random()}
+  onClick={() => handleSelect(book)}
+>
+  <ListItemAvatar>
+    <Avatar
+      src={book.coverImage || "/placeholder.png"} // fallback
+      variant="square"
+      sx={{ width: 40, height: 60 }}
+    />
+  </ListItemAvatar>
                 <ListItemText
                   primary={book.title}
                   secondary={book.author}
