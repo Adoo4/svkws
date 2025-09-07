@@ -18,6 +18,8 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useNavigate } from "react-router-dom";
 
 const SearchBarTop = ({ booksCopy, setBooks, books, setCart }) => {
+  console.log("SearchBarTop booksCopy:", booksCopy);
+
   const [query, setQuery] = useState("");
   const [fuse, setFuse] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
