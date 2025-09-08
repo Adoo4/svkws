@@ -28,7 +28,7 @@ const ProductGallery = ({
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Safe fallback
-  const safeBooks = Array.isArray(books) ? books : [];
+  const safeBooks = useMemo(() => books || [], [books]);
 
   // Reset to page 1 whenever books change
   React.useEffect(() => {
