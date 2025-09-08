@@ -113,6 +113,7 @@ const handleSearch = (e) => {
         flexDirection: "column",
         position: "relative",
         border:"1px solid red"
+        
       }}
     >
       <motion.div
