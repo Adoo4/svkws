@@ -60,7 +60,7 @@ const isShopOrCheckout = location.pathname === "/shop" || location.pathname === 
 const backgroundColor = scrolled || isShopOrCheckout ? "#262626" : "transparent";
 
   return (
-   <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 999 }}>
+   <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 999,  }}>
   <AppBar
     position="fixed"
     elevation={0}   // 🔥 disables default shadow
@@ -80,6 +80,7 @@ const backgroundColor = scrolled || isShopOrCheckout ? "#262626" : "transparent"
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+      
       }}
     >
       {/* Mobile menu button */}

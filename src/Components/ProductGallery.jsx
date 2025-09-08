@@ -61,6 +61,7 @@ const ProductGallery = ({
         alignItems: "center",
         background: "#f0f0f0",
         boxShadow: "1px 0 10px rgba(0, 0, 0, 0.1)",
+        
       }}
     >
       {/* Loading Skeleton */}

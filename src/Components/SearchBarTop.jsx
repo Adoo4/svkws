@@ -112,6 +112,7 @@ const handleSearch = (e) => {
         mt: "5rem",
         flexDirection: "column",
         position: "relative",
+        
       }}
     >
       <motion.div
@@ -126,7 +127,7 @@ const handleSearch = (e) => {
         <TextField
           size="small"
           value={query}
-          onChange={handleSearch}
+          onChange={()=>console.log("typing...")}
           placeholder="Pretraži knjige, autore, ISBN..."
           fullWidth
           variant="outlined"
@@ -206,7 +207,7 @@ const handleSearch = (e) => {
                     color: "text.secondary",
                   }}
                 />
- <Box sx={{ display: "flex", gap: {xs:1, md:2}, alignItems: "center" }}>
+ <Box sx={{ display: "flex", gap: {xs:1, md:2}, alignItems: "center",  }}>
       {/* View Icon */}
       <Box
         sx={{
