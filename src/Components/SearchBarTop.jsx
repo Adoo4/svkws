@@ -16,11 +16,6 @@ import { motion } from "framer-motion";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useNavigate } from "react-router-dom";
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import DirectionsIcon from '@mui/icons-material/Directions';
 
 const SearchBarTop = ({ booksCopy, setBooks, books, setCart }) => {
   console.log("SearchBarTop booksCopy:", booksCopy);
@@ -121,45 +116,53 @@ const handleSearch = (e) => {
       }}
     >
       <motion.div
-  whileHover={{ scale: 1.01 }}
-  style={{
-    flexGrow: 1,
-    maxWidth: "900px",
-    width: "100%",
-    zIndex: "99999999999",
-  }}
->
-  <Paper
-    component="form"
-    sx={{
-      p: "2px 8px",
-      display: "flex",
-      alignItems: "center",
-      width: "100%",
-      borderRadius: "50px",
-      background: "rgba(255,255,255,0.9)",
-      backdropFilter: "blur(8px)",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-      "&:hover": {
-        background: "rgba(255,255,255,1)",
-        boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
-      },
-    }}
-    onSubmit={(e) => e.preventDefault()}
-  >
-    <InputBase
-      sx={{ ml: 1, flex: 1, fontSize: "0.95rem", p: "6px 8px" }}
-      placeholder="Pretraži knjige, autore, ISBN..."
-      inputProps={{ "aria-label": "search books" }}
-      value={query}
-      onChange={handleSearch}
-    />
-    <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-      <SearchIcon sx={{ color: "#313131" }} />
-    </IconButton>
-  </Paper>
-</motion.div>
-
+        whileHover={{ scale: 1.01 }}
+        style={{
+          flexGrow: 1,
+          maxWidth: "900px",
+          width: "100%",
+          zIndex:"99999999999"
+        }}
+      >
+        <TextField
+          size="small"
+          value={query}
+          onChange={handleSearch}
+          placeholder="Pretraži knjige, autore, ISBN..."
+          fullWidth
+          variant="outlined"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "50px",
+              background: "rgba(255,255,255,0.9)",
+              backdropFilter: "blur(8px)",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+              "&:hover": {
+                background: "rgba(255,255,255,1)",
+                boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+              },
+              "&.Mui-focused": {
+                boxShadow: "0 0 0 3px rgba(49,49,49,0.2)",
+              },
+              "& fieldset": {
+                border: "none",
+              },
+            },
+            input: {
+              padding: "10px 14px",
+              fontSize: "0.95rem",
+            },
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "#313131", fontSize: "1.3rem" }} />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </motion.div>
 
       {/* Suggestions dropdown */}
       {suggestions.length > 0 && (
