@@ -112,7 +112,7 @@ const handleSearch = (e) => {
         mt: "5rem",
         flexDirection: "column",
         position: "relative",
-        border:"1px solid red"
+        
         
       }}
     >
