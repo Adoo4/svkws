@@ -35,15 +35,10 @@ let CategoryMenu = ({
 
   const { books, isLoading, totalPages, currentPage } = useBooks(filter);
 
-  //const [books, setBooks] = useState([]);
-  const [booksCopy, setBooksCopy] = useState([]);
+  //const [bo = useState([]);
+  const [booksCopy] = useState([]);
 
-  useEffect(() => {
-    if (fetchedBooks.length > 0) {
-      setBooks(fetchedBooks);
-      setBooksCopy(fetchedBooks);
-    }
-  }, [fetchedBooks]);
+  
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -86,8 +81,8 @@ let CategoryMenu = ({
       >
         <SearchBarTop
           booksCopy={booksCopy}
-          setBooks={setBooks}
-          books={filteredBooks}
+
+          
           setCart={setCart}
         />
       </Box>
@@ -119,7 +114,7 @@ let CategoryMenu = ({
           <Menu
             setFilter={setFilter}
             filter={filter}
-            setBooks={setBooks}
+  
             booksCopy={booksCopy}
             books={books}
             allBooks={booksCopy}
@@ -147,7 +142,6 @@ let CategoryMenu = ({
         setOpen={setLeftDrawerOpen}
         setFilter={setFilter}
         filter={filter}
-        setBooks={setBooks}
         booksCopy={booksCopy}
         books={books}
         allBooks={booksCopy}
