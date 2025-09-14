@@ -37,10 +37,6 @@ const ProductGallery = ({
     setPage(1);
   }, [safeBooks]);
 
-  // Pagination applied after filtering
-  const paginatedBooks = useMemo(() => {
-    return safeBooks.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-  }, [safeBooks, page]);
 
   return (
     <Box
@@ -102,18 +98,18 @@ const ProductGallery = ({
           justifyContent="center"
           sx={{ width: "100%", height: "100%" }}
         >
-          {paginatedBooks.map((book) => (
-            <Grid item xs sx={{ display: "flex" }} key={book._id}>
-              <BookCard
-                book={book}
-                toggleDrawer={toggleDrawer}
-                setDrawerData={setDrawerData}
-                drawerData={drawerData}
-                cart={cart}
-                setCart={setCart}
-                wishlist={wishlist}
-                setWishlist={setWishlist}
-              />
+       {books.map((book) => (
+      <Grid item xs sx={{ display: "flex" }} key={book._id}>
+        <BookCard
+          book={book}
+          toggleDrawer={toggleDrawer}
+          setDrawerData={setDrawerData}
+          drawerData={drawerData}
+          cart={cart}
+          setCart={setCart}
+          wishlist={wishlist}
+          setWishlist={setWishlist}
+        />
             </Grid>
           ))}
         </Grid>
