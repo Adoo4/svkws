@@ -2,17 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const useBooks = (filters, page = 1, limit = 15) => {
-  const { data, isLoading, isError } = useQuery(
-    ["books", filters, page],
-    async () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["books", filters, page],
+    queryFn: async () => {
       const params = { ...filters, page, limit };
       const res = await axios.get("https://backendsvkwbshp.onrender.com/api/books", { params });
       return res.data;
     },
-    {
-      staleTime: 5 * 60 * 1000,
-    }
-  );
+    staleTime: 5 * 60 * 1000,
+  });
 
   return {
     books: data?.books || [],
