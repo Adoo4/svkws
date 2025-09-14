@@ -118,7 +118,6 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
           books={books}
           loading={isLoading}
           totalPages={totalPages}
-          currentPage={currentPage}
           toggleDrawer={toggleDrawer}
           drawerData={drawerData}
           setDrawerData={setDrawerData}
