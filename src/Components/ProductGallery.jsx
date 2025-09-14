@@ -11,7 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
-const ProductGallery  = ({
+const ProductGallery = ({
   books = [],
   loading = false,
   toggleDrawer,
@@ -41,8 +41,6 @@ const ProductGallery  = ({
   const paginatedBooks = useMemo(() => {
     return safeBooks.slice((page - 1) * itemsPerPage, page * itemsPerPage);
   }, [safeBooks, page]);
-
- 
 
   return (
     <Box
@@ -122,7 +120,7 @@ const ProductGallery  = ({
       )}
 
       {/* Pagination */}
-      {!loading && safeBooks.length > itemsPerPage && (
+      {!loading && totalPages > 1 && (
         <Box
           sx={{
             px: 3,
@@ -136,37 +134,36 @@ const ProductGallery  = ({
           }}
         >
           <Pagination
-  count={totalPages}        // comes from backend
-  page={page}               // controlled by local state
-  onChange={(e, value) => setPage(value)}  // updates local state
-  shape="rounded"
-  variant="outlined"
-  size={isSmallScreen ? "small" : "medium"}
-  sx={{
-    "& .MuiPaginationItem-root": {
-      borderRadius: "50%",
-      transition: "all 0.3s ease",
-      border: "1px solid #313131",
-      color: "#f9f9f9",
-      bgcolor: "#313131",
-    },
-    "& .MuiPaginationItem-root:hover": {
-      bgcolor: "#d62d00",
-      color: "#f9f9f9",
-      borderColor: "#d62d00",
-    },
-    "& .Mui-selected": {
-      bgcolor: "#d62d00",
-      color: "#f9f9f9",
-      fontWeight: "bold",
-      borderColor: "#d62d00",
-      boxShadow: "0px 0px 8px rgba(214, 45, 0, 0.6)",
-      "&:hover": { bgcolor: "#a32000" },
-    },
-    "& .MuiPaginationItem-ellipsis": { color: "#f9f9f9" },
-  }}
-/>
-
+            count={totalPages}
+            page={page}
+            onChange={(e, value) => setPage(value)}
+            shape="rounded"
+            variant="outlined"
+            size={isSmallScreen ? "small" : "medium"}
+            sx={{
+              "& .MuiPaginationItem-root": {
+                borderRadius: "50%",
+                transition: "all 0.3s ease",
+                border: "1px solid #313131",
+                color: "#f9f9f9",
+                bgcolor: "#313131",
+              },
+              "& .MuiPaginationItem-root:hover": {
+                bgcolor: "#d62d00",
+                color: "#f9f9f9",
+                borderColor: "#d62d00",
+              },
+              "& .Mui-selected": {
+                bgcolor: "#d62d00",
+                color: "#f9f9f9",
+                fontWeight: "bold",
+                borderColor: "#d62d00",
+                boxShadow: "0px 0px 8px rgba(214, 45, 0, 0.6)",
+                "&:hover": { bgcolor: "#a32000" },
+              },
+              "& .MuiPaginationItem-ellipsis": { color: "#f9f9f9" },
+            }}
+          />
         </Box>
       )}
     </Box>
