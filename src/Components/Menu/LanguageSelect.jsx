@@ -10,11 +10,11 @@ import {
 
 export default function LanguageSelect({ filter, setFilter }) {
   const handleChange = (event) => {
-    setFilter((prev) => ({
-      ...prev,
-      bookLanguage: event.target.value, // ✅ must be bookLanguage
-    }));
-  };
+  setFilter((prev) => ({
+    ...prev,
+    bookLanguage: event.target.value,
+  }));
+};
 
   return (
     <Box sx={{ minWidth: 250, width: "100%" }}>

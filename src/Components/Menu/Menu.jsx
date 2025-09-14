@@ -177,34 +177,24 @@ export default function SelectedListItem({
   
 
 const handleCategoryClick = (kategorija) => {
-  const selectedCategory = kategorija.naziv;
-
   setFilter((prev) => ({
     ...prev,
-    bookCategory: selectedCategory === "Sve Knjige" ? "" : selectedCategory,
+    bookCategory: kategorija.naziv === "Sve Knjige" ? "" : kategorija.naziv,
     bookSubCategory: "",
   }));
-
   setSelectedIndex(null);
   toggleOpen(kategorija.naziv);
 };
 
-
   // SUBCATEGORY button handler (inside the Collapse grid)
 const handleSubcategoryClick = (kategorija, pod, index) => {
   setSelectedIndex(index);
-
   setFilter((prev) => ({
     ...prev,
     bookCategory: kategorija.naziv,
     bookSubCategory: pod,
   }));
-
-  // ensure category stays open
-  setOpenMap((prev) => ({
-    ...prev,
-    [kategorija.naziv]: true,
-  }));
+  setOpenMap((prev) => ({ ...prev, [kategorija.naziv]: true }));
 };
   const toggleOpen = (categoryName) => {
     setOpenMap((prev) => {
@@ -295,12 +285,13 @@ const handleSubcategoryClick = (kategorija, pod, index) => {
 
   // Reset filters
   setFilter({
-    bookCategory: "",
-    bookSubCategory: "",
-    bookLanguage: "",
-    newBook: false,
-    bookDiscount: false,
-  });
+  bookCategory: "",
+  bookSubCategory: "",
+  bookLanguage: "",
+  newBook: false,
+  bookDiscount: false,
+});
+setSelectedIndex(null);
   }}
 >
   <RestartAltIcon />
