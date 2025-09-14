@@ -11,8 +11,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
-const ProductGallery = ({
-  books = [], // default to empty array if undefined
+const ProductGallery  = ({
+  books = [],
   loading = false,
   toggleDrawer,
   drawerData,
@@ -21,6 +21,8 @@ const ProductGallery = ({
   setCart,
   wishlist,
   setWishlist,
+  totalPages = 1,
+  currentPage = 1,
 }) => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 15;
