@@ -42,13 +42,7 @@ const ProductGallery  = ({
     return safeBooks.slice((page - 1) * itemsPerPage, page * itemsPerPage);
   }, [safeBooks, page]);
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+ 
 
   return (
     <Box
