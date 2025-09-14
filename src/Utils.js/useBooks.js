@@ -1,37 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useMemo } from "react";
 
-// useBooks.js
-const useBooks = (filter) => {
-  const { data: allBooks = [], isLoading, isError } = useQuery({
-    queryKey: ["books"],
-    queryFn: async () => {
-      const res = await axios.get("https://backendsvkwbshp.onrender.com/api/books");
+const useBooks = (filters, page = 1, limit = 15) => {
+  const { data, isLoading, isError } = useQuery(
+    ["books", filters, page],
+    async () => {
+      const params = { ...filters, page, limit };
+      const res = await axios.get("https://backendsvkwbshp.onrender.com/api/books", { params });
       return res.data;
     },
-    staleTime: 5 * 60 * 1000,
-  });
+    {
+      staleTime: 5 * 60 * 1000,
+    }
+  );
 
-  const filteredBooks = useMemo(() => {
-    if (!Array.isArray(allBooks)) return [];
-    return allBooks.filter((b) => {
-      if (filter.bookCategory && filter.bookCategory.toLowerCase() !== "sve knjige") {
-        if (b.mainCategory?.toLowerCase() !== filter.bookCategory.toLowerCase()) return false;
-      }
-      if (filter.bookSubCategory) {
-        if (b.subCategory?.toLowerCase() !== filter.bookSubCategory.toLowerCase()) return false;
-      }
-      if (filter.bookLanguage) {
-        if (b.language?.toLowerCase() !== filter.bookLanguage.toLowerCase()) return false;
-      }
-      if (filter.newBook && !b.isNew) return false;
-      if (filter.bookDiscount && (!b.discount || b.discount.amount <= 0)) return false;
-      return true;
-    });
-  }, [allBooks, filter]);
-
-  return { allBooks, filteredBooks, isLoading, isError };
+  return {
+    books: data?.books || [],
+    totalPages: data?.totalPages || 1,
+    currentPage: data?.currentPage || 1,
+    totalBooks: data?.totalBooks || 0,
+    isLoading,
+    isError,
+  };
 };
 
 export default useBooks;

@@ -5,14 +5,14 @@ import {
   Typography,
   Pagination,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
 const ProductGallery = ({
-  books = [],         // default to empty array if undefined
+  books = [], // default to empty array if undefined
   loading = false,
   toggleDrawer,
   drawerData,
@@ -20,7 +20,7 @@ const ProductGallery = ({
   cart,
   setCart,
   wishlist,
-  setWishlist
+  setWishlist,
 }) => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 15;
@@ -61,7 +61,6 @@ const ProductGallery = ({
         alignItems: "center",
         background: "#f0f0f0",
         boxShadow: "1px 0 10px rgba(0, 0, 0, 0.1)",
-        
       }}
     >
       {/* Loading Skeleton */}
@@ -141,9 +140,9 @@ const ProductGallery = ({
           }}
         >
           <Pagination
-            count={Math.ceil(safeBooks.length / itemsPerPage)}
-            page={page}
-            onChange={handlePageChange}
+            count={totalPages}
+            page={currentPage}
+            onChange={(e, value) => setPage(value)}
             shape="rounded"
             variant="outlined"
             size={isSmallScreen ? "small" : "medium"}
