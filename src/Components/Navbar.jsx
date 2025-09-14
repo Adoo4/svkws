@@ -116,7 +116,7 @@ const backgroundColor = scrolled || isShopOrCheckout ? "#262626" : "transparent"
           alignItems: "center",
           gap: {xs:"0rem", md:"1.5rem"},
           mr: { xs: 0, sm: 4 },
-          fontSize: "0.85rem",
+          fontSize: "0.80rem",
         }}
       >
         <Button
