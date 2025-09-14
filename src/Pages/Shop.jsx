@@ -34,7 +34,7 @@ let CategoryMenu = ({
   });
 
   const [page, setPage] = useState(1);
-  const { books, isLoading, totalPages, currentPage } = useBooks(filter);
+const { books, isLoading, totalPages } = useBooks(filter, page, 15);
 
   //const [bo = useState([]);
   const [booksCopy] = useState([]);

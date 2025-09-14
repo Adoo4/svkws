@@ -117,51 +117,51 @@ const ProductGallery = ({
 
       {/* Pagination */}
       {!loading && totalPages > 1 && (
-        <Box
-          sx={{
-            px: 3,
-            py: 1.5,
-            mt: "1rem",
-            borderRadius: "50px",
-            bgcolor: "#262626",
-            display: "flex",
-            justifyContent: "center",
-            width: "100%",
-          }}
-        >
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(e, value) => setPage(value)}
-            shape="rounded"
-            variant="outlined"
-            size={isSmallScreen ? "small" : "medium"}
-            sx={{
-              "& .MuiPaginationItem-root": {
-                borderRadius: "50%",
-                transition: "all 0.3s ease",
-                border: "1px solid #313131",
-                color: "#f9f9f9",
-                bgcolor: "#313131",
-              },
-              "& .MuiPaginationItem-root:hover": {
-                bgcolor: "#d62d00",
-                color: "#f9f9f9",
-                borderColor: "#d62d00",
-              },
-              "& .Mui-selected": {
-                bgcolor: "#d62d00",
-                color: "#f9f9f9",
-                fontWeight: "bold",
-                borderColor: "#d62d00",
-                boxShadow: "0px 0px 8px rgba(214, 45, 0, 0.6)",
-                "&:hover": { bgcolor: "#a32000" },
-              },
-              "& .MuiPaginationItem-ellipsis": { color: "#f9f9f9" },
-            }}
-          />
-        </Box>
-      )}
+  <Box
+    sx={{
+      px: 3,
+      py: 1.5,
+      mt: "1rem",
+      borderRadius: "50px",
+      bgcolor: "#262626",
+      display: "flex",
+      justifyContent: "center",
+      width: "100%",
+    }}
+  >
+   <Pagination
+  count={totalPages}
+  page={currentPage}
+  onChange={(e, value) => setPage(value)}
+      shape="rounded"
+      variant="outlined"
+      size={isSmallScreen ? "small" : "medium"}
+      sx={{
+        "& .MuiPaginationItem-root": {
+          borderRadius: "50%",
+          transition: "all 0.3s ease",
+          border: "1px solid #313131",
+          color: "#f9f9f9",
+          bgcolor: "#313131",
+        },
+        "& .MuiPaginationItem-root:hover": {
+          bgcolor: "#d62d00",
+          color: "#f9f9f9",
+          borderColor: "#d62d00",
+        },
+        "& .Mui-selected": {
+          bgcolor: "#d62d00",
+          color: "#f9f9f9",
+          fontWeight: "bold",
+          borderColor: "#d62d00",
+          boxShadow: "0px 0px 8px rgba(214, 45, 0, 0.6)",
+          "&:hover": { bgcolor: "#a32000" },
+        },
+        "& .MuiPaginationItem-ellipsis": { color: "#f9f9f9" },
+      }}
+    />
+  </Box>
+)}
     </Box>
   );
 };
