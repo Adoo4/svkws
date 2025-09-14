@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import  {  useMemo } from "react";
 import Box from "@mui/material/Box";
 import {
   Grid,
@@ -33,10 +33,6 @@ const ProductGallery = ({
   // Safe fallback
   const safeBooks = useMemo(() => books || [], [books]);
 
-  // Reset to page 1 whenever books change
-  React.useEffect(() => {
-    setPage(1);
-  }, [safeBooks]);
 
 
   return (
