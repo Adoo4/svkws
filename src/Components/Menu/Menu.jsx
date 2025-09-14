@@ -134,16 +134,7 @@ const kategorije = [
   },
 ];
 
-export default function SelectedListItem({
- 
-  setFilter,
-  filter,
- 
-
- 
- 
-  allBooks
-}) {
+export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [selectedIndex, setSelectedIndex] = React.useState(() => {
     // calculate initial selectedIndex based on filter.bookCategory and filter.bookSubCategory
     if (!filter.bookCategory) return null;
@@ -164,47 +155,48 @@ export default function SelectedListItem({
   });
 
   const [openMap, setOpenMap] = React.useState(() => {
-  const map = {};
-  kategorije.forEach((k) => {
-    map[k.naziv] =
-      filter.bookCategory &&
-      k.naziv.toLowerCase() === filter.bookCategory.toLowerCase();
+    const map = {};
+    kategorije.forEach((k) => {
+      map[k.naziv] =
+        filter.bookCategory &&
+        k.naziv.toLowerCase() === filter.bookCategory.toLowerCase();
+    });
+    return map;
   });
-  return map;
-});
 
   // Safe filtering helper
   
 
 const handleCategoryClick = (kategorija) => {
-  setFilter((prev) => ({
-    ...prev,
-    bookCategory: kategorija.naziv === "Sve Knjige" ? "" : kategorija.naziv,
-    bookSubCategory: "",
-  }));
-  setSelectedIndex(null);
-  toggleOpen(kategorija.naziv);
-};
+    setFilter((prev) => ({
+      ...prev,
+      bookCategory: kategorija.naziv === "Sve Knjige" ? "" : kategorija.naziv,
+      bookSubCategory: "",
+    }));
+    setPage(1);
+    setSelectedIndex(null);
+    toggleOpen(kategorija.naziv);
+  };
 
   // SUBCATEGORY button handler (inside the Collapse grid)
-const handleSubcategoryClick = (kategorija, pod, index) => {
-  setSelectedIndex(index);
-  setFilter((prev) => ({
-    ...prev,
-    bookCategory: kategorija.naziv,
-    bookSubCategory: pod,
-  }));
-  setOpenMap((prev) => ({ ...prev, [kategorija.naziv]: true }));
-};
-  const toggleOpen = (categoryName) => {
+ const handleSubcategoryClick = (kategorija, pod, index) => {
+    setSelectedIndex(index);
+    setFilter((prev) => ({
+      ...prev,
+      bookCategory: kategorija.naziv,
+      bookSubCategory: pod,
+    }));
+    setPage(1);
+    setOpenMap((prev) => ({ ...prev, [kategorija.naziv]: true }));
+  };
+  
+ const toggleOpen = (categoryName) => {
     setOpenMap((prev) => {
       const isOpen = !!prev[categoryName];
-      // close all
       const newMap = {};
       kategorije.forEach((k) => {
         newMap[k.naziv] = false;
       });
-      // open clicked if it wasn't open
       if (!isOpen) newMap[categoryName] = true;
       return newMap;
     });
