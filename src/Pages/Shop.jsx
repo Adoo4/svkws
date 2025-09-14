@@ -33,12 +33,11 @@ let CategoryMenu = ({
     bookDiscount: false,
   });
 
+  const [page, setPage] = useState(1);
   const { books, isLoading, totalPages, currentPage } = useBooks(filter);
 
   //const [bo = useState([]);
   const [booksCopy] = useState([]);
-
-  
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -79,12 +78,7 @@ let CategoryMenu = ({
           alignItems: "center",
         }}
       >
-        <SearchBarTop
-          booksCopy={booksCopy}
-
-          
-          setCart={setCart}
-        />
+        <SearchBarTop booksCopy={booksCopy} setCart={setCart} />
       </Box>
 
       <Box
@@ -114,7 +108,6 @@ let CategoryMenu = ({
           <Menu
             setFilter={setFilter}
             filter={filter}
-  
             booksCopy={booksCopy}
             books={books}
             allBooks={booksCopy}
@@ -134,6 +127,8 @@ let CategoryMenu = ({
           setCart={setCart}
           wishlist={wishlist}
           setWishlist={setWishlist}
+          page={page}
+          setPage={setPage}
         />
       </Box>
 
