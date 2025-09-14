@@ -12,7 +12,7 @@ import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
 const ProductGallery = ({
-  books = [],
+ books = [],
   loading = false,
   toggleDrawer,
   drawerData,
@@ -23,8 +23,9 @@ const ProductGallery = ({
   setWishlist,
   totalPages = 1,
   currentPage = 1,
+  setPage, // <- use this from parent
 }) => {
-  const [page, setPage] = useState(1);
+  
   const itemsPerPage = 15;
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));

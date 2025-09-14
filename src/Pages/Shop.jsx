@@ -126,7 +126,7 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
           setCart={setCart}
           wishlist={wishlist}
           setWishlist={setWishlist}
-          page={page}
+          currentPage={page}
           setPage={setPage}
         />
       </Box>
