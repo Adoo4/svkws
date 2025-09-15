@@ -193,6 +193,23 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
         mt: "1rem",
       }}
     >
+
+    {/* Decorative header bar */}
+      <Box
+        sx={{
+          height: { xs: "2rem", md: "3rem" },
+          width: "100%",
+          background: `repeating-linear-gradient(
+            45deg,
+           #313131,
+            #313131 10px,
+            transparent 10px,
+            transparent 20px
+          )`,
+          borderRadius: "6px",
+        }}
+      />
+
       <List
         sx={{ background: "#313131" }}
         component="nav"
