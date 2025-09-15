@@ -9,9 +9,9 @@ import {
   Divider,
   ListSubheader,
   Collapse,
-  Grid,
 } from "@mui/material";
 
+import Grid from "@mui/material/Grid";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -135,50 +135,38 @@ const kategorije = [
 
 export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [selectedIndex, setSelectedIndex] = React.useState(null);
-
-  const [openMap, setOpenMap] = React.useState(() => {
-    const map = {};
-    kategorije.forEach((k) => {
-      map[k.naziv.toLowerCase()] =
-        filter.bookCategory &&
-        k.naziv.toLowerCase() === filter.bookCategory.toLowerCase();
-    });
-    return map;
-  });
-
-  const toggleOpen = (key) => {
-    setOpenMap((prev) => {
-      const isOpen = prev[key];
-      const newMap = {};
-      kategorije.forEach((k) => (newMap[k.naziv.toLowerCase()] = false));
-      newMap[key] = !isOpen;
-      return newMap;
-    });
-  };
+  const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
 
   const handleCategoryClick = (kategorija) => {
     if (kategorija.naziv.toLowerCase() === "sve knjige") {
-      setFilter((prev) => ({
-        ...prev,
+      // Reset filters
+      setFilter({
         bookCategory: "",
         bookSubCategory: "",
-      }));
+        bookLanguage: "",
+        newBook: false,
+        bookDiscount: false,
+      });
       setSelectedIndex(null);
-      setOpenMap(
-        kategorije.reduce(
-          (acc, k) => ({ ...acc, [k.naziv.toLowerCase()]: false }),
-          {}
-        )
-      );
+      setOpenCategory(null);
+      setPage(1);
       return;
     }
+
+    // Toggle open/close category
+    setOpenCategory((prev) =>
+      prev === kategorija.naziv.toLowerCase() ? null : kategorija.naziv.toLowerCase()
+    );
+
+    // Reset subcategory selection
+    setSelectedIndex(null);
+
+    // Update filter
     setFilter((prev) => ({
       ...prev,
       bookCategory: kategorija.naziv,
       bookSubCategory: "",
     }));
-    setSelectedIndex(null);
-    toggleOpen(kategorija.naziv.toLowerCase());
     setPage(1);
   };
 
@@ -189,7 +177,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
       bookCategory: kategorija.naziv,
       bookSubCategory: pod,
     }));
-    setOpenMap((prev) => ({ ...prev, [kategorija.naziv.toLowerCase()]: true }));
+    setOpenCategory(kategorija.naziv.toLowerCase()); // ensure parent stays open
     setPage(1);
   };
 
@@ -205,23 +193,6 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
         mt: "1rem",
       }}
     >
-      {/* Decorative header bar */}
-      <Box
-        sx={{
-          height: { xs: "2rem", md: "3rem" },
-          width: "100%",
-          background: `repeating-linear-gradient(
-            45deg,
-           #313131,
-            #313131 10px,
-            transparent 10px,
-            transparent 20px
-          )`,
-          borderRadius: "6px",
-        }}
-      />
-
-      {/* Categories */}
       <List
         sx={{ background: "#313131" }}
         component="nav"
@@ -244,18 +215,10 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
               sx={{
                 display: "inline-flex",
                 transition: "color 0.3s ease",
-                "&:hover": {
-                  color: "#f33600",
-                  cursor: "pointer",
-                },
+                "&:hover": { color: "#f33600", cursor: "pointer" },
               }}
               onClick={() => {
-                setOpenMap(
-                  kategorije.reduce(
-                    (acc, k) => ({ ...acc, [k.naziv.toLowerCase()]: false }),
-                    {}
-                  )
-                );
+                setOpenCategory(null);
                 setSelectedIndex(null);
                 setFilter({
                   bookCategory: "",
@@ -276,12 +239,12 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
 
           return (
             <React.Fragment key={kategorija.naziv}>
+              {/* Main category button */}
               <ListItemButton
-                onClick={() => !isSveKnjige && handleCategoryClick(kategorija)}
+                onClick={() => handleCategoryClick(kategorija)}
                 sx={{
                   display: "flex",
                   gap: "1rem",
-                  flexShrink: 0,
                   minWidth: "100%",
                   borderRadius: "8px",
                   mb: 0.5,
@@ -292,81 +255,54 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                     backgroundColor: `${kategorija.boja}15`,
                     borderLeft: `6px solid ${kategorija.boja}`,
                     transform: "translateX(3px)",
-                    "& .MuiListItemIcon-root": {
-                      color: kategorija.boja,
-                    },
                   },
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    borderRadius: "50%",
-                    p: { xs: "0.2rem", md: "0.5rem" },
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minWidth: "auto",
-                    mr: 0,
                     color: kategorija.boja,
+                    minWidth: "auto",
                     "& svg": { fontSize: { xs: "1.2rem", sm: "1.4rem" } },
                   }}
                 >
                   {kategorija.ikona}
                 </ListItemIcon>
-
                 <ListItemText
                   primary={
                     <Typography
-                      sx={{
-                        fontSize: { xs: "0.7rem", sm: "0.8rem" },
-                        fontWeight: 500,
-                        letterSpacing: 0.5,
-                        color: "#f7f7f7f7",
-                      }}
+                      sx={{ fontSize: { xs: "0.7rem", sm: "0.8rem" }, color: "#f7f7f7f7" }}
                     >
                       {kategorija.naziv}
                     </Typography>
                   }
                 />
-
-                {!isSveKnjige &&
-                  kategorija.podkategorije?.length > 0 &&
-                  (openMap[kategorija.naziv.toLowerCase()] ? (
-                    <PanoramaFishEyeIcon
-                      fontSize="small"
-                      sx={{ color: kategorija.boja }}
-                    />
-                  ) : (
-                    <AdjustIcon fontSize="small" sx={{ color: "#262626" }} />
-                  ))}
+                {!isSveKnjige && kategorija.podkategorije?.length > 0 && (
+                  <>
+                    {openCategory === kategorija.naziv.toLowerCase() ? (
+                      <PanoramaFishEyeIcon fontSize="small" sx={{ color: kategorija.boja }} />
+                    ) : (
+                      <AdjustIcon fontSize="small" sx={{ color: "#262626" }} />
+                    )}
+                  </>
+                )}
               </ListItemButton>
 
-              {!isSveKnjige && (
+              {/* Subcategories accordion */}
+              {!isSveKnjige && kategorija.podkategorije?.length > 0 && (
                 <Collapse
-                  in={!!openMap[kategorija.naziv.toLowerCase()]}
+                  in={openCategory === kategorija.naziv.toLowerCase()}
                   timeout="auto"
                   unmountOnExit
                 >
                   <List component="div" disablePadding>
-                    <Grid container sx={{ borderLeft: `4px solid ${kategorija.boja}` }}>
-                      {kategorija.podkategorije?.map((pod, i) => (
-                        <Grid
-                          item
-                          xs={6}
-                          key={pod}
-                          sx={{
-                            display: "flex",
-                            justifyContent: i % 2 === 0 ? "flex-start" : "flex-end",
-                          }}
-                        >
+                    <Grid container spacing={1} sx={{ pl: 2 }}>
+                      {kategorija.podkategorije.map((pod, i) => (
+                        <Grid item xs={6} key={pod}>
                           <ListItemButton
                             sx={{
-                              width: "fit-content",
                               borderRadius: "6px",
                               color: "#f7f7f7",
-                              "&:hover": {
-                                backgroundColor: `${kategorija.boja}22`,
-                              },
+                              "&:hover": { backgroundColor: `${kategorija.boja}22` },
                             }}
                             selected={selectedIndex === idx * 100 + i}
                             onClick={() =>
@@ -375,9 +311,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                           >
                             <ListItemText
                               primary={
-                                <Typography
-                                  sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" }, pl: "0.3rem" }}
-                                >
+                                <Typography sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" } }}>
                                   {pod}
                                 </Typography>
                               }
@@ -395,7 +329,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
       </List>
 
       <Divider sx={{ my: 1 }} />
-      <Box sx={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "2rem" }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 2 }}>
         <Language filter={filter} setFilter={setFilter} />
       </Box>
     </Box>
