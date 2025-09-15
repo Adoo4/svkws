@@ -191,6 +191,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
         overflowY: "auto",
         pr: "0.5rem",
         mt: "1rem",
+        
       }}
     >
 

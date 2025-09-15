@@ -102,7 +102,7 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
             paddingBottom: "1rem",
             display: { xs: "none", lg: "flex" },
             background: "#262626",
-            boxShadow: "1px 0 10px rgba(0,0,0,0.1)",
+            
             minHeight: "106lvh",
           }}
         >
