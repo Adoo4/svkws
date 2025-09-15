@@ -154,15 +154,15 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
     return null;
   });
 
-  const [openMap, setOpenMap] = React.useState(() => {
-    const map = {};
-    kategorije.forEach((k) => {
-      map[k.naziv] =
-        filter.bookCategory &&
-        k.naziv.toLowerCase() === filter.bookCategory.toLowerCase();
-    });
-    return map;
+ const [openMap, setOpenMap] = React.useState(() => {
+  const map = {};
+  kategorije.forEach((k) => {
+    map[k.naziv.toLowerCase()] =
+      filter.bookCategory &&
+      k.naziv.toLowerCase() === filter.bookCategory.toLowerCase();
   });
+  return map;
+});
 
   // Safe filtering helper
   
@@ -294,7 +294,7 @@ setSelectedIndex(null);
     }
   >
     {kategorije.map((kategorija, idx) => {
-      const isSveKnjige = kategorija.naziv === "SVE KNJIGE";
+      const isSveKnjige = kategorija.naziv.toLowerCase() === "sve knjige";
 
       return (
         <React.Fragment key={kategorija.naziv}>
@@ -370,7 +370,7 @@ setSelectedIndex(null);
 
           {/* Subcategories (skip collapse for "SVE KNJIGE") */}
           {!isSveKnjige && (
-            <Collapse in={!!openMap[kategorija.naziv]} timeout="auto" unmountOnExit>
+           <Collapse in={!!openMap[kategorija.naziv.toLowerCase()]} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <Grid container sx={{ borderLeft: `4px solid ${kategorija.boja}` }}>
                   {(kategorija.podkategorije || []).map((pod, i) => (
