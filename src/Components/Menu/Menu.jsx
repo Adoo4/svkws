@@ -9,10 +9,10 @@ import {
   Divider,
   ListSubheader,
   Collapse,
+  Grid,
 } from "@mui/material";
 
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
-import { Grid } from "@mui/material";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import ArticleIcon from "@mui/icons-material/Article";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
@@ -23,8 +23,7 @@ import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import BiotechIcon from "@mui/icons-material/Biotech";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import DrawIcon from "@mui/icons-material/Draw";
-import  Language  from "./LanguageSelect";
-
+import Language from "./LanguageSelect";
 
 const kategorije = [
   {
@@ -135,299 +134,270 @@ const kategorije = [
 ];
 
 export default function SelectedListItem({ filter, setFilter, page, setPage }) {
-  const [selectedIndex, setSelectedIndex] = React.useState(() => {
-    // calculate initial selectedIndex based on filter.bookCategory and filter.bookSubCategory
-    if (!filter.bookCategory) return null;
+  const [selectedIndex, setSelectedIndex] = React.useState(null);
 
-    const catIdx = kategorije.findIndex(
-      (k) => k.naziv.toLowerCase() === filter.bookCategory.toLowerCase()
-    );
-    if (catIdx === -1) return null;
-
-    if (filter.bookSubCategory && kategorije[catIdx].podkategorije) {
-      const subIdx = kategorije[catIdx].podkategorije.findIndex(
-        (sub) => sub.toLowerCase() === filter.bookSubCategory.toLowerCase()
-      );
-      if (subIdx !== -1) return catIdx * 100 + subIdx;
-    }
-
-    return null;
+  const [openMap, setOpenMap] = React.useState(() => {
+    const map = {};
+    kategorije.forEach((k) => {
+      map[k.naziv.toLowerCase()] =
+        filter.bookCategory &&
+        k.naziv.toLowerCase() === filter.bookCategory.toLowerCase();
+    });
+    return map;
   });
 
- const [openMap, setOpenMap] = React.useState(() => {
-  const map = {};
-  kategorije.forEach((k) => {
-    map[k.naziv.toLowerCase()] =
-      filter.bookCategory &&
-      k.naziv.toLowerCase() === filter.bookCategory.toLowerCase();
-  });
-  return map;
-});
-
-  // Safe filtering helper
-  
-
-const handleCategoryClick = (kategorija) => {
-    setFilter((prev) => ({
-      ...prev,
-      bookCategory: kategorija.naziv === "Sve Knjige" ? "" : kategorija.naziv,
-      bookSubCategory: "",
-    }));
-    setPage(1);
-    setSelectedIndex(null);
-   toggleOpen(kategorija.naziv.toLowerCase());
+  const toggleOpen = (key) => {
+    setOpenMap((prev) => {
+      const isOpen = prev[key];
+      const newMap = {};
+      kategorije.forEach((k) => (newMap[k.naziv.toLowerCase()] = false));
+      newMap[key] = !isOpen;
+      return newMap;
+    });
   };
 
-  // SUBCATEGORY button handler (inside the Collapse grid)
- const handleSubcategoryClick = (kategorija, pod, index) => {
-    setSelectedIndex(index);
+  const handleCategoryClick = (kategorija) => {
+    if (kategorija.naziv.toLowerCase() === "sve knjige") {
+      setFilter((prev) => ({
+        ...prev,
+        bookCategory: "",
+        bookSubCategory: "",
+      }));
+      setSelectedIndex(null);
+      setOpenMap(
+        kategorije.reduce(
+          (acc, k) => ({ ...acc, [k.naziv.toLowerCase()]: false }),
+          {}
+        )
+      );
+      return;
+    }
+    setFilter((prev) => ({
+      ...prev,
+      bookCategory: kategorija.naziv,
+      bookSubCategory: "",
+    }));
+    setSelectedIndex(null);
+    toggleOpen(kategorija.naziv.toLowerCase());
+    setPage(1);
+  };
+
+  const handleSubcategoryClick = (kategorija, pod, idx) => {
+    setSelectedIndex(idx);
     setFilter((prev) => ({
       ...prev,
       bookCategory: kategorija.naziv,
       bookSubCategory: pod,
     }));
+    setOpenMap((prev) => ({ ...prev, [kategorija.naziv.toLowerCase()]: true }));
     setPage(1);
-    setOpenMap((prev) => ({ ...prev, [kategorija.naziv]: true }));
   };
-  
-const toggleOpen = (categoryKey) => {
-  setOpenMap((prev) => {
-    const isOpen = !!prev[categoryKey];
-    const newMap = {};
-    kategorije.forEach((k) => {
-      newMap[k.naziv.toLowerCase()] = false;
-    });
-    if (!isOpen) newMap[categoryKey] = true;
-    return newMap;
-  });
-};
 
   return (
-   <Box
-  sx={{
-    width: "100%",
-    maxWidth: { xs: "300px", sm: "400px" },
-    height: "100%",
-    background: "transparent",
-    overflowY: "auto",
-    pr: "0.5rem",
-    mt: "1rem",
-    
-   
-  }}
->
-  {/* Decorative header bar */}
-  <Box
-  
-    sx={{
-      height: { xs: "2rem", md: "3rem" },
-      width: "100%",
-      background: `repeating-linear-gradient(
-        45deg,
-       #313131,
-        #313131 10px,
-        transparent 10px,
-        transparent 20px
-      )`,
-      borderRadius: "6px",
-    }}
-  />
-
-  {/* Categories */}
-  <List
-  sx={{background:"#313131"}}
-    component="nav"
-    subheader={
-      <ListSubheader
-        component="div"
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: { xs: "300px", sm: "400px" },
+        height: "100%",
+        background: "transparent",
+        overflowY: "auto",
+        pr: "0.5rem",
+        mt: "1rem",
+      }}
+    >
+      {/* Decorative header bar */}
+      <Box
         sx={{
-          fontWeight: "bold",
-          fontSize: "0.95rem",
-          bgcolor: "inherit",
-          textAlign: "center",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        color: "#f7f7f7f7",
-        
-
+          height: { xs: "2rem", md: "3rem" },
+          width: "100%",
+          background: `repeating-linear-gradient(
+            45deg,
+           #313131,
+            #313131 10px,
+            transparent 10px,
+            transparent 20px
+          )`,
+          borderRadius: "6px",
         }}
-      >
-        Kategorije knjiga
-       <Box
-  sx={{
-    display: "inline-flex",
-    transition: "color 0.3s ease",
-    "&:hover": {
-      color: "#f33600",
-      cursor: "pointer",
-    },
-  }}
-  onClick={() => {
-    // Reset books
-    // Close all categories
-  const closedMap = {};
-kategorije.forEach((k) => {
-  closedMap[k.naziv.toLowerCase()] = false;
-});
-setOpenMap(closedMap);
+      />
 
-  // Reset selected category/subcategory
-  setSelectedIndex(null);
-
-  // Reset filters
-  setFilter({
-  bookCategory: "",
-  bookSubCategory: "",
-  bookLanguage: "",
-  newBook: false,
-  bookDiscount: false,
-});
-setSelectedIndex(null);
-  }}
->
-  <RestartAltIcon />
-</Box>
-
-      </ListSubheader>
-    }
-  >
-    {kategorije.map((kategorija, idx) => {
-      const isSveKnjige = kategorija.naziv.toLowerCase() === "sve knjige";
-
-      return (
-        <React.Fragment key={kategorija.naziv}>
-          {/* Main category */}
-          <ListItemButton
-            onClick={() => !isSveKnjige && handleCategoryClick(kategorija)}
+      {/* Categories */}
+      <List
+        sx={{ background: "#313131" }}
+        component="nav"
+        subheader={
+          <ListSubheader
+            component="div"
             sx={{
+              fontWeight: "bold",
+              fontSize: "0.95rem",
+              bgcolor: "inherit",
+              textAlign: "center",
               display: "flex",
-              gap: "1rem",
-              flexShrink: 0,
-              minWidth: "100%",
-              borderRadius: "8px",
-              mb: 0.5,
-              borderLeft: "4px solid transparent",
-              transition:
-                "border-left 0.3s ease, background-color 0.3s ease, transform 0.2s",
-              "&:hover": {
-                backgroundColor: `${kategorija.boja}15`,
-                borderLeft: `6px solid ${kategorija.boja}`,
-                transform: "translateX(3px)",
-                "& .MuiListItemIcon-root": {
-                  color: kategorija.boja,
-                },
-              },
+              justifyContent: "space-between",
+              alignItems: "center",
+              color: "#f7f7f7f7",
             }}
           >
-            {/* Icon */}
-            <ListItemIcon
+            Kategorije knjiga
+            <Box
               sx={{
-                borderRadius: "50%",
-                p: { xs: "0.2rem", md: "0.5rem" },
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minWidth: "auto",
-                mr: 0,
-                color: kategorija.boja,
-
-                "& svg": {
-                  fontSize: { xs: "1.2rem", sm: "1.4rem" },
+                display: "inline-flex",
+                transition: "color 0.3s ease",
+                "&:hover": {
+                  color: "#f33600",
+                  cursor: "pointer",
                 },
               }}
+              onClick={() => {
+                setOpenMap(
+                  kategorije.reduce(
+                    (acc, k) => ({ ...acc, [k.naziv.toLowerCase()]: false }),
+                    {}
+                  )
+                );
+                setSelectedIndex(null);
+                setFilter({
+                  bookCategory: "",
+                  bookSubCategory: "",
+                  bookLanguage: "",
+                  newBook: false,
+                  bookDiscount: false,
+                });
+              }}
             >
-              {kategorija.ikona}
-            </ListItemIcon>
+              <RestartAltIcon />
+            </Box>
+          </ListSubheader>
+        }
+      >
+        {kategorije.map((kategorija, idx) => {
+          const isSveKnjige = kategorija.naziv.toLowerCase() === "sve knjige";
 
-            {/* Category name */}
-            <ListItemText
-              primary={
-                <Typography
+          return (
+            <React.Fragment key={kategorija.naziv}>
+              <ListItemButton
+                onClick={() => !isSveKnjige && handleCategoryClick(kategorija)}
+                sx={{
+                  display: "flex",
+                  gap: "1rem",
+                  flexShrink: 0,
+                  minWidth: "100%",
+                  borderRadius: "8px",
+                  mb: 0.5,
+                  borderLeft: "4px solid transparent",
+                  transition:
+                    "border-left 0.3s ease, background-color 0.3s ease, transform 0.2s",
+                  "&:hover": {
+                    backgroundColor: `${kategorija.boja}15`,
+                    borderLeft: `6px solid ${kategorija.boja}`,
+                    transform: "translateX(3px)",
+                    "& .MuiListItemIcon-root": {
+                      color: kategorija.boja,
+                    },
+                  },
+                }}
+              >
+                <ListItemIcon
                   sx={{
-                    fontSize: { xs: "0.7rem", sm: "0.8rem" },
-                    fontWeight: 500,
-                    letterSpacing: 0.5,
-                    color: "#f7f7f7f7",
+                    borderRadius: "50%",
+                    p: { xs: "0.2rem", md: "0.5rem" },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minWidth: "auto",
+                    mr: 0,
+                    color: kategorija.boja,
+                    "& svg": { fontSize: { xs: "1.2rem", sm: "1.4rem" } },
                   }}
                 >
-                  {kategorija.naziv}
-                </Typography>
-              }
-            />
+                  {kategorija.ikona}
+                </ListItemIcon>
 
-            {/* Collapse icon (only if not "SVE KNJIGE") */}
-            {!isSveKnjige &&
-              Array.isArray(kategorija.podkategorije) &&
-              kategorija.podkategorije.length > 0 &&
-              (openMap[kategorija.naziv.toLowerCase()] ? (
-                <PanoramaFishEyeIcon fontSize="small" sx={{ color: kategorija.boja }} />
-              ) : (
-                <AdjustIcon fontSize="small" sx={{ color: "#262626" }} />
-              ))}
-          </ListItemButton>
-
-          {/* Subcategories (skip collapse for "SVE KNJIGE") */}
-          {!isSveKnjige && (
-           <Collapse in={!!openMap[kategorija.naziv.toLowerCase()]} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <Grid container sx={{ borderLeft: `4px solid ${kategorija.boja}` }}>
-                  {(kategorija.podkategorije || []).map((pod, i) => (
-                    <Grid
-                      item
-                      xs={6}
-                      key={pod}
+                <ListItemText
+                  primary={
+                    <Typography
                       sx={{
-                        display: "flex",
-                        justifyContent: i % 2 === 0 ? "flex-start" : "flex-end",
+                        fontSize: { xs: "0.7rem", sm: "0.8rem" },
+                        fontWeight: 500,
+                        letterSpacing: 0.5,
+                        color: "#f7f7f7f7",
                       }}
                     >
-                      <ListItemButton
-                        sx={{
-                          width: "fit-content",
-                          borderRadius: "6px",
-                          color:"#f7f7f7",
-                          "&:hover": {
-                            backgroundColor: `${kategorija.boja}22`,
-                          },
-                        }}
-                        selected={selectedIndex === idx * 100 + i}
-                        onClick={() =>
-                          handleSubcategoryClick(kategorija, pod, idx * 100 + i)
-                        }
-                      >
-                        <ListItemText
-                          primary={
-                            <Typography
-                              sx={{
-                                fontSize: { xs: "0.65rem", sm: "0.7rem" },
-                                pl: "0.3rem",
-                              }}
-                            >
-                              {pod}
-                            </Typography>
-                          }
-                        />
-                      </ListItemButton>
-                    </Grid>
+                      {kategorija.naziv}
+                    </Typography>
+                  }
+                />
+
+                {!isSveKnjige &&
+                  kategorija.podkategorije?.length > 0 &&
+                  (openMap[kategorija.naziv.toLowerCase()] ? (
+                    <PanoramaFishEyeIcon
+                      fontSize="small"
+                      sx={{ color: kategorija.boja }}
+                    />
+                  ) : (
+                    <AdjustIcon fontSize="small" sx={{ color: "#262626" }} />
                   ))}
-                </Grid>
-              </List>
-            </Collapse>
-          )}
-        </React.Fragment>
-      );
-    })}
-  </List>
+              </ListItemButton>
 
-  <Divider sx={{ my: 1 }} />
-  <Box sx={{ display: "flex", justifyContent: "flext-start", width: "100%", marginBottom: "2rem" }}>
-  <Language
-  filter={filter}
-  setFilter={setFilter}
-/>
-</Box>
-</Box>
+              {!isSveKnjige && (
+                <Collapse
+                  in={!!openMap[kategorija.naziv.toLowerCase()]}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List component="div" disablePadding>
+                    <Grid container sx={{ borderLeft: `4px solid ${kategorija.boja}` }}>
+                      {kategorija.podkategorije?.map((pod, i) => (
+                        <Grid
+                          item
+                          xs={6}
+                          key={pod}
+                          sx={{
+                            display: "flex",
+                            justifyContent: i % 2 === 0 ? "flex-start" : "flex-end",
+                          }}
+                        >
+                          <ListItemButton
+                            sx={{
+                              width: "fit-content",
+                              borderRadius: "6px",
+                              color: "#f7f7f7",
+                              "&:hover": {
+                                backgroundColor: `${kategorija.boja}22`,
+                              },
+                            }}
+                            selected={selectedIndex === idx * 100 + i}
+                            onClick={() =>
+                              handleSubcategoryClick(kategorija, pod, idx * 100 + i)
+                            }
+                          >
+                            <ListItemText
+                              primary={
+                                <Typography
+                                  sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" }, pl: "0.3rem" }}
+                                >
+                                  {pod}
+                                </Typography>
+                              }
+                            />
+                          </ListItemButton>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </List>
+                </Collapse>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </List>
 
+      <Divider sx={{ my: 1 }} />
+      <Box sx={{ display: "flex", justifyContent: "flex-start", width: "100%", marginBottom: "2rem" }}>
+        <Language filter={filter} setFilter={setFilter} />
+      </Box>
+    </Box>
   );
 }
