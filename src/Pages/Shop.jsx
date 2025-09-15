@@ -26,12 +26,13 @@ let CategoryMenu = ({
   const [open, setOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [filter, setFilter] = useState({
-    bookCategory: "",
-    bookSubCategory: "",
-    bookLanguage: "",
-    newBook: false,
-    bookDiscount: false,
-  });
+  category: "",       // main category
+  subCategory: "",    // sub category
+  language: "",       // book language
+  isNew: false,
+  discount: false,
+});
+
 
   const [page, setPage] = useState(1);
 const { books, isLoading, totalPages } = useBooks(filter, page, 15);

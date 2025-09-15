@@ -198,30 +198,32 @@ const backgroundColor = scrolled || isShopOrCheckout ? "#262626" : "transparent"
 
           <SignedOut>
   <SignInButton mode="modal">
-   <Button
+   <Button 
+   
   variant="contained"
   startIcon={<LoginIcon />}
   sx={(theme) => ({
     height: "100%",
     textTransform: "none",
     background:"transparent",
-    border:"1px solid #d62d00",
+      boxShadow: "none",
     borderRadius:"10rem",
     px: { xs: 0, sm: 3, md: 4 }, // responsive padding
-    fontSize: { xs: "0.70rem", sm: "0.9rem", md: "1rem" }, // responsive font size
+    fontSize: { xs: "0.70rem", sm: "0.7rem", md: "0.80rem" }, // responsive font size
     minWidth: { xs: "90px", sm: "120px", md: "150px" }, // button width scales
     "& .MuiButton-startIcon": {
       margin: { xs: 0, sm: "0 8px 0 0" }, // hide spacing on small screens
     },
     "&:hover": {
       bgcolor: "#d62d00",
+        boxShadow: "none",
     },
     [theme.breakpoints.down("sm")]: {
       startIcon: false, // hides icon on extra small screens
     },
   })}
 >
-  Prijava
+  PRIJAVA
 </Button>
   </SignInButton>
 </SignedOut>

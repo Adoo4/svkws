@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const useBooks = (filters = {}, page = 1, limit = 30) => {
+const useBooks = (filters = {}, page = 1, limit = 15) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["books", filters, page],
     queryFn: async () => {
@@ -19,7 +19,7 @@ const useBooks = (filters = {}, page = 1, limit = 30) => {
   return {
     books: data?.books || [],
     totalPages: data?.totalPages || 1,
-    currentPage: data?.currentPage || 1,
+    serverPage: data?.currentPage || 1, // renamed
     totalBooks: data?.totalBooks || 0,
     isLoading,
     isError,
