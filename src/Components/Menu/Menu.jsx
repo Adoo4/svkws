@@ -175,7 +175,7 @@ const handleCategoryClick = (kategorija) => {
     }));
     setPage(1);
     setSelectedIndex(null);
-    toggleOpen(kategorija.naziv);
+   toggleOpen(kategorija.naziv.toLowerCase());
   };
 
   // SUBCATEGORY button handler (inside the Collapse grid)
@@ -190,18 +190,17 @@ const handleCategoryClick = (kategorija) => {
     setOpenMap((prev) => ({ ...prev, [kategorija.naziv]: true }));
   };
   
- const toggleOpen = (categoryName) => {
-    setOpenMap((prev) => {
-      const isOpen = !!prev[categoryName.toLowerCase()];
-const newMap = {};
-kategorije.forEach((k) => {
-  newMap[k.naziv.toLowerCase()] = false;
-});
-if (!isOpen) newMap[categoryName.toLowerCase()] = true;
-return newMap;
-
+const toggleOpen = (categoryKey) => {
+  setOpenMap((prev) => {
+    const isOpen = !!prev[categoryKey];
+    const newMap = {};
+    kategorije.forEach((k) => {
+      newMap[k.naziv.toLowerCase()] = false;
     });
-  };
+    if (!isOpen) newMap[categoryKey] = true;
+    return newMap;
+  });
+};
 
   return (
    <Box
@@ -268,10 +267,10 @@ return newMap;
     // Reset books
     // Close all categories
   const closedMap = {};
-  kategorije.forEach((k) => {
-    closedMap[k.naziv] = false;
-  });
-  setOpenMap(closedMap);
+kategorije.forEach((k) => {
+  closedMap[k.naziv.toLowerCase()] = false;
+});
+setOpenMap(closedMap);
 
   // Reset selected category/subcategory
   setSelectedIndex(null);
@@ -361,7 +360,7 @@ setSelectedIndex(null);
             {!isSveKnjige &&
               Array.isArray(kategorija.podkategorije) &&
               kategorija.podkategorije.length > 0 &&
-              (openMap[kategorija.naziv] ? (
+              (openMap[kategorija.naziv.toLowerCase()] ? (
                 <PanoramaFishEyeIcon fontSize="small" sx={{ color: kategorija.boja }} />
               ) : (
                 <AdjustIcon fontSize="small" sx={{ color: "#262626" }} />
