@@ -61,6 +61,7 @@ useEffect(() => {
             }
           : item
       );
+      
     } else {
       return [
         ...prevCart,

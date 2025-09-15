@@ -192,13 +192,14 @@ const handleCategoryClick = (kategorija) => {
   
  const toggleOpen = (categoryName) => {
     setOpenMap((prev) => {
-      const isOpen = !!prev[categoryName];
-      const newMap = {};
-      kategorije.forEach((k) => {
-        newMap[k.naziv] = false;
-      });
-      if (!isOpen) newMap[categoryName] = true;
-      return newMap;
+      const isOpen = !!prev[categoryName.toLowerCase()];
+const newMap = {};
+kategorije.forEach((k) => {
+  newMap[k.naziv.toLowerCase()] = false;
+});
+if (!isOpen) newMap[categoryName.toLowerCase()] = true;
+return newMap;
+
     });
   };
 
