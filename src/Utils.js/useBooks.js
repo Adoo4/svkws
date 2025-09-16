@@ -10,7 +10,7 @@ const useBooks = (filters = {}, page = 1, limit = 15) => {
         "https://backendsvkwbshp.onrender.com/api/books",
         { params }
       );
-      console.log("QUERY PARAMS:", params);   // 👀 debug
+      console.log("Filter sent to backend:", filters);
       return res.data;
     },
     keepPreviousData: true,

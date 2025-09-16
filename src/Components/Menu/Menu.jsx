@@ -152,9 +152,8 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
     return;
   }
 
-  // 🔑 Always update filter FIRST (before toggling open state)
   setFilter({
-    mainCategory: kategorija.naziv, // overwrite, don’t spread prev
+    mainCategory: kategorija.naziv,
     subCategory: "",
     language: "",
     isNew: false,
@@ -163,11 +162,8 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
 
   setPage(1);
 
-  // Now toggle accordion
   setOpenCategory((prev) =>
-    prev === kategorija.naziv.toLowerCase()
-      ? null
-      : kategorija.naziv.toLowerCase()
+    prev === kategorija.naziv.toLowerCase() ? null : kategorija.naziv.toLowerCase()
   );
 
   setSelectedIndex(null);
