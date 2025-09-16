@@ -14,7 +14,7 @@ const useBooks = (filters = {}, page = 1, limit = 15) => {
       return res.data;
     },
     keepPreviousData: true,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   });
 
   return {
