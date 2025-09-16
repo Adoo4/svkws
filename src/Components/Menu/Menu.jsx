@@ -153,14 +153,13 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   }
 
   setFilter({
-    mainCategory: kategorija.naziv,
-    subCategory: "",
-    language: "",
-    isNew: false,
-    discount: false,
-  });
-
-  setPage(1);
+  mainCategory: kategorija.naziv,
+  subCategory: "",
+  language: "",
+  isNew: false,
+  discount: false,
+});
+setPage(1); // reset to first page
 
   setOpenCategory((prev) =>
     prev === kategorija.naziv.toLowerCase() ? null : kategorija.naziv.toLowerCase()
