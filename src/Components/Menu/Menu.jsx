@@ -50,6 +50,7 @@ const kategorije = [
       "Poezija",
       "Klasici",
       "Humoristička književnost",
+      "Mitologija"
     ],
   },
   {
