@@ -138,46 +138,49 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
 
   const handleCategoryClick = (kategorija) => {
-    if (kategorija.naziv.toLowerCase() === "sve knjige") {
-      // Reset filters
-      setFilter({
-  mainCategory: "",
-  subCategory: "",
-  language: "",
-  isNew: false,
-  discount: false,
-});
-      setSelectedIndex(null);
-      setOpenCategory(null);
-      setPage(1);
-      return;
-    }
-
-    // Toggle open/close category
-    setOpenCategory((prev) =>
-      prev === kategorija.naziv.toLowerCase() ? null : kategorija.naziv.toLowerCase()
-    );
-
-    // Reset subcategory selection
+  if (kategorija.naziv.toLowerCase() === "sve knjige") {
+    setFilter({
+      mainCategory: "",
+      subCategory: "",
+      language: "",
+      isNew: false,
+      discount: false,
+    });
     setSelectedIndex(null);
-
-    // Update filter
-   setFilter((prev) => ({
-  ...prev,
-  mainCategory: kategorija.naziv,  // was bookCategory
-  subCategory: "",
-}));
-
+    setOpenCategory(null);
     setPage(1);
-  };
+    return;
+  }
+
+  // 🔑 Always update filter FIRST (before toggling open state)
+  setFilter({
+    mainCategory: kategorija.naziv, // overwrite, don’t spread prev
+    subCategory: "",
+    language: "",
+    isNew: false,
+    discount: false,
+  });
+
+  setPage(1);
+
+  // Now toggle accordion
+  setOpenCategory((prev) =>
+    prev === kategorija.naziv.toLowerCase()
+      ? null
+      : kategorija.naziv.toLowerCase()
+  );
+
+  setSelectedIndex(null);
+};
+
 
   const handleSubcategoryClick = (kategorija, pod, idx) => {
     setSelectedIndex(idx);
-   setFilter((prev) => ({
-  ...prev,
-  mainCategory: kategorija.naziv,
-  subCategory: pod,
-}));
+    setFilter((prev) => ({
+      ...prev,
+      mainCategory: kategorija.naziv,
+      subCategory: pod,
+    }));
     setOpenCategory(kategorija.naziv.toLowerCase()); // ensure parent stays open
     setPage(1);
   };
@@ -192,11 +195,9 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
         overflowY: "auto",
         pr: "0.5rem",
         mt: "1rem",
-        
       }}
     >
-
-    {/* Decorative header bar */}
+      {/* Decorative header bar */}
       <Box
         sx={{
           height: { xs: "2rem", md: "3rem" },
@@ -240,11 +241,11 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                 setOpenCategory(null);
                 setSelectedIndex(null);
                 setFilter({
-                  bookCategory: "",
-                  bookSubCategory: "",
-                  bookLanguage: "",
-                  newBook: false,
-                  bookDiscount: false,
+                  mainCategory: "",
+                  subCategory: "",
+                  language: "",
+                  isNew: false,
+                  discount: false,
                 });
               }}
             >
@@ -289,7 +290,10 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                 <ListItemText
                   primary={
                     <Typography
-                      sx={{ fontSize: { xs: "0.7rem", sm: "0.8rem" }, color: "#f7f7f7f7" }}
+                      sx={{
+                        fontSize: { xs: "0.7rem", sm: "0.8rem" },
+                        color: "#f7f7f7f7",
+                      }}
                     >
                       {kategorija.naziv}
                     </Typography>
@@ -298,7 +302,10 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                 {!isSveKnjige && kategorija.podkategorije?.length > 0 && (
                   <>
                     {openCategory === kategorija.naziv.toLowerCase() ? (
-                      <PanoramaFishEyeIcon fontSize="small" sx={{ color: kategorija.boja }} />
+                      <PanoramaFishEyeIcon
+                        fontSize="small"
+                        sx={{ color: kategorija.boja }}
+                      />
                     ) : (
                       <AdjustIcon fontSize="small" sx={{ color: "#262626" }} />
                     )}
@@ -321,16 +328,26 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                             sx={{
                               borderRadius: "6px",
                               color: "#f7f7f7",
-                              "&:hover": { backgroundColor: `${kategorija.boja}22` },
+                              "&:hover": {
+                                backgroundColor: `${kategorija.boja}22`,
+                              },
                             }}
                             selected={selectedIndex === idx * 100 + i}
                             onClick={() =>
-                              handleSubcategoryClick(kategorija, pod, idx * 100 + i)
+                              handleSubcategoryClick(
+                                kategorija,
+                                pod,
+                                idx * 100 + i
+                              )
                             }
                           >
                             <ListItemText
                               primary={
-                                <Typography sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" } }}>
+                                <Typography
+                                  sx={{
+                                    fontSize: { xs: "0.65rem", sm: "0.7rem" },
+                                  }}
+                                >
                                   {pod}
                                 </Typography>
                               }
