@@ -141,12 +141,12 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
     if (kategorija.naziv.toLowerCase() === "sve knjige") {
       // Reset filters
       setFilter({
-        bookCategory: "",
-        bookSubCategory: "",
-        bookLanguage: "",
-        newBook: false,
-        bookDiscount: false,
-      });
+  mainCategory: "",
+  subCategory: "",
+  language: "",
+  isNew: false,
+  discount: false,
+});
       setSelectedIndex(null);
       setOpenCategory(null);
       setPage(1);
@@ -162,21 +162,22 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
     setSelectedIndex(null);
 
     // Update filter
-    setFilter((prev) => ({
-      ...prev,
-      bookCategory: kategorija.naziv,
-      bookSubCategory: "",
-    }));
+   setFilter((prev) => ({
+  ...prev,
+  mainCategory: kategorija.naziv,  // was bookCategory
+  subCategory: "",
+}));
+
     setPage(1);
   };
 
   const handleSubcategoryClick = (kategorija, pod, idx) => {
     setSelectedIndex(idx);
-    setFilter((prev) => ({
-      ...prev,
-      bookCategory: kategorija.naziv,
-      bookSubCategory: pod,
-    }));
+   setFilter((prev) => ({
+  ...prev,
+  mainCategory: kategorija.naziv,
+  subCategory: pod,
+}));
     setOpenCategory(kategorija.naziv.toLowerCase()); // ensure parent stays open
     setPage(1);
   };

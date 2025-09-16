@@ -25,10 +25,10 @@ let CategoryMenu = ({
   const [drawerData, setDrawerData] = useState(null);
   const [open, setOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
-  const [filter, setFilter] = useState({
-  category: "",       // main category
-  subCategory: "",    // sub category
-  language: "",       // book language
+const [filter, setFilter] = useState({
+  mainCategory: "",   // <- matches DB
+  subCategory: "",    // <- matches DB
+  language: "",
   isNew: false,
   discount: false,
 });
