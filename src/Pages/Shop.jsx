@@ -107,12 +107,14 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
           }}
         >
           <Menu
-            setFilter={setFilter}
-            filter={filter}
-            booksCopy={booksCopy}
-            books={books}
-            allBooks={booksCopy}
-          />
+  setFilter={setFilter}
+  filter={filter}
+  booksCopy={booksCopy}
+  books={books}
+  allBooks={booksCopy}
+  page={page}          // ✅ added
+  setPage={setPage}    // ✅ added
+/>
         </Box>
 
         <ProductGallery
