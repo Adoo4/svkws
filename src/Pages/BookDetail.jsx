@@ -25,6 +25,7 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import RelatedBooks from "../Components/RelatedBooks";
 import { round } from "../Utils.js/round";
 import { useUser } from "@clerk/clerk-react";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 
 export default function BookDetail({cart, setCart, setCartMenu}) {
   const { id } = useParams(); // book id from route
@@ -120,7 +121,7 @@ useEffect(() => {
               sx={{
                 width: { xs: "100%", md: 350 },
                 height: { xs: 500, md: "auto" },
-                objectFit: "cover",
+                objectFit: "contain",
                 borderRight: { md: "1px solid #444" },
                 borderBottom: { xs: "1px solid #444", md: "none" },
               }}
@@ -140,35 +141,41 @@ useEffect(() => {
               </Typography>
 
               {/* Description */}
-              <Typography variant="body2" sx={{ mb: 3, fontSize: { xs: "0.9rem", md: "1rem" }, color: "#ddd" }}>
+              <Typography variant="body2" sx={{ mb: 3, fontSize: { xs: "0.75rem", md: "0.85rem" }, color: "#ddd" }}>
                 {book.description}
               </Typography>
 
               <Divider sx={{ my: 2, borderColor: "#444" }} />
 
               {/* Info Grid */}
-              <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
-                  <MenuBookIcon sx={{ color: "#f9f9f9" }} />
-                  <Typography variant="body2">Format: {book.format}</Typography>
-                </Grid>
-                <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
-                  <LanguageIcon sx={{ color: "#f9f9f9" }} />
-                  <Typography variant="body2">Jezik: {book.language}</Typography>
-                </Grid>
-                <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
-                  <CalendarTodayIcon sx={{ color: "#f9f9f9" }} />
-                  <Typography variant="body2">Godina izdanja: {book.publicationYear}</Typography>
-                </Grid>
-                <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
-                  <PeopleAltIcon sx={{ color: "#f9f9f9" }} />
-                  <Typography variant="body2">Izdavač: {book.publisher}</Typography>
-                </Grid>
-                <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
-                  <LocalLibraryIcon sx={{ color: "#f9f9f9" }} />
-                  <Typography variant="body2">Stranica: {book.pages}</Typography>
-                </Grid>
-              </Grid>
+             <Grid container spacing={3} sx={{ mb: 3 }}>
+  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+    <MenuBookIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Format: {book.format}</Typography>
+  </Grid>
+  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+    <LanguageIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Jezik: {book.language}</Typography>
+  </Grid>
+  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+    <CalendarTodayIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Godina izdanja: {book.publicationYear}</Typography>
+  </Grid>
+  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+    <PeopleAltIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Izdavač: {book.publisher}</Typography>
+  </Grid>
+  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+    <LocalLibraryIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Stranica: {book.pages}</Typography>
+  </Grid>
+  {/* New ISBN field */}
+  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+    <ConfirmationNumberIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">ISBN: {book.isbn}</Typography>
+  </Grid>
+</Grid>
+
 
               {/* Price & Actions */}
               <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between" gap={2} mt={4}>
@@ -249,9 +256,11 @@ useEffect(() => {
         Možda će vam se i ovo svidjeti
       </Typography>
           {/* Related Books Section */}
-         { book&& <Box mt={5} sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
-            <RelatedBooks id={book._id} category={book.mainCategory} />
-          </Box>}
+         {book && (
+  <Box mt={5} sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+    <RelatedBooks book={book} />
+  </Box>
+)}
         </>
       )}
      

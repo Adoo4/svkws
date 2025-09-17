@@ -1,0 +1,33 @@
+/* Arrows */
+.related-swiper .swiper-button-next,
+.related-swiper .swiper-button-prev {
+  color: #f33600; /* arrow color */
+  width: 35px;    /* optional size */
+  height: 35px;   /* optional size */
+}
+
+.related-swiper .swiper-button-next:hover,
+.related-swiper .swiper-button-prev:hover {
+  color: #d62d00; /* hover color */
+}
+
+/* Pagination bullets */
+.related-swiper .swiper-pagination-bullet {
+   
+     height: 6px;
+  background-color: rgba(204, 204, 204, 0.2); /* 50% transparent */
+  opacity: 1;
+  width:35px;
+  border-radius:0;
+  
+}
+
+.related-swiper .swiper-pagination {
+  bottom: 0rem; /* distance from bottom of swiper */
+}
+
+.related-swiper .swiper-pagination-bullet-active {
+  background-color: #f33600;
+
+  
+}
