@@ -39,6 +39,7 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
 
   //const [bo = useState([]);
   const [booksCopy] = useState([]);
+  
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -142,6 +143,8 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
         booksCopy={booksCopy}
         books={books}
         allBooks={booksCopy}
+         page={page}        // pass the current page
+  setPage={setPage}  
       />
       <AnchorTemporaryDrawer
         open={open}

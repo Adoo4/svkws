@@ -17,7 +17,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const SearchBarTop = ({ booksCopy, setBooks, setCart }) => {
+const SearchBarTop = ({ booksCopy,  setCart }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
@@ -26,11 +26,10 @@ const SearchBarTop = ({ booksCopy, setBooks, setCart }) => {
     const value = e.target.value;
     setQuery(value);
 
-    if (value.trim() === "") {
-      setSuggestions([]);
-      setBooks(booksCopy); // fallback: show all
-      return;
-    }
+ if (value.trim() === "") {
+  setSuggestions([]); // just hide suggestions
+  return;
+}
 
     try {
       const res = await axios.get(
@@ -45,7 +44,7 @@ const SearchBarTop = ({ booksCopy, setBooks, setCart }) => {
 
   const handleSelect = (book) => {
     setQuery(book.title);
-    setBooks([book]);
+    
     setSuggestions([]);
   };
 
@@ -154,7 +153,7 @@ const SearchBarTop = ({ booksCopy, setBooks, setCart }) => {
                   <Avatar
                     src={book.coverImage || "/placeholder.png"}
                     variant="square"
-                    sx={{ width: 40, height: 60 }}
+                    sx={{ width: 50, height: "auto", objectFit:"contain" }}
                   />
                 </ListItemAvatar>
                 <ListItemText

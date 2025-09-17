@@ -238,7 +238,7 @@ const formatCategoryName = (name) => {
   elevation={0}
   sx={{
      minWidth: { xs: "170px", sm: "290px" }, // increase sm
-    maxWidth: { xs: "30vw", sm: "320px", md: "270px" }, // allow more space
+    maxWidth: { xs: "30vw", sm: "320px", md: "240px" }, // allow more space
     flexGrow: { xs: 1, sm: 1 }, // lets it stretch if space is available
     borderRadius: 4,
     cursor: "pointer", // 👈 makes it a hand icon
@@ -309,7 +309,7 @@ const formatCategoryName = (name) => {
       alt={book.title}
       loading="eager"
       sx={{
-        height: { xs: 190, sm: 200, md: 250 },
+        height: { xs: 190, sm: 200, md: 280 },
         objectFit: "contain",
         width: "100%",
         aspectRatio: "3 / 4",

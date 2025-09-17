@@ -249,9 +249,9 @@ useEffect(() => {
           
 <Divider sx={{ my: 2, borderColor: "#444" }} />
 <Typography
-        variant="h7"
+        variant="subtitle1"
         mb={2}
-        sx={{ color: "white", fontWeight: "bold", display:"flex", justifyContent:"center" }}
+        sx={{ color: "#ccc",  display:"flex", justifyContent:"center" }}
       >
         Možda će vam se i ovo svidjeti
       </Typography>

@@ -2,7 +2,7 @@ import React from 'react';
 import { SwipeableDrawer, Box } from '@mui/material';
 import Menu from "../Components/Menu/Menu";
 
-const LeftDrawerMenu = ({ open, setOpen, setFilter, filter, allBooks }) => {
+const LeftDrawerMenu = ({ open, setOpen, setFilter, filter, allBooks, page,  setPage }) => {
   const handleClose = () => setOpen(false);
 
   return (
@@ -30,6 +30,8 @@ const LeftDrawerMenu = ({ open, setOpen, setFilter, filter, allBooks }) => {
           setFilter={setFilter}
           filter={filter}
           allBooks={allBooks}
+          page={page}
+          setPage={setPage}
         />
       </Box>
     </SwipeableDrawer>
