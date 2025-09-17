@@ -317,7 +317,7 @@ setPage(1); // reset to first page
                   unmountOnExit
                 >
                   <List component="div" disablePadding>
-                    <Grid container spacing={1} sx={{ pl: 2 }}>
+                    <Grid container spacing={0} sx={{ pl: 2 }}>
                       {kategorija.podkategorije.map((pod, i) => (
                         <Grid item xs={6} key={pod}>
                           <ListItemButton

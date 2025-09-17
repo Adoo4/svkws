@@ -144,7 +144,7 @@ const Home = () => {
       variant="h2"
       sx={{
         fontWeight: 'bold',
-        fontSize: { xs: '2rem', md: '4rem', lg: '5rem' },
+        fontSize: { xs: '2rem', md: '4rem', lg: '4rem' },
         color: '#f9f9f9',
         textShadow: '2px 2px 6px rgba(0,0,0,0.7)',
         animation: 'fadeInDown 1s ease forwards',
