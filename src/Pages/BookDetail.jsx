@@ -148,33 +148,33 @@ useEffect(() => {
               <Divider sx={{ my: 2, borderColor: "#444" }} />
 
               {/* Info Grid */}
-             <Grid container spacing={3} sx={{ mb: 3 }}>
-  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+<Grid container spacing={3} sx={{ mb: 3 }}>
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
     <MenuBookIcon sx={{ color: "#f9f9f9" }} />
     <Typography variant="body2">Format: {book.format}</Typography>
   </Grid>
-  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
     <LanguageIcon sx={{ color: "#f9f9f9" }} />
     <Typography variant="body2">Jezik: {book.language}</Typography>
   </Grid>
-  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
     <CalendarTodayIcon sx={{ color: "#f9f9f9" }} />
     <Typography variant="body2">Godina izdanja: {book.publicationYear}</Typography>
   </Grid>
-  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
     <PeopleAltIcon sx={{ color: "#f9f9f9" }} />
     <Typography variant="body2">Izdavač: {book.publisher}</Typography>
   </Grid>
-  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
     <LocalLibraryIcon sx={{ color: "#f9f9f9" }} />
     <Typography variant="body2">Stranica: {book.pages}</Typography>
   </Grid>
-  {/* New ISBN field */}
-  <Grid item xs={6} sm={4} display="flex" alignItems="center" gap={1}>
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
     <ConfirmationNumberIcon sx={{ color: "#f9f9f9" }} />
     <Typography variant="body2">ISBN: {book.isbn}</Typography>
   </Grid>
 </Grid>
+
 
 
               {/* Price & Actions */}
