@@ -80,7 +80,10 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
           alignItems: "center",
         }}
       >
-        <SearchBarTop booksCopy={booksCopy} setCart={setCart} />
+       <SearchBarTop
+  booksCopy={books}  // instead of booksCopy
+  setCart={setCart}
+/>
       </Box>
 
       <Box
