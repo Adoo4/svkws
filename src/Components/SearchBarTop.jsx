@@ -10,6 +10,8 @@ import {
   ListItemText,
   Avatar,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton"
 import SearchIcon from "@mui/icons-material/Search";
 import { motion } from "framer-motion";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -103,41 +105,54 @@ const handleSearch = (e) => {
       }}
     >
       <motion.div
-        whileHover={{ scale: 1.01 }}
-        style={{ flexGrow: 1, maxWidth: "900px", width: "100%" }}
-      >
-        <TextField
-          size="small"
-          value={query}
-          onChange={handleSearch}
-          placeholder="Pretraži knjige, autore, ISBN..."
-          fullWidth
-          variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "50px",
-              background: "rgba(255,255,255,0.9)",
-              backdropFilter: "blur(8px)",
-              transition: "all 0.3s ease",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              "&:hover": {
-                background: "rgba(255,255,255,1)",
-                boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
-              },
-              "&.Mui-focused": { boxShadow: "0 0 0 3px rgba(49,49,49,0.2)" },
-              "& fieldset": { border: "none" },
-            },
-            input: { padding: "10px 14px", fontSize: "0.95rem" },
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "#313131", fontSize: "1.3rem" }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </motion.div>
+  whileHover={{ scale: 1.01 }}
+  style={{ flexGrow: 1, maxWidth: "900px", width: "100%" }}
+>
+  <TextField
+    size="small"
+    value={query}
+    onChange={handleSearch}
+    placeholder="Pretraži knjige, autore, ISBN..."
+    fullWidth
+    variant="outlined"
+    sx={{
+      "& .MuiOutlinedInput-root": {
+        borderRadius: "50px",
+        background: "rgba(255,255,255,0.9)",
+        backdropFilter: "blur(8px)",
+        transition: "all 0.3s ease",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        "&:hover": {
+          background: "rgba(255,255,255,1)",
+          boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+        },
+        "&.Mui-focused": { boxShadow: "0 0 0 3px rgba(49,49,49,0.2)" },
+        "& fieldset": { border: "none" },
+      },
+      input: { padding: "10px 14px", fontSize: "0.95rem" },
+    }}
+    InputProps={{
+      startAdornment: (
+        <InputAdornment position="start">
+          <SearchIcon sx={{ color: "#313131", fontSize: "1.3rem" }} />
+        </InputAdornment>
+      ),
+      endAdornment: query && (
+        <InputAdornment position="end">
+          <IconButton
+            size="small"
+            onClick={() => {
+              setQuery("");
+              setSuggestions([]); // also clear suggestions
+            }}
+          >
+            <CloseIcon sx={{ fontSize: "1.1rem" }} />
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+  />
+</motion.div>
 
       {suggestions.length > 0 && (
         <Paper
