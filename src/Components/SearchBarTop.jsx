@@ -53,11 +53,11 @@ const handleSearch = (e) => {
   };
 
 
-  const handleSelect = (book) => {
+  /*const handleSelect = (book) => {
     setQuery(book.title);
     
     setSuggestions([]);
-  };
+  };*/
 
   const addToCart = (product) => {
     setCart((prevCart) => {
