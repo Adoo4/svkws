@@ -23,24 +23,24 @@ const SearchBarTop = ({ booksCopy,  setCart }) => {
   const navigate = useNavigate();
 
   const handleSearch = async (e) => {
-    const value = e.target.value;
-    setQuery(value);
+  const value = e.target.value;
+  setQuery(value);
 
- if (value.trim() === "") {
-  setSuggestions([]); // just hide suggestions
-  return;
-}
+  if (!value.trim()) {
+    setSuggestions([]);
+    return;
+  }
 
-    try {
-      const res = await axios.get(
-        `https://backendsvkwbshp.onrender.com/api/books/search`,
-        { params: { q: value } }
-      );
-      setSuggestions(res.data.slice(0, 6));
-    } catch (err) {
-      console.error("Search error:", err);
-    }
-  };
+  try {
+    const res = await axios.get(
+      "https://backendsvkwbshp.onrender.com/api/books/search",
+      { params: { q: value } }
+    );
+    setSuggestions(res.data); // top 6 results
+  } catch (err) {
+    console.error("Search error full:", err);
+  }
+};
 
   const handleSelect = (book) => {
     setQuery(book.title);
