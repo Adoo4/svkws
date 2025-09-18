@@ -16,31 +16,42 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDebounce } from "../Utils.js/useDebounce"
 
-const SearchBarTop = ({ booksCopy,  setCart }) => {
+const SearchBarTop = ({ booksCopy,  setCart, setDrawerData, toggleDrawer }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
 
-  const handleSearch = async (e) => {
-  const value = e.target.value;
-  setQuery(value);
 
-  if (!value.trim()) {
-    setSuggestions([]);
-    return;
-  }
+  const fetchSuggestions = async (value) => {
+    try {
+      const res = await axios.get(
+        "https://backendsvkwbshp.onrender.com/api/books/search",
+        { params: { q: value } }
+      );
+      console.log(res.data)
+      setSuggestions(res.data);
+    } catch (err) {
+      console.error("Search error full:", err);
+    }
+  };
 
-  try {
-    const res = await axios.get(
-      "https://backendsvkwbshp.onrender.com/api/books/search",
-      { params: { q: value } }
-    );
-    setSuggestions(res.data); // top 6 results
-  } catch (err) {
-    console.error("Search error full:", err);
-  }
-};
+   const debouncedFetch = useDebounce(fetchSuggestions, 400);
+
+const handleSearch = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    if (!value.trim()) {
+      setSuggestions([]);
+      debouncedFetch.cancel(); // cancel pending request
+      return;
+    }
+
+    debouncedFetch(value);
+  };
+
 
   const handleSelect = (book) => {
     setQuery(book.title);
@@ -147,7 +158,8 @@ const SearchBarTop = ({ booksCopy,  setCart }) => {
               <ListItem
                 button
                 key={book._id || book.isbn || Math.random()}
-                onClick={() => handleSelect(book)}
+                onClick={(e)=>{setDrawerData(book)
+      toggleDrawer(true)(e)}}
               >
                 <ListItemAvatar>
                   <Avatar

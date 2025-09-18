@@ -83,6 +83,8 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
        <SearchBarTop
   booksCopy={books}  // instead of booksCopy
   setCart={setCart}
+    toggleDrawer={toggleDrawer}
+    setDrawerData={setDrawerData}
 />
       </Box>
 
