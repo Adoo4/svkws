@@ -129,7 +129,13 @@ const ProductGallery = ({
    <Pagination
   count={totalPages}
   page={currentPage}
-  onChange={(e, value) => setPage(value)}
+   onChange={(e, value) => {
+    setPage(value);
+    window.scrollTo({
+      top: 0,          // scroll to top
+      behavior: "smooth" // optional smooth scroll
+    });
+  }}
       shape="rounded"
       variant="outlined"
       size={isSmallScreen ? "small" : "medium"}
