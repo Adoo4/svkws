@@ -60,6 +60,7 @@ const Home = () => {
         <div className="embla__slide" >
           <img
            loading="eager"
+           fetchpriority="high"
             src="https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"
             alt=""
           />

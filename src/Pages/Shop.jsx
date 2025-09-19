@@ -26,55 +26,59 @@ let CategoryMenu = ({
   const [drawerData, setDrawerData] = useState(null);
   const [open, setOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
-const [filter, setFilter] = useState({
-  mainCategory: "",   // <- matches DB
-  subCategory: "",    // <- matches DB
-  language: "",
-  isNew: false,
-  discount: false,
-});
-
+  const [filter, setFilter] = useState({
+    mainCategory: "", // <- matches DB
+    subCategory: "", // <- matches DB
+    language: "",
+    isNew: false,
+    discount: false,
+  });
 
   const [page, setPage] = useState(1);
-const { books, isLoading, totalPages } = useBooks(filter, page, 15);
+  const { books, isLoading, totalPages } = useBooks(filter, page, 15);
 
   //const [bo = useState([]);
   const [booksCopy] = useState([]);
-  
 
   const toggleDrawer = useCallback(
-  (open) => (event) => {
-    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) return;
-    setOpen(open);
-  },
-  []
-);
+    (open) => (event) => {
+      if (
+        event.type === "keydown" &&
+        (event.key === "Tab" || event.key === "Shift")
+      )
+        return;
+      setOpen(open);
+    },
+    []
+  );
 
   const toggleDrawer2 = useCallback(
-  (open) => (event) => {
-    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-      return;
-    }
-    setLeftDrawerOpen(open);
-  },
-  [] // empty dependency array if setLeftDrawerOpen is stable (from useState)
-);
+    (open) => (event) => {
+      if (
+        event.type === "keydown" &&
+        (event.key === "Tab" || event.key === "Shift")
+      ) {
+        return;
+      }
+      setLeftDrawerOpen(open);
+    },
+    [] // empty dependency array if setLeftDrawerOpen is stable (from useState)
+  );
 
-const handleSetCart = useCallback(
-  (cartData) => setCart(cartData),
-  [setCart] // include setCart in dependencies
-);
+  const handleSetCart = useCallback(
+    (cartData) => setCart(cartData),
+    [setCart] // include setCart in dependencies
+  );
 
+  const handleSetWishlist = useCallback(
+    (wishlistData) => setWishlist(wishlistData),
+    [setWishlist] // include setWishlist in dependencies
+  );
 
-const handleSetWishlist = useCallback(
-  (wishlistData) => setWishlist(wishlistData),
-  [setWishlist] // include setWishlist in dependencies
-);
-
-const handleSetDrawerData = useCallback(
-  (data) => setDrawerData(data),
-  [] // no dependencies because setDrawerData is stable
-);
+  const handleSetDrawerData = useCallback(
+    (data) => setDrawerData(data),
+    [] // no dependencies because setDrawerData is stable
+  );
   return (
     <Box
       sx={{
@@ -96,12 +100,12 @@ const handleSetDrawerData = useCallback(
           alignItems: "center",
         }}
       >
-       <SearchBarTop
-  booksCopy={books}  // instead of booksCopy
-  setCart={setCart}
-    toggleDrawer={toggleDrawer}
-    setDrawerData={setDrawerData}
-/>
+        <SearchBarTop
+          booksCopy={books} // instead of booksCopy
+          setCart={setCart}
+          toggleDrawer={toggleDrawer}
+          setDrawerData={setDrawerData}
+        />
       </Box>
 
       <Box
@@ -124,19 +128,19 @@ const handleSetDrawerData = useCallback(
             paddingBottom: "1rem",
             display: { xs: "none", lg: "flex" },
             background: "#262626",
-            
+
             minHeight: "106lvh",
           }}
         >
           <Menu
-  setFilter={setFilter}
-  filter={filter}
-  booksCopy={booksCopy}
-  books={books}
-  allBooks={booksCopy}
-  page={page}          // ✅ added
-  setPage={setPage}    // ✅ added
-/>
+            setFilter={setFilter}
+            filter={filter}
+            booksCopy={booksCopy}
+            books={books}
+            allBooks={booksCopy}
+            page={page} // ✅ added
+            setPage={setPage} // ✅ added
+          />
         </Box>
 
         <ProductGallery
@@ -164,8 +168,8 @@ const handleSetDrawerData = useCallback(
         booksCopy={booksCopy}
         books={books}
         allBooks={booksCopy}
-         page={page}        // pass the current page
-  setPage={setPage}  
+        page={page} // pass the current page
+        setPage={setPage}
       />
       <AnchorTemporaryDrawer
         open={open}

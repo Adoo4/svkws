@@ -308,7 +308,7 @@ const formatCategoryName = (name) => {
       component="img"
       image={book?.coverImage}
       alt={book.title}
-      loading="lazy"
+      loading="eager"
       sx={{
         height: { xs: 190, sm: 200, md: 280 },
         objectFit: "contain",
