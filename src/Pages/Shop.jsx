@@ -10,6 +10,7 @@ import AnchorTemporaryDrawer from "../Components/CardPreviewComponent";
 import CartMenu from "../Components/CartMenu";
 import BottomNavigationMenu from "../Components/BottomNavigationMenu";
 import useBooks from "../Utils.js/useBooks";
+import { useCallback } from "react";
 
 let CategoryMenu = ({
   cart,
@@ -41,24 +42,39 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
   const [booksCopy] = useState([]);
   
 
-  const toggleDrawer = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    )
-      return;
+  const toggleDrawer = useCallback(
+  (open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) return;
     setOpen(open);
-  };
+  },
+  []
+);
 
-  const toggleDrawer2 = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    )
+  const toggleDrawer2 = useCallback(
+  (open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
+    }
     setLeftDrawerOpen(open);
-  };
+  },
+  [] // empty dependency array if setLeftDrawerOpen is stable (from useState)
+);
 
+const handleSetCart = useCallback(
+  (cartData) => setCart(cartData),
+  [setCart] // include setCart in dependencies
+);
+
+
+const handleSetWishlist = useCallback(
+  (wishlistData) => setWishlist(wishlistData),
+  [setWishlist] // include setWishlist in dependencies
+);
+
+const handleSetDrawerData = useCallback(
+  (data) => setDrawerData(data),
+  [] // no dependencies because setDrawerData is stable
+);
   return (
     <Box
       sx={{
@@ -129,12 +145,12 @@ const { books, isLoading, totalPages } = useBooks(filter, page, 15);
           totalPages={totalPages}
           toggleDrawer={toggleDrawer}
           drawerData={drawerData}
-          setDrawerData={setDrawerData}
+          setDrawerData={handleSetDrawerData}
           isSmallScreen={isSmallScreen}
           cart={cart}
-          setCart={setCart}
+          setCart={handleSetCart}
           wishlist={wishlist}
-          setWishlist={setWishlist}
+          setWishlist={handleSetWishlist}
           currentPage={page}
           setPage={setPage}
         />

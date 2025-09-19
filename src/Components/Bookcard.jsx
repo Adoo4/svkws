@@ -25,6 +25,7 @@ import IconButton from "@mui/material/IconButton";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { SignedIn } from '@clerk/clerk-react';
+import React, { memo } from "react";
 import {
   isInWishlist,
 } from "../Utils.js/wishlist"; // adjust path
@@ -307,7 +308,7 @@ const formatCategoryName = (name) => {
       component="img"
       image={book?.coverImage}
       alt={book.title}
-      loading="eager"
+      loading="lazy"
       sx={{
         height: { xs: 190, sm: 200, md: 280 },
         objectFit: "contain",
@@ -652,4 +653,4 @@ const formatCategoryName = (name) => {
   );
 };
 
-export default BookCard;
+export default memo(BookCard);;

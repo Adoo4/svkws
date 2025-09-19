@@ -10,7 +10,7 @@ import {
   ListSubheader,
   Collapse,
 } from "@mui/material";
-
+import  { useState } from "react";
 import Grid from "@mui/material/Grid";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
@@ -24,6 +24,7 @@ import BiotechIcon from "@mui/icons-material/Biotech";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import DrawIcon from "@mui/icons-material/Draw";
 import Language from "./LanguageSelect";
+import IsNewSwitch from "./IsNewSwitch";
 
 const kategorije = [
   {
@@ -137,7 +138,7 @@ const kategorije = [
 export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
-
+const [isNewOnly, setIsNewOnly] = useState(false);
   const handleCategoryClick = (kategorija) => {
   if (kategorija.naziv.toLowerCase() === "sve knjige") {
     setFilter({
@@ -169,6 +170,14 @@ setPage(1); // reset to first page
   setSelectedIndex(null);
 };
 
+const handleIsNewToggle = (checked) => {
+  setIsNewOnly(checked);
+  setFilter((prev) => ({
+    ...prev,
+    isNew: checked,
+  }));
+  setPage(1);
+};
 
   const handleSubcategoryClick = (kategorija, pod, idx) => {
     setSelectedIndex(idx);
@@ -361,9 +370,14 @@ setPage(1); // reset to first page
       </List>
 
       <Divider sx={{ my: 1 }} />
-      <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
         <Language filter={filter} setFilter={setFilter} />
       </Box>
+      
+<Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
+  <IsNewSwitch onToggle={handleIsNewToggle} checked={isNewOnly} />
+</Box>
+
     </Box>
   );
 }

@@ -10,10 +10,11 @@ import {
 
 export default function LanguageSelect({ filter, setFilter }) {
   const handleChange = (event) => {
-  setFilter((prev) => ({
-    ...prev,
-    bookLanguage: event.target.value,
+ setFilter((prev) => ({
+  ...prev,
+   language: event.target.value,   // ✅ match backend field
   }));
+
 };
 
   return (
@@ -34,7 +35,7 @@ export default function LanguageSelect({ filter, setFilter }) {
         <Select
           labelId="language-select-label"
           id="language-select"
-          value={filter.bookLanguage || ""}  // ✅ fixed here
+          value={filter.language || ""}  // ✅ fixed here
           onChange={handleChange}
          sx={{
     color: "#f7f7f7",
