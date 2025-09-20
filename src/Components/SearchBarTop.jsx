@@ -129,7 +129,7 @@ const handleSearch = (e) => {
         "&.Mui-focused": { boxShadow: "0 0 0 3px rgba(49,49,49,0.2)" },
         "& fieldset": { border: "none" },
       },
-      input: { padding: "10px 14px", fontSize: "0.95rem" },
+      input: { padding: {xs:"5px 14px", md:"10px 14px"}, fontSize: "0.90rem" },
     }}
     InputProps={{
       startAdornment: (

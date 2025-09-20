@@ -25,6 +25,7 @@ import DrawIcon from "@mui/icons-material/Draw";
 import Language from "./LanguageSelect";
 import IsNewSwitch from "./IsNewSwitch";
 import ActiveFilters from "./ActiveFIlters";
+import DiscountSwitch from "./DiscountSwitch";
 
 
 const kategorije = [
@@ -191,14 +192,14 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
 
 // Add these inside SelectedListItem component (not nested in any function)
 const handleRemoveFilter = (key) => {
-  if (key === "category") {
+  if (key === "mainCategory") {
     setFilter((prev) => ({
       ...prev,
       mainCategory: "",
       subCategory: "",
     }));
     setSelectedIndex(null);
-    setOpenCategory(null);
+    setOpenCategory(null); // collapse category menu
   } else {
     setFilter((prev) => ({
       ...prev,
@@ -206,6 +207,8 @@ const handleRemoveFilter = (key) => {
     }));
   }
 };
+
+
 
 
 
@@ -403,6 +406,13 @@ const handleRemoveFilter = (key) => {
       <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
         <IsNewSwitch checked={filter.isNew} onToggle={handleIsNewToggle} />
       </Box>
+
+      <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
+  <DiscountSwitch checked={filter.discount} onToggle={(val) => {
+    setFilter((prev) => ({ ...prev, discount: val }));
+    setPage(1);
+  }} />
+</Box>
     </Box>
   );
 }

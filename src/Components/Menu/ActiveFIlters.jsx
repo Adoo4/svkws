@@ -9,7 +9,7 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
   };
 
   // Hide component if no filters are active
-  if (!filters.mainCategory && !filters.subCategory && !filters.language && !filters.isNew) {
+  if (!filters.mainCategory && !filters.subCategory && !filters.language && !filters.isNew && !filters.discount) {
     return null;
   }
 
@@ -18,7 +18,7 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        gap: { xs: 0.5, sm: 1 }, // smaller gap on mobile
+        gap: { xs: 0.5, sm: 1 },
         mb: { xs: 1, sm: 2 },
         ml: { xs: 0.5, sm: 1 },
         alignItems: "center",
@@ -96,25 +96,26 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
       {/* Language */}
       {filters.language && (
         <Chip
-          label={filters.language}
-          variant="outlined"
-          onDelete={() => onRemove("language")}
-          size="small"
-          sx={{
-            borderColor: "#ccc",
-            color: "#333",
-            backgroundColor: "#f7f7f7",
-            fontWeight: 500,
-            fontSize: { xs: "0.65rem", sm: "0.75rem" },
-            height: { xs: 22, sm: 26 },
-            borderRadius: "14px",
-            "&:hover": { backgroundColor: "#e0e0e0" },
-            "& .MuiChip-deleteIcon": {
-              fontSize: { xs: "0.6rem", sm: "0.7rem" },
-              color: "#333",
-            },
-          }}
-        />
+  label={filters.language}
+  variant="outlined"
+  onDelete={() => onRemove("language")}
+  size="small"
+  sx={{
+    borderColor: "transparent",
+    color: "#f0f0f0", // pick your new color here
+    backgroundColor: alpha("#ff6f61", 0.15), // semi-transparent background
+    fontWeight: 500,
+    fontSize: { xs: "0.65rem", sm: "0.75rem" },
+    height: { xs: 22, sm: 26 },
+    borderRadius: "14px",
+    "&:hover": { backgroundColor: alpha("#ff6f61", 0.25) },
+    "& .MuiChip-deleteIcon": {
+      fontSize: { xs: "0.6rem", sm: "0.7rem" },
+      color: "#ff6f61", // match the text color
+    },
+  }}
+/>
+
       )}
 
       {/* isNew */}
@@ -125,17 +126,41 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
           onDelete={() => onRemove("isNew")}
           size="small"
           sx={{
-            borderColor: "#666",
-            color: "#666",
-            backgroundColor: "#f0f0f0",
+            borderColor: "transparent",
+            color: "#f0f0f0",
+            backgroundColor: alpha("#007e2aff", 0.15),
             fontWeight: 500,
             fontSize: { xs: "0.65rem", sm: "0.75rem" },
             height: { xs: 22, sm: 26 },
             borderRadius: "14px",
-            "&:hover": { backgroundColor: "#e0e0e0" },
+            "&:hover": { backgroundColor: alpha("#007e2aff", 0.25) },
             "& .MuiChip-deleteIcon": {
               fontSize: { xs: "0.6rem", sm: "0.7rem" },
-              color: "#666",
+              color: "#007e2aff",
+            },
+          }}
+        />
+      )}
+
+      {/* Discount */}
+      {filters.discount && (
+        <Chip
+          label="Popust"
+          variant="outlined"
+          onDelete={() => onRemove("discount")}
+          size="small"
+          sx={{
+            borderColor: "transparent",
+            color: "#f0f0f0",
+            backgroundColor: alpha("#ffb703", 0.15),
+            fontWeight: 500,
+            fontSize: { xs: "0.65rem", sm: "0.75rem" },
+            height: { xs: 22, sm: 26 },
+            borderRadius: "14px",
+            "&:hover": { backgroundColor: alpha("#ffb703", 0.25) },
+            "& .MuiChip-deleteIcon": {
+              fontSize: { xs: "0.6rem", sm: "0.7rem" },
+              color: "#ffb703",
             },
           }}
         />
