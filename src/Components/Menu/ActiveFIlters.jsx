@@ -75,6 +75,7 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
           onDelete={() => onRemove("subCategory")}
           size="small"
           sx={{
+            border:"1px dashed",
             borderColor: alpha(getCategoryColor(filters.mainCategory), 0.6),
             color: getCategoryColor(filters.mainCategory),
             backgroundColor: alpha(getCategoryColor(filters.mainCategory), 0.08),
