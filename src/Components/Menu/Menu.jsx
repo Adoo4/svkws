@@ -10,7 +10,6 @@ import {
   ListSubheader,
   Collapse,
 } from "@mui/material";
-import  { useState } from "react";
 import Grid from "@mui/material/Grid";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
@@ -25,6 +24,8 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import DrawIcon from "@mui/icons-material/Draw";
 import Language from "./LanguageSelect";
 import IsNewSwitch from "./IsNewSwitch";
+import ActiveFilters from "./ActiveFIlters";
+
 
 const kategorije = [
   {
@@ -51,7 +52,7 @@ const kategorije = [
       "Poezija",
       "Klasici",
       "Humoristička književnost",
-      "Mitologija"
+      "Mitologija",
     ],
   },
   {
@@ -138,57 +139,75 @@ const kategorije = [
 export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
-const [isNewOnly, setIsNewOnly] = useState(false);
   const handleCategoryClick = (kategorija) => {
-  if (kategorija.naziv.toLowerCase() === "sve knjige") {
-    setFilter({
-      mainCategory: "",
+    if (kategorija.naziv.toLowerCase() === "sve knjige") {
+      // ✅ Do NOT reset language/isNew/discount here
+      setFilter((prev) => ({
+        ...prev,
+        mainCategory: "",
+        subCategory: "",
+      }));
+      setSelectedIndex(null);
+      setOpenCategory(null);
+      setPage(1);
+      return;
+    }
+
+    // Other categories
+    setFilter((prev) => ({
+      ...prev,
+      mainCategory: kategorija.naziv,
       subCategory: "",
-      language: "",
-      isNew: false,
-      discount: false,
-    });
-    setSelectedIndex(null);
-    setOpenCategory(null);
+    }));
     setPage(1);
-    return;
-  }
+    setOpenCategory((prev) =>
+      prev === kategorija.naziv.toLowerCase()
+        ? null
+        : kategorija.naziv.toLowerCase()
+    );
+    setSelectedIndex(null);
+  };
 
-  setFilter({
-  mainCategory: kategorija.naziv,
-  subCategory: "",
-  language: "",
-  isNew: false,
-  discount: false,
-});
-setPage(1); // reset to first page
-
-  setOpenCategory((prev) =>
-    prev === kategorija.naziv.toLowerCase() ? null : kategorija.naziv.toLowerCase()
-  );
-
-  setSelectedIndex(null);
-};
-
-const handleIsNewToggle = (checked) => {
-  setIsNewOnly(checked);
-  setFilter((prev) => ({
-    ...prev,
-    isNew: checked,
-  }));
-  setPage(1);
-};
+  const handleIsNewToggle = (checked) => {
+    setFilter((prev) => ({
+      ...prev,
+      isNew: checked,
+    }));
+    setPage(1);
+  };
 
   const handleSubcategoryClick = (kategorija, pod, idx) => {
     setSelectedIndex(idx);
+    // ✅ Preserve language & isNew
     setFilter((prev) => ({
       ...prev,
       mainCategory: kategorija.naziv,
       subCategory: pod,
     }));
-    setOpenCategory(kategorija.naziv.toLowerCase()); // ensure parent stays open
+    setOpenCategory(kategorija.naziv.toLowerCase());
     setPage(1);
   };
+
+
+// Add these inside SelectedListItem component (not nested in any function)
+const handleRemoveFilter = (key) => {
+  if (key === "category") {
+    setFilter((prev) => ({
+      ...prev,
+      mainCategory: "",
+      subCategory: "",
+    }));
+    setSelectedIndex(null);
+    setOpenCategory(null);
+  } else {
+    setFilter((prev) => ({
+      ...prev,
+      [key]: typeof prev[key] === "boolean" ? false : "",
+    }));
+  }
+};
+
+
 
   return (
     <Box
@@ -200,8 +219,15 @@ const handleIsNewToggle = (checked) => {
         overflowY: "auto",
         pr: "0.5rem",
         mt: "1rem",
+        marginBottom:"10rem"
       }}
     >
+      {/*Filters athat are applied*/ }
+{/* Active Filters Bar */}
+<ActiveFilters filters={filter} onRemove={handleRemoveFilter} kategorije={kategorije} />
+
+
+
       {/* Decorative header bar */}
       <Box
         sx={{
@@ -373,11 +399,10 @@ const handleIsNewToggle = (checked) => {
       <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
         <Language filter={filter} setFilter={setFilter} />
       </Box>
-      
-<Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
-  <IsNewSwitch onToggle={handleIsNewToggle} checked={isNewOnly} />
-</Box>
 
+      <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
+        <IsNewSwitch checked={filter.isNew} onToggle={handleIsNewToggle} />
+      </Box>
     </Box>
   );
 }

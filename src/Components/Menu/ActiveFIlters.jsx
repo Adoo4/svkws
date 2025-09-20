@@ -1,0 +1,145 @@
+import React from "react";
+import { Box, Chip, Typography, Divider } from "@mui/material";
+import { alpha } from "@mui/material";
+
+export default function ActiveFilters({ filters, onRemove, kategorije }) {
+  const getCategoryColor = (categoryName) => {
+    const cat = kategorije.find((k) => k.naziv === categoryName);
+    return cat ? cat.boja : "#313131";
+  };
+
+  // Hide component if no filters are active
+  if (!filters.mainCategory && !filters.subCategory && !filters.language && !filters.isNew) {
+    return null;
+  }
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: { xs: 0.5, sm: 1 }, // smaller gap on mobile
+        mb: { xs: 1, sm: 2 },
+        ml: { xs: 0.5, sm: 1 },
+        alignItems: "center",
+      }}
+    >
+      {/* Label */}
+      <Typography
+        sx={{
+          fontSize: { xs: "0.65rem", sm: "0.75rem" },
+          fontWeight: 500,
+          color: "#f0f0f0",
+          width: "100%",
+          mb: 0.5,
+        }}
+      >
+        Filteri koji se primjenjuju:
+      </Typography>
+
+      {/* Divider */}
+      <Divider sx={{ width: "100%", mb: 1, borderColor: "#444" }} />
+
+      {/* Main category */}
+      {filters.mainCategory && (
+        <Chip
+          label={filters.mainCategory}
+          variant="outlined"
+          onDelete={() => onRemove("mainCategory")}
+          size="small"
+          sx={{
+            borderColor: getCategoryColor(filters.mainCategory),
+            color: getCategoryColor(filters.mainCategory),
+            backgroundColor: alpha(getCategoryColor(filters.mainCategory), 0.15),
+            fontWeight: 500,
+            fontSize: { xs: "0.65rem", sm: "0.75rem" },
+            height: { xs: 22, sm: 26 },
+            borderRadius: "14px",
+            cursor: "default",
+            "&:hover": {
+              backgroundColor: alpha(getCategoryColor(filters.mainCategory), 0.25),
+            },
+            "& .MuiChip-deleteIcon": {
+              fontSize: { xs: "0.6rem", sm: "0.7rem" },
+              color: getCategoryColor(filters.mainCategory),
+            },
+          }}
+        />
+      )}
+
+      {/* Subcategory */}
+      {filters.subCategory && (
+        <Chip
+          label={filters.subCategory}
+          variant="outlined"
+          onDelete={() => onRemove("subCategory")}
+          size="small"
+          sx={{
+            borderColor: alpha(getCategoryColor(filters.mainCategory), 0.6),
+            color: getCategoryColor(filters.mainCategory),
+            backgroundColor: alpha(getCategoryColor(filters.mainCategory), 0.08),
+            fontWeight: 500,
+            fontSize: { xs: "0.65rem", sm: "0.75rem" },
+            height: { xs: 22, sm: 26 },
+            borderRadius: "14px",
+            "&:hover": {
+              backgroundColor: alpha(getCategoryColor(filters.mainCategory), 0.18),
+            },
+            "& .MuiChip-deleteIcon": {
+              fontSize: { xs: "0.6rem", sm: "0.7rem" },
+              color: getCategoryColor(filters.mainCategory),
+            },
+          }}
+        />
+      )}
+
+      {/* Language */}
+      {filters.language && (
+        <Chip
+          label={filters.language}
+          variant="outlined"
+          onDelete={() => onRemove("language")}
+          size="small"
+          sx={{
+            borderColor: "#ccc",
+            color: "#333",
+            backgroundColor: "#f7f7f7",
+            fontWeight: 500,
+            fontSize: { xs: "0.65rem", sm: "0.75rem" },
+            height: { xs: 22, sm: 26 },
+            borderRadius: "14px",
+            "&:hover": { backgroundColor: "#e0e0e0" },
+            "& .MuiChip-deleteIcon": {
+              fontSize: { xs: "0.6rem", sm: "0.7rem" },
+              color: "#333",
+            },
+          }}
+        />
+      )}
+
+      {/* isNew */}
+      {filters.isNew && (
+        <Chip
+          label="Novo"
+          variant="outlined"
+          onDelete={() => onRemove("isNew")}
+          size="small"
+          sx={{
+            borderColor: "#666",
+            color: "#666",
+            backgroundColor: "#f0f0f0",
+            fontWeight: 500,
+            fontSize: { xs: "0.65rem", sm: "0.75rem" },
+            height: { xs: 22, sm: 26 },
+            borderRadius: "14px",
+            "&:hover": { backgroundColor: "#e0e0e0" },
+            "& .MuiChip-deleteIcon": {
+              fontSize: { xs: "0.6rem", sm: "0.7rem" },
+              color: "#666",
+            },
+          }}
+        />
+      )}
+    </Box>
+  );
+}

@@ -7,55 +7,60 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import LanguageIcon from "@mui/icons-material/Language";
 
 export default function LanguageSelect({ filter, setFilter }) {
   const handleChange = (event) => {
- setFilter((prev) => ({
-  ...prev,
-   language: event.target.value,   // ✅ match backend field
-  }));
-
-};
+    setFilter((prev) => ({
+      ...prev,
+      language: event.target.value, // ✅ match backend field
+    }));
+  };
 
   return (
     <Box sx={{ minWidth: 250, width: "100%" }}>
-      <FormControl fullWidth sx={{ borderRadius: 2, backgroundColor: "#262626" }}>
+      <FormControl
+        fullWidth
+        sx={{ borderRadius: 2, backgroundColor: "#262626" }}
+      >
         <InputLabel
           id="language-select-label"
           sx={{
             display: "flex",
             alignItems: "center",
+            gap: 0.5,
             color: "#f7f7f7",
             "&.Mui-focused": { color: "#f7f7f7", fontSize: "1rem" },
           }}
         >
+          <LanguageIcon sx={{ fontSize: "1rem", color: "#d62d00" }} />
           <Typography sx={{ fontSize: "0.75rem" }}>Jezik</Typography>
         </InputLabel>
 
         <Select
           labelId="language-select-label"
           id="language-select"
-          value={filter.language || ""}  // ✅ fixed here
+          value={filter.language || ""}
           onChange={handleChange}
-         sx={{
-    color: "#f7f7f7",
-    backgroundColor: "#313131",
-    borderRadius: 2,
-    height: "3rem",
-    fontSize: "0.75rem", // 👈 fixes displayed value
-    "& .MuiSelect-select": {
-      fontSize: "0.75rem", // 👈 ensures text inside select is smaller
-      display: "flex",
-      alignItems: "center",
-    },
-    "& .MuiSelect-icon": { color: "#d62d00" },
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#313131",
-      borderRadius: 2,
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#313131" },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#313131" },
-  }}
+          sx={{
+            color: "#f7f7f7",
+            backgroundColor: "#313131",
+            borderRadius: 2,
+            height: "3rem",
+            fontSize: "0.75rem",
+            "& .MuiSelect-select": {
+              fontSize: "0.75rem",
+              display: "flex",
+              alignItems: "center",
+            },
+            "& .MuiSelect-icon": { color: "#d62d00" },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#313131",
+              borderRadius: 2,
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#313131" },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#313131" },
+          }}
           MenuProps={{
             PaperProps: {
               sx: {
@@ -71,7 +76,7 @@ export default function LanguageSelect({ filter, setFilter }) {
             transformOrigin: { vertical: "bottom", horizontal: "left" },
           }}
         >
-          <MenuItem sx={{ fontSize: "0.75rem" }} value={""} >
+          <MenuItem sx={{ fontSize: "0.75rem" }} value={""}>
             Svi
           </MenuItem>
           <MenuItem sx={{ fontSize: "0.75rem" }} value={"English"}>
