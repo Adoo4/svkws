@@ -19,7 +19,7 @@ import { SignIn, SignUp } from "@clerk/clerk-react";
 import WishlistDrawer from "./Components/WishlistDrawer";
 import { SnackbarProvider } from "notistack";
 import AuthNotifier from "./Components/SignIn/AuthNotifier.jsx"; // <-- import it
-import { useMediaQuery, useTheme } from "@mui/material";
+
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -31,8 +31,8 @@ function App() {
    const [loading, setLoading] = useState(true);
   const imageUrl = "https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"; // example
 
-  const theme = useTheme();
-const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // xs & sm
+
+
    
 useEffect(() => {
   // If user visited before, skip loading
