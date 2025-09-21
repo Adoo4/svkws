@@ -120,34 +120,98 @@ const backgroundColor = scrolled || isShopOrCheckout ? "#262626" : "transparent"
         }}
       >
         <Button
-          sx={{
-            fontSize: "inherit",
-            display: { xs: "none", md: "flex" },
-            color: "#f9f9f9",
-            "&:hover": {
-              color: "#d62d00",
-            },
-          }}
-          onClick={() => navigate("/home")}
-          startIcon={<HomeIcon />}
-        >
-          <Box sx={{ display: { xs: "none", sm: "inline" } }}>POČETNA</Box>
-        </Button>
+  sx={{
+    fontSize: "0.80rem",
+    display: { xs: "none", md: "flex" },
+    color: "#f9f9f9",
+    backgroundColor: "transparent",
+    borderRadius: 2,
+    px: 2.5,
+    py: 1.2,
+    fontWeight: 600,
+    position: "relative",
+    overflow: "hidden",
+    transition: "all 0.3s ease",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: 4,
+      left: "50%",
+      width: "0%",
+      height: "2px",
+      background: "linear-gradient(90deg, #d62d00, #ff5722)",
+      transition: "all 0.3s ease",
+      transform: "translateX(-50%)",
+      borderRadius: 2,
+    },
+    "&:hover": {
+      color: "#d62d00",
+    
+      textShadow: "0 0 8px rgba(214,45,0,0.5)",
+    },
+    "&:hover::after": {
+      width: "60%",
+    },
+    "&.Mui-selected": {
+      color: "#d62d00",
+      "&::after": {
+        width: "60%",
+      },
+    },
+  }}
+  onClick={() => navigate("/home")}
+  startIcon={<HomeIcon />}
+>
+  <Box sx={{ display: { xs: "none", sm: "inline" } }}>POCETNA</Box>
+</Button>
 
-        <Button
-          sx={{
-            fontSize: "inherit",
-            display: { xs: "none", md: "flex" },
-            color: "#f9f9f9",
-            "&:hover": {
-              color: "#d62d00",
-            },
-          }}
-          onClick={() => navigate("/shop")}
-          startIcon={<StoreIcon />}
-        >
-          <Box sx={{ display: { xs: "none", sm: "inline" } }}>BOOKSTORE</Box>
-        </Button>
+<Button
+  sx={{
+    fontSize: "0.80rem",
+    display: { xs: "none", md: "flex" },
+    color: "#f9f9f9",
+    backgroundColor: "transparent",
+    borderRadius: 2,
+    px: 2.5,
+    py: 1.2,
+    
+    fontWeight: 600,
+    position: "relative",
+    overflow: "hidden",
+    transition: "all 0.3s ease",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: 4,
+      left: "50%",
+      width: "0%",
+      height: "2px",
+      background: "linear-gradient(90deg, #d62d00, #ff5722)",
+      transition: "all 0.3s ease",
+      transform: "translateX(-50%)",
+      borderRadius: 2,
+    },
+    "&:hover": {
+      color: "#d62d00",
+     
+      textShadow: "0 0 8px rgba(214,45,0,0.5)",
+    },
+    "&:hover::after": {
+      width: "60%",
+    },
+    "&.Mui-selected": {
+      color: "#d62d00",
+      "&::after": {
+        width: "60%",
+      },
+    },
+  }}
+  onClick={() => navigate("/shop")}
+  startIcon={<StoreIcon />}
+>
+  <Box sx={{ display: { xs: "none", sm: "inline" } }}>BOOKSTORE</Box>
+</Button>
+
         
 
         {/* Cart */}
@@ -198,28 +262,37 @@ const backgroundColor = scrolled || isShopOrCheckout ? "#262626" : "transparent"
 
           <SignedOut>
   <SignInButton mode="modal">
-   <Button 
-   
+   <Button
   variant="contained"
   startIcon={<LoginIcon />}
   sx={(theme) => ({
-    height: "100%",
+    height: { xs: "1.5rem", sm: "2.2rem", md: "2.4rem" },
+    borderRadius: "50px",
+    px: { xs: 1.5, sm: 3, md: 4 },
+    fontSize: { xs: "0.65rem", sm: "0.7rem", md: "0.8rem" },
+    fontWeight: 600,
+    minWidth: { xs: "70px", sm: "120px", md: "150px" },
+    color: "#fff",
+    backgroundColor: "transparent", // semi-transparent on transparent navbar
     textTransform: "none",
-    background:"transparent",
-      boxShadow: "none",
-    borderRadius:"10rem",
-    px: { xs: 0, sm: 3, md: 4 }, // responsive padding
-    fontSize: { xs: "0.70rem", sm: "0.7rem", md: "0.80rem" }, // responsive font size
-    minWidth: { xs: "90px", sm: "120px", md: "150px" }, // button width scales
+    boxShadow: "none",
+    transition: "all 0.3s ease",
     "& .MuiButton-startIcon": {
-      margin: { xs: 0, sm: "0 8px 0 0" }, // hide spacing on small screens
+      mr: { xs: 0.3, sm: 1 },
+      fontSize: { xs: "0.9rem", sm: "1.2rem" },
     },
     "&:hover": {
-      bgcolor: "#d62d00",
-        boxShadow: "none",
+      backgroundColor: "#ff3c1a",
+      boxShadow: "0 4px 12px rgba(214,45,0,0.4)",
     },
-    [theme.breakpoints.down("sm")]: {
-      startIcon: false, // hides icon on extra small screens
+    [theme.breakpoints.down("xs")]: {
+      minWidth: "60px",
+      px: 1,
+      fontSize: "0.6rem",
+      "& .MuiButton-startIcon": {
+        fontSize: "0.8rem",
+        mr: 0.2,
+      },
     },
   })}
 >

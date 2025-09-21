@@ -17,6 +17,9 @@ import CartMenu from "./Components/CartMenu";
 import LoadingDevice from "./Pages/Loading";
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import WishlistDrawer from "./Components/WishlistDrawer";
+import { SnackbarProvider } from "notistack";
+import AuthNotifier from "./Components/SignIn/AuthNotifier.jsx"; // <-- import it
+import { useMediaQuery, useTheme } from "@mui/material";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -27,6 +30,9 @@ function App() {
 
    const [loading, setLoading] = useState(true);
   const imageUrl = "https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"; // example
+
+  const theme = useTheme();
+const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // xs & sm
    
 useEffect(() => {
   // If user visited before, skip loading
@@ -45,6 +51,27 @@ useEffect(() => {
 }, []);
   
   return  (
+<SnackbarProvider
+  maxSnack={3}
+  autoHideDuration={2500}
+  anchorOrigin={{
+    vertical: "bottom",
+    horizontal: "right",
+  }}
+  Components={{
+    Snackbar: (props) => (
+      <div
+        style={{
+          zIndex: 100000, // higher than BottomNavigation (9999)
+          marginBottom: "60px", // lift above bottom nav
+        }}
+      >
+        <props.Component {...props} />
+      </div>
+    ),
+  }}
+>
+       <AuthNotifier />
       <Router>
   {loading ? (
     <LoadingDevice /> // show loader while loading
@@ -121,7 +148,9 @@ useEffect(() => {
   setWishlist={setWishlist}
   
 />
-</Router>)
+</Router>
+</SnackbarProvider>
+)
 }
 
 

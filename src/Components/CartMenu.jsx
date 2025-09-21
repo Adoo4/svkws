@@ -1,4 +1,4 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Typography,
@@ -13,14 +13,14 @@ import {
   IconButton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import { useSnackbar } from "notistack"; // add this at the top
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
   const navigate = useNavigate();
-
+  const { enqueueSnackbar } = useSnackbar(); // initialize snackbar
   useEffect(() => {
     console.log("cart:", cart);
   }, [cart]);
@@ -80,8 +80,8 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                 disablePadding
                 sx={{
                   background: "#2b2b2b",
-                  alignItems:"center",
-                  
+                  alignItems: "center",
+
                   mb: 2,
                   borderRadius: 2,
                   boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
@@ -123,10 +123,9 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                       sx={{
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent:"center",
+                        justifyContent: "center",
                         gap: 0.5,
                         mt: 0.5,
-                        
                       }}
                     >
                       {/* Author */}
@@ -193,20 +192,22 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                     alignItems: "center",
                     justifyContent: "center",
                     ml: 1,
-                    
                   }}
                 >
                   <IconButton
                     size="small"
-                    onClick={() =>
+                    onClick={() => {
                       setCart((prev) =>
                         prev.map((item) =>
                           item._id === book._id
                             ? { ...item, quantity: item.quantity + 1 }
                             : item
                         )
-                      )
-                    }
+                      );
+                      enqueueSnackbar(`Povećana količina: ${book.title}`, {
+                        variant: "success",
+                      });
+                    }}
                     sx={{
                       color: "#4caf50",
                       "&:hover": { color: "#388e3c" },
@@ -229,7 +230,7 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
 
                   <IconButton
                     size="small"
-                    onClick={() =>
+                    onClick={() => {
                       setCart((prev) =>
                         prev
                           .map((item) =>
@@ -238,8 +239,11 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                               : item
                           )
                           .filter((item) => item.quantity > 0)
-                      )
-                    }
+                      );
+                      enqueueSnackbar(`Smanjena količina: ${book.title}`, {
+                        variant: "info",
+                      });
+                    }}
                     sx={{
                       color: "#f44336",
                       "&:hover": { color: "#d32f2f" },
@@ -303,56 +307,55 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
             }}
           >
             {/* Checkout */}
-           {/* Checkout */}
-<Button
-  startIcon={<ShoppingCartIcon />}
-  variant="contained"
-  fullWidth
-  sx={{
-    borderRadius: "12px",
-    textTransform: "none",
-    fontSize: { xs: "0.70rem", sm: "0.70rem" },
-    bgcolor: "#f33600",
-    color: "#fff",
-    py: 1.2,
-    fontWeight: 400,
-    "&:hover": {
-      bgcolor: "#d62d00",
-    },
-  }}
-  onClick={() => {
-    navigate("/checkout"); // navigate first
-    setCartMenu(false);    // then close the drawer
-  }}
->
-  ZAVRŠI KUPOVINU
-</Button>
+            {/* Checkout */}
+            <Button
+              startIcon={<ShoppingCartIcon />}
+              variant="contained"
+              fullWidth
+              sx={{
+                borderRadius: "12px",
+                textTransform: "none",
+                fontSize: { xs: "0.70rem", sm: "0.70rem" },
+                bgcolor: "#f33600",
+                color: "#fff",
+                py: 1.2,
+                fontWeight: 400,
+                "&:hover": {
+                  bgcolor: "#d62d00",
+                },
+              }}
+              onClick={() => {
+                navigate("/checkout"); // navigate first
+                setCartMenu(false); // then close the drawer
+              }}
+            >
+              ZAVRŠI KUPOVINU
+            </Button>
 
-{/* Clear Cart */}
-<Button
-  onClick={() => {
-    setCart([]);       // clear cart
-    setCartMenu(false); // close drawer
-  }}
-  variant="outlined"
-  fullWidth
-  sx={{
-    borderRadius: "12px",
-    textTransform: "none",
-    fontSize: { xs: "0.75rem", sm: "0.875rem" },
-    borderColor: "white",
-    color: "white",
-    py: 1.2,
-    fontWeight: 400,
-    "&:hover": {
-      borderColor: "#d62d00",
-      color: "#d62d00",
-    },
-  }}
->
-  Isprazni
-</Button>
-
+            {/* Clear Cart */}
+            <Button
+              onClick={() => {
+                setCart([]); // clear cart
+                setCartMenu(false); // close drawer
+              }}
+              variant="outlined"
+              fullWidth
+              sx={{
+                borderRadius: "12px",
+                textTransform: "none",
+                fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                borderColor: "white",
+                color: "white",
+                py: 1.2,
+                fontWeight: 400,
+                "&:hover": {
+                  borderColor: "#d62d00",
+                  color: "#d62d00",
+                },
+              }}
+            >
+              Isprazni
+            </Button>
           </Box>
         </Box>
       )}

@@ -26,6 +26,7 @@ import RelatedBooks from "../Components/RelatedBooks";
 import { round } from "../Utils.js/round";
 import { useUser } from "@clerk/clerk-react";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function BookDetail({cart, setCart, setCartMenu}) {
   const { id } = useParams(); // book id from route
@@ -225,23 +226,30 @@ useEffect(() => {
         Dodaj u listu želja
       </Button>
 
-      <Button
-        variant="contained"
-        startIcon={<ShoppingCartIcon />}
-        sx={{
-          borderRadius: "12px",
-          textTransform: "none",
-          flex: { xs: 1, sm: "unset" },
-          fontSize: { xs: "0.60rem", sm: "0.7rem" },
-          bgcolor: "#f33600",
-          "&:hover": { bgcolor: "#d62d00" },
-        }}
-        fullWidth
-        onClick={() => addToCart(book)}
-        disabled={!isSignedIn} // disable if user isn't signed in
-      >
-        Dodaj u korpu
-      </Button>
+<Tooltip
+  title={!isSignedIn ? "Morate biti prijavljeni da biste kupili knjige" : ""}
+  arrow
+>
+  <span> {/* Needed because disabled buttons don’t trigger tooltip otherwise */}
+    <Button
+      variant="contained"
+      startIcon={<ShoppingCartIcon />}
+      sx={{
+        borderRadius: "12px",
+        textTransform: "none",
+        flex: { xs: 1, sm: "unset" },
+        fontSize: { xs: "0.60rem", sm: "0.7rem" },
+        bgcolor: "#f33600",
+        "&:hover": { bgcolor: "#d62d00" },
+      }}
+      fullWidth
+      onClick={() => addToCart(book)}
+      disabled={!isSignedIn} // disable for guests
+    >
+      Dodaj u korpu
+    </Button>
+  </span>
+</Tooltip>
     </Box>
               </Box>
             </CardContent>

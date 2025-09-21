@@ -88,6 +88,7 @@ let CategoryMenu = ({
         justifyContent: "center",
         background: "#262626",
         alignItems: "center",
+        
       }}
     >
       <Box

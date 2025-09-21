@@ -23,7 +23,7 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
     display: "flex",
     flexDirection: "column",
     overflowY: "auto",
-     marginBottom:{xs:"3rem", sm:"0"}
+     
   }}
   role="presentation"
   onKeyDown={toggleDrawer(false)}
@@ -78,11 +78,11 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
       <PersonIcon sx={{ color: "#f7f7f7f7", fontSize: 18, opacity: 0.8 }} />
       <Typography
         variant="subtitle2"
-        sx={{ fontWeight: "bold", fontSize: "0.70rem", color: "#f7f7f7f7",  }}
+        sx={{ fontWeight: "bold", fontSize: {xs:"0.70rem", lg:"0.85rem"}, color: "#f7f7f7f7",  }}
       >
         Autor:
       </Typography>
-      <Typography variant="body2" sx={{ fontSize: "0.70rem", color: "#f7f7f7f7" }}>
+      <Typography variant="body2" sx={{ fontSize: {xs:"0.70rem", lg:"0.85rem"}, color: "#f7f7f7f7" }}>
         {drawerData.author}
       </Typography>
     </Box>

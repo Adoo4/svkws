@@ -161,11 +161,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
       subCategory: "",
     }));
     setPage(1);
-    setOpenCategory((prev) =>
-      prev === kategorija.naziv.toLowerCase()
-        ? null
-        : kategorija.naziv.toLowerCase()
-    );
+    setOpenCategory((prev) => prev === kategorija.naziv.toLowerCase() ? null : kategorija.naziv.toLowerCase());
     setSelectedIndex(null);
   };
 

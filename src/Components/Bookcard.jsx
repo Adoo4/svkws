@@ -26,9 +26,11 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { SignedIn } from '@clerk/clerk-react';
 import React, { memo } from "react";
+import Tooltip from "@mui/material/Tooltip";
 import {
   isInWishlist,
 } from "../Utils.js/wishlist"; // adjust path
+import { useSnackbar } from "notistack";
 
 const kategorije = [
   {
@@ -145,7 +147,7 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist })
   const isNew = book.isNew;
   const hasDiscount = book.discount?.amount > 0;
   const navigate = useNavigate();
-
+const { enqueueSnackbar } = useSnackbar();
 
    // state to control heart icon
   const [inWishlist, setInWishlist] = useState(false);
@@ -187,15 +189,16 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist })
 
 
    function addToCart(product) {
+  let isNewItem = false; // flag to check if this is a new addition
+
   setCart((prevCart) => {
     const existing = prevCart.find((item) => item._id === product._id);
 
-    // check if discount is still valid
     const hasValidDiscount =
-      product.discount &&
-      new Date(product.discount.validUntil) > new Date();
+      product.discount && new Date(product.discount.validUntil) > new Date();
 
     if (existing) {
+      // just increase quantity, no notification
       return prevCart.map((item) =>
         item._id === product._id
           ? {
@@ -206,6 +209,7 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist })
           : item
       );
     } else {
+      isNewItem = true; // mark as new
       return [
         ...prevCart,
         {
@@ -216,7 +220,15 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist })
       ];
     }
   });
+
+  if (isNewItem) {
+    enqueueSnackbar(`${product.title} dodan u korpu!`, {
+      variant: "success",
+      autoHideDuration: 2000,
+    });
+  }
 }
+
 
 // Then when rendering cart, compute price:
 const formatCategoryName = (name) => {
@@ -564,88 +576,77 @@ const formatCategoryName = (name) => {
     </CardContent>
 
     {/* Actions */}
- <CardActions
+<CardActions
   sx={{
     p: 0,
     mt: 2,
     display: "flex",
-    flexDirection: { xs: "column", sm:"column", md:"row" },
+    flexDirection: { xs: "column", sm: "column", md: "row" },
     alignItems: "stretch",
     justifyContent: "center",
     gap: { xs: 0.5, sm: 1 },
     "& > :not(:first-of-type)": {
-      ml: { xs: 0, sm: 0, md: 1, lg: 2 }, // responsive margin
+      ml: { xs: 0, sm: 0, md: 1, lg: 2 },
     },
   }}
 >
+  {/* Info Button */}
   <Button
-  variant="outlined"
-  size="small"
-  onClick={(e) => {
-  
-    navigate(`/${book._id}`, {
-      state: {
-        book,                     // full book object
-        category: book.subCategory, // mainCategory for related books
-      },
-    });
-    console.log(book);
-  }}
-  fullWidth
-  startIcon={
-    <InfoOutlinedIcon
-      sx={{
-        fontSize: { xs: "0.9rem", sm: "1.2rem" },
-      }}
-    />
-  }
-  sx={{
-    width: "100%",
-    flex: { xs: "1 1 100%", sm: "1 1 50%" },
-    px: { xs: 1, sm: 1.5 },
-    borderRadius: "12px",
-    textTransform: "none",
-    borderColor: "#313131",
-    color: "#313131",
-    fontSize: { xs: "0.60rem", sm: "0.7rem" },
-    "&:hover": {
-      borderColor: "#f33600",
-      color: "#f33600",
-    },
-  }}
->
-  Detalji
-</Button>
+    variant="outlined"
+    size="small"
+    onClick={(e) => {
+      navigate(`/${book._id}`, {
+        state: { book, category: book.subCategory },
+      });
+    }}
+    startIcon={
+      <InfoOutlinedIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
+    }
+    sx={{
+      flex: 1,
+      px: { xs: 1, sm: 1.5 },
+      borderRadius: "12px",
+      textTransform: "none",
+      borderColor: "#313131",
+      color: "#313131",
+      fontSize: { xs: "0.60rem", sm: "0.7rem" },
+      "&:hover": { borderColor: "#f33600", color: "#f33600" },
+    }}
+  >
+    Detalji
+  </Button>
 
-
-  {isSignedIn && (
-    <Button
-  variant="contained"
-  size="small"
-  onClick={() => addToCart(book)}
-  fullWidth
-  startIcon={
-    <ShoppingCartIcon
-      sx={{
-        fontSize: { xs: "0.9rem", sm: "1.2rem" },
-      }}
-    />
-  }
-  sx={{
-    width: "100%",
-    flex: { xs: "1 1 100%", sm: "1 1 50%" },
-    px: { xs: 1, sm: 1.5 },
-    fontSize: { xs: "0.60rem", sm: "0.7rem" },
-    borderRadius: "12px",
-    textTransform: "none",
-    bgcolor: "#313131",
-    "&:hover": { bgcolor: "#d62d00" },
-  }}
->
-  Dodaj
-</Button>
-  )}
+  {/* Add to Cart Button with Tooltip */}
+  <Tooltip
+    title={isSignedIn ? "" : "Morate biti prijavljeni da dodate knjige u korpu"}
+    arrow
+  >
+    <span style={{ flex: 1, display: "flex" }}>
+      <Button
+        variant="contained"
+        size="small"
+        onClick={() => addToCart(book)}
+        startIcon={
+          <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
+        }
+        sx={{
+          flex: 1,
+          px: { xs: 1, sm: 1.5 },
+          fontSize: { xs: "0.60rem", sm: "0.7rem" },
+          borderRadius: "12px",
+          textTransform: "none",
+          bgcolor: "#313131",
+          color: "#fff",
+          "&:hover": { bgcolor: "#d62d00" },
+        }}
+        disabled={!isSignedIn}
+      >
+        Dodaj
+      </Button>
+    </span>
+  </Tooltip>
 </CardActions>
+
 
   </Box>
 </Card>

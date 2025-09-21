@@ -22,6 +22,8 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
         mb: { xs: 1, sm: 2 },
         ml: { xs: 0.5, sm: 1 },
         alignItems: "center",
+        minHeight:"5rem",
+       
       }}
     >
       {/* Label */}
@@ -29,7 +31,7 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
         sx={{
           fontSize: { xs: "0.65rem", sm: "0.75rem" },
           fontWeight: 500,
-          color: "#f0f0f0",
+          color: "#f1f1f1",
           width: "100%",
           mb: 0.5,
         }}

@@ -28,10 +28,10 @@ const DiscountSwitch = ({ onToggle, checked }) => {
               color="default"
               sx={{
                 "& .MuiSwitch-switchBase": {
-                  color: "#f7f7f7",
+                  color: "#696969",
                 },
                 "& .MuiSwitch-switchBase.Mui-checked": {
-                  color: "#f7f7f7",
+                  color: "#696969",
                   transform: "translateX(16px)",
                   "&:hover": {
                     backgroundColor: "rgba(247, 247, 247, 0.08)",

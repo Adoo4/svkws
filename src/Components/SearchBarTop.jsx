@@ -19,6 +19,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDebounce } from "../Utils.js/useDebounce"
+import { SignedIn, SignedOut,  SignInButton, UserButton } from '@clerk/clerk-react';
 
 const SearchBarTop = ({ booksCopy,  setCart, setDrawerData, toggleDrawer }) => {
   const [query, setQuery] = useState("");
@@ -180,7 +181,7 @@ const handleSearch = (e) => {
                   <Avatar
                     src={book.coverImage || "/placeholder.png"}
                     variant="square"
-                    sx={{ width: 50, height: "auto", objectFit:"contain" }}
+                    sx={{ width: 40, height: "auto", objectFit:"contain" }}
                   />
                 </ListItemAvatar>
                 <ListItemText
@@ -228,7 +229,7 @@ const handleSearch = (e) => {
                   >
                     <VisibilityIcon fontSize="small" />
                   </Box>
-
+<SignedIn>
                   <Box
                     sx={{
                       display: "flex",
@@ -251,6 +252,7 @@ const handleSearch = (e) => {
                   >
                     <AddShoppingCartIcon fontSize="small" />
                   </Box>
+                  </SignedIn>
                 </Box>
               </ListItem>
             ))}
