@@ -31,10 +31,7 @@ import { useSnackbar } from "notistack";
 import {
   getWishlist,
   setWishlist as setWishlistLocalStorage, // rename import
-  isInWishlist,
-  addToWishlist,
-  removeFromWishlist,
-  toggleWishlist,
+  
 } from "../Utils.js/wishlist"; 
 
 
@@ -61,7 +58,7 @@ useEffect(() => {
     .get(`https://backendsvkwbshp.onrender.com/api/books/${id}`)
     .then((res) => {setBook(res.data); setLoading(false)})
     .catch((err) => console.error("Book fetch error:", err));
-}, [id]);
+}, [id, setWishlist, wishlist]);
   function addToCart(product) {
   setCart((prevCart) => {
     const existing = prevCart.find((item) => item._id === product._id);
