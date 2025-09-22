@@ -27,9 +27,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { SignedIn } from '@clerk/clerk-react';
 import React, { memo } from "react";
 import Tooltip from "@mui/material/Tooltip";
-import {
-  isInWishlist,
-} from "../Utils.js/wishlist"; // adjust path
 import { useSnackbar } from "notistack";
 
 const kategorije = [
