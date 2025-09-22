@@ -27,14 +27,32 @@ import { round } from "../Utils.js/round";
 import { useUser } from "@clerk/clerk-react";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import Tooltip from "@mui/material/Tooltip";
+import { useSnackbar } from "notistack";
+import {
+  getWishlist,
+  setWishlist as setWishlistLocalStorage, // rename import
+  isInWishlist,
+  addToWishlist,
+  removeFromWishlist,
+  toggleWishlist,
+} from "../Utils.js/wishlist"; 
 
-export default function BookDetail({cart, setCart, setCartMenu}) {
+
+export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWishlist}) {
   const { id } = useParams(); // book id from route
   const location = useLocation();
   const { book: initialBook } = location.state || {};
   const [book, setBook] = useState(initialBook);
   const [loading, setLoading] = useState(true);
    const { isSignedIn } = useUser();
+    const { enqueueSnackbar } = useSnackbar();
+
+     useEffect(() => {
+  if (!wishlist || wishlist.length === 0) {
+    const storedWishlist = getWishlist();
+    setWishlist(storedWishlist);
+  }
+}, []);
 
 useEffect(() => {
   setBook(null); // reset state
@@ -209,45 +227,68 @@ useEffect(() => {
 
                 <Box display="flex" gap={2} flexWrap="wrap">
       <Button
-        variant="outlined"
-        startIcon={<FavoriteBorderIcon />}
-        sx={{
-          borderRadius: "12px",
-          textTransform: "none",
-          flex: { xs: 1, sm: "unset" },
-          borderColor: "#f9f9f9",
-          color: "#f9f9f9",
-          fontSize: { xs: "0.60rem", sm: "0.7rem" },
-          "&:hover": { borderColor: "#f33600", color: "#f33600" },
-        }}
-        fullWidth
-        disabled={!isSignedIn} // disable if user isn't signed in
-      >
-        Dodaj u listu želja
-      </Button>
+  variant="outlined"
+  startIcon={<FavoriteBorderIcon />}
+  sx={{
+    borderRadius: "12px",
+    textTransform: "none",
+    flex: { xs: 1, sm: "unset" },
+    borderColor: "#f9f9f9",
+    color: "#f9f9f9",
+    fontSize: { xs: "0.60rem", sm: "0.7rem" },
+    "&:hover": { borderColor: "#f33600", color: "#f33600" },
+  }}
+  fullWidth
+  disabled={!isSignedIn}
+  onClick={() => {
+    if (!book) return;
 
-<Tooltip
-  title={!isSignedIn ? "Morate biti prijavljeni da biste kupili knjige" : ""}
-  arrow
+    const alreadyInWishlist = wishlist.some((b) => b._id === book._id);
+
+    if (alreadyInWishlist) {
+      enqueueSnackbar(`${book.title} je već u listi želja`, { variant: "warning" });
+    } else {
+      const newWishlist = [...wishlist, book];
+
+      setWishlist(newWishlist); // update React state
+      setWishlistLocalStorage(newWishlist); // update localStorage
+
+      enqueueSnackbar(`Dodano u listu želja: ${book.title}`, { variant: "success" });
+    }
+  }}
 >
-  <span> {/* Needed because disabled buttons don’t trigger tooltip otherwise */}
-    <Button
-      variant="contained"
-      startIcon={<ShoppingCartIcon />}
-      sx={{
-        borderRadius: "12px",
-        textTransform: "none",
-        flex: { xs: 1, sm: "unset" },
-        fontSize: { xs: "0.60rem", sm: "0.7rem" },
-        bgcolor: "#f33600",
-        "&:hover": { bgcolor: "#d62d00" },
-      }}
-      fullWidth
-      onClick={() => addToCart(book)}
-      disabled={!isSignedIn} // disable for guests
-    >
-      Dodaj u korpu
-    </Button>
+  Dodaj u listu želja
+</Button>
+
+
+      {/* Cart button */}
+      <Tooltip
+        title={!isSignedIn ? "Morate biti prijavljeni da biste kupili knjige" : ""}
+        arrow
+      >
+        <span>
+          <Button
+            variant="contained"
+            startIcon={<ShoppingCartIcon />}
+            sx={{
+              borderRadius: "12px",
+              textTransform: "none",
+              flex: { xs: 1, sm: "unset" },
+              fontSize: { xs: "0.60rem", sm: "0.7rem" },
+              bgcolor: "#f33600",
+              "&:hover": { bgcolor: "#d62d00" },
+            }}
+            fullWidth
+            onClick={() => {
+              addToCart(book);
+              enqueueSnackbar(`Dodano u korpu: ${book.title}`, {
+                variant: "success",
+              });
+            }}
+            disabled={!isSignedIn}
+          >
+            Dodaj u korpu
+          </Button>
   </span>
 </Tooltip>
     </Box>

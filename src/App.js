@@ -119,6 +119,8 @@ useEffect(() => {
                   setCart={setCart}
                   cartMenu={cartMenu}
                   setCartMenu={setCartMenu}
+                   wishlist={wishlist}
+                  setWishlist={setWishlist}
                 />
               }
             />

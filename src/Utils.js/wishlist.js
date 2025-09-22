@@ -10,10 +10,13 @@ export const setWishlist = (wishlist) => {
 };
 
 // check if a book is in the wishlist
-export const isInWishlist = (book) => {
-  const wishlist = getWishlist();
-  return wishlist.some((item) => item._id === book._id);
-};
+export function isInWishlist(book) {
+  if (!book || !book._id) return false;
+
+  const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+
+  return wishlist.some((item) => item && item._id === book._id);
+}
 
 // add book to wishlist
 export const addToWishlist = (book) => {
@@ -33,9 +36,13 @@ export const removeFromWishlist = (book) => {
 
 // toggle wishlist status
 export const toggleWishlist = (book) => {
-  if (isInWishlist(book)) {
-    removeFromWishlist(book);
+  if (!book || !book._id) return; // guard
+  let wishlist = getWishlist() || [];
+  const exists = wishlist.some((item) => item._id === book._id);
+  if (exists) {
+    wishlist = wishlist.filter((item) => item._id !== book._id);
   } else {
-    addToWishlist(book);
+    wishlist.push(book);
   }
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
 };

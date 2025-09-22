@@ -79,13 +79,13 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                 alignItems="flex-start"
                 disablePadding
                 sx={{
-                  background: "#2b2b2b",
+                  
                   alignItems: "center",
 
                   mb: 2,
                   borderRadius: 2,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
-                  "&:hover": { backgroundColor: "#333" },
+                
+                  
                 }}
               >
                 <ListItemAvatar>
@@ -93,6 +93,11 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                     variant="square"
                     src={book.coverImage}
                     alt={book.title}
+                    onClick={(e) => {
+      navigate(`/${book?._id}`, {
+        state: { book, category: book.subCategory },
+      });
+    }}
                     sx={{
                       width: { xs: 80, sm: 100, md: 130 },
                       height: { xs: 100, sm: 130, md: 150 },
@@ -107,7 +112,7 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                 </ListItemAvatar>
 
                 <ListItemText
-                  sx={{ ml: 2, mr: 1 }}
+                  sx={{ ml: 1, mr: 1 }}
                   primary={
                     <Typography
                       variant="subtitle1"
@@ -192,6 +197,7 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                     alignItems: "center",
                     justifyContent: "center",
                     ml: 1,
+                    
                   }}
                 >
                   <IconButton
@@ -209,9 +215,10 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                       });
                     }}
                     sx={{
-                      color: "#4caf50",
+                      color: "#515151",
                       "&:hover": { color: "#388e3c" },
                       mb: 0.5,
+                      background:"#282828"
                     }}
                   >
                     <AddIcon />
@@ -228,38 +235,53 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                     {book.quantity}
                   </Typography>
 
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setCart((prev) =>
-                        prev
-                          .map((item) =>
-                            item._id === book._id
-                              ? { ...item, quantity: item.quantity - 1 }
-                              : item
-                          )
-                          .filter((item) => item.quantity > 0)
-                      );
-                      enqueueSnackbar(`Smanjena količina: ${book.title}`, {
-                        variant: "info",
-                      });
-                    }}
-                    sx={{
-                      color: "#f44336",
-                      "&:hover": { color: "#d32f2f" },
-                      mt: 0.5,
-                    }}
-                  >
-                    <RemoveIcon />
-                  </IconButton>
+                <IconButton
+  size="small"
+  onClick={() => {
+    setCart((prev) => {
+      const target = prev.find((item) => item._id === book._id);
+
+      if (target?.quantity === 1) {
+        // Removing the book completely
+        enqueueSnackbar(`Knjiga je uklonjena iz korpe: ${book.title}`, {
+          variant: "warning",
+        });
+        return prev.filter((item) => item._id !== book._id);
+      } else {
+        // Just decreasing quantity
+        enqueueSnackbar(`Smanjena količina: ${book.title}`, {
+          variant: "info",
+        });
+        return prev.map((item) =>
+          item._id === book._id
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        );
+      }
+    });
+  }}
+  sx={{
+    color: "#414141",
+    "&:hover": { color: "#d32f2f" },
+    mt: 0.5,
+    background: "#282828",
+  }}
+>
+  <RemoveIcon />
+</IconButton>
+
+                  
                 </Box>
+                
               </ListItem>
+              
             );
           })
         )}
+        
       </List>
 
-      <Divider sx={{ my: 2, borderColor: "#444" }} />
+      
 
       {cart.length > 0 && (
         <Box
@@ -354,7 +376,7 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                 },
               }}
             >
-              Isprazni
+              Isprazni Korpu
             </Button>
           </Box>
         </Box>

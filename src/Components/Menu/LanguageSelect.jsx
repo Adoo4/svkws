@@ -10,10 +10,11 @@ import {
 import LanguageIcon from "@mui/icons-material/Language";
 
 export default function LanguageSelect({ filter, setFilter }) {
-  const handleChange = (event) => {
+ const handleChange = (event) => {
+    const value = event.target.value;
     setFilter((prev) => ({
       ...prev,
-      language: event.target.value, // ✅ match backend field
+      language: value === "Svi" ? "" : value, // "" means no filter
     }));
   };
 
@@ -40,13 +41,13 @@ export default function LanguageSelect({ filter, setFilter }) {
         <Select
           labelId="language-select-label"
           id="language-select"
-          value={filter.language || ""}
+            value={filter.language || "Svi"} 
           onChange={handleChange}
           sx={{
             color: "#f7f7f7",
             backgroundColor: "#313131",
             borderRadius: 2,
-            height: "3rem",
+            height: "2.5rem",
             fontSize: "0.75rem",
             "& .MuiSelect-select": {
               fontSize: "0.75rem",
@@ -76,14 +77,14 @@ export default function LanguageSelect({ filter, setFilter }) {
             transformOrigin: { vertical: "bottom", horizontal: "left" },
           }}
         >
-          <MenuItem sx={{ fontSize: "0.75rem" }} value={""}>
+          <MenuItem sx={{ fontSize: "0.75rem" }} value={"Svi"}>
             Svi
           </MenuItem>
-          <MenuItem sx={{ fontSize: "0.75rem" }} value={"English"}>
+          <MenuItem sx={{ fontSize: "0.75rem" }} value={"Engleski"}>
             Engleski
           </MenuItem>
-          <MenuItem sx={{ fontSize: "0.75rem" }} value={"Bosnian"}>
-            B/H/S
+          <MenuItem sx={{ fontSize: "0.75rem" }} value={"Bosanski"}>
+            Bosanski
           </MenuItem>
         </Select>
       </FormControl>
