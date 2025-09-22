@@ -50,7 +50,7 @@ export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWi
     setWishlist(storedWishlist);
   }
 }, []);
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
   setBook(null); // reset state
    window.scrollTo(0, 0); // scroll to top
