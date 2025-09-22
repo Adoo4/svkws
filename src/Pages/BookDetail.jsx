@@ -58,7 +58,7 @@ useEffect(() => {
     .get(`https://backendsvkwbshp.onrender.com/api/books/${id}`)
     .then((res) => {setBook(res.data); setLoading(false)})
     .catch((err) => console.error("Book fetch error:", err));
-}, [id, setWishlist, wishlist]);
+}, [id]);
   function addToCart(product) {
   setCart((prevCart) => {
     const existing = prevCart.find((item) => item._id === product._id);
