@@ -43,14 +43,14 @@ export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWi
   const [loading, setLoading] = useState(true);
    const { isSignedIn } = useUser();
     const { enqueueSnackbar } = useSnackbar();
-
+/* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
   if (!wishlist || wishlist.length === 0) {
     const storedWishlist = getWishlist();
     setWishlist(storedWishlist);
   }
 }, []); // empty dependency array
-
+/* eslint-enable react-hooks/exhaustive-deps */
 useEffect(() => {
   setBook(null); // reset state
    window.scrollTo(0, 0); // scroll to top
