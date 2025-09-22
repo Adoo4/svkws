@@ -44,12 +44,12 @@ export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWi
    const { isSignedIn } = useUser();
     const { enqueueSnackbar } = useSnackbar();
 
-     useEffect(() => {
+    useEffect(() => {
   if (!wishlist || wishlist.length === 0) {
     const storedWishlist = getWishlist();
     setWishlist(storedWishlist);
   }
-}, [wishlist, setWishlist]);
+}, []); // empty dependency array
 
 useEffect(() => {
   setBook(null); // reset state
@@ -97,22 +97,46 @@ useEffect(() => {
      <Box sx={{ width: "100%", minHeight: "100vh", background: "#313131", p: { xs: 2, md: 4 } }}>
       {loading ? (
         // Skeleton while loading
-        <Card sx={{ maxWidth: 1100, mt: "4rem", mx: "auto", display: "flex", flexDirection: { xs: "column", md: "row" }, borderRadius: "20px", overflow: "hidden", bgcolor: "#313131" }}>
-          <Skeleton variant="rectangular" width={{ xs: "100%", md: 350 }} height={500} />
-          <CardContent sx={{ flex: 1, p: { xs: 2, md: 4 } }}>
-            <Skeleton variant="text" width="60%" height={40} />
-            <Skeleton variant="text" width="40%" height={30} />
-            <Skeleton variant="rectangular" width="100%" height={200} sx={{ mt: 2 }} />
-            <Grid container spacing={2} sx={{ mt: 2 }}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Grid item xs={6} sm={4} key={i}>
-                  <Skeleton variant="text" width="100%" height={20} />
-                </Grid>
-              ))}
+           <Card
+      sx={{
+        maxWidth: 1100,
+        mt: "4rem",
+        mx: "auto",
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        borderRadius: "20px",
+        overflow: "hidden",
+        bgcolor: "#313131",
+      }}
+    >
+      {/* Cover Skeleton */}
+      <Skeleton
+        variant="rectangular"
+        height={500}
+        sx={{ width: { xs: "100%", md: 350 } }}
+      />
+
+      <CardContent sx={{ flex: 1, p: { xs: 2, md: 4 } }}>
+        {/* Title & Author */}
+        <Skeleton variant="text" sx={{ width: "60%", height: 40 }} />
+        <Skeleton variant="text" sx={{ width: "40%", height: 30 }} />
+
+        {/* Description */}
+        <Skeleton variant="rectangular" sx={{ width: "100%", height: 200, mt: 2 }} />
+
+        {/* Info Grid */}
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Grid item xs={6} md={4} key={i}>
+              <Skeleton variant="text" sx={{ width: "100%", height: 20 }} />
             </Grid>
-            <Skeleton variant="rectangular" width="100%" height={50} sx={{ mt: 2 }} />
-          </CardContent>
-        </Card>
+          ))}
+        </Grid>
+
+        {/* Add to Cart / Wishlist Skeleton */}
+        <Skeleton variant="rectangular" sx={{ width: "100%", height: 50, mt: 2 }} />
+      </CardContent>
+    </Card>
       ) : (
         <>
           {/* Real Book Content */}

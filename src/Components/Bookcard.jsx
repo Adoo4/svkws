@@ -141,7 +141,7 @@ const kategorije = [
 ];
 
 
-const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist }) => {
+const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist, wishlist }) => {
   const { isSignedIn } = useUser();
   const theme = useTheme();
   const isNew = book.isNew;
@@ -150,37 +150,37 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist })
 const { enqueueSnackbar } = useSnackbar();
 
    // state to control heart icon
-  const [inWishlist, setInWishlist] = useState(false);
+const [inWishlist, setInWishlist] = useState(false);
 
-  // sync with localStorage on mount
-  useEffect(() => {
-    setInWishlist(isInWishlist(book));
-  }, [book]);
+// sync with parent wishlist
+useEffect(() => {
+  const isIn = wishlist.some((item) => item._id === book._id);
+  setInWishlist(isIn);
+}, [wishlist, book]); // automatically updates whenever wishlist changes
 
-  // handle heart click
- const handleWishlistClick = (e) => {
+// handle heart click
+const handleWishlistClick = (e) => {
   e.stopPropagation();
 
   setWishlist((prev) => {
     const alreadyInWishlist = prev.some((item) => item._id === book._id);
 
-    let updated;
-    if (alreadyInWishlist) {
-      // remove book
-      updated = prev.filter((item) => item._id !== book._id);
-    } else {
-      // add book
-      updated = [...prev, book];
-    }
+    const updated = alreadyInWishlist
+      ? prev.filter((item) => item._id !== book._id)
+      : [...prev, book];
 
-    // persist to localStorage
+    enqueueSnackbar(
+      alreadyInWishlist
+        ? `${book.title} uklonjena iz liste želja.`
+        : `${book.title} dodana u listu želja!`,
+      { variant: alreadyInWishlist ? "info" : "success", autoHideDuration: 2000 }
+    );
+
     localStorage.setItem("wishlist", JSON.stringify(updated));
-
     return updated;
   });
-
-  setInWishlist((prev) => !prev); // just for icon toggle
 };
+
 
 
   const finalPrice = hasDiscount

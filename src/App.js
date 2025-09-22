@@ -25,7 +25,15 @@ function App() {
   const [cart, setCart] = useState([]);
   const [cartMenu, setCartMenu] = useState(false);
 
-  const [wishlist, setWishlist] = useState([]);
+const [wishlist, setWishlist] = useState(() => {
+  const stored = localStorage.getItem("wishlist");
+  return stored ? JSON.parse(stored) : [];
+});
+
+// Keep localStorage in sync when wishlist changes
+useEffect(() => {
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+}, [wishlist]);
   const [drawerOpen3, setDrawerOpen3] = useState(false); 
 
    const [loading, setLoading] = useState(true);
