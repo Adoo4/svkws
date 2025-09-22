@@ -49,8 +49,8 @@ export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWi
     const storedWishlist = getWishlist();
     setWishlist(storedWishlist);
   }
-}, []);
-// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [wishlist, setWishlist]);
+
 useEffect(() => {
   setBook(null); // reset state
    window.scrollTo(0, 0); // scroll to top
