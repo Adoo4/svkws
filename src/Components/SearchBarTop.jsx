@@ -100,7 +100,7 @@ const handleSearch = (e) => {
         alignItems: "center",
         width: "100%",
         px: 2,
-        mt: "5rem",
+        mt: "4rem",
         flexDirection: "column",
         position: "relative",
       }}

@@ -14,11 +14,16 @@ import { useCallback } from "react";
 
 let CategoryMenu = ({
   cart,
-  setCart,
   cartMenu,
   setCartMenu,
   wishlist,
   setWishlist,
+  addToCart,
+  updateCartItem,
+  removeCartItem,
+  addToWishlist,
+  removeFromWishlist,
+  clearWishlist,
 }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -65,10 +70,12 @@ let CategoryMenu = ({
     [] // empty dependency array if setLeftDrawerOpen is stable (from useState)
   );
 
-  const handleSetCart = useCallback(
+  {
+    /*const handleSetCart = useCallback(
     (cartData) => setCart(cartData),
     [setCart] // include setCart in dependencies
-  );
+  );*/
+  }
 
   const handleSetWishlist = useCallback(
     (wishlistData) => setWishlist(wishlistData),
@@ -88,13 +95,12 @@ let CategoryMenu = ({
         justifyContent: "center",
         background: "#262626",
         alignItems: "center",
-        
       }}
     >
       <Box
         sx={{
           width: "100%",
-          height: "15lvh",
+          height: { xs: "12lvh", md: "15lvh" },
           background: "#262626",
           display: "flex",
           justifyContent: "center",
@@ -103,7 +109,7 @@ let CategoryMenu = ({
       >
         <SearchBarTop
           booksCopy={books} // instead of booksCopy
-          setCart={setCart}
+          setCart={addToCart}
           toggleDrawer={toggleDrawer}
           setDrawerData={setDrawerData}
         />
@@ -145,20 +151,23 @@ let CategoryMenu = ({
         </Box>
 
         <ProductGallery
-          books={books}
-          loading={isLoading}
-          totalPages={totalPages}
-          toggleDrawer={toggleDrawer}
-          drawerData={drawerData}
-          setDrawerData={handleSetDrawerData}
-          isSmallScreen={isSmallScreen}
-          cart={cart}
-          setCart={handleSetCart}
-          wishlist={wishlist}
-          setWishlist={handleSetWishlist}
-          currentPage={page}
-          setPage={setPage}
-        />
+  books={books}
+  loading={isLoading}
+  totalPages={totalPages}
+  toggleDrawer={toggleDrawer}
+  drawerData={drawerData}
+  setDrawerData={handleSetDrawerData}
+  isSmallScreen={isSmallScreen}
+  cart={cart}
+  wishlist={wishlist}
+  addToWishlist={addToWishlist}
+  removeFromWishlist={removeFromWishlist}
+  currentPage={page}
+  setPage={setPage}
+  addToCart={addToCart}
+  updateCartItem={updateCartItem}
+  removeCartItem={removeCartItem}
+/>
       </Box>
 
       <LeftDrawerMenu
@@ -181,9 +190,11 @@ let CategoryMenu = ({
       <CartMenu
         open={cartMenu}
         cart={cart}
-        setCart={setCart}
+        setCart={addToCart}
+        updateCartItem={updateCartItem}
         cartMenu={cartMenu}
         setCartMenu={setCartMenu}
+        removeCartItem={removeCartItem}
       />
       <BottomNavigationMenu
         leftDrawerOpen={leftDrawerOpen}

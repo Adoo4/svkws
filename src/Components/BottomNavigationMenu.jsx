@@ -96,13 +96,13 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
   label="Kategorije"
   onClick={(event) => toggleDrawer2(!leftDrawerOpen)(event)} // toggle instead of always true
   icon={<MenuIcon sx={{ color: "#f9f9f9" }} />}
-  sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.75rem" } }}
+  sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" } }}
 />
          <BottomNavigationAction
       label="Početna"
       icon={<HomeIcon sx={{ color: "#f9f9f9" }} />}
       sx={{
-        "& .MuiBottomNavigationAction-label": { fontSize: "0.75rem" },
+        "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" },
       }}
       onClick={() => navigate("/home")}
     />
@@ -110,11 +110,8 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
 <BottomNavigationAction
   label="Korpa"
   icon={<ShoppingCartIcon sx={{ color: "#f9f9f9" }} />}
-  sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.75rem" } }}
-  onClick={() => {
-    setCartMenu((prev) => !prev); // toggles cart menu
-    toggleDrawer(true);           // ensures drawer opens
-  }}
+  sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" } }}
+  onClick={() => setCartMenu(true)} // just open it
 />
 )}
         </BottomNavigation>

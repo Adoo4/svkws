@@ -56,7 +56,7 @@ export default function ButtonAppBar({cart, setCartMenu, wishlist, setDrawerOpen
   return () => window.removeEventListener("scroll", handleScroll);
 }, []);
 
-const isShopOrCheckout = location.pathname === "/shop" || location.pathname === "/checkout";
+const isShopOrCheckout = location.pathname === "/shop" || location.pathname === "/checkout" || location.pathname ==="/Uslovikupovine";
 const backgroundColor = scrolled || isShopOrCheckout ? "#262626" : "transparent";
 
   return (

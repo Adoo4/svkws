@@ -23,7 +23,7 @@ export default function AuthNotifier() {
 
     // normal login/logout notifications
     if (isSignedIn) {
-      enqueueSnackbar("Prijavljeni ste", {
+      enqueueSnackbar("Prijava uspješna", {
         variant: "success",
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
         autoHideDuration: 3000,

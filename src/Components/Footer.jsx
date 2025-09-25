@@ -1,11 +1,24 @@
 import { Box, Typography, Link, Grid, Stack } from '@mui/material';
 import { Facebook, Instagram } from '@mui/icons-material';
 import { useLocation } from "react-router-dom";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+
+const navLinks = [
+  { label: "Opšti Uslovi Poslovanja", path: "/OpštiUsloviPoslovanja" },
+  { label: "Uslovi Kupovine", path: "/Uslovikupovine" },
+  { label: "Politika Povrata i Reklamacije", path: "/PolitikaPovrataiReklamacije" },
+  { label: "Sigurnost", path: "/Sigurnost" },
+  { label: "Privatnost", path: "/Privatnost" },
+  { label: "Politika kolačića", path: "/PolitikaKolačića" },
+];
 
 const SimpleFooter = () => {
   
   const location = useLocation();
    const isHome = location.pathname === "/home";
+    const navigate = useNavigate(); // ovo omogućava navigate()
 
   return (
     <Box
@@ -122,6 +135,8 @@ const SimpleFooter = () => {
       </Stack>
     </Grid>
 
+    
+
     {/* Right Section - Social + Copyright */}
     <Grid
       item
@@ -176,6 +191,47 @@ const SimpleFooter = () => {
       </Typography>
     </Grid>
   </Grid>
+
+   {/* Bottom Legal Links Section */}
+      <Box
+        sx={{
+          borderTop: "1px solid #444",
+          mt: 4,
+          pt: 3,
+          px: { xs: 3, md: 6 },
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <Stack direction="row" spacing={2} flexWrap="wrap" justifyContent={{ xs: "center", md: "flex-start" }}>
+          {navLinks.map((link, index) => (
+            <Button
+              key={index}
+              variant="text"
+              sx={{
+                color: "#f9f9f9",
+                textTransform: "none",
+                fontSize: { xs: "0.65rem", md: "0.75rem" },
+                "&:hover": { color: "#d62d00" },
+                minWidth: "fit-content",
+              }}
+              onClick={() => navigate(link.path)}
+            >
+              {link.label}
+            </Button>
+          ))}
+        </Stack>
+
+        <Typography
+          variant="caption"
+          sx={{ opacity: 0.7, fontSize: { xs: "0.65rem", md: "0.75rem" }, textAlign: { xs: "center", md: "right" } }}
+        >
+          © {new Date().getFullYear()} Svjetlostkomerc d.d. Sarajevo. Sva prava zadržana.
+        </Typography>
+      </Box>
 </Box>
 
 

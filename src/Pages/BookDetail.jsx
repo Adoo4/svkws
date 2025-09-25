@@ -35,7 +35,7 @@ import {
 } from "../Utils.js/wishlist"; 
 
 
-export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWishlist}) {
+export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWishlist,  addToCart, updateCartItem}) {
   const { id } = useParams(); // book id from route
   const location = useLocation();
   const { book: initialBook } = location.state || {};

@@ -18,7 +18,14 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
-export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
+export default function CartMenu({
+  cart,
+  setCart,
+  cartMenu,
+  setCartMenu,
+  updateCartItem,
+  removeCartItem,
+}) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar(); // initialize snackbar
   useEffect(() => {
@@ -79,13 +86,10 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                 alignItems="flex-start"
                 disablePadding
                 sx={{
-                  
                   alignItems: "center",
 
                   mb: 2,
                   borderRadius: 2,
-                
-                  
                 }}
               >
                 <ListItemAvatar>
@@ -94,10 +98,10 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                     src={book.coverImage}
                     alt={book.title}
                     onClick={(e) => {
-      navigate(`/${book?._id}`, {
-        state: { book, category: book.subCategory },
-      });
-    }}
+                      navigate(`/${book?._id}`, {
+                        state: { book, category: book.subCategory },
+                      });
+                    }}
                     sx={{
                       width: { xs: 80, sm: 100, md: 130 },
                       height: { xs: 100, sm: 130, md: 150 },
@@ -197,19 +201,12 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                     alignItems: "center",
                     justifyContent: "center",
                     ml: 1,
-                    
                   }}
                 >
                   <IconButton
                     size="small"
                     onClick={() => {
-                      setCart((prev) =>
-                        prev.map((item) =>
-                          item._id === book._id
-                            ? { ...item, quantity: item.quantity + 1 }
-                            : item
-                        )
-                      );
+                      updateCartItem(book._id, book.quantity + 1);
                       enqueueSnackbar(`Povećana količina: ${book.title}`, {
                         variant: "success",
                       });
@@ -218,7 +215,7 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                       color: "#515151",
                       "&:hover": { color: "#388e3c" },
                       mb: 0.5,
-                      background:"#282828"
+                      background: "#282828",
                     }}
                   >
                     <AddIcon />
@@ -235,53 +232,36 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
                     {book.quantity}
                   </Typography>
 
-                <IconButton
-  size="small"
-  onClick={() => {
-    setCart((prev) => {
-      const target = prev.find((item) => item._id === book._id);
-
-      if (target?.quantity === 1) {
-        // Removing the book completely
-        enqueueSnackbar(`Knjiga je uklonjena iz korpe: ${book.title}`, {
-          variant: "warning",
-        });
-        return prev.filter((item) => item._id !== book._id);
-      } else {
-        // Just decreasing quantity
-        enqueueSnackbar(`Smanjena količina: ${book.title}`, {
-          variant: "info",
-        });
-        return prev.map((item) =>
-          item._id === book._id
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
-        );
-      }
-    });
-  }}
-  sx={{
-    color: "#414141",
-    "&:hover": { color: "#d32f2f" },
-    mt: 0.5,
-    background: "#282828",
-  }}
->
-  <RemoveIcon />
-</IconButton>
-
-                  
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      if (book.quantity === 1) {
+                        removeCartItem(book._id);
+                        enqueueSnackbar(`Knjiga uklonjena: ${book.title}`, {
+                          variant: "warning",
+                        });
+                      } else {
+                        updateCartItem(book._id, book.quantity - 1);
+                        enqueueSnackbar(`Smanjena količina: ${book.title}`, {
+                          variant: "info",
+                        });
+                      }
+                    }}
+                    sx={{
+                      color: "#414141",
+                      "&:hover": { color: "#d32f2f" },
+                      mt: 0.5,
+                      background: "#282828",
+                    }}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
                 </Box>
-                
               </ListItem>
-              
             );
           })
         )}
-        
       </List>
-
-      
 
       {cart.length > 0 && (
         <Box
@@ -357,8 +337,11 @@ export default function CartMenu({ cart, setCart, cartMenu, setCartMenu }) {
             {/* Clear Cart */}
             <Button
               onClick={() => {
-                setCart([]); // clear cart
-                setCartMenu(false); // close drawer
+                cart.forEach((item) => removeCartItem(item._id));
+                enqueueSnackbar("Korpa je ispražnjena!", {
+                  variant: "warning",
+                });
+                setCartMenu(false);
               }}
               variant="outlined"
               fullWidth

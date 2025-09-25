@@ -1,0 +1,77 @@
+import { Box, Typography, Divider } from "@mui/material";
+
+const paymentSecurityData = [
+  {
+    title: "1. Sigurnost online plaćanja",
+    content:
+      "Svjetlostkomerc d.d. koristi najsavremenije sigurnosne standarde za zaštitu Vaših podataka prilikom online plaćanja. Svi podaci koje unosite prilikom plaćanja (broj kartice, datum isteka, CVV kod) prenose se putem sigurne SSL konekcije i nisu dostupni neovlaštenim trećim stranama.",
+  },
+  {
+    title: "2. 3D Secure zaštita",
+    content:
+      "Online plaćanja putem našeg webshopa dodatno su osigurana kroz Verified by Visa i MasterCard SecureCode (3D Secure program). Ovaj sistem autentifikacije garantuje da transakciju može izvršiti isključivo vlasnik kartice, što značajno smanjuje mogućnost zloupotrebe.",
+  },
+  {
+    title: "3. Obrada podataka o kartici",
+    content:
+      "Svjetlostkomerc d.d. ne pohranjuje podatke o Vašim karticama. Plaćanje se vrši preko zaštićenog sistema partnerske banke, koja vrši autorizaciju i naplatu. Na ovaj način osiguravamo maksimalnu sigurnost i povjerenje naših korisnika.",
+  },
+  {
+    title: "4. Zaštita ličnih podataka",
+    content:
+      "Svi lični podaci koje nam dostavite prilikom kupovine obrađuju se u skladu sa Zakonom o zaštiti ličnih podataka BiH. Podaci se koriste isključivo u svrhu realizacije narudžbe i neće biti dijeljeni s trećim stranama bez Vaše saglasnosti.",
+  },
+  {
+    title: "5. Transparentnost i povjerenje",
+    content:
+      "Naš cilj je da Vam omogućimo sigurnu, brzu i pouzdanu kupovinu. Ukoliko imate bilo kakvih pitanja ili sumnji u vezi sigurnosti plaćanja, slobodno nas kontaktirajte kako bismo Vam pružili sve potrebne informacije.",
+  },
+];
+
+const PaymentSecurityPage = () => {
+  return (
+    <Box sx={{ maxWidth: 900, mx: "auto", p: 3, marginTop: "6rem", color: "#262626" }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        textAlign="center"
+        sx={{ fontWeight: 900, color: "#262626" }}
+      >
+        Sigurnost plaćanja
+      </Typography>
+
+      {paymentSecurityData.map((item, index) => (
+        <Box key={index} sx={{ mb: 4 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: "#262626" }} gutterBottom>
+            {item.title}
+          </Typography>
+          <Typography variant="body3" whiteSpace="pre-line">
+            {item.content}
+          </Typography>
+          {index < paymentSecurityData.length - 1 && <Divider sx={{ mt: 3 }} />}
+        </Box>
+      ))}
+
+      {/* Box za dodatne informacije */}
+      <Box
+        sx={{
+          mt: 5,
+          p: 3,
+          border: "1px solid #ccc",
+          borderRadius: 2,
+          backgroundColor: "#262626",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="body1" sx={{ color: "#f1f1f1" }}>
+          Za sva pitanja u vezi sigurnosti plaćanja obratite se na mail:{" "}
+          <Typography component="span" color="error" sx={{ fontWeight: "bold" }}>
+            info@svjetlostkomerc.ba
+          </Typography>
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
+export default PaymentSecurityPage;

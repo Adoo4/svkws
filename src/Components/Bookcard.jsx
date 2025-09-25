@@ -138,7 +138,7 @@ const kategorije = [
 ];
 
 
-const BookCard = ({ book, setDrawerData, toggleDrawer,  setCart,  setWishlist, wishlist }) => {
+const BookCard = ({ book, setDrawerData, toggleDrawer, addToCart, updateCartItem, wishlist, addToWishlist, removeFromWishlist }) => {
   const { isSignedIn } = useUser();
   const theme = useTheme();
   const isNew = book.isNew;
@@ -157,26 +157,25 @@ useEffect(() => {
 
 // handle heart click
 const handleWishlistClick = (e) => {
-  e.stopPropagation();
+  e.stopPropagation(); // Prevent card click
 
-  setWishlist((prev) => {
-    const alreadyInWishlist = prev.some((item) => item._id === book._id);
+  const alreadyInWishlist = wishlist.some((item) => item._id === book._id);
 
-    const updated = alreadyInWishlist
-      ? prev.filter((item) => item._id !== book._id)
-      : [...prev, book];
-
-    enqueueSnackbar(
-      alreadyInWishlist
-        ? `${book.title} uklonjena iz liste želja.`
-        : `${book.title} dodana u listu želja!`,
-      { variant: alreadyInWishlist ? "info" : "success", autoHideDuration: 2000 }
-    );
-
-    localStorage.setItem("wishlist", JSON.stringify(updated));
-    return updated;
-  });
+  if (alreadyInWishlist) {
+    removeFromWishlist(book._id); // pass only the id
+    enqueueSnackbar(`${book.title} uklonjena iz liste želja.`, { 
+      variant: "info", 
+      autoHideDuration: 2000 
+    });
+  } else {
+    addToWishlist(book._id); // pass only the id
+    enqueueSnackbar(`${book.title} dodana u listu želja!`, { 
+      variant: "success", 
+      autoHideDuration: 2000 
+    });
+  }
 };
+
 
 
 
@@ -185,41 +184,13 @@ const handleWishlistClick = (e) => {
     : book.price.toFixed(2);
 
 
-   function addToCart(product) {
+   function handleAddToCart(book) {
   let isNewItem = false; // flag to check if this is a new addition
 
-  setCart((prevCart) => {
-    const existing = prevCart.find((item) => item._id === product._id);
-
-    const hasValidDiscount =
-      product.discount && new Date(product.discount.validUntil) > new Date();
-
-    if (existing) {
-      // just increase quantity, no notification
-      return prevCart.map((item) =>
-        item._id === product._id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-              discount: hasValidDiscount ? product.discount : null,
-            }
-          : item
-      );
-    } else {
-      isNewItem = true; // mark as new
-      return [
-        ...prevCart,
-        {
-          ...product,
-          quantity: 1,
-          discount: hasValidDiscount ? product.discount : null,
-        },
-      ];
-    }
-  });
+   addToCart(book);
 
   if (isNewItem) {
-    enqueueSnackbar(`${product.title} dodan u korpu!`, {
+    enqueueSnackbar(`${book.title} dodan u korpu!`, {
       variant: "success",
       autoHideDuration: 2000,
     });
@@ -369,16 +340,16 @@ const formatCategoryName = (name) => {
     gap: "0.5rem",
     display: "flex",
     fontWeight: 600,
-    color: "#333",
+    color: "#262626",
     mb: 0.5,
     lineHeight: 1.2,
-    fontSize: { xs: "0.75rem", sm:"0.88", md: "0.95rem", },
+    fontSize: { xs: "0.95rem", sm:"0.88", md: "0.95rem", },
       // ⬅️ force single line
     overflow: "hidden",     // ⬅️ hide overflow
     textOverflow: "ellipsis" // ⬅️ show "..." if too long
   }}
 >
-        {book?.title?.toUpperCase()}
+        {book?.title}
       </Typography>
 
       {/* Categories */}
@@ -400,7 +371,7 @@ const formatCategoryName = (name) => {
     alignItems: "center",
     width:"100%",
     gap: 0.5,
-    px: 0.8,
+   
     py: 0.3,
     borderRadius: 20,
     color: (() => {
@@ -428,17 +399,23 @@ const formatCategoryName = (name) => {
 
   {/* Optional: keep text on very small screens */}
   <Typography
-    component="span"
-    sx={{
-      ml: 0.3,
-      color:"#313131",
-      fontSize: "0.55rem",
-      fontWeight: 500,
-      display: { xs: "flex", sm: "inline" }, // text hidden on xs, shown on sm
-    }}
-  >
-    {book.subCategory}
-  </Typography>
+  component="span"
+  variant="caption"
+  sx={{
+    ml: 0.3,
+    color: "#313131",
+    fontWeight: 500,
+    lineHeight: 1.2,
+    fontSize: { xs: "0.75rem", sm: "0.65rem" }, // bigger on xs, slightly smaller on sm+
+    display: { xs: "flex", sm: "inline" }, // keep visible on xs
+    whiteSpace: "nowrap", // prevent breaking into 2 lines
+    overflow: "hidden",
+    textOverflow: "ellipsis", // add "..." if text too long
+  }}
+>
+  {book.subCategory}
+</Typography>
+
 </Box>
 
 
@@ -520,18 +497,20 @@ const formatCategoryName = (name) => {
 
 
       {/* Description */}
-      <Typography
-          sx={{
+     <Typography
+  sx={{
     color: "text.secondary",
     fontSize: { xs: "0.60rem", md: "0.8rem" },
     fontStyle: "italic",
     lineHeight: 1.3,
-    display: "-webkit-box",
-    WebkitLineClamp: 2, // always max 2 lines
-    WebkitBoxOrient: "vertical",
+    display: "-webkit-box",          // makes it a box container
+    WebkitLineClamp: 2,              // limits to 2 lines
+    WebkitBoxOrient: "vertical",     // vertical orientation
     overflow: "hidden",
+    textOverflow: "ellipsis",        // adds the ellipsis
+    wordBreak: "break-word",         // ensures long words wrap properly
   }}
-      >
+>
         {book.description}
       </Typography>
 
@@ -575,8 +554,8 @@ const formatCategoryName = (name) => {
     {/* Actions */}
 <CardActions
   sx={{
-    p: 0,
-    mt: 2,
+    p: 1,
+    mt: 1,
     display: "flex",
     flexDirection: { xs: "column", sm: "column", md: "row" },
     alignItems: "stretch",
@@ -622,7 +601,7 @@ const formatCategoryName = (name) => {
       <Button
         variant="contained"
         size="small"
-        onClick={() => addToCart(book)}
+       onClick={() => addToCart(book)}
         startIcon={
           <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
         }

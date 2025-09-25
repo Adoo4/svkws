@@ -91,7 +91,7 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
     <Typography
       variant="body2"
       sx={{
-        fontSize: {xs:"0.60rem", md:"0.8rem"},
+        fontSize: {xs:"0.70rem", md:"0.8rem"},
         color: "#f7f7f7f7",
         opacity: 0.85,
         mb: 2,

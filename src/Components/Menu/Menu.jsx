@@ -320,6 +320,7 @@ const handleRemoveFilter = (key) => {
                 <ListItemText
                   primary={
                     <Typography
+                     variant="caption"
                       sx={{
                         fontSize: { xs: "0.7rem", sm: "0.8rem" },
                         color: "#f7f7f7f7",

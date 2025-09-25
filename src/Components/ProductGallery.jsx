@@ -15,15 +15,18 @@ const ProductGallery = ({
  books = [],
   loading = false,
   toggleDrawer,
+  cart,
   drawerData,
   setDrawerData,
-  cart,
-  setCart,
-  wishlist,
-  setWishlist,
+  addToCart,
+  updateCartItem,
+  removeCartItem,
   totalPages = 1,
   currentPage = 1,
   setPage, // <- use this from parent
+    wishlist,
+  addToWishlist,
+  removeFromWishlist
 }) => {
   
   const itemsPerPage = 15;
@@ -103,9 +106,12 @@ const ProductGallery = ({
           setDrawerData={setDrawerData}
           drawerData={drawerData}
           cart={cart}
-          setCart={setCart}
-          wishlist={wishlist}
-          setWishlist={setWishlist}
+         addToCart={addToCart}
+  updateCartItem={updateCartItem}
+  removeCartItem={removeCartItem}
+           wishlist={wishlist}
+  addToWishlist={addToWishlist}   // ✅ make sure this exists
+  removeFromWishlist={removeFromWishlist} // ✅ make sure this exists
         />
             </Grid>
           ))}
