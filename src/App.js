@@ -25,7 +25,7 @@ import OpštiUsloviPoslovanja from "./Pages/OpštiUsloviPoslovanja.jsx";
 import PolitikaPovrataiReklamacije from "./Pages/PolitikaPovrata.jsx";
 import Sigurnost from "./Pages/Sigurnost.jsx";
 import PolitikaKolačića from "./Pages/Politikekolačića.jsx";
-import { useSnackbar } from "notistack";
+
 import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
 
@@ -33,14 +33,12 @@ function App() {
   const { cart, addToCart, updateCartItem, removeCartItem, clearCart } = useCart();
   const {
     wishlist,
-    isLoading: wishlistLoading,
-    isError: wishlistError,
     addToWishlist,
     removeFromWishlist,
     clearWishlist,
   } = useWishlist();
   const [cartMenu, setCartMenu] = useState(false);
-  const { enqueueSnackbar } = useSnackbar(); // ✅ add this here
+
 
   // Keep localStorage in sync when wishlist changes
   useEffect(() => {
@@ -52,40 +50,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const imageUrl = "https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"; // example
 
-  {
-    /*const addToCart = async (product) => {
-  try {
-    // update frontend state immediately
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item._id === product._id);
-      if (existing) {
-        return prevCart.map((item) =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prevCart, { ...product, quantity: 1 }];
-      }
-    });
 
-    // update backend
-    await axios.post(
-      "https://backendsvkwbshp.onrender.com/api/cart",
-      { bookId: product._id, quantity: 1 },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    enqueueSnackbar(`${product.title} dodan u korpu!`, {
-      variant: "success",
-      autoHideDuration: 2000,
-    });
-  } catch (err) {
-    console.error("Cart add failed:", err);
-    enqueueSnackbar("Greška prilikom dodavanja u korpu", { variant: "error" });
-  }
-};*/
-  }
 
   useEffect(() => {
     // If user visited before, skip loading
