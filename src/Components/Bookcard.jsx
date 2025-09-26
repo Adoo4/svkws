@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useUser } from "@clerk/clerk-react";
-import  { useState, useEffect } from "react";
+import  { useState, useEffect, useRef } from "react";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -28,6 +28,9 @@ import { SignedIn } from '@clerk/clerk-react';
 import React, { memo } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
+import { debounce } from "lodash";
+import { useWishlist } from "../Utils.js/useWishlist"; // your hook
+import useCart from "../Utils.js/useCart";
 
 const kategorije = [
   {
@@ -138,43 +141,42 @@ const kategorije = [
 ];
 
 
-const BookCard = ({ book, setDrawerData, toggleDrawer, addToCart, updateCartItem, wishlist, addToWishlist, removeFromWishlist }) => {
+const BookCard = ({ book, setDrawerData, toggleDrawer,  updateCartItem }) => {
   const { isSignedIn } = useUser();
   const theme = useTheme();
   const isNew = book.isNew;
   const hasDiscount = book.discount?.amount > 0;
   const navigate = useNavigate();
 const { enqueueSnackbar } = useSnackbar();
+const { cart, isAdding, addToCart } = useCart();
 
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
    // state to control heart icon
-const [inWishlist, setInWishlist] = useState(false);
+ // local state for heart icon
+  const [inWishlist, setInWishlist] = useState(false);
 
-// sync with parent wishlist
-useEffect(() => {
-  const isIn = wishlist.some((item) => item._id === book._id);
-  setInWishlist(isIn);
-}, [wishlist, book]); // automatically updates whenever wishlist changes
+  // sync with wishlist
+  useEffect(() => {
+    setInWishlist(wishlist.some((item) => item._id === book._id));
+  }, [wishlist, book]);
 
-// handle heart click
-const handleWishlistClick = (e) => {
-  e.stopPropagation(); // Prevent card click
+  const handleWishlistClick = (e) => {
+    e.stopPropagation();
 
-  const alreadyInWishlist = wishlist.some((item) => item._id === book._id);
-
-  if (alreadyInWishlist) {
-    removeFromWishlist(book._id); // pass only the id
-    enqueueSnackbar(`${book.title} uklonjena iz liste želja.`, { 
-      variant: "info", 
-      autoHideDuration: 2000 
-    });
-  } else {
-    addToWishlist(book._id); // pass only the id
-    enqueueSnackbar(`${book.title} dodana u listu želja!`, { 
-      variant: "success", 
-      autoHideDuration: 2000 
-    });
-  }
-};
+    if (inWishlist) {
+      removeFromWishlist(book._id);
+      enqueueSnackbar(`${book.title} uklonjena iz liste želja.`, {
+        variant: "info",
+        autoHideDuration: 2000,
+      });
+    } else {
+      addToWishlist(book);
+      enqueueSnackbar(`${book.title} dodana u listu želja!`, {
+        variant: "success",
+        autoHideDuration: 2000,
+      });
+    }
+  };
 
 
 
@@ -184,18 +186,9 @@ const handleWishlistClick = (e) => {
     : book.price.toFixed(2);
 
 
-   function handleAddToCart(book) {
-  let isNewItem = false; // flag to check if this is a new addition
 
-   addToCart(book);
 
-  if (isNewItem) {
-    enqueueSnackbar(`${book.title} dodan u korpu!`, {
-      variant: "success",
-      autoHideDuration: 2000,
-    });
-  }
-}
+
 
 
 // Then when rendering cart, compute price:
@@ -599,26 +592,26 @@ const formatCategoryName = (name) => {
   >
     <span style={{ flex: 1, display: "flex" }}>
       <Button
-        variant="contained"
-        size="small"
-       onClick={() => addToCart(book)}
-        startIcon={
-          <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
-        }
-        sx={{
-          flex: 1,
-          px: { xs: 1, sm: 1.5 },
-          fontSize: { xs: "0.60rem", sm: "0.7rem" },
-          borderRadius: "12px",
-          textTransform: "none",
-          bgcolor: "#313131",
-          color: "#fff",
-          "&:hover": { bgcolor: "#d62d00" },
-        }}
-        disabled={!isSignedIn}
-      >
-        Dodaj
-      </Button>
+      variant="contained"
+      size="small"
+      onClick={() => addToCart(book)}
+  disabled={isAdding || !isSignedIn}
+ 
+     
+      startIcon={<ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />}
+      sx={{
+        flex: 1,
+        px: { xs: 1, sm: 1.5 },
+        fontSize: { xs: "0.60rem", sm: "0.7rem" },
+        borderRadius: "12px",
+        textTransform: "none",
+        bgcolor: "#313131",
+        color: "#fff",
+        "&:hover": { bgcolor: "#d62d00" },
+      }}
+    >
+      Dodaj
+    </Button>
     </span>
   </Tooltip>
 </CardActions>

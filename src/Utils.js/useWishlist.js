@@ -1,122 +1,125 @@
+// src/hooks/useWishlist.js
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useSnackbar } from "notistack";
 import { useAuth } from "@clerk/clerk-react";
 
-const useWishlist = () => {
+export const useWishlist = () => {
   const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  const { isSignedIn, getToken } = useAuth();
+  const { isSignedIn, getToken, isLoaded } = useAuth(); // 🔹 add isLoaded
 
-  // Fetch Wishlist
+  // --- FETCH WISHLIST ---
   const { data, isLoading, isError } = useQuery({
     queryKey: ["wishlist"],
     queryFn: async () => {
+      if (!isSignedIn) return [];
       const token = await getToken({ template: "backend" });
       const res = await axios.get(
         "https://backendsvkwbshp.onrender.com/api/wishlist",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      return res.data.items; // array of book objects
+      return res.data.items;
     },
-    enabled: isSignedIn,
     staleTime: 5 * 60 * 1000,
-    refetchInterval: 30 * 1000,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
+    enabled: isLoaded && isSignedIn, // 🔹 wait until auth is loaded
   });
 
-  // Add to Wishlist
+  // --- ADD TO WISHLIST ---
   const addMutation = useMutation({
-    mutationFn: async ({ bookId }) => {
-      const token = await getToken();
+    mutationFn: async (book) => {
+      const token = await getToken({ template: "backend" });
       return axios.post(
         "https://backendsvkwbshp.onrender.com/api/wishlist",
-        { bookId },
+        { bookId: book._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
     },
-    onMutate: async ({ bookId }) => {
-      await queryClient.cancelQueries(["wishlist"]);
-      const previousWishlist = queryClient.getQueryData(["wishlist"]);
+    onMutate: async (book) => {
+      await queryClient.cancelQueries({ queryKey: ["wishlist"] });
+      const previousWishlist = queryClient.getQueryData({ queryKey: ["wishlist"] });
 
-      queryClient.setQueryData(["wishlist"], (old = []) => {
-        if (old.find(item => item._id === bookId)) return old;
-        return [...old, { _id: bookId }];
+      queryClient.setQueryData({ queryKey: ["wishlist"] }, (old = []) => {
+        if (old.some((b) => b._id === book._id)) return old;
+        return [...old, book];
       });
 
       return { previousWishlist };
     },
-    onError: (_err, _vars, context) => {
-      queryClient.setQueryData(["wishlist"], context.previousWishlist);
-      enqueueSnackbar("Greška pri dodavanju u wishlistu", { variant: "error" });
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previousWishlist) {
+        queryClient.setQueryData({ queryKey: ["wishlist"] }, ctx.previousWishlist);
+      }
     },
-    onSuccess: () => {
-      enqueueSnackbar("Proizvod dodan u wishlistu", { variant: "success" });
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
     },
   });
 
-  // Remove from Wishlist
+  // --- REMOVE FROM WISHLIST ---
   const removeMutation = useMutation({
     mutationFn: async (bookId) => {
-      const token = await getToken();
+      const token = await getToken({ template: "backend" });
       return axios.delete(
         `https://backendsvkwbshp.onrender.com/api/wishlist/${bookId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
     },
     onMutate: async (bookId) => {
-      await queryClient.cancelQueries(["wishlist"]);
-      const previousWishlist = queryClient.getQueryData(["wishlist"]);
+      await queryClient.cancelQueries({ queryKey: ["wishlist"] });
+      const previousWishlist = queryClient.getQueryData({ queryKey: ["wishlist"] });
 
-      queryClient.setQueryData(["wishlist"], (old) =>
-        old.filter((item) => item._id !== bookId)
+      queryClient.setQueryData({ queryKey: ["wishlist"] }, (old = []) =>
+        old.filter((b) => b._id !== bookId)
       );
 
       return { previousWishlist };
     },
-    onError: (_err, _vars, context) => {
-      queryClient.setQueryData(["wishlist"], context.previousWishlist);
-      enqueueSnackbar("Greška pri uklanjanju iz wishlista", { variant: "error" });
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previousWishlist) {
+        queryClient.setQueryData({ queryKey: ["wishlist"] }, ctx.previousWishlist);
+      }
     },
-    onSuccess: () => {
-      enqueueSnackbar("Proizvod uklonjen iz wishlista", { variant: "success" });
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
     },
   });
 
-  // Clear Wishlist
-  const clearMutation = useMutation({
-    mutationFn: async () => {
-      const token = await getToken();
-      return axios.delete(
-        "https://backendsvkwbshp.onrender.com/api/wishlist",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    },
-    onMutate: async () => {
-      await queryClient.cancelQueries(["wishlist"]);
-      const previousWishlist = queryClient.getQueryData(["wishlist"]);
 
-      queryClient.setQueryData(["wishlist"], []);
-      return { previousWishlist };
-    },
-    onError: (_err, _vars, context) => {
-      queryClient.setQueryData(["wishlist"], context.previousWishlist);
-      enqueueSnackbar("Greška pri brisanju wishlista", { variant: "error" });
-    },
-    onSuccess: () => {
-      enqueueSnackbar("Wishlist očišćen", { variant: "success" });
-    },
-  });
+  // --- CLEAR WISHLIST ---
+const clearMutation = useMutation({
+  mutationFn: async () => {
+    const token = await getToken({ template: "backend" });
+    return axios.delete(
+      `https://backendsvkwbshp.onrender.com/api/wishlist`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  },
+  onMutate: async () => {
+    await queryClient.cancelQueries({ queryKey: ["wishlist"] });
+    const previousWishlist = queryClient.getQueryData({ queryKey: ["wishlist"] });
+
+    queryClient.setQueryData({ queryKey: ["wishlist"] }, []);
+    return { previousWishlist };
+  },
+  onError: (_err, _vars, ctx) => {
+    if (ctx?.previousWishlist) {
+      queryClient.setQueryData({ queryKey: ["wishlist"] }, ctx.previousWishlist);
+    }
+  },
+  onSettled: () => {
+    queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+  },
+});
+
 
   return {
     wishlist: data || [],
     isLoading,
     isError,
-    addToWishlist: (bookId) => addMutation.mutate({ bookId }),
+    addToWishlist: (book) => addMutation.mutate(book),
     removeFromWishlist: (bookId) => removeMutation.mutate(bookId),
-    clearWishlist: () => clearMutation.mutate(),
+     clearWishlist: () => clearMutation.mutate(), // ✅ expose function,
   };
 };
 
 export default useWishlist;
+

@@ -17,22 +17,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import { useWishlist } from "../Utils.js/useWishlist";
 export default function WishlistDrawer({
   open,
   onClose,
-  wishlist,
-  setWishlist,
   addToCart,
-  cart,
-  removeFromWishlist,
-  clearWishlist,
- 
+  cart
 }) {
-
+  const { wishlist, isLoading, removeFromWishlist, clearWishlist } = useWishlist();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
+    if (isLoading) {
+    return <div style={{ padding: "1rem", color: "#fff" }}>Loading...</div>;
+  }
+
   const list = () => (
+
+    
     <Box
       sx={{
         width: { xs: 300, sm: 400, md: 450 },

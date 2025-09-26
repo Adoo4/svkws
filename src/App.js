@@ -30,7 +30,7 @@ import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
 
 function App() {
-  const { cart, addToCart, updateCartItem, removeCartItem } = useCart();
+  const { cart, addToCart, updateCartItem, removeCartItem, clearCart } = useCart();
   const {
     wishlist,
     isLoading: wishlistLoading,
@@ -235,6 +235,7 @@ function App() {
           setCartMenu={setCartMenu}
           updateCartItem={updateCartItem}
           removeCartItem={removeCartItem}
+          clearCart={clearCart}
         />
 
         <WishlistDrawer

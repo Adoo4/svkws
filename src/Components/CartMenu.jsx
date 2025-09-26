@@ -25,6 +25,7 @@ export default function CartMenu({
   setCartMenu,
   updateCartItem,
   removeCartItem,
+  clearCart
 }) {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar(); // initialize snackbar
@@ -336,13 +337,7 @@ export default function CartMenu({
 
             {/* Clear Cart */}
             <Button
-              onClick={() => {
-                cart.forEach((item) => removeCartItem(item._id));
-                enqueueSnackbar("Korpa je ispražnjena!", {
-                  variant: "warning",
-                });
-                setCartMenu(false);
-              }}
+              onClick={clearCart} disabled={!cart.length}
               variant="outlined"
               fullWidth
               sx={{

@@ -35,7 +35,7 @@ import {
 } from "../Utils.js/wishlist"; 
 
 
-export default function BookDetail({cart, setCart, setCartMenu,  wishlist, setWishlist,  addToCart, updateCartItem}) {
+export default function BookDetail({cart, setCartMenu,  wishlist, setWishlist,  addToCart, updateCartItem, removeFromWishlist, addToWishlist}) {
   const { id } = useParams(); // book id from route
   const location = useLocation();
   const { book: initialBook } = location.state || {};
@@ -59,38 +59,7 @@ useEffect(() => {
     .then((res) => {setBook(res.data); setLoading(false)})
     .catch((err) => console.error("Book fetch error:", err));
 }, [id]);
-  function addToCart(product) {
-  setCart((prevCart) => {
-    const existing = prevCart.find((item) => item._id === product._id);
 
-    // check if discount is still valid
-    const hasValidDiscount =
-      product.discount &&
-      new Date(product.discount.validUntil) > new Date();
-
-    if (existing) {
-      return prevCart.map((item) =>
-        item._id === product._id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-              discount: hasValidDiscount ? product.discount : null,
-            }
-          : item
-      );
-      
-    } else {
-      return [
-        ...prevCart,
-        {
-          ...product,
-          quantity: 1,
-          discount: hasValidDiscount ? product.discount : null,
-        },
-      ];
-    }
-  });
-}
  
 
   return (
@@ -267,19 +236,17 @@ useEffect(() => {
     const alreadyInWishlist = wishlist.some((b) => b._id === book._id);
 
     if (alreadyInWishlist) {
-      enqueueSnackbar(`${book.title} je već u listi želja`, { variant: "warning" });
+      removeFromWishlist(book._id);
+      enqueueSnackbar(`${book.title} uklonjeno iz liste želja`, { variant: "info" });
     } else {
-      const newWishlist = [...wishlist, book];
-
-      setWishlist(newWishlist); // update React state
-      setWishlistLocalStorage(newWishlist); // update localStorage
-
-      enqueueSnackbar(`Dodano u listu želja: ${book.title}`, { variant: "success" });
+      addToWishlist(book);
+      enqueueSnackbar(`${book.title} dodano u listu želja`, { variant: "success" });
     }
   }}
 >
-  Dodaj u listu želja
+  {wishlist.some((b) => b._id === book._id) ? "Ukloni iz liste želja" : "Dodaj u listu želja"}
 </Button>
+
 
 
       {/* Cart button */}
@@ -300,12 +267,10 @@ useEffect(() => {
               "&:hover": { bgcolor: "#d62d00" },
             }}
             fullWidth
-            onClick={() => {
-              addToCart(book);
-              enqueueSnackbar(`Dodano u korpu: ${book.title}`, {
-                variant: "success",
-              });
-            }}
+           onClick={() => {
+    addToCart(book);   // ✅ pass book directly
+    enqueueSnackbar(`Dodano u korpu: ${book.title}`, { variant: "success" });
+  }}
             disabled={!isSignedIn}
           >
             Dodaj u korpu

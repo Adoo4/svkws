@@ -173,7 +173,7 @@ const handleSearch = (e) => {
             {suggestions.map((book) => (
               <ListItem
                 button
-                key={book._id || book.isbn || Math.random()}
+                key={book._id || book.isbn}
                 onClick={(e)=>{setDrawerData(book)
       toggleDrawer(true)(e)}}
               >

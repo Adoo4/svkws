@@ -1,14 +1,17 @@
+// src/hooks/useCart.js
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useAuth } from "@clerk/clerk-react";
+import { debounce } from "lodash"; // 👈 import lodash debounce
+import { useMemo } from "react";
 
 const useCart = () => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { isSignedIn, getToken } = useAuth();
 
-  // Fetch Cart only if signed in
+  // 🔹 Fetch cart
 const { data, isLoading, isError } = useQuery({
   queryKey: ["cart"],
   queryFn: async () => {
@@ -19,16 +22,17 @@ const { data, isLoading, isError } = useQuery({
     );
     return res.data.items.map((i) => ({ ...i.book, quantity: i.quantity }));
   },
-  staleTime: 5 * 60 * 1000,       // cache 5min
-  refetchInterval: 30 * 1000,     // 👈 auto-refetch every 30s
-  refetchOnWindowFocus: true,     // 👈 refetch on tab focus
-  refetchOnReconnect: true,       // 👈 refetch if connection drops/returns
+  staleTime: 5 * 60 * 1000, // cache for 5 minutes
+  refetchOnWindowFocus: false, // 🔹 stop automatic refetch
+  refetchOnReconnect: false,   // 🔹 stop automatic refetch
+  enabled: isSignedIn,         // only fetch if signed in
 });
 
-  // Add to cart
+
+  // 🔹 Add to cart
   const addMutation = useMutation({
     mutationFn: async ({ book }) => {
-      const token = await getToken();
+      const token = await getToken({ template: "backend" });
       return axios.post(
         "https://backendsvkwbshp.onrender.com/api/cart",
         { bookId: book._id, quantity: 1 },
@@ -38,7 +42,6 @@ const { data, isLoading, isError } = useQuery({
     onMutate: async ({ book }) => {
       await queryClient.cancelQueries(["cart"]);
       const previousCart = queryClient.getQueryData(["cart"]);
-
       queryClient.setQueryData(["cart"], (old = []) => {
         const exists = old.find((item) => item._id === book._id);
         return exists
@@ -49,24 +52,21 @@ const { data, isLoading, isError } = useQuery({
             )
           : [...old, { ...book, quantity: 1 }];
       });
-
       return { previousCart };
     },
-    onError: (_err, _vars, context) => {
-      queryClient.setQueryData(["cart"], context.previousCart);
+    onError: (_err, _vars, ctx) => {
+      queryClient.setQueryData(["cart"], ctx.previousCart);
       enqueueSnackbar("Greška pri dodavanju u korpu", { variant: "error" });
     },
     onSuccess: () => {
       enqueueSnackbar("Proizvod dodan u korpu", { variant: "success" });
     },
-    // ❌ don’t invalidate immediately (causes spam)
-    // Instead, rely on optimistic update
   });
 
-  // Update cart item
+  // 🔹 Update cart
   const updateMutation = useMutation({
     mutationFn: async ({ bookId, quantity }) => {
-      const token = await getToken();
+      const token = await getToken({ template: "backend" });
       return axios.patch(
         "https://backendsvkwbshp.onrender.com/api/cart",
         { bookId, quantity },
@@ -76,25 +76,48 @@ const { data, isLoading, isError } = useQuery({
     onMutate: async ({ bookId, quantity }) => {
       await queryClient.cancelQueries(["cart"]);
       const previousCart = queryClient.getQueryData(["cart"]);
-
       queryClient.setQueryData(["cart"], (old) =>
         old.map((item) =>
           item._id === bookId ? { ...item, quantity } : item
         )
       );
-
       return { previousCart };
     },
-    onError: (_err, _vars, context) => {
-      queryClient.setQueryData(["cart"], context.previousCart);
+    onError: (_err, _vars, ctx) => {
+      queryClient.setQueryData(["cart"], ctx.previousCart);
       enqueueSnackbar("Greška pri ažuriranju korpe", { variant: "error" });
     },
   });
 
-  // Remove item
+const clearCartMutation = useMutation({
+  mutationFn: async () => {
+    const token = await getToken({ template: "backend" });
+    await axios.delete("https://backendsvkwbshp.onrender.com/api/cart", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+  onSuccess: () => {
+    queryClient.setQueryData(["cart"], []);
+    enqueueSnackbar("Korpa je očišćena", { variant: "success" });
+  },
+  onError: () => {
+    enqueueSnackbar("Greška pri čišćenju korpe", { variant: "error" });
+  },
+});
+
+  // 🔹 Debounced wrapper so UI can spam without 429
+  const debouncedUpdateCartItem = useMemo(
+    () =>
+      debounce((bookId, quantity) => {
+        updateMutation.mutate({ bookId, quantity });
+      }, 250), // wait 250ms after last change
+    [updateMutation]
+  );
+
+  // 🔹 Remove item
   const removeMutation = useMutation({
     mutationFn: async (bookId) => {
-      const token = await getToken();
+      const token = await getToken({ template: "backend" });
       return axios.delete(
         `https://backendsvkwbshp.onrender.com/api/cart/${bookId}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -103,30 +126,41 @@ const { data, isLoading, isError } = useQuery({
     onMutate: async (bookId) => {
       await queryClient.cancelQueries(["cart"]);
       const previousCart = queryClient.getQueryData(["cart"]);
-
       queryClient.setQueryData(["cart"], (old) =>
         old.filter((item) => item._id !== bookId)
       );
-
       return { previousCart };
     },
-    onError: (_err, _vars, context) => {
-      queryClient.setQueryData(["cart"], context.previousCart);
+    onError: (_err, _vars, ctx) => {
+      queryClient.setQueryData(["cart"], ctx.previousCart);
       enqueueSnackbar("Greška pri uklanjanju iz korpe", { variant: "error" });
     },
   });
 
-  return {
+  const debouncedAddToCart = useMemo(
+    () => debounce((book) => addMutation.mutate({ book }), 200),
+    [addMutation]
+  );
+
+  const debouncedRemoveCartItem = useMemo(
+    () => debounce((bookId) => removeMutation.mutate(bookId), 200),
+    [removeMutation]
+  );
+
+ return {
     cart: data || [],
     isLoading,
     isError,
-    addToCart: (book) => addMutation.mutate({ book }),
-    updateCartItem: (bookId, quantity) => updateMutation.mutate({ bookId, quantity }),
-    removeCartItem: (bookId) => removeMutation.mutate(bookId),
+    addToCart: debouncedAddToCart,       // 👈 use debounced version
+    updateCartItem: debouncedUpdateCartItem,
+    removeCartItem: debouncedRemoveCartItem, // 👈 use debounced version
+    clearCart: clearCartMutation.mutate,
+    isAdding: addMutation.isPending,
   };
 };
 
 export default useCart;
+
 
 /*  STARI useCart Hook*/
 

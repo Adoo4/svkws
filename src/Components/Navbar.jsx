@@ -19,7 +19,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 
-
+import { useWishlist } from "../Utils.js/useWishlist"; // your hook
 
 
 
@@ -34,9 +34,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export default function ButtonAppBar({cart, setCartMenu, wishlist, setDrawerOpen3}) {
+export default function ButtonAppBar({cart, setCartMenu, setDrawerOpen3}) {
  const location = useLocation();
-
+  const { wishlist} = useWishlist();
   const [scrolled, setScrolled] = useState(false);
 
   const navigate = useNavigate();
