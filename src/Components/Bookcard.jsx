@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useUser } from "@clerk/clerk-react";
-import  { useState, useEffect, useRef } from "react";
+import  { useState, useEffect } from "react";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -25,10 +25,9 @@ import IconButton from "@mui/material/IconButton";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { SignedIn } from '@clerk/clerk-react';
-import React, { memo } from "react";
+import  { memo } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
-import { debounce } from "lodash";
 import { useWishlist } from "../Utils.js/useWishlist"; // your hook
 import useCart from "../Utils.js/useCart";
 
@@ -148,7 +147,7 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  updateCartItem }) => {
   const hasDiscount = book.discount?.amount > 0;
   const navigate = useNavigate();
 const { enqueueSnackbar } = useSnackbar();
-const { cart, isAdding, addToCart } = useCart();
+const {  isAdding, addToCart } = useCart();
 
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
    // state to control heart icon

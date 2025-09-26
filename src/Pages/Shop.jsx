@@ -23,7 +23,7 @@ let CategoryMenu = ({
   removeCartItem,
   addToWishlist,
   removeFromWishlist,
-  clearWishlist,
+  
 }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -68,18 +68,6 @@ let CategoryMenu = ({
       setLeftDrawerOpen(open);
     },
     [] // empty dependency array if setLeftDrawerOpen is stable (from useState)
-  );
-
-  {
-    /*const handleSetCart = useCallback(
-    (cartData) => setCart(cartData),
-    [setCart] // include setCart in dependencies
-  );*/
-  }
-
-  const handleSetWishlist = useCallback(
-    (wishlistData) => setWishlist(wishlistData),
-    [setWishlist] // include setWishlist in dependencies
   );
 
   const handleSetDrawerData = useCallback(

@@ -30,7 +30,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import {
   getWishlist,
-  setWishlist as setWishlistLocalStorage, // rename import
+  
   
 } from "../Utils.js/wishlist"; 
 
