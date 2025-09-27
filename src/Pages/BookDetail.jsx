@@ -28,15 +28,11 @@ import { useUser } from "@clerk/clerk-react";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
-import {
-  getWishlist,
-  
-  
-} from "../Utils.js/wishlist"; 
+import { useWishlist } from "../Utils.js/useWishlist";
 
-
-export default function BookDetail({cart, setCartMenu,  wishlist, setWishlist,  addToCart, updateCartItem, removeFromWishlist, addToWishlist}) {
+export default function BookDetail({addToCart}) {
   const { id } = useParams(); // book id from route
+  const { wishlist, addToWishlist, removeFromWishlist, isLoading: wishlistLoading } = useWishlist();
   const location = useLocation();
   const { book: initialBook } = location.state || {};
   const [book, setBook] = useState(initialBook);
@@ -44,12 +40,7 @@ export default function BookDetail({cart, setCartMenu,  wishlist, setWishlist,  
    const { isSignedIn } = useUser();
     const { enqueueSnackbar } = useSnackbar();
 /* eslint-disable react-hooks/exhaustive-deps */
-    useEffect(() => {
-  if (!wishlist || wishlist.length === 0) {
-    const storedWishlist = getWishlist();
-    setWishlist(storedWishlist);
-  }
-}, []); // empty dependency array
+   
 /* eslint-enable react-hooks/exhaustive-deps */
 useEffect(() => {
   setBook(null); // reset state
@@ -229,8 +220,8 @@ useEffect(() => {
     "&:hover": { borderColor: "#f33600", color: "#f33600" },
   }}
   fullWidth
-  disabled={!isSignedIn}
-  onClick={() => {
+  disabled={!isSignedIn || wishlistLoading} // ✅ use it here
+   onClick={() => {
     if (!book) return;
 
     const alreadyInWishlist = wishlist.some((b) => b._id === book._id);
