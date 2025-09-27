@@ -6,6 +6,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { debounce } from "lodash"; // 👈 import lodash debounce
 import { useMemo } from "react";
 
+
 const useCart = () => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();

@@ -20,11 +20,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDebounce } from "../Utils.js/useDebounce"
 import { SignedIn} from '@clerk/clerk-react';
+import useCart from "../Utils.js/useCart";
 
-const SearchBarTop = ({  setCart, setDrawerData, toggleDrawer }) => {
+const SearchBarTop = ({  setDrawerData, toggleDrawer }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
+  const {  addToCart } = useCart();
 
 
   const fetchSuggestions = async (value) => {
@@ -62,35 +64,7 @@ const handleSearch = (e) => {
     setSuggestions([]);
   };*/
 
-  const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item._id === product._id);
-      const hasValidDiscount =
-        product.discount &&
-        new Date(product.discount.validUntil) > new Date();
-
-      if (existing) {
-        return prevCart.map((item) =>
-          item._id === product._id
-            ? {
-                ...item,
-                quantity: item.quantity + 1,
-                discount: hasValidDiscount ? product.discount : null,
-              }
-            : item
-        );
-      } else {
-        return [
-          ...prevCart,
-          {
-            ...product,
-            quantity: 1,
-            discount: hasValidDiscount ? product.discount : null,
-          },
-        ];
-      }
-    });
-  };
+  
 
   return (
     <Box
