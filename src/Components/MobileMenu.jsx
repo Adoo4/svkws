@@ -29,7 +29,7 @@ const [hover, setHover] = useState(false);
     <Hamburger
       toggled={isOpen}
       toggle={setOpen}
-      size={24}
+      size={20}
       color={hover ? "#d62d00" : "#f9f9f9"}
     />
   </Box>

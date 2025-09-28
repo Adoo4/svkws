@@ -12,7 +12,7 @@ import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
 const ProductGallery = ({
- books = [],
+  books = [],
   loading = false,
   toggleDrawer,
   cart,
@@ -24,19 +24,16 @@ const ProductGallery = ({
   totalPages = 1,
   currentPage = 1,
   setPage, // <- use this from parent
-    wishlist,
+  wishlist,
   addToWishlist,
-  removeFromWishlist
+  removeFromWishlist,
 }) => {
-  
   const itemsPerPage = 20;
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Safe fallback
   const safeBooks = useMemo(() => books || [], [books]);
-
-
 
   return (
     <Box
@@ -98,21 +95,21 @@ const ProductGallery = ({
           justifyContent="center"
           sx={{ width: "100%", height: "100%" }}
         >
-       {books.map((book) => (
-      <Grid item xs sx={{ display: "flex" }} key={book._id}>
-        <BookCard
-          book={book}
-          toggleDrawer={toggleDrawer}
-          setDrawerData={setDrawerData}
-          drawerData={drawerData}
-          cart={cart}
-         addToCart={addToCart}
-  updateCartItem={updateCartItem}
-  removeCartItem={removeCartItem}
-           wishlist={wishlist}
-  addToWishlist={addToWishlist}   // ✅ make sure this exists
-  removeFromWishlist={removeFromWishlist} // ✅ make sure this exists
-        />
+          {books.map((book) => (
+            <Grid item xs sx={{ display: "flex" }} key={book._id}>
+              <BookCard
+                book={book}
+                toggleDrawer={toggleDrawer}
+                setDrawerData={setDrawerData}
+                drawerData={drawerData}
+                cart={cart}
+                addToCart={addToCart}
+                updateCartItem={updateCartItem}
+                removeCartItem={removeCartItem}
+                wishlist={wishlist}
+                addToWishlist={addToWishlist} // ✅ make sure this exists
+                removeFromWishlist={removeFromWishlist} // ✅ make sure this exists
+              />
             </Grid>
           ))}
         </Grid>
@@ -120,57 +117,57 @@ const ProductGallery = ({
 
       {/* Pagination */}
       {!loading && totalPages > 1 && (
-  <Box
-    sx={{
-      px: 3,
-      py: 1.5,
-      mt: "1rem",
-      borderRadius: "50px",
-      bgcolor: "#262626",
-      display: "flex",
-      justifyContent: "center",
-      width: "100%",
-    }}
-  >
-   <Pagination
-  count={totalPages}
-  page={currentPage}
-   onChange={(e, value) => {
-    setPage(value);
-    window.scrollTo({
-      top: 0,          // scroll to top
-      behavior: "smooth" // optional smooth scroll
-    });
-  }}
-      shape="rounded"
-      variant="outlined"
-      size={isSmallScreen ? "small" : "medium"}
-      sx={{
-        "& .MuiPaginationItem-root": {
-          borderRadius: "50%",
-          transition: "all 0.3s ease",
-          border: "1px solid #313131",
-          color: "#f9f9f9",
-          bgcolor: "#313131",
-        },
-        "& .MuiPaginationItem-root:hover": {
-          bgcolor: "#d62d00",
-          color: "#f9f9f9",
-          borderColor: "#d62d00",
-        },
-        "& .Mui-selected": {
-          bgcolor: "#d62d00",
-          color: "#f9f9f9",
-          fontWeight: "bold",
-          borderColor: "#d62d00",
-          boxShadow: "0px 0px 8px rgba(214, 45, 0, 0.6)",
-          "&:hover": { bgcolor: "#a32000" },
-        },
-        "& .MuiPaginationItem-ellipsis": { color: "#f9f9f9" },
-      }}
-    />
-  </Box>
-)}
+        <Box
+          sx={{
+            px: 3,
+            py: 1.5,
+            mt: "1rem",
+            borderRadius: "50px",
+            bgcolor: "#262626",
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(e, value) => {
+              setPage(value);
+              window.scrollTo({
+                top: 0, // scroll to top
+                behavior: "smooth", // optional smooth scroll
+              });
+            }}
+            shape="rounded"
+            variant="outlined"
+            size={isSmallScreen ? "small" : "medium"}
+            sx={{
+              "& .MuiPaginationItem-root": {
+                borderRadius: "50%",
+                transition: "all 0.3s ease",
+                border: "1px solid #313131",
+                color: "#f9f9f9",
+                bgcolor: "#313131",
+              },
+              "& .MuiPaginationItem-root:hover": {
+                bgcolor: "#d62d00",
+                color: "#f9f9f9",
+                borderColor: "#d62d00",
+              },
+              "& .Mui-selected": {
+                bgcolor: "#d62d00",
+                color: "#f9f9f9",
+                fontWeight: "bold",
+                borderColor: "#d62d00",
+                boxShadow: "0px 0px 8px rgba(214, 45, 0, 0.6)",
+                "&:hover": { bgcolor: "#a32000" },
+              },
+              "& .MuiPaginationItem-ellipsis": { color: "#f9f9f9" },
+            }}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

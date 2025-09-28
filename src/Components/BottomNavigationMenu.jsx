@@ -66,6 +66,20 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
         }}
         elevation={3}
       >
+          <Box
+        sx={{
+          height: { xs: "0.50rem", md: "3rem" },
+          width: "100%",
+          background: `repeating-linear-gradient(
+            45deg,
+           #313131,
+            #313131 10px,
+            #262626 10px,
+            #262626 20px
+          )`,
+        
+        }}
+      />
         <BottomNavigation
           showLabels
           value={value}
@@ -85,21 +99,25 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
               color: "white",
             },
             "& .MuiBottomNavigationAction-label": {
-              fontSize: "0.70rem",
+              fontSize: "0.60rem",
             },
             "& .MuiSvgIcon-root": {
-              fontSize: "1.0rem",
+              fontSize: "1rem",
             },
           }}
         >
          <BottomNavigationAction
-  label="Kategorije"
+         
+  label="KATEGORIJE"
   onClick={(event) => toggleDrawer2(!leftDrawerOpen)(event)} // toggle instead of always true
   icon={<MenuIcon sx={{ color: "#f9f9f9" }} />}
   sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" } }}
 />
+
+
+
          <BottomNavigationAction
-      label="Početna"
+      label="POČETNA"
       icon={<HomeIcon sx={{ color: "#f9f9f9" }} />}
       sx={{
         "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" },
@@ -108,7 +126,7 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
     />
     {isSignedIn && (
 <BottomNavigationAction
-  label="Korpa"
+  label="KORPA"
   icon={<ShoppingCartIcon sx={{ color: "#f9f9f9" }} />}
   sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" } }}
   onClick={() => setCartMenu(true)} // just open it

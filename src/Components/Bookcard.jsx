@@ -221,8 +221,8 @@ const formatCategoryName = (name) => {
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    background: "#ffffff",
-    border: "1px solid transparent",
+    background: inWishlist ? "#262626" : "#ffffff",
+    border:  "1px solid transparent",
     boxShadow: 2,
     transition: "transform 0.3s ease, box-shadow 0.3s ease",
     [theme.breakpoints.up("sm")]: {
@@ -235,22 +235,39 @@ const formatCategoryName = (name) => {
     position: "relative",
   }}
 >
-  {/* Badge */}
-  {(isNew || hasDiscount) && (
-    <Chip
-      label={isNew ? "Novo" : `-${book.discount.amount}%`}
-      color={isNew ? "success" : "error"}
-      size="small"
-      sx={{
-        position: "absolute",
-        top: 8,
-        left: 8,
-        zIndex: 5,
-        fontWeight: "bold",
-        fontSize: { xs: "0.6rem", sm: "0.65rem", md:"0.75rem" }, // ⬅️ smaller on xs
-      }}
-    />
-  )}
+  {/* Badges */}
+{isNew && (
+  <Chip
+    label="Novo"
+    color="success"
+    size="small"
+    sx={{
+      position: "absolute",
+      top: 8,
+      left: 8,
+      zIndex: 5,
+      fontWeight: "bold",
+      fontSize: { xs: "0.6rem", sm: "0.65rem", md: "0.75rem" },
+    }}
+  />
+)}
+
+{hasDiscount && (
+  <Chip
+    label={`-${book.discount.amount}%`}
+    color="error"
+    size="small"
+    sx={{
+      position: "absolute",
+      top: isNew ? 36 : 8, // move below "Novo" if both exist
+      left: 8,
+      zIndex: 5,
+      fontWeight: "bold",
+      fontSize: { xs: "0.6rem", sm: "0.65rem", md: "0.75rem" },
+    }}
+  />
+)}
+
 
     {/* Wishlist Icon */}
 <SignedIn>
@@ -332,7 +349,7 @@ const formatCategoryName = (name) => {
     gap: "0.5rem",
     display: "flex",
     fontWeight: 600,
-    color: "#262626",
+    color: inWishlist ? "#f1f1f1" : "#262626",
     mb: 0.5,
     lineHeight: 1.2,
     fontSize: { xs: "0.95rem", sm:"0.88", md: "0.95rem", },
@@ -395,7 +412,7 @@ const formatCategoryName = (name) => {
   variant="caption"
   sx={{
     ml: 0.3,
-    color: "#313131",
+    color: inWishlist ? "#f1f1f1" : "#262626",
     fontWeight: 500,
     lineHeight: 1.2,
     fontSize: { xs: "0.75rem", sm: "0.65rem" }, // bigger on xs, slightly smaller on sm+
@@ -441,7 +458,7 @@ const formatCategoryName = (name) => {
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        color: "#313131"
+        color: inWishlist ? "#f1f1f1" : "#262626",
       }}
     >
       {formatCategoryName(book.mainCategory)}
@@ -474,7 +491,7 @@ const formatCategoryName = (name) => {
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
-          color: "#313131"
+          color: inWishlist ? "#f1f1f1" : "#262626",
         }}
       >
         {book.subCategory}
@@ -491,7 +508,7 @@ const formatCategoryName = (name) => {
       {/* Description */}
      <Typography
   sx={{
-    color: "text.secondary",
+    color: inWishlist ? "#f1f1f1" : "#262626",
     fontSize: { xs: "0.60rem", md: "0.8rem" },
     fontStyle: "italic",
     lineHeight: 1.3,
@@ -533,7 +550,7 @@ const formatCategoryName = (name) => {
           <Typography
             sx={{
               fontWeight: "bold",
-              color: "#222",
+              color: inWishlist ? "#f1f1f1" : "#262626",
               fontSize: { xs: "0.8rem", sm: "1rem" },
             }}
           >
@@ -576,7 +593,7 @@ const formatCategoryName = (name) => {
       borderRadius: "12px",
       textTransform: "none",
       borderColor: "#313131",
-      color: "#313131",
+      color: inWishlist ? "#f1f1f1" : "#262626",
       fontSize: { xs: "0.60rem", sm: "0.7rem" },
       "&:hover": { borderColor: "#f33600", color: "#f33600" },
     }}

@@ -30,7 +30,7 @@ import DiscountSwitch from "./DiscountSwitch";
 
 const kategorije = [
   {
-    naziv: "Sve Knjige",
+    naziv: "Sve Kategorije",
     ikona: <ImportContactsIcon />,
     boja: "#2a9d8f",
   },
@@ -141,7 +141,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
   const handleCategoryClick = (kategorija) => {
-    if (kategorija.naziv.toLowerCase() === "sve knjige") {
+    if (kategorija.naziv.toLowerCase() === "sve kategorije") {
       // ✅ Do NOT reset language/isNew/discount here
       setFilter((prev) => ({
         ...prev,
@@ -250,8 +250,8 @@ const handleRemoveFilter = (key) => {
           <ListSubheader
             component="div"
             sx={{
-              fontWeight: "bold",
-              fontSize: "0.95rem",
+              fontWeight: "400",
+              fontSize: "0.80rem",
               bgcolor: "inherit",
               textAlign: "center",
               display: "flex",
@@ -285,7 +285,7 @@ const handleRemoveFilter = (key) => {
         }
       >
         {kategorije.map((kategorija, idx) => {
-          const isSveKnjige = kategorija.naziv.toLowerCase() === "sve knjige";
+          const isSveKnjige = kategorija.naziv.toLowerCase() === "sve kategorije";
 
           return (
             <React.Fragment key={kategorija.naziv}>

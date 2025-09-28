@@ -94,6 +94,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
             <img
               src="/svklogo.svg"
               alt="logo"
+               onClick={() => navigate("/home")}
               style={{
                 width: "90%",
                 height: "90%",
@@ -114,99 +115,93 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
             }}
           >
             <Button
-              sx={{
-                fontSize: "0.80rem",
-                display: { xs: "none", md: "flex" },
-                color: "#f9f9f9",
-                backgroundColor: "transparent",
-                borderRadius: 2,
-                px: 2.5,
-                py: 1.2,
-                fontWeight: 600,
-                position: "relative",
-                overflow: "hidden",
-                transition: "all 0.3s ease",
-                "&::after": {
-                  content: '""',
-                  position: "absolute",
-                  bottom: 4,
-                  left: "50%",
-                  width: "0%",
-                  height: "2px",
-                  background: "linear-gradient(90deg, #d62d00, #ff5722)",
-                  transition: "all 0.3s ease",
-                  transform: "translateX(-50%)",
-                  borderRadius: 2,
-                },
-                "&:hover": {
-                  color: "#d62d00",
-
-                  textShadow: "0 0 8px rgba(214,45,0,0.5)",
-                },
-                "&:hover::after": {
-                  width: "60%",
-                },
-                "&.Mui-selected": {
-                  color: "#d62d00",
-                  "&::after": {
-                    width: "60%",
-                  },
-                },
-              }}
-              onClick={() => navigate("/home")}
-              startIcon={<HomeIcon />}
-            >
-              <Box sx={{ display: { xs: "none", sm: "inline" } }}>POCETNA</Box>
-            </Button>
+  sx={{
+    fontFamily: "'Inter', sans-serif",
+    fontSize: "0.70rem",
+    display: { xs: "none", md: "flex" },
+    color: "#f9f9f9",
+    backgroundColor: "transparent",
+    borderRadius: 2,
+    px: 2.5,
+    py: 1.2,
+    fontWeight: 600,
+    position: "relative",
+    overflow: "hidden",
+    transition: "all 0.3s ease",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: 4,
+      left: "50%",
+      width: "0%",
+      height: "2px",
+      background: "linear-gradient(90deg, #d62d00, #ff5722)",
+      transition: "all 0.3s ease",
+      transform: "translateX(-50%)",
+      borderRadius: 2,
+    },
+    "&:hover": {
+      color: "#d62d00",
+      textShadow: "0 0 8px rgba(214,45,0,0.5)",
+    },
+    "&:hover::after": { width: "60%" },
+    "&.Mui-selected": {
+      color: "#d62d00",
+      "&::after": { width: "60%" },
+    },
+  }}
+  onClick={() => navigate("/home")}
+  startIcon={<HomeIcon />}
+>
+  <Box sx={{ display: { xs: "none", sm: "inline" } }}>POČETNA</Box>
+</Button>
 
             <Button
-              sx={{
-                fontSize: "0.80rem",
-                display: { xs: "none", md: "flex" },
-                color: "#f9f9f9",
-                backgroundColor: "transparent",
-                borderRadius: 2,
-                px: 2.5,
-                py: 1.2,
+  sx={{
+    fontFamily: "'Inter', sans-serif", // ✅ clean accented letters
+    fontSize: "0.70rem",
+    display: { xs: "none", md: "flex" },
+    color: "#f9f9f9",
+    backgroundColor: "transparent",
+    borderRadius: 2,
+    px: 2.5,
+    py: 1.2,
+    fontWeight: 600,
+    position: "relative",
+    overflow: "hidden",
+    transition: "all 0.3s ease",
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: 4,
+      left: "50%",
+      width: "0%",
+      height: "2px",
+      background: "linear-gradient(90deg, #d62d00, #ff5722)",
+      transition: "all 0.3s ease",
+      transform: "translateX(-50%)",
+      borderRadius: 2,
+    },
+    "&:hover": {
+      color: "#d62d00",
+      textShadow: "0 0 8px rgba(214,45,0,0.5)",
+    },
+    "&:hover::after": {
+      width: "60%",
+    },
+    "&.Mui-selected": {
+      color: "#d62d00",
+      "&::after": {
+        width: "60%",
+      },
+    },
+  }}
+  onClick={() => navigate("/shop")}
+  startIcon={<StoreIcon />}
+>
+  <Box sx={{ display: { xs: "none", sm: "inline" } }}>BOOKSTORE</Box>
+</Button>
 
-                fontWeight: 600,
-                position: "relative",
-                overflow: "hidden",
-                transition: "all 0.3s ease",
-                "&::after": {
-                  content: '""',
-                  position: "absolute",
-                  bottom: 4,
-                  left: "50%",
-                  width: "0%",
-                  height: "2px",
-                  background: "linear-gradient(90deg, #d62d00, #ff5722)",
-                  transition: "all 0.3s ease",
-                  transform: "translateX(-50%)",
-                  borderRadius: 2,
-                },
-                "&:hover": {
-                  color: "#d62d00",
-
-                  textShadow: "0 0 8px rgba(214,45,0,0.5)",
-                },
-                "&:hover::after": {
-                  width: "60%",
-                },
-                "&.Mui-selected": {
-                  color: "#d62d00",
-                  "&::after": {
-                    width: "60%",
-                  },
-                },
-              }}
-              onClick={() => navigate("/shop")}
-              startIcon={<StoreIcon />}
-            >
-              <Box sx={{ display: { xs: "none", sm: "inline" } }}>
-                BOOKSTORE
-              </Box>
-            </Button>
 
             {/* Cart */}
 
@@ -296,8 +291,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
                     minWidth: { xs: "70px", sm: "120px", md: "150px" },
                     color: "#fff",
                     backgroundColor: "transparent", // semi-transparent on transparent navbar
-                    textTransform: "none",
-                    boxShadow: "none",
+                                    boxShadow: "none",
                     transition: "all 0.3s ease",
                     "& .MuiButton-startIcon": {
                       mr: { xs: 0.3, sm: 1 },
