@@ -30,6 +30,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import { useWishlist } from "../Utils.js/useWishlist"; // your hook
 import useCart from "../Utils.js/useCart";
+import { darken } from "@mui/material/styles";
 
 const kategorije = [
   {
@@ -221,7 +222,7 @@ const formatCategoryName = (name) => {
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    background: inWishlist ? "#262626" : "#ffffff",
+    background: inWishlist ? darken("#60dce8", 0.4) : "#ffffff",
     border:  "1px solid transparent",
     boxShadow: 2,
     transition: "transform 0.3s ease, box-shadow 0.3s ease",

@@ -190,6 +190,7 @@ export default function WishlistDrawer({
             <Button
               onClick={() => {
                 clearWishlist();
+                
               }}
               variant="outlined"
               fullWidth
