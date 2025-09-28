@@ -13,7 +13,7 @@ const useCart = () => {
   const { isSignedIn, getToken } = useAuth();
 
   // 🔹 Fetch cart
-const { data, isLoading, isError } = useQuery({
+const { data, isLoading,  isError } = useQuery({
   queryKey: ["cart"],
   queryFn: async () => {
     const token = await getToken({ template: "backend" });

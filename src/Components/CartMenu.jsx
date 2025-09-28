@@ -40,7 +40,7 @@ export default function CartMenu({
     <Box
       sx={{
         width: { xs: 300, sm: 400, md: 450 },
-        p: 2,
+        p: 1,
         background: "#1f1f1f",
         height: "100%",
         overflowY: "auto",

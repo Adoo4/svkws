@@ -38,7 +38,7 @@ export default function WishlistDrawer({
     <Box
       sx={{
         width: { xs: 300, sm: 400, md: 450 },
-        p: 2,
+        p: 1,
         background: "#1f1f1f",
         height: "100%",
         overflowY: "auto",
@@ -132,7 +132,7 @@ export default function WishlistDrawer({
               >
                 <Tooltip title="Izbriši iz liste" arrow>
                   <IconButton
-                    size="medium"
+                    size="small"
                       onClick={() => {
                       removeFromWishlist(book._id);
                       enqueueSnackbar("Knjiga je uklonjena iz liste želja", {
@@ -147,7 +147,7 @@ export default function WishlistDrawer({
                         bgcolor: "#d32f2f",
                       },
                       borderRadius: 10,
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
+                      
                     }}
                   >
                     <DeleteIcon />
@@ -157,7 +157,7 @@ export default function WishlistDrawer({
                 {/* Add to cart */}
                 <Tooltip title="Prebaci ovu knjigu u korpu" arrow>
                   <IconButton
-                    size="medium"
+                    size="small"
                      onClick={() => {
                       addToCart(book);
                       enqueueSnackbar("Knjiga je dodana u korpu", {
@@ -166,13 +166,13 @@ export default function WishlistDrawer({
                     }}
                     sx={{
                       color: "#fff",
-                      bgcolor: "#4caf50",
+                      bgcolor: "#313131",
                       "&:hover": {
                         color: "#fff",
                         bgcolor: "#388e3c",
                       },
                       borderRadius: 10,
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.4)",
+                      
                     }}
                   >
                     <ShoppingCartIcon />

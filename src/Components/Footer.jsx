@@ -153,7 +153,7 @@ const SimpleFooter = () => {
       </Typography>
       <Stack direction="row" spacing={2}>
         <Link
-          href="https://www.facebook.com/svjetlostkomerc"
+          href="https://www.facebook.com/knjizarasvjetlost/?locale=hr_HR"
           target="_blank"
           rel="noopener"
           aria-label="Facebook"
@@ -182,13 +182,7 @@ const SimpleFooter = () => {
         </Link>
       </Stack>
 
-      <Typography
-        variant="caption"
-        sx={{ mt: 2, opacity: 0.7, fontSize: {xs:"0.7rem", md:"0.8rem"}, color: "#f9f9f9" }}
-      >
-        © {new Date().getFullYear()} Svjetlostkomerc d.d. Sarajevo. Sva prava
-        zadržana.
-      </Typography>
+     
     </Grid>
   </Grid>
 

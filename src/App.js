@@ -48,7 +48,7 @@ function App() {
   const [drawerOpen3, setDrawerOpen3] = useState(false);
 
   const [loading, setLoading] = useState(true);
-  const imageUrl = "https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"; // example
+  const imageUrl = "https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"; 
 
 
 

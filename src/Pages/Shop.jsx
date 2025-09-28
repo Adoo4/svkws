@@ -17,7 +17,6 @@ let CategoryMenu = ({
   cartMenu,
   setCartMenu,
   wishlist,
-  setWishlist,
   addToCart,
   updateCartItem,
   removeCartItem,
@@ -96,7 +95,7 @@ let CategoryMenu = ({
         }}
       >
         <SearchBarTop
-          booksCopy={books} // instead of booksCopy
+          booksCopy={books} 
           setCart={addToCart}
           toggleDrawer={toggleDrawer}
           setDrawerData={setDrawerData}
@@ -133,8 +132,8 @@ let CategoryMenu = ({
             booksCopy={booksCopy}
             books={books}
             allBooks={booksCopy}
-            page={page} // ✅ added
-            setPage={setPage} // ✅ added
+            page={page}
+            setPage={setPage} 
           />
         </Box>
 
@@ -166,7 +165,7 @@ let CategoryMenu = ({
         booksCopy={booksCopy}
         books={books}
         allBooks={booksCopy}
-        page={page} // pass the current page
+        page={page} 
         setPage={setPage}
       />
       <AnchorTemporaryDrawer
