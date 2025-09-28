@@ -27,14 +27,7 @@ import useCart from "../Utils.js/useCart";
 
 import { useWishlist } from "../Utils.js/useWishlist"; // your hook
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    right: -3,
-    top: 13,
-    border: `2px solid white`,
-    padding: "0 4px",
-  },
-}));
+
 
 export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
   const location = useLocation();
