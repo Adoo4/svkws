@@ -29,7 +29,7 @@ const ProductGallery = ({
   removeFromWishlist
 }) => {
   
-  const itemsPerPage = 15;
+  const itemsPerPage = 20;
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
