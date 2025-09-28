@@ -35,7 +35,7 @@ export const useWishlist = () => {
     },
     onMutate: async (book) => {
       await queryClient.cancelQueries({ queryKey: ["wishlist"] });
-      const previousWishlist = queryClient.getQueryData({ queryKey: ["wishlist"] });
+      const previousWishlist = queryClient.getQueryData(["wishlist"]);
 
       queryClient.setQueryData({ queryKey: ["wishlist"] }, (old = []) => {
         if (old.some((b) => b._id === book._id)) return old;
@@ -46,11 +46,11 @@ export const useWishlist = () => {
     },
     onError: (_err, _vars, ctx) => {
       if (ctx?.previousWishlist) {
-        queryClient.setQueryData({ queryKey: ["wishlist"] }, ctx.previousWishlist);
+       queryClient.setQueryData(["wishlist"], ctx.previousWishlist);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries(["wishlist"]);
     },
   });
 
