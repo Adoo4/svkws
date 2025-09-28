@@ -13,9 +13,11 @@ import {
   Avatar,
 } from "@mui/material";
 import { useAuth } from "@clerk/clerk-react";
+import useCart from "../Utils.js/useCart";
 
-export default function CheckoutPage({ cart, setCart }) {
+export default function CheckoutPage() {
   const { user } = useAuth();
+   const { cart, clearCart } = useCart();
   const [shipping, setShipping] = useState({
     fullName: user?.firstName + " " + user?.lastName || "",
     email: user?.emailAddresses[0]?.emailAddress || "",
@@ -41,7 +43,7 @@ export default function CheckoutPage({ cart, setCart }) {
 
   const handleCheckout = () => {
     alert(`Narudžba poslana!\nUkupno: ${total.toFixed(2)} BAM`);
-    setCart([]);
+    clearCart();
   };
 
   return (
@@ -62,7 +64,7 @@ export default function CheckoutPage({ cart, setCart }) {
     flex: 2,
     background: "#f9f9f9",
     borderRadius: 3,
-    p: 3,
+    p: 1,
     boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
   }}
 >
@@ -90,7 +92,7 @@ export default function CheckoutPage({ cart, setCart }) {
         <ListItem
           key={book._id}
           sx={{
-            background: "#262626",
+            background: "#313131",
             borderRadius: 2,
             p: 2,
             alignItems: "flex-start",
@@ -218,7 +220,8 @@ export default function CheckoutPage({ cart, setCart }) {
         <TextField
           label="Ime i prezime"
           name="fullName"
-          value={shipping.fullName}
+          value={ ""}
+          placeholder="Ime i prezime"
           onChange={handleChange}
           fullWidth
           sx={{ mb: 2 }}
