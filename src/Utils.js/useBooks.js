@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const useBooks = (filters = {}, page = 1, limit = 15) => {
+const useBooks = (filters = {}, page = 1, limit = 20) => {
   const stableFilters = JSON.stringify(filters); // 🚀 prevents queryKey duplication
 
   const { data, isLoading, isError } = useQuery({
