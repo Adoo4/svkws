@@ -11,8 +11,6 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
-
 import Badge from "@mui/material/Badge";
 import HomeIcon from "@mui/icons-material/Home";
 import StoreIcon from "@mui/icons-material/Store";
