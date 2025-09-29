@@ -89,13 +89,14 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
 
     {/* Description */}
     <Typography
-      variant="body2"
+      variant="body1"
       sx={{
         fontSize: {xs:"0.70rem", md:"0.8rem"},
         color: "#f7f7f7f7",
         opacity: 0.85,
         mb: 2,
-        lineHeight: 1.5,
+        lineHeight: 1.4,
+        textAlign:"justify"
       }}
     >
       {drawerData.description}

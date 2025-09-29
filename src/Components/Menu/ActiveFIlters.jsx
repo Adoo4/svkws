@@ -106,15 +106,15 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
   sx={{
     borderColor: "transparent",
     color: "#f0f0f0", // pick your new color here
-    backgroundColor: alpha("#ff6f61", 0.15), // semi-transparent background
+    backgroundColor: alpha("#007e2aff", 0.15), // semi-transparent background alpha("#007e2aff", 0.15)
     fontWeight: 500,
     fontSize: { xs: "0.65rem", sm: "0.75rem" },
     height: { xs: 22, sm: 26 },
     borderRadius: "14px",
-    "&:hover": { backgroundColor: alpha("#ff6f61", 0.25) },
+    "&:hover": { backgroundColor: alpha("#007e2aff", 0.25) },
     "& .MuiChip-deleteIcon": {
       fontSize: { xs: "0.6rem", sm: "0.7rem" },
-      color: "#ff6f61", // match the text color
+      color: "#007e2aff", // match the text color
     },
   }}
 />
@@ -131,15 +131,15 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
           sx={{
             borderColor: "transparent",
             color: "#f0f0f0",
-            backgroundColor: alpha("#007e2aff", 0.15),
+            backgroundColor: alpha("#ff6f61", 0.15),
             fontWeight: 500,
             fontSize: { xs: "0.65rem", sm: "0.75rem" },
             height: { xs: 22, sm: 26 },
             borderRadius: "14px",
-            "&:hover": { backgroundColor: alpha("#007e2aff", 0.25) },
+            "&:hover": { backgroundColor: alpha("#ff6f61", 0.25) },
             "& .MuiChip-deleteIcon": {
               fontSize: { xs: "0.6rem", sm: "0.7rem" },
-              color: "#007e2aff",
+              color: "#ff6f61",
             },
           }}
         />

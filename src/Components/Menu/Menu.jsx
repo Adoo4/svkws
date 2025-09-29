@@ -397,7 +397,7 @@ const handleRemoveFilter = (key) => {
 
       <Divider sx={{ my: 1 }} />
       <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
-        <Language filter={filter} setFilter={setFilter} />
+        <Language filter={filter} setFilter={setFilter} setPage={setPage} />
       </Box>
 
       <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>

@@ -9,13 +9,14 @@ import {
 } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
 
-export default function LanguageSelect({ filter, setFilter }) {
+export default function LanguageSelect({ filter, setFilter, setPage }) {
  const handleChange = (event) => {
     const value = event.target.value;
     setFilter((prev) => ({
       ...prev,
       language: value === "Svi" ? "" : value, // "" means no filter
     }));
+     setPage(1);
   };
 
   return (
@@ -34,7 +35,7 @@ export default function LanguageSelect({ filter, setFilter }) {
             "&.Mui-focused": { color: "#f7f7f7", fontSize: "1rem" },
           }}
         >
-          <LanguageIcon sx={{ fontSize: "1rem", color: "#d62d00" }} />
+          <LanguageIcon sx={{ fontSize: "1rem", color: "#007e2aff" }} />
           <Typography sx={{ fontSize: "0.75rem" }}>Jezik</Typography>
         </InputLabel>
 
@@ -54,7 +55,7 @@ export default function LanguageSelect({ filter, setFilter }) {
               display: "flex",
               alignItems: "center",
             },
-            "& .MuiSelect-icon": { color: "#d62d00" },
+            "& .MuiSelect-icon": { color: "#007e2aff" },
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "#313131",
               borderRadius: 2,

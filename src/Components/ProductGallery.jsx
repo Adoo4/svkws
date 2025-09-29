@@ -52,7 +52,7 @@ const ProductGallery = ({
     >
       {/* Loading Skeleton */}
       {loading && (
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={1} justifyContent="center">
           {Array.from({ length: itemsPerPage }).map((_, index) => (
             <Grid item xs key={index} sx={{ display: "flex" }}>
               <BookCardSkeleton />

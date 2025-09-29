@@ -222,7 +222,7 @@ const formatCategoryName = (name) => {
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    background: inWishlist ? darken("#60dce8", 0.4) : "#ffffff",
+    background: inWishlist ? darken("#b9b9b9ff", 0.4) : "#ffffff",
     border:  "1px solid transparent",
     boxShadow: 2,
     transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -285,7 +285,7 @@ const formatCategoryName = (name) => {
     }}
   >
     {inWishlist ? (
-      <BookmarkIcon sx={{ color: "#262626", fontSize: "1.5rem" }} />
+      <BookmarkIcon sx={{ color: "#ca1f1fff", fontSize: "1.5rem" }} />
     ) : (
       <BookmarkBorderIcon sx={{ color: "#262626", fontSize: "1.5rem" }} />
     )}

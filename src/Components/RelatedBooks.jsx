@@ -147,7 +147,7 @@ export default function RelatedBooks({ book }) {
               image={b.coverImage}
               alt={b.title}
               width={"auto"}
-              height={400}
+              height={300}
               sx={{ objectFit: "contain", borderRadius: 2 }}
             />
             <CardContent>
