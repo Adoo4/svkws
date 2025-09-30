@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 
@@ -15,12 +15,12 @@ const LoadingDevice = ({ imageUrl }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+const location = useLocation();
   useEffect(() => {
     // If user has visited before, skip loading
     if (sessionStorage.getItem("hasVisitedBefore")) {
       setLoading(false);
-      navigate("/home");
+      if (location.pathname === "/") navigate("/home");
       return;
     }
 
@@ -47,7 +47,7 @@ const LoadingDevice = ({ imageUrl }) => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-      navigate("/home");
+      if (location.pathname === "/") navigate("/home");
     }, 6000); // optional delay
 
     return () => clearTimeout(timer);
