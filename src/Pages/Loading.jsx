@@ -40,7 +40,7 @@ const location = useLocation();
     img.onerror = () => {
       setIsImageLoaded(true); // mark as loaded even if error, so loader stops
     };
-  }, [imageUrl, navigate]);
+  }, [imageUrl, navigate, location.pathname]);
 
   useEffect(() => {
     if (!isImageLoaded) return;
@@ -51,7 +51,7 @@ const location = useLocation();
     }, 6000); // optional delay
 
     return () => clearTimeout(timer);
-  }, [isImageLoaded, navigate]);
+  }, [isImageLoaded, navigate, location.pathname]);
 
   if (!loading) return null;
 
