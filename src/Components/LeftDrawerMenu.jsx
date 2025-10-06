@@ -14,13 +14,13 @@ const LeftDrawerMenu = ({ open, setOpen, setFilter, filter, allBooks, page,  set
       PaperProps={{
         sx: {
           backgroundColor: "#262626",
-          width: { xs: 270, md: 400 },
+          width: { xs: 270, md: 430 }, overflow:"hidden"
         },
       }}
     >
       <Box
         sx={{
-          width: { xs: 270, md: 400 },
+          width: { xs: 270, md: 450 },
           background: "#262626",
         }}
         role="presentation"

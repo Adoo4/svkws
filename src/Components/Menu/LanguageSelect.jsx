@@ -9,13 +9,14 @@ import {
 } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
 
-export default function LanguageSelect({ filter, setFilter, setPage }) {
+export default function LanguageSelect({ filter, setFilter, setPage, setSelectedLanguage }) {
  const handleChange = (event) => {
     const value = event.target.value;
     setFilter((prev) => ({
       ...prev,
       language: value === "Svi" ? "" : value, // "" means no filter
     }));
+    setSelectedLanguage(value === "Svi" ? null : value);
      setPage(1);
   };
 

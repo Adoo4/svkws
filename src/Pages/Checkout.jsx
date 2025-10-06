@@ -98,7 +98,7 @@ export default function CheckoutPage() {
             alignItems: "flex-start",
             boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
             transition: "0.3s",
-            "&:hover": { transform: "scale(1.01)", background: "#333" },
+           
           }}
         >
           <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
@@ -197,17 +197,38 @@ export default function CheckoutPage() {
 
   {/* Total */}
   <Divider sx={{ borderColor: "#333", mt: 3, mb: 2 }} />
+<Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+  {/* Price of all books */}
   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <Typography variant="h6" sx={{ color: "#313131", fontWeight: "bold" }}>
-      Ukupno:
+    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
+      Cijena knjiga:
     </Typography>
-    <Typography
-      variant="h5"
-      sx={{ color: "#f33600", fontWeight: "bold" }}
-    >
+    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
       {total.toFixed(2)} BAM
     </Typography>
   </Box>
+
+  {/* Dostava */}
+  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
+      Dostava:
+    </Typography>
+    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
+      8.00 BAM
+    </Typography>
+  </Box>
+
+  {/* Grand total */}
+  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <Typography variant="h5" sx={{ color: "#f33600", fontWeight: "bold" }}>
+      Ukupno:
+    </Typography>
+    <Typography variant="h5" sx={{ color: "#f33600", fontWeight: "bold" }}>
+      {(total + 8).toFixed(2)} BAM
+    </Typography>
+  </Box>
+</Box>
+
 </Box>
 
 

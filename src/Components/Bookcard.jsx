@@ -9,7 +9,6 @@ import Chip from "@mui/material/Chip";
 import { useTheme } from "@mui/material/styles";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useUser } from "@clerk/clerk-react";
 import  { useState, useEffect } from "react";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
@@ -31,6 +30,7 @@ import { useSnackbar } from "notistack";
 import { useWishlist } from "../Utils.js/useWishlist"; // your hook
 import useCart from "../Utils.js/useCart";
 import { darken } from "@mui/material/styles";
+import { useUser, useClerk } from "@clerk/clerk-react"; // make sure both are imported
 
 const kategorije = [
   {
@@ -149,7 +149,7 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  updateCartItem }) => {
   const navigate = useNavigate();
 const { enqueueSnackbar } = useSnackbar();
 const {  isAdding, addToCart } = useCart();
-
+const clerk = useClerk();
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
    // state to control heart icon
  // local state for heart icon
@@ -212,7 +212,7 @@ const formatCategoryName = (name) => {
   elevation={0}
   sx={{
      minWidth: { xs: "170px", sm: "290px" }, // increase sm
-    maxWidth: { xs: "30vw", sm: "320px", md: "240px" }, // allow more space
+    maxWidth: { xs: "25vw", sm: "320px", md: "240px" }, // allow more space
     flexGrow: { xs: 1, sm: 1 }, // lets it stretch if space is available
     borderRadius: 4,
     cursor: "pointer", // 👈 makes it a hand icon
@@ -414,9 +414,9 @@ const formatCategoryName = (name) => {
   sx={{
     ml: 0.3,
     color: inWishlist ? "#f1f1f1" : "#262626",
-    fontWeight: 500,
+    fontWeight: "bold",
     lineHeight: 1.2,
-    fontSize: { xs: "0.75rem", sm: "0.65rem" }, // bigger on xs, slightly smaller on sm+
+    fontSize: { xs: "0.60rem", sm: "0.65rem" }, // bigger on xs, slightly smaller on sm+
     display: { xs: "flex", sm: "inline" }, // keep visible on xs
     whiteSpace: "nowrap", // prevent breaking into 2 lines
     overflow: "hidden",
@@ -593,7 +593,7 @@ const formatCategoryName = (name) => {
       px: { xs: 1, sm: 1.5 },
       borderRadius: "12px",
       textTransform: "none",
-      borderColor: "#313131",
+      borderColor:  inWishlist ? "#f1f1f1" : "#262626",
       color: inWishlist ? "#f1f1f1" : "#262626",
       fontSize: { xs: "0.60rem", sm: "0.7rem" },
       "&:hover": { borderColor: "#f33600", color: "#f33600" },
@@ -607,29 +607,35 @@ const formatCategoryName = (name) => {
     title={isSignedIn ? "" : "Morate biti prijavljeni da dodate knjige u korpu"}
     arrow
   >
-    <span style={{ flex: 1, display: "flex" }}>
-      <Button
-      variant="contained"
-      size="small"
-      onClick={() => addToCart(book)}
-  disabled={isAdding || !isSignedIn}
- 
-     
-      startIcon={<ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />}
-      sx={{
-        flex: 1,
-        px: { xs: 1, sm: 1.5 },
-        fontSize: { xs: "0.60rem", sm: "0.7rem" },
-        borderRadius: "12px",
-        textTransform: "none",
-        bgcolor: "#313131",
-        color: "#fff",
-        "&:hover": { bgcolor: "#d62d00" },
-      }}
-    >
-      Dodaj
-    </Button>
-    </span>
+    
+   <Button
+  variant="contained"
+  size="small"
+  onClick={() => {
+    if (!isSignedIn) {
+      clerk.openSignIn(); // 👈 trigger Clerk login
+    } else {
+      addToCart(book);
+    }
+  }}
+  disabled={isAdding} // 👈 remove !isSignedIn here
+  startIcon={<ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />}
+  sx={{
+    flex: 1,
+    px: { xs: 1, sm: 1.5 },
+    fontSize: { xs: "0.60rem", sm: "0.7rem" },
+    borderRadius: "12px",
+    textTransform: "none",
+    bgcolor: "#313131",
+    color: "#fff",
+    "&:hover": { bgcolor: "#d62d00" },
+    boxShadow: "none",
+  }}
+>
+  Dodaj
+</Button>
+
+    
   </Tooltip>
 </CardActions>
 

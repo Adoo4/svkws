@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Typography } from "@mui/material"
 import {
   SignedIn,
   SignedOut,
@@ -297,6 +298,9 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
                       mr: { xs: 0.3, sm: 1 },
                       fontSize: { xs: "0.9rem", sm: "1.2rem" },
                     },
+                    "& .MuiButton-startIcon .MuiSvgIcon-root": {
+    fontSize: { xs: "1.5rem", md: "1.2rem" },
+  },
                     "&:hover": {
                       backgroundColor: "#ff3c1a",
                       boxShadow: "0 4px 12px rgba(214,45,0,0.4)",
@@ -312,7 +316,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
                     },
                   })}
                 >
-                  PRIJAVA
+                  <Typography sx={{fontSize:"0.75rem", fontWeight:"bold", display:{xs:"none", md:"block"}}}>PRIJAVA</Typography>
                 </Button>
               </SignInButton>
             </SignedOut>

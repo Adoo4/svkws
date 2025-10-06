@@ -92,7 +92,7 @@ const kategorije = [
       "Biografije i autobiografije",
       "Eseji",
       "Putopisi",
-      "Istorija",
+      "Historija",
       "Filozofija",
       "Religija i duhovnost",
       "Politika i društvo",
@@ -212,7 +212,7 @@ const handleRemoveFilter = (key) => {
     <Box
       sx={{
         width: "100%",
-        maxWidth: { xs: "300px", sm: "400px" },
+        maxWidth: { xs: "380px", sm: "430px" },
         height: "100%",
         background: "transparent",
         overflowY: "auto",
@@ -291,7 +291,7 @@ const handleRemoveFilter = (key) => {
             <React.Fragment key={kategorija.naziv}>
               {/* Main category button */}
               <ListItemButton
-                onClick={() => handleCategoryClick(kategorija)}
+                onClick={() => {handleCategoryClick(kategorija); window.scrollTo(0, 0);}}
                 sx={{
                   display: "flex",
                   gap: "1rem",
@@ -352,24 +352,27 @@ const handleRemoveFilter = (key) => {
                   unmountOnExit
                 >
                   <List component="div" disablePadding>
-                    <Grid container spacing={0} sx={{ pl: 2 }}>
+                    <Grid container spacing={1} sx={{ pl: 2 }}>
                       {kategorija.podkategorije.map((pod, i) => (
                         <Grid item xs={6} key={pod}>
                           <ListItemButton
                             sx={{
+                              padding:{xs:"0.5rem", sm:"0.5rem"},
+                              gap:"0.5rem",
                               borderRadius: "6px",
                               color: "#f7f7f7",
+                              background:"#292929ff",
                               "&:hover": {
                                 backgroundColor: `${kategorija.boja}22`,
                               },
                             }}
                             selected={selectedIndex === idx * 100 + i}
-                            onClick={() =>
+                            onClick={() => {
                               handleSubcategoryClick(
                                 kategorija,
                                 pod,
                                 idx * 100 + i
-                              )
+                              ); window.scrollTo(0, 0); }
                             }
                           >
                             <ListItemText
@@ -407,7 +410,7 @@ const handleRemoveFilter = (key) => {
       <Box sx={{ display: "flex", justifyContent: "flex-start", mb: 1 }}>
   <DiscountSwitch checked={filter.discount} onToggle={(val) => {
     setFilter((prev) => ({ ...prev, discount: val }));
-    setPage(1);
+    setPage(1); 
   }} />
 </Box>
     </Box>

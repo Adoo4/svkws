@@ -29,6 +29,11 @@ import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import { useWishlist } from "../Utils.js/useWishlist";
+import ShareButton from "../Components/ShareButton";
+import { useClerk } from "@clerk/clerk-react";
+
+
+
 
 export default function BookDetail({addToCart}) {
   const { id } = useParams(); // book id from route
@@ -39,6 +44,7 @@ export default function BookDetail({addToCart}) {
   const [loading, setLoading] = useState(true);
    const { isSignedIn } = useUser();
     const { enqueueSnackbar } = useSnackbar();
+    const clerk = useClerk();
 /* eslint-disable react-hooks/exhaustive-deps */
    
 /* eslint-enable react-hooks/exhaustive-deps */
@@ -133,6 +139,7 @@ useEffect(() => {
                   {book.title}
                 </Typography>
                 {book.isNew && <Chip label="Novo" sx={{ bgcolor: "green", color: "#fff", fontWeight: "bold" }} />}
+                <ShareButton/>
               </Box>
 
               {/* Author */}
@@ -259,10 +266,14 @@ useEffect(() => {
             }}
             fullWidth
            onClick={() => {
-    addToCart(book);   // ✅ pass book directly
+  if (!isSignedIn) {
+    clerk.openSignIn(); // 👈 trigger Clerk modal/redirect
+  } else {
+    addToCart(book);
     enqueueSnackbar(`Dodano u korpu: ${book.title}`, { variant: "success" });
-  }}
-            disabled={!isSignedIn}
+  }
+}}
+            
           >
             Dodaj u korpu
           </Button>

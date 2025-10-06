@@ -4,15 +4,16 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useUser } from "@clerk/clerk-react";
+import TuneIcon from '@mui/icons-material/Tune';
+import Badge from '@mui/material/Badge';
 
 
 
-export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, setLeftDrawerOpen, setCartMenu, CartMenu, toggleDrawer }) {
+export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, setLeftDrawerOpen, setCartMenu, CartMenu, toggleDrawer, cart }) {
   const [value, setValue] = React.useState(0);
   const ref = React.useRef(null);
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
 }, []);
 
   return (
-    <Box sx={{ pb: 3, zIndex: "99", display: { xs: "flex", md: "none" } }} ref={ref}>
+    <Box sx={{ pb: 3, zIndex: "99", display: { xs: "flex", lg: "none" } }} ref={ref}>
       <CssBaseline />
 
       <Paper
@@ -66,73 +67,81 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
         }}
         elevation={3}
       >
-          <Box
+          
+       <BottomNavigation
+  showLabels
+  value={value}
+  onChange={(event, newValue) => {
+    setValue(newValue);
+  }}
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    background: "#1e1e1e",
+    boxShadow: "0 -2px 8px rgba(0,0,0,0.4)",
+    borderTop: "1px solid rgba(255,255,255,0.1)",
+    "& .MuiBottomNavigationAction-root": {
+      color: "#bdbdbd",
+      minWidth: "60px",
+      padding: "6px 8px",
+      transition: "all 0.3s ease",
+      "&:hover": {
+        color: "#ffffff",
+        transform: "scale(1.05)",
+      },
+    },
+    "& .Mui-selected": {
+      color: "#ffffff",
+    },
+    "& .MuiBottomNavigationAction-label": {
+      fontSize: "0.7rem",
+      fontWeight: 500,
+      letterSpacing: "0.5px",
+    },
+    "& .MuiSvgIcon-root": {
+      fontSize: "1.3rem",
+    },
+  }}
+>
+  <BottomNavigationAction
+    label="FILTRIRAJ"
+    onClick={(event) => toggleDrawer2(!leftDrawerOpen)(event)}
+    icon={<TuneIcon />}
+  />
+
+  <BottomNavigationAction
+    label="POČETNA"
+    icon={<HomeIcon />}
+    onClick={() => navigate("/home")}
+  />
+
+  {isSignedIn && (
+   <BottomNavigationAction
+    label="KORPA"
+    onClick={() => setCartMenu(true)}
+    icon={
+      <Badge
+        badgeContent={cart?.reduce((sum, item) => sum + item.quantity, 0) || 0}
+        color="error"
+        overlap="circular"
         sx={{
-          height: { xs: "0.50rem", md: "3rem" },
-          width: "100%",
-          background: `repeating-linear-gradient(
-            45deg,
-           #313131,
-            #313131 10px,
-            #262626 10px,
-            #262626 20px
-          )`,
-        
+          "& .MuiBadge-badge": {
+            fontSize: "0.65rem",
+            fontWeight: "bold",
+            minWidth: "18px",
+            height: "18px",
+            borderRadius: "50%",
+          },
         }}
-      />
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            background: "#222",
-            "& .MuiBottomNavigationAction-root": {
-              color: "#f7f7f7",
-              minWidth: 0,
-              padding: "4px 6px",
-            },
-            "& .Mui-selected": {
-              color: "white",
-            },
-            "& .MuiBottomNavigationAction-label": {
-              fontSize: "0.60rem",
-            },
-            "& .MuiSvgIcon-root": {
-              fontSize: "1rem",
-            },
-          }}
-        >
-         <BottomNavigationAction
-         
-  label="KATEGORIJE"
-  onClick={(event) => toggleDrawer2(!leftDrawerOpen)(event)} // toggle instead of always true
-  icon={<MenuIcon sx={{ color: "#f9f9f9" }} />}
-  sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" } }}
-/>
+      >
+        <ShoppingCartIcon />
+      </Badge>
+    }
+  />
+  )}
+</BottomNavigation>
 
-
-
-         <BottomNavigationAction
-      label="POČETNA"
-      icon={<HomeIcon sx={{ color: "#f9f9f9" }} />}
-      sx={{
-        "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" },
-      }}
-      onClick={() => navigate("/home")}
-    />
-    {isSignedIn && (
-<BottomNavigationAction
-  label="KORPA"
-  icon={<ShoppingCartIcon sx={{ color: "#f9f9f9" }} />}
-  sx={{ "& .MuiBottomNavigationAction-label": { fontSize: "0.70rem" } }}
-  onClick={() => setCartMenu(true)} // just open it
-/>
-)}
-        </BottomNavigation>
       </Paper>
     </Box>
   );
