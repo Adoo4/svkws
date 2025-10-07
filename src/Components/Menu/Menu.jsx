@@ -227,7 +227,7 @@ const handleRemoveFilter = (key) => {
       flex: 1,              // take remaining height
       overflowY: "auto",    // enable scrolling
       pr: "0.5rem",
-      pb: "6rem",           // extra bottom padding so last items are reachable
+      pb: "10rem",           // extra bottom padding so last items are reachable
     }}
   >
       {/*Filters athat are applied*/ }
