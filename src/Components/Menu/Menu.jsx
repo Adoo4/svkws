@@ -226,7 +226,7 @@ const handleRemoveFilter = (key) => {
     sx={{
       
       flex: 1,              // take remaining height
-      overflowY: {xs:"auto", md:"none"},    // enable scrolling
+      overflowY: {xs:"auto", md:"hidden"},    // enable scrolling
       pr: "0.5rem",
       pb: "10rem",           // extra bottom padding so last items are reachable
     }}
