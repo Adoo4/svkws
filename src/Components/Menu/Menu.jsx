@@ -210,17 +210,26 @@ const handleRemoveFilter = (key) => {
 
   return (
     <Box
-      sx={{
+  sx={{
     width: "100%",
     maxWidth: { xs: "380px", sm: "430px" },
-    height: "90lvh", // <-- use full viewport height
+    height: "100dvh",       // dynamic viewport height
+    display: "flex",
+    flexDirection: "column",
     background: "transparent",
-    overflowY: "auto",
+    pt: "1rem",
     pr: "0.5rem",
-    mt: "1rem",
-    marginBottom: "15rem", // reduce large bottom margin
   }}
-    >
+>
+  {/* Scrollable area */}
+  <Box
+    sx={{
+      flex: 1,              // take remaining height
+      overflowY: "auto",    // enable scrolling
+      pr: "0.5rem",
+      pb: "6rem",           // extra bottom padding so last items are reachable
+    }}
+  >
       {/*Filters athat are applied*/ }
 {/* Active Filters Bar */}
 <ActiveFilters filters={filter} onRemove={handleRemoveFilter} kategorije={kategorije} />
@@ -412,7 +421,8 @@ const handleRemoveFilter = (key) => {
     setFilter((prev) => ({ ...prev, discount: val }));
     setPage(1); 
   }} />
+   </Box>
+  </Box>
 </Box>
-    </Box>
   );
 }
