@@ -32,9 +32,9 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
   <Box
     sx={{
       width: "100%",
-      minHeight: "auto",
       position: "relative",
       overflow: "hidden",
+      minHeight:"300px",
     }}
   >
     <img
@@ -43,6 +43,7 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
       style={{
         width: "100%",
         height: "100%",
+        
         objectFit: "contain",
         objectPosition: "top",
       }}
@@ -83,7 +84,16 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
         Autor:
       </Typography>
       <Typography variant="body2" sx={{ fontSize: {xs:"0.70rem", lg:"0.85rem"}, color: "#f7f7f7f7" }}>
-        {drawerData.author}
+       {drawerData.author
+  .split(" ")
+  .map(word => {
+    if (word === word.toUpperCase() || /\.$/.test(word)) {
+      return word;
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  })
+  .join(" ")
+}
       </Typography>
     </Box>
 
@@ -95,8 +105,9 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
         color: "#f7f7f7f7",
         opacity: 0.85,
         mb: 2,
-        lineHeight: 1.4,
-        textAlign:"justify"
+        lineHeight: 1.3,
+        textAlign:"match-parent",
+        overflow:"auto"
       }}
     >
       {drawerData.description}

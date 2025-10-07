@@ -16,7 +16,7 @@ export default function LanguageSelect({ filter, setFilter, setPage, setSelected
       ...prev,
       language: value === "Svi" ? "" : value, // "" means no filter
     }));
-    setSelectedLanguage(value === "Svi" ? null : value);
+   
      setPage(1);
   };
 
