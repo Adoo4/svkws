@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -11,6 +11,7 @@ import CartMenu from "../Components/CartMenu";
 import BottomNavigationMenu from "../Components/BottomNavigationMenu";
 import useBooks from "../Utils.js/useBooks";
 import { useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 
 let CategoryMenu = ({
   cart,
@@ -30,15 +31,30 @@ let CategoryMenu = ({
   const [drawerData, setDrawerData] = useState(null);
   const [open, setOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
-  const [filter, setFilter] = useState({
-    mainCategory: "", // <- matches DB
-    subCategory: "", // <- matches DB
-    language: "",
-    isNew: false,
-    discount: false,
-  });
+const [searchParams, setSearchParams] = useSearchParams();
 
-  const [page, setPage] = useState(1);
+const [filter, setFilter] = useState({
+  mainCategory: searchParams.get("mainCategory") || "",
+  subCategory: searchParams.get("subCategory") || "",
+  language: searchParams.get("language") || "",
+  isNew: searchParams.get("isNew") === "true",
+  discount: searchParams.get("discount") === "true",
+});
+
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+
+
+  useEffect(() => {
+  const params = {
+    ...(filter.mainCategory && { mainCategory: filter.mainCategory }),
+    ...(filter.subCategory && { subCategory: filter.subCategory }),
+    ...(filter.language && { language: filter.language }),
+    ...(filter.isNew && { isNew: "true" }),
+    ...(filter.discount && { discount: "true" }),
+    page: page.toString(),
+  };
+  setSearchParams(params);
+}, [filter, page, setSearchParams]);
   const { books, isLoading, totalPages } = useBooks(filter, page, 20);
 
   //const [bo = useState([]);

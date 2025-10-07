@@ -11,6 +11,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
+
+
 const ProductGallery = ({
   books = [],
   loading = false,
@@ -33,7 +35,14 @@ const ProductGallery = ({
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   // Safe fallback
-  const safeBooks = useMemo(() => books || [], [books]);
+  const safeBooks = useMemo(() => {
+  // If the backend returns fewer than requested, show whatever is available
+  if (!books || books.length === 0) return [];
+  return books.slice(0, Math.min(books.length, 20)); // Option 1 logic
+}, [books]);
+
+
+  
 
   return (
     <Box
@@ -95,7 +104,7 @@ const ProductGallery = ({
           justifyContent="center"
           sx={{ width: "100%", height: "100%" }}
         >
-          {books.map((book) => (
+          {safeBooks.map((book) => (
             <Grid item xs sx={{ display: "flex" }} key={book._id}>
               <BookCard
                 book={book}

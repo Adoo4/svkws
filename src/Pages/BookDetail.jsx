@@ -143,12 +143,19 @@ useEffect(() => {
               </Box>
 
               {/* Author */}
-              <Typography variant="subtitle1" sx={{ fontSize: { xs: "0.9rem", md: "1.1rem" }, color: "#ccc" }}>
-                Autor: {book.author}
+              <Typography variant="subtitle1" sx={{ fontSize: { xs: "0.9rem", md: "1.0rem" }, color: "#ccc" }}>
+                Autor: {book.author
+  ?.split(" ")
+  .map(word =>
+    word
+      ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      : ""
+  )
+  .join(" ")}
               </Typography>
 
               {/* Description */}
-              <Typography variant="body2" sx={{ mb: 3, fontSize: { xs: "0.75rem", md: "0.85rem" }, color: "#ddd" }}>
+              <Typography variant="body2" sx={{ mb: 3, mt:1, fontSize: { xs: "0.75rem", md: "0.85rem" }, color: "#ddd" }}>
                 {book.description}
               </Typography>
 

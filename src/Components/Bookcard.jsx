@@ -580,10 +580,10 @@ const formatCategoryName = (name) => {
   <Button
     variant="outlined"
     size="small"
-    onClick={(e) => {
-      navigate(`/${book._id}`, {
-        state: { book, category: book.subCategory },
-      });
+     onClick={() => {
+    navigate(`/${book._id}${window.location.search}`, {
+      state: { book, category: book.subCategory },
+    });
     }}
     startIcon={
       <InfoOutlinedIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />

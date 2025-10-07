@@ -85,15 +85,13 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
       </Typography>
       <Typography variant="body2" sx={{ fontSize: {xs:"0.70rem", lg:"0.85rem"}, color: "#f7f7f7f7" }}>
        {drawerData.author
-  .split(" ")
-  .map(word => {
-    if (word === word.toUpperCase() || /\.$/.test(word)) {
-      return word;
-    }
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-  })
-  .join(" ")
-}
+  ?.split(" ")
+  .map(word =>
+    word
+      ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      : ""
+  )
+  .join(" ")}
       </Typography>
     </Box>
 
