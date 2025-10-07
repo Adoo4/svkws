@@ -211,15 +211,15 @@ const handleRemoveFilter = (key) => {
   return (
     <Box
       sx={{
-        width: "100%",
-        maxWidth: { xs: "380px", sm: "430px" },
-        height: "100%",
-        background: "transparent",
-        overflowY: "auto",
-        pr: "0.5rem",
-        mt: "1rem",
-        marginBottom:"10rem"
-      }}
+    width: "100%",
+    maxWidth: { xs: "380px", sm: "430px" },
+    height: "90lvh", // <-- use full viewport height
+    background: "transparent",
+    overflowY: "auto",
+    pr: "0.5rem",
+    mt: "1rem",
+    marginBottom: "15rem", // reduce large bottom margin
+  }}
     >
       {/*Filters athat are applied*/ }
 {/* Active Filters Bar */}

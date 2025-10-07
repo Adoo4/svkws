@@ -108,18 +108,33 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
     label="FILTRIRAJ"
     onClick={(event) => toggleDrawer2(!leftDrawerOpen)(event)}
     icon={<TuneIcon />}
+     sx={{
+    "& .MuiBottomNavigationAction-label": {
+      fontSize: "0.6rem", // adjust as needed
+    },
+  }}
   />
 
   <BottomNavigationAction
     label="POČETNA"
     icon={<HomeIcon />}
     onClick={() => navigate("/home")}
+     sx={{
+    "& .MuiBottomNavigationAction-label": {
+      fontSize: "0.6rem", // adjust as needed
+    },
+  }}
   />
 
   {isSignedIn && (
    <BottomNavigationAction
     label="KORPA"
     onClick={() => setCartMenu(true)}
+     sx={{
+    "& .MuiBottomNavigationAction-label": {
+      fontSize: "0.6rem", // adjust as needed
+    },
+  }}
     icon={
       <Badge
         badgeContent={cart?.reduce((sum, item) => sum + item.quantity, 0) || 0}

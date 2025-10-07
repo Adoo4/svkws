@@ -139,7 +139,7 @@ const [filter, setFilter] = useState({
             display: { xs: "none", lg: "flex" },
             background: "#262626",
 
-            minHeight: "106lvh",
+            minHeight: "100lvh",
           }}
         >
           <Menu
