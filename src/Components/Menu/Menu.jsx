@@ -224,6 +224,7 @@ const handleRemoveFilter = (key) => {
   {/* Scrollable area */}
   <Box
     sx={{
+      
       flex: 1,              // take remaining height
       overflowY: "auto",    // enable scrolling
       pr: "0.5rem",
