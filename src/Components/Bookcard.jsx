@@ -211,8 +211,8 @@ const formatCategoryName = (name) => {
    <Card
   elevation={0}
   sx={{
-     minWidth: { xs: "170px", sm: "290px" }, // increase sm
-    maxWidth: { xs: "25vw", sm: "320px", md: "240px" }, // allow more space
+     minWidth: { xs: "165px", sm: "280px" }, // increase sm
+    maxWidth: { xs: "25vw", sm: "310px", md: "240px" }, // allow more space
     flexGrow: { xs: 1, sm: 1 }, // lets it stretch if space is available
     borderRadius: 4,
     cursor: "pointer", // 👈 makes it a hand icon
@@ -510,6 +510,7 @@ const formatCategoryName = (name) => {
      <Typography
   sx={{
     color: inWishlist ? "#f1f1f1" : "#262626",
+    fontWeight:"500",
     fontSize: { xs: "0.60rem", md: "0.8rem" },
     fontStyle: "italic",
     lineHeight: 1.3,

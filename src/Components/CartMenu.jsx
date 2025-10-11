@@ -33,6 +33,11 @@ export default function CartMenu({
     console.log("cart:", cart);
   }, [cart]);
 
+   const handleClearCart = () => {
+    clearCart(); // your function to empty the cart
+    enqueueSnackbar("Korpa ispražnjena", { variant: "info" });
+  };
+
   const round = (num, decimals = 2) =>
     Math.round((num + Number.EPSILON) * 10 ** decimals) / 10 ** decimals;
 
@@ -337,7 +342,7 @@ export default function CartMenu({
 
             {/* Clear Cart */}
             <Button
-              onClick={clearCart} disabled={!cart.length}
+               onClick={handleClearCart} disabled={!cart.length}
               variant="outlined"
               fullWidth
               sx={{

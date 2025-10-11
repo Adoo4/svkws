@@ -96,33 +96,46 @@ const ProductGallery = ({
       )}
 
       {/* Book Grid */}
-      {!loading && safeBooks.length > 0 && (
+     {/* Book Grid */}
+<Box sx={{ flexGrow: 1, width: "100%" }}>
+  <Grid
+    container
+    spacing={{ xs: 1, sm: 2, md: 3 }}
+    columns={{ xs: 4, sm: 8, md: 12 }}
+    justifyContent="center"
+  >
+    {!loading && safeBooks.length > 0 &&
+      safeBooks.map((book) => (
         <Grid
-          container
-          spacing={{ xs: 0.5, sm: 2, xl: 3 }}
-          columns={12}
-          justifyContent="center"
-          sx={{ width: "100%", height: "100%" }}
+          item
+          xs={2}  // ✅ two per row on mobile
+          sm={4}  // ✅ two per row on tablet
+          md={3}  // ✅ four per row on desktop
+          key={book._id}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "stretch",
+          }}
         >
-          {safeBooks.map((book) => (
-            <Grid item xs sx={{ display: "flex" }} key={book._id}>
-              <BookCard
-                book={book}
-                toggleDrawer={toggleDrawer}
-                setDrawerData={setDrawerData}
-                drawerData={drawerData}
-                cart={cart}
-                addToCart={addToCart}
-                updateCartItem={updateCartItem}
-                removeCartItem={removeCartItem}
-                wishlist={wishlist}
-                addToWishlist={addToWishlist} // ✅ make sure this exists
-                removeFromWishlist={removeFromWishlist} // ✅ make sure this exists
-              />
-            </Grid>
-          ))}
+          <BookCard
+            book={book}
+            toggleDrawer={toggleDrawer}
+            setDrawerData={setDrawerData}
+            drawerData={drawerData}
+            cart={cart}
+            addToCart={addToCart}
+            updateCartItem={updateCartItem}
+            removeCartItem={removeCartItem}
+            wishlist={wishlist}
+            addToWishlist={addToWishlist}
+            removeFromWishlist={removeFromWishlist}
+          />
         </Grid>
-      )}
+      ))}
+  </Grid>
+</Box>
+
 
       {/* Pagination */}
       {!loading && totalPages > 1 && (

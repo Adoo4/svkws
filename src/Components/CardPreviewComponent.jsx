@@ -95,21 +95,33 @@ export default function AnchorTemporaryDrawer({toggleDrawer, open, setOpen, draw
       </Typography>
     </Box>
 
-    {/* Description */}
-    <Typography
-      variant="body1"
-      sx={{
-        fontSize: {xs:"0.70rem", md:"0.8rem"},
-        color: "#f7f7f7f7",
-        opacity: 0.85,
-        mb: 2,
-        lineHeight: 1.3,
-        textAlign:"match-parent",
-        overflow:"auto"
-      }}
-    >
-      {drawerData.description}
-    </Typography>
+   {/* Description */}
+<Typography
+  variant="body1"
+  sx={{
+    fontSize: { xs: "0.70rem", sm: "0.8rem", md: "0.85rem" },
+    color: "#f5f5f5",
+    opacity: 0.9,
+    mb: 2,
+    lineHeight: 1.5,
+    textAlign: "justify",
+    overflowY: "auto",
+    maxHeight: { xs: 400, md: 300 },
+    pr: 1, // Adds space so scrollbar doesn’t overlap text
+    whiteSpace: "pre-line", // Keeps line breaks from DB text
+    scrollbarWidth: "thin", // Firefox
+    "&::-webkit-scrollbar": {
+      width: "2px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(255, 255, 255, 0.3)",
+      borderRadius: "10px",
+    },
+  }}
+>
+  {drawerData.description || "No description available."}
+</Typography>
+
 
     
   </Box>

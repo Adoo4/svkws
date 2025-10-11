@@ -367,7 +367,7 @@ const handleRemoveFilter = (key) => {
                         <Grid item xs={6} key={pod}>
                           <ListItemButton
                             sx={{
-                              padding:{xs:"0.5rem", sm:"0.5rem"},
+                              padding:{xs:"0.3rem", sm:"0.3rem"},
                               gap:"0.5rem",
                               borderRadius: "6px",
                               color: "#f7f7f7",

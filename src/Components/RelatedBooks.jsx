@@ -24,7 +24,7 @@ export default function RelatedBooks({ book }) {
   const [relatedBooks, setRelatedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
    const theme = useTheme();
-   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md")); // xs & sm
+   const isSmallScreen = useMediaQuery(theme.breakpoints.down("xl")); // xs & sm
 
   useEffect(() => {
     console.log("RelatedBooks received book:", book);
@@ -85,7 +85,14 @@ export default function RelatedBooks({ book }) {
       modules={[Navigation, Pagination]}
       spaceBetween={16}
       slidesPerView={1.5}
-      centeredSlides={true}
+       breakpoints={{
+         400: { slidesPerView: 2 },   // sm
+        600: { slidesPerView: 3 },   // sm
+        900: { slidesPerView: 5 },   // md
+        1200: { slidesPerView: 5 },  // lg
+        1536: { slidesPerView: 7 },  // xl
+      }}
+      centeredSlides={false}
       navigation
       pagination={{ clickable: true }}
       style={{ padding: "1rem 0" }}

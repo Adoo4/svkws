@@ -190,7 +190,7 @@ export default function WishlistDrawer({
             <Button
               onClick={() => {
                 clearWishlist();
-                
+                enqueueSnackbar("lista želja ispražnjena", { variant: "info" });
               }}
               variant="outlined"
               fullWidth
