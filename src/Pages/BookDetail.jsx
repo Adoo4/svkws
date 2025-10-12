@@ -389,7 +389,7 @@ export default function BookDetail({ addToCart }) {
                     <Tooltip
                       title={
                         !isSignedIn
-                          ? "Morate biti prijavljeni da biste kupili knjige"
+                          ? "Morate biti prijavljeni da biste dodavali knjige u korpu"
                           : ""
                       }
                       arrow

@@ -81,7 +81,7 @@ const handleSearch = (e) => {
     >
       <motion.div
   whileHover={{ scale: 1.01 }}
-  style={{ flexGrow: 1, maxWidth: "900px", width: "100%" }}
+  style={{ display: "inline-block", width: "100%", maxWidth:"900px" }}
 >
   <TextField
     size="small"
@@ -96,12 +96,12 @@ const handleSearch = (e) => {
         background: "rgba(255,255,255,0.9)",
         backdropFilter: "blur(8px)",
         transition: "all 0.3s ease",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+       
         "&:hover": {
           background: "rgba(255,255,255,1)",
-          boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+         
         },
-        "&.Mui-focused": { boxShadow: "0 0 0 3px rgba(49,49,49,0.2)" },
+      
         "& fieldset": { border: "none" },
       },
       input: { padding: {xs:"5px 14px", md:"10px 14px"}, fontSize: "0.90rem" },
