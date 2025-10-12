@@ -209,26 +209,25 @@ const handleRemoveFilter = (key) => {
 
 
   return (
-    <Box
+   <Box
   sx={{
     width: "100%",
     maxWidth: { xs: "380px", sm: "430px" },
-    height: "100dvh",       // dynamic viewport height
     display: "flex",
     flexDirection: "column",
-    background: "transparent",
+    height: "100vh", // full viewport height
     pt: "1rem",
     pr: "0.5rem",
+    background: "transparent",
   }}
 >
-  {/* Scrollable area */}
+  {/* Scrollable content on small/medium, static on large */}
   <Box
     sx={{
-      
-      flex: 1,              // take remaining height
-      overflowY: {xs:"auto", md:"hidden"},    // enable scrolling
+      flex: "1 1 auto",
+      overflowY: { xs: "auto", sm: "auto", md: "auto", lg: "visible", xl: "visible" },
       pr: "0.5rem",
-      pb: "10rem",           // extra bottom padding so last items are reachable
+      pb: "10rem", // extra bottom padding for switches
     }}
   >
       {/*Filters athat are applied*/ }

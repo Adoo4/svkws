@@ -211,8 +211,8 @@ const formatCategoryName = (name) => {
    <Card
   elevation={0}
   sx={{
-     minWidth: { xs: "165px", sm: "280px" }, // increase sm
-    maxWidth: { xs: "25vw", sm: "310px", md: "240px" }, // allow more space
+    minWidth: { xs: "165px", sm: "270px" }, // increase sm
+    maxWidth: { xs: "25vw", sm: "310px", md: "230px" }, // allow more space
     flexGrow: { xs: 1, sm: 1 }, // lets it stretch if space is available
     borderRadius: 4,
     cursor: "pointer", // 👈 makes it a hand icon
@@ -300,7 +300,7 @@ const formatCategoryName = (name) => {
       alt={book.title}
       loading="eager"
       sx={{
-        height: { xs: 190, sm: 200, md: 280 },
+        height: { xs: 190, sm: 200, md: 270 },
         objectFit: "contain",
         width: "100%",
         aspectRatio: "3 / 4",
