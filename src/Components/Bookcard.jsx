@@ -288,13 +288,13 @@ const formatCategoryName = (name) => {
     <IconButton
       onClick={handleWishlistClick}
       sx={{
-        bgcolor: "rgba(255,255,255,0.9)",
+        bgcolor: inWishlist ? "#ca1f1fff" : "rgba(255,255,255,0.9)",
         "&:hover": { bgcolor: "rgba(255,255,255,1)" },
         p: 0.5,
       }}
     >
       {inWishlist ? (
-        <BookmarkIcon sx={{ fontSize: "1.5rem", color: "#ca1f1fff" }} />
+        <BookmarkIcon sx={{ fontSize: "1.5rem", color: "white" }} />
       ) : (
         <BookmarkBorderIcon sx={{ fontSize: "1.5rem", color: "#262626" }} />
       )}
@@ -366,25 +366,28 @@ const formatCategoryName = (name) => {
   </Box>
 
   <Box sx={{ px: { xs: 1, sm: 1 }, py: 1, flexGrow: 1 }}>
-    <CardContent sx={{ p: 0, minHeight: { xs: "5rem", sm: "7rem" } }}>
+    <CardContent sx={{ p: 0, minHeight: { xs: "5rem", sm: "7rem" }, alignItems:"space-between" }}>
       {/* Title */}
-    <Typography
+<Typography
   variant="subtitle2"
   sx={{
-    gap: "0.5rem",
-    display: "flex",
-    fontWeight: 600,
+    display: "block",
+    fontWeight: 500,
+    
     color: inWishlist ? "#f1f1f1" : "#262626",
     mb: 0.5,
-    lineHeight: 1.2,
-    fontSize: { xs: "0.95rem", sm:"0.88", md: "0.95rem", },
-      // ⬅️ force single line
-    overflow: "hidden",     // ⬅️ hide overflow
-    textOverflow: "ellipsis" // ⬅️ show "..." if too long
+    lineHeight: 1.2, // 1.2 * fontSize = line height
+    fontSize: { xs: "0.80rem", sm: "0.88rem", md: "0.95rem" },
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,          // max 2 lines
+    WebkitBoxOrient: "vertical",
+    minHeight: "1.8rem",         // adjust based on line-height * 2 lines
   }}
 >
-        {book?.title}
-      </Typography>
+  {book?.title}
+</Typography>
 
       {/* Categories */}
      {/* Categories */}
