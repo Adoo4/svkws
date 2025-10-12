@@ -100,7 +100,7 @@ const ProductGallery = ({
 <Box sx={{ flexGrow: 1, width: "100%" }}>
   <Grid
     container
-    spacing={{ xs: 1, sm: 2, md: 3 }}
+    spacing={{ xs: "3vw", sm: 2, md: 3 }}
     columns={{ xs: 4, sm: 8, md: 12 }}
     justifyContent="center"
   >

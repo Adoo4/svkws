@@ -211,9 +211,9 @@ const formatCategoryName = (name) => {
    <Card
   elevation={0}
   sx={{
-    minWidth: { xs: "165px", sm: "270px" }, // increase sm
-    maxWidth: { xs: "25vw", sm: "310px", md: "230px" }, // allow more space
-    flexGrow: { xs: 1, sm: 1 }, // lets it stretch if space is available
+    minWidth: { xs: "166px", sm: "210px" }, // increase sm
+    maxWidth: { xs: "29vw", sm: "220px", md: "230px" }, // allow more space
+    flexGrow: 1, // lets it stretch if space is available
     borderRadius: 4,
     cursor: "pointer", // 👈 makes it a hand icon
     "&:hover": {
@@ -271,26 +271,50 @@ const formatCategoryName = (name) => {
 
 
     {/* Wishlist Icon */}
-<SignedIn>
+<Box
+  sx={{
+    position: "absolute",
+    top: 8,
+    right: 8,
+    zIndex: 5,
+    display: "flex",
+    flexDirection: "column",
+    gap: 0.5,
+    alignItems: "center",
+  }}
+>
+  {/* Wishlist Icon - only if signed in */}
+  <SignedIn>
+    <IconButton
+      onClick={handleWishlistClick}
+      sx={{
+        bgcolor: "rgba(255,255,255,0.9)",
+        "&:hover": { bgcolor: "rgba(255,255,255,1)" },
+        p: 0.5,
+      }}
+    >
+      {inWishlist ? (
+        <BookmarkIcon sx={{ fontSize: "1.5rem", color: "#ca1f1fff" }} />
+      ) : (
+        <BookmarkBorderIcon sx={{ fontSize: "1.5rem", color: "#262626" }} />
+      )}
+    </IconButton>
+  </SignedIn>
+
+  {/* Search / Details Icon - always visible */}
   <IconButton
-    onClick={handleWishlistClick}
-    sx={{
-      position: "absolute",
-      top: 8,
-      right: 8,
-      zIndex: 5,
-      bgcolor: "rgba(255,255,255,0.9)",
+    onClick={() => navigate(`/${book._id}${window.location.search}`, { state: { book, category: book.subCategory } })}
+    sx={{ display:{md:"none"},
+      bgcolor: "#262626",
       "&:hover": { bgcolor: "rgba(255,255,255,1)" },
       p: 0.5,
     }}
   >
-    {inWishlist ? (
-      <BookmarkIcon sx={{ color: "#ca1f1fff", fontSize: "1.5rem" }} />
-    ) : (
-      <BookmarkBorderIcon sx={{ color: "#262626", fontSize: "1.5rem" }} />
-    )}
+    <SearchOutlinedIcon sx={{ fontSize: "1.5rem", color:"white" }} />
   </IconButton>
-</SignedIn>
+</Box>
+
+
 
   {/* Image */}
    <Box sx={{ position: "relative" }}   >
@@ -300,7 +324,7 @@ const formatCategoryName = (name) => {
       alt={book.title}
       loading="eager"
       sx={{
-        height: { xs: 190, sm: 200, md: 270 },
+        height: { xs: 250, sm: 200, md: 270 },
         objectFit: "contain",
         width: "100%",
         aspectRatio: "3 / 4",
@@ -341,7 +365,7 @@ const formatCategoryName = (name) => {
     </Box>
   </Box>
 
-  <Box sx={{ px: { xs: 1, sm: 1 }, py: 2, flexGrow: 1 }}>
+  <Box sx={{ px: { xs: 1, sm: 1 }, py: 1, flexGrow: 1 }}>
     <CardContent sx={{ p: 0, minHeight: { xs: "5rem", sm: "7rem" } }}>
       {/* Title */}
     <Typography
@@ -379,11 +403,19 @@ const formatCategoryName = (name) => {
   sx={{
     display: { xs: "flex", md: "none" },
     alignItems: "center",
-    width:"100%",
-    gap: 0.5,
-   
-    py: 0.3,
-    borderRadius: 20,
+    width: "100%",
+    gap: 0.2,
+    px: 1,
+    py: 0.2,
+    borderRadius: "16px",
+    bgcolor: (() => {
+      const kat = kategorije.find(
+        (k) =>
+          k.naziv === book.mainCategory ||
+          k.podkategorije?.includes(book.subCategory)
+      );
+      return kat?.boja + "33" || "#e0e0e0"; // subtle transparent background
+    })(),
     color: (() => {
       const kat = kategorije.find(
         (k) =>
@@ -392,9 +424,11 @@ const formatCategoryName = (name) => {
       );
       return kat?.boja || "#313131";
     })(),
-    
-    fontSize: "0.55rem",
-    fontWeight: 500,
+    fontSize: "0.65rem",
+    fontWeight: 600,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   }}
 >
   {/* Icon */}
@@ -404,29 +438,33 @@ const formatCategoryName = (name) => {
         k.naziv === book.mainCategory ||
         k.podkategorije?.includes(book.subCategory)
     );
-    return kat?.ikona || <ImportContactsIcon  />;
+    return kat?.ikona ? (
+      <Box sx={{ display: "flex", alignItems: "center", fontSize: "1rem" }}>
+        {kat.ikona}
+      </Box>
+    ) : (
+      <ImportContactsIcon sx={{ fontSize: "1rem" }} />
+    );
   })()}
 
-  {/* Optional: keep text on very small screens */}
+  {/* Subcategory text */}
   <Typography
-  component="span"
-  variant="caption"
-  sx={{
-    ml: 0.3,
-    color: inWishlist ? "#f1f1f1" : "#262626",
-    fontWeight: "bold",
-    lineHeight: 1.2,
-    fontSize: { xs: "0.60rem", sm: "0.65rem" }, // bigger on xs, slightly smaller on sm+
-    display: { xs: "flex", sm: "inline" }, // keep visible on xs
-    whiteSpace: "nowrap", // prevent breaking into 2 lines
-    overflow: "hidden",
-    textOverflow: "ellipsis", // add "..." if text too long
-  }}
->
-  {book.subCategory}
-</Typography>
-
+    component="span"
+    sx={{
+      ml: 0.5,
+      color: inWishlist ? "#f1f1f1" : "#262626",
+      fontWeight: 600,
+      lineHeight: 1.2,
+      fontSize: "0.65rem",
+      display: "inline",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    }}
+  >
+    {book.subCategory}
+  </Typography>
 </Box>
+
 
 
   {/* SM+ full chips */}
@@ -486,6 +524,7 @@ const formatCategoryName = (name) => {
       <Typography
         component="span"
         sx={{
+          
           fontWeight: 400,
           fontSize: "0.6rem",
           textTransform: "uppercase",
@@ -514,7 +553,7 @@ const formatCategoryName = (name) => {
     fontSize: { xs: "0.60rem", md: "0.8rem" },
     fontStyle: "italic",
     lineHeight: 1.3,
-    display: "-webkit-box",          // makes it a box container
+    display:{xs:"none", md:"-webkit-box",},           // makes it a box container
     WebkitLineClamp: 2,              // limits to 2 lines
     WebkitBoxOrient: "vertical",     // vertical orientation
     overflow: "hidden",
@@ -567,7 +606,7 @@ const formatCategoryName = (name) => {
   sx={{
     p: 1,
     mt: 1,
-    display: "flex",
+    display: {xs:"none", md:"flex"},
     flexDirection: { xs: "column", sm: "column", md: "row" },
     alignItems: "stretch",
     justifyContent: "center",
