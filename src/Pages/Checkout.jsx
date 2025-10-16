@@ -89,16 +89,16 @@ const openMonriLightbox = (clientSecret) => {
   }
 
   const monri = window.Monri("test"); // change to "production" when live
-  monri.lightbox({
-    client_secret: clientSecret,
-    order_info: {
-      order_number: "ORDER_" + Date.now(),
-      amount: Math.round((total + 8) * 100),
-      currency: "BAM",
-    },
-    transaction_type: "purchase",
-    language: "ba",
-  });
+monri.lightbox({
+  client_secret: clientSecret,
+  order_info: {
+    order_number: "ORDER_" + Date.now(),
+    amount: Math.round((total + 8) * 100),
+    currency: "BAM",
+  },
+  transaction_type: "purchase",
+  language: "ba",
+});
 
   monri.on("success", (response) => {
     console.log("Success:", response);
