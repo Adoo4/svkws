@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import { useAuth } from "@clerk/clerk-react";
 import useCart from "../Utils.js/useCart";
+import CheckoutStepper from "../Components/CheckoutStepper"
+
 
 export default function CheckoutPage() {
   const { user } = useAuth();
@@ -41,31 +43,116 @@ export default function CheckoutPage() {
     return sum + price * item.quantity; // multiply by quantity
   }, 0);
 
-  const handleCheckout = () => {
-    alert(`Narudžba poslana!\nUkupno: ${total.toFixed(2)} BAM`);
+  const startPayment = async () => {
+  const amountToPay = Math.round((total + 8) * 100); // in cents
+
+  try {
+    const res = await fetch(
+      "https://backendsvkwbshp.onrender.com/api/payment/create-payment",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: amountToPay.toString(),
+          currency: "BAM",
+          customer: {
+            ch_full_name: shipping.fullName,
+            ch_email: shipping.email,
+            ch_address: shipping.address,
+            ch_city: shipping.city,
+            ch_zip: shipping.zip,
+            ch_country: "BA",
+            ch_phone: "00000000",
+          },
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!data?.client_secret) {
+      console.error("No client_secret returned:", data);
+      return;
+    }
+
+    openMonriLightbox(data.client_secret);
+  } catch (err) {
+    console.error("Payment init failed:", err);
+    alert("Payment could not be initialized");
+  }
+};
+
+const openMonriLightbox = (clientSecret) => {
+  if (!window.Monri) {
+    console.error("Monri script not loaded");
+    return;
+  }
+
+  const monri = window.Monri("test"); // change to "production" when live
+  monri.lightbox({
+    client_secret: clientSecret,
+    order_info: {
+      order_number: "ORDER_" + Date.now(),
+      amount: Math.round((total + 8) * 100),
+      currency: "BAM",
+    },
+    transaction_type: "purchase",
+    language: "ba",
+  });
+
+  monri.on("success", (response) => {
+    console.log("Success:", response);
     clearCart();
-  };
+    alert("Plaćanje uspješno!");
+  });
+
+  monri.on("error", (error) => {
+    console.error("Error:", error);
+    alert("Greška u plaćanju.");
+  });
+
+  monri.on("cancel", () => {
+    console.log("User cancelled payment");
+  });
+};
+
+
+// Inject Lightbox script only once
+
+
+
+
+const handleCheckout = () => {
+  startPayment();
+};
 
   return (
-    <Box
-      sx={{
-        maxWidth: "100%",
-        marginTop:"4rem",
-        
-        p: 1,
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        gap: 4,
-      }}
-    >
+    <Box  sx={{
+    display: "flex",
+    flexDirection: { xs: "column-reverse", md: "row" },
+    gap: 4,
+    marginTop: { xs: "4rem", md: "6rem" },
+    marginBottom: { xs: "4rem", md: "6rem" },
+    alignItems: "flex-start", // ensures both children start at the top
+    p:1
+  }}>
+<Box sx={{ width: { xs: "100%", md: "70%" } }}>
+      <CheckoutStepper
+  shipping={shipping}
+  handleChange={handleChange}
+  handleCheckout={handleCheckout}
+  cart={cart}
+/>
+</Box>
+     <Box sx={{ width: { xs: "100%", md: "30%" } }}>
       {/* Cart Summary */}
      <Box
   sx={{
     flex: 2,
-    background: "#f9f9f9",
+    background: "#f0f0f0",
     borderRadius: 3,
     p: 1,
-    boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+    
   }}
 >
   {/* Header */}
@@ -89,6 +176,9 @@ export default function CheckoutPage() {
         : book.price;
 
       return (
+
+
+        
         <ListItem
           key={book._id}
           sx={{
@@ -101,6 +191,7 @@ export default function CheckoutPage() {
            
           }}
         >
+          
           <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
             {/* Book Cover */}
             <ListItemAvatar>
@@ -233,68 +324,8 @@ export default function CheckoutPage() {
 
 
 
-      {/* Shipping / Payment Form */}
-      <Box sx={{ flex: 1, background: "#f9f9f9", borderRadius: 3, p: 3 }}>
-        <Typography variant="h5" sx={{ mb: 2, color: "#f9f9f9" }}>
-          Podaci za dostavu
-        </Typography>
-        <TextField
-          label="Ime i prezime"
-          name="fullName"
-          value={ ""}
-          placeholder="Ime i prezime"
-          onChange={handleChange}
-          fullWidth
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Email"
-          name="email"
-          value={shipping.email}
-          onChange={handleChange}
-          fullWidth
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Adresa"
-          name="address"
-          value={shipping.address}
-          onChange={handleChange}
-          fullWidth
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Grad"
-          name="city"
-          value={shipping.city}
-          onChange={handleChange}
-          fullWidth
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Poštanski broj"
-          name="zip"
-          value={shipping.zip}
-          onChange={handleChange}
-          fullWidth
-          sx={{ mb: 3 }}
-        />
-        <Button
-          variant="contained"
-          fullWidth
-          sx={{
-            bgcolor: "#f33600",
-            color: "#fff",
-            py: 1.5,
-            fontWeight: "bold",
-            "&:hover": { bgcolor: "#d62d00" },
-          }}
-          onClick={handleCheckout}
-          disabled={cart.length === 0}
-        >
-          Završi kupovinu
-        </Button>
-      </Box>
+     
+    </Box>
     </Box>
   );
 }

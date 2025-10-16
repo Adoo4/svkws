@@ -137,6 +137,8 @@ const kategorije = [
   },
 ];
 
+
+
 export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
