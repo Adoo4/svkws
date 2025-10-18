@@ -25,6 +25,7 @@ import OpštiUsloviPoslovanja from "./Pages/OpštiUsloviPoslovanja.jsx";
 import PolitikaPovrataiReklamacije from "./Pages/PolitikaPovrata.jsx";
 import Sigurnost from "./Pages/Sigurnost.jsx";
 import PolitikaKolačića from "./Pages/Politikekolačića.jsx";
+import PaymentSuccess from "./Pages/PaymentSuccess.jsx";
 
 import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
@@ -146,6 +147,7 @@ function App() {
                   path="/checkout"
                   element={<CheckoutPage cart={cart} />}
                 />
+                <Route path="/payment-success" element={<PaymentSuccess />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route
                   path="/sign-up"

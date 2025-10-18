@@ -1,5 +1,4 @@
 // CheckoutPage.jsx
-// CheckoutPage.jsx
 import  { useState, useEffect } from "react";
 import {
   Box,
@@ -44,7 +43,7 @@ export default function CheckoutPage() {
   }, 0);
 
   const startPayment = async () => {
-  const amountToPay = Math.round((total + 8) * 100); // in cents
+  const amountToPay = Math.round((total + 8) * 100); // BAM minor units
 
   try {
     const res = await fetch(
@@ -68,57 +67,94 @@ export default function CheckoutPage() {
       }
     );
 
-    const data = await res.json();
-
-    if (!data?.client_secret) {
-      console.error("No client_secret returned:", data);
-      return;
-    }
-
-    openMonriLightbox(data.client_secret);
+     const data = await res.json();
+    injectMonriLightbox(data);
   } catch (err) {
     console.error("Payment init failed:", err);
     alert("Payment could not be initialized");
   }
 };
 
-const openMonriLightbox = (clientSecret) => {
-  if (!window.Monri) {
-    console.error("Monri script not loaded");
-    return;
+// Inject Lightbox script only once
+const injectMonriLightbox = async (paymentData) => {
+  // Remove any old form
+  const oldForm = document.querySelector("#monri-lightbox-form");
+  if (oldForm) oldForm.remove();
+
+  const form = document.createElement("form");
+  form.id = "monri-lightbox-form";
+  form.method = "POST";
+  form.action = "https://backendsvkwbshp.onrender.com/api/payment/callback";
+
+  const script = document.createElement("script");
+  script.src = "https://ipgtest.monri.com/dist/lightbox.js";
+  script.type = "text/javascript";
+  script.className = "lightbox-button";
+
+  // Digest calculation
+  let digest = paymentData.digest;
+  if (!digest && paymentData.merchantKey) {
+    const encoder = new TextEncoder();
+    const dataToHash =
+      paymentData.merchantKey +
+      paymentData.order_number +
+      paymentData.amount +
+      paymentData.currency;
+    const hashBuffer = await crypto.subtle.digest(
+      "SHA-512",
+      encoder.encode(dataToHash)
+    );
+    digest = Array.from(new Uint8Array(hashBuffer))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 
-  const monri = window.Monri("test"); // change to "production" when live
-monri.lightbox({
-  client_secret: clientSecret,
-  order_info: {
-    order_number: "ORDER_" + Date.now(),
-    amount: Math.round((total + 8) * 100),
-    currency: "BAM",
-  },
-  transaction_type: "purchase",
-  language: "ba",
-});
+  script.setAttribute("data-authenticity-token", paymentData.authenticity_token);
+  script.setAttribute("data-order-number", paymentData.order_number);
+  script.setAttribute("data-amount", paymentData.amount);
+  script.setAttribute("data-currency", paymentData.currency);
+  script.setAttribute("data-digest", digest);
+  script.setAttribute("data-transaction-type", "purchase");
+  script.setAttribute("data-language", "ba");
+  script.setAttribute("data-order-info", "Book Order");
 
-  monri.on("success", (response) => {
-    console.log("Success:", response);
-    clearCart();
-    alert("Plaćanje uspješno!");
+  // Customer info
+  Object.entries(paymentData.customer).forEach(([key, value]) => {
+    script.setAttribute(`data-${key}`, value);
   });
 
-  monri.on("error", (error) => {
-    console.error("Error:", error);
-    alert("Greška u plaćanju.");
-  });
+  form.appendChild(script);
+  document.body.appendChild(form);
 
-  monri.on("cancel", () => {
-    console.log("User cancelled payment");
-  });
+  // Wait a tiny bit to ensure MonriLightbox is attached
+  setTimeout(() => {
+    if (!window.MonriLightbox) return;
+
+    const lightbox = window.MonriLightbox;
+
+    // Register event handlers
+    lightbox.on("success", (resp) => {
+      console.log("Payment successful:", resp);
+      clearCart();
+      alert("Payment completed successfully!");
+      form.remove(); // remove form after success
+    });
+
+    lightbox.on("close", () => {
+      console.log("Lightbox closed by user");
+      form.remove(); // remove form on cancel
+    });
+
+    lightbox.on("error", (err) => {
+      console.error("Payment error:", err);
+      alert("Payment failed. Please try again.");
+      form.remove(); // remove form on error
+    });
+
+    // Open Lightbox
+    lightbox.open();
+  }, 100); // 100ms delay ensures script is ready
 };
-
-
-// Inject Lightbox script only once
-
 
 
 

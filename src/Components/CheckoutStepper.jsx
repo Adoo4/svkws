@@ -16,10 +16,8 @@ export default function CheckoutStepper({ shipping, handleChange, handleCheckout
     'Zaključi narudžbu',
   ];
 
-  
-
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
+  const [activeStep, setActiveStep] = useState(0);
+  const [completed, setCompleted] = useState({});
 
   const totalSteps = () => steps.length;
   const completedSteps = () => Object.keys(completed).length;
@@ -128,7 +126,7 @@ export default function CheckoutStepper({ shipping, handleChange, handleCheckout
                 fontWeight: 'bold',
                 '&:hover': { bgcolor: '#d62d00' },
               }}
-              onClick={()=>handleCheckout()}
+              onClick={handleCheckout}
               disabled={cart.length === 0}
             >
               Završi kupovinu
@@ -164,17 +162,13 @@ export default function CheckoutStepper({ shipping, handleChange, handleCheckout
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack}>
               Nazad
             </Button>
+
             <Box sx={{ flex: '1 1 auto' }} />
-            {activeStep !== steps.length &&
-              (completed[activeStep] ? (
-                <Typography variant="caption">Korak {activeStep + 1} je već završen</Typography>
-              ) : (
-                <Button onClick={handleComplete}>
-                  {completedSteps() === totalSteps() - 1 ? 'Završi' : 'Označi korak'}
-                </Button>
-              ))}
+
             {activeStep < steps.length - 1 && (
-              <Button onClick={handleNext}>Sledeći</Button>
+              <Button onClick={handleComplete}>
+                {completedSteps() === totalSteps() - 1 ? 'Završi' : 'Označi korak'}
+              </Button>
             )}
           </Box>
         </Box>
