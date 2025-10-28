@@ -10,7 +10,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
-import { useLocation } from "react-router-dom";
+
 
 
 
@@ -43,34 +43,12 @@ const ProductGallery = ({
   return books.slice(0, Math.min(books.length, 20)); // Option 1 logic
 }, [books]);
 
-const location = useLocation();
-const pathParts = location.pathname.split("/").filter(Boolean); // removes empty segments
+
 
 // Example: "/books/fiction" -> ["books", "fiction"]
-const category = pathParts[0] ? decodeURIComponent(pathParts[0]) : "Proizvodi";
-const subcategory = pathParts[1] ? decodeURIComponent(pathParts[1]) : null;
 
-const categoryTitle = filter.subCategory
-  ? `${filter.mainCategory} / ${filter.subCategory}`
-  : filter.mainCategory || "Svi žanrovi";
-let displayTitle = "";
 
-const main = filter.mainCategory || "kolekcije";
-const sub = filter.subCategory;
 
-// Construct creative dynamic title
-if (filter.isNew && filter.discount) {
-  displayTitle = `Novo i na sniženju iz ${main}`;
-} else if (filter.isNew) {
-  displayTitle = `Novo iz ${main}`;
-} else if (filter.discount) {
-  displayTitle = `${main} na sniženju`;
-} else {
-  displayTitle = main;
-}
-const hasSubCategory = !!filter.subCategory;
-const categoryTitleMain = filter.mainCategory || "Svi žanrovi";
-const categoryTitleSub = filter.subCategory || "";
 
   return (
     <Box
