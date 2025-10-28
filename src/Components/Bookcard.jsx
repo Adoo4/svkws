@@ -371,7 +371,7 @@ const formatCategoryName = (name) => {
 <Typography
   variant="subtitle2"
   sx={{
-    display: "block",
+   
     fontWeight: 500,
     
     color: inWishlist ? "#f1f1f1" : "#262626",
