@@ -10,6 +10,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import BookCard from "../Components/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
+import { useLocation } from "react-router-dom";
 
 
 
@@ -29,6 +30,7 @@ const ProductGallery = ({
   wishlist,
   addToWishlist,
   removeFromWishlist,
+  filter
 }) => {
   const itemsPerPage = 20;
   const theme = useTheme();
@@ -41,14 +43,40 @@ const ProductGallery = ({
   return books.slice(0, Math.min(books.length, 20)); // Option 1 logic
 }, [books]);
 
+const location = useLocation();
+const pathParts = location.pathname.split("/").filter(Boolean); // removes empty segments
 
-  
+// Example: "/books/fiction" -> ["books", "fiction"]
+const category = pathParts[0] ? decodeURIComponent(pathParts[0]) : "Proizvodi";
+const subcategory = pathParts[1] ? decodeURIComponent(pathParts[1]) : null;
+
+const categoryTitle = filter.subCategory
+  ? `${filter.mainCategory} / ${filter.subCategory}`
+  : filter.mainCategory || "Svi žanrovi";
+let displayTitle = "";
+
+const main = filter.mainCategory || "kolekcije";
+const sub = filter.subCategory;
+
+// Construct creative dynamic title
+if (filter.isNew && filter.discount) {
+  displayTitle = `Novo i na sniženju iz ${main}`;
+} else if (filter.isNew) {
+  displayTitle = `Novo iz ${main}`;
+} else if (filter.discount) {
+  displayTitle = `${main} na sniženju`;
+} else {
+  displayTitle = main;
+}
+const hasSubCategory = !!filter.subCategory;
+const categoryTitleMain = filter.mainCategory || "Svi žanrovi";
+const categoryTitleSub = filter.subCategory || "";
 
   return (
     <Box
       sx={{
         marginTop: 0,
-        minHeight: { xs: "100lvh", md: "100lvh" },
+        minHeight: { xs: "100lvh", md: "120lvh" },
         padding: { xs: "0.5rem", lg: "1.2rem" },
         width: "100%",
         display: "flex",
@@ -59,6 +87,42 @@ const ProductGallery = ({
         boxShadow: "1px 0 10px rgba(0, 0, 0, 0.1)",
       }}
     >
+
+{/*<Typography
+    variant="h5"
+    component="h1"
+    fontWeight={500}
+    textAlign="left"
+    sx={{
+      color: "#2e2e2e",
+      fontSize: { xs: "0.9rem", md: "1.1rem" },
+      width: "100%",
+      mt: { xs: 1, md: 3 },
+      mb: { xs: 2, md: 4 },
+      letterSpacing: "0.4px",
+      textTransform: "capitalize",
+    }}
+  >
+    {displayTitle}
+
+    
+    {sub && (
+      <Box
+        component="span"
+        sx={{
+          ml: 0.5,
+          color: "text.secondary",
+          fontWeight: 400,
+          fontSize: { xs: "0.9rem", md: "1.05rem" },
+          opacity: 0.75,
+        }}
+      >
+        / {sub}
+      </Box>
+    )}
+  </Typography>*/}
+
+
       {/* Loading Skeleton */}
       {loading && (
         <Grid container spacing={1} justifyContent="center">

@@ -170,6 +170,7 @@ const [filter, setFilter] = useState({
   addToCart={addToCart}
   updateCartItem={updateCartItem}
   removeCartItem={removeCartItem}
+  filter={filter}
 />
       </Box>
 

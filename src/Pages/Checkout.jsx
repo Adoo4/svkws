@@ -1,10 +1,8 @@
 // CheckoutPage.jsx
-import  { useState, useEffect } from "react";
+import  { useState } from "react";
 import {
   Box,
   Typography,
-  TextField,
-  Button,
   Divider,
   List,
   ListItem,
@@ -14,20 +12,22 @@ import {
 import { useAuth } from "@clerk/clerk-react";
 import useCart from "../Utils.js/useCart";
 import CheckoutStepper from "../Components/CheckoutStepper"
+import axios from "axios";
 
 
 export default function CheckoutPage() {
   const { user } = useAuth();
-   const { cart, clearCart } = useCart();
+   const { cart } = useCart();
   const [shipping, setShipping] = useState({
     fullName: user?.firstName + " " + user?.lastName || "",
     email: user?.emailAddresses[0]?.emailAddress || "",
+    phone: null,
     address: "",
     city: "",
     zip: "",
   });
 
-  useEffect(()=>  window.scrollTo(0, 0))
+  
 
   const handleChange = (e) => {
     setShipping({ ...shipping, [e.target.name]: e.target.value });
@@ -42,150 +42,110 @@ export default function CheckoutPage() {
     return sum + price * item.quantity; // multiply by quantity
   }, 0);
 
-  const startPayment = async () => {
-  const amountToPay = Math.round((total + 8) * 100); // BAM minor units
 
-  try {
-    const res = await fetch(
-      "https://backendsvkwbshp.onrender.com/api/payment/create-payment",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: amountToPay.toString(),
-          currency: "BAM",
-          customer: {
-            ch_full_name: shipping.fullName,
-            ch_email: shipping.email,
-            ch_address: shipping.address,
-            ch_city: shipping.city,
-            ch_zip: shipping.zip,
-            ch_country: "BA",
-            ch_phone: "00000000",
-          },
-        }),
-      }
-    );
+const handlePay = async () => {
+    try {
+      const orderNumber = "ORD-" + Math.floor(Math.random() * 1000000);
+      const amount = 500; // means 5.00 BAM
+      const currency = "BAM";
 
-     const data = await res.json();
-    injectMonriLightbox(data);
-  } catch (err) {
-    console.error("Payment init failed:", err);
-    alert("Payment could not be initialized");
-  }
-};
+      // 1️⃣ Request digest from backend
+      const { data } = await axios.post("https://backendsvkwbshp.onrender.com/api/payment/create-payment", {
+        amount,
+        currency,
+        order_number: orderNumber,
+      });
 
-// Inject Lightbox script only once
-const injectMonriLightbox = async (paymentData) => {
-  // Remove any old form
-  const oldForm = document.querySelector("#monri-lightbox-form");
-  if (oldForm) oldForm.remove();
+     const formattedPhone = shipping.phone
+  ? shipping.phone.startsWith("+387")
+    ? shipping.phone.replace(/\s+/g, "")
+    : `+387${shipping.phone.replace(/^0+/, "").replace(/\s+/g, "")}`
+  : "";
 
-  const form = document.createElement("form");
-  form.id = "monri-lightbox-form";
-  form.method = "POST";
-  form.action = "https://backendsvkwbshp.onrender.com/api/payment/callback";
 
-  const script = document.createElement("script");
-  script.src = "https://ipgtest.monri.com/dist/lightbox.js";
-  script.type = "text/javascript";
-  script.className = "lightbox-button";
 
-  // Digest calculation
-  let digest = paymentData.digest;
-  if (!digest && paymentData.merchantKey) {
-    const encoder = new TextEncoder();
-    const dataToHash =
-      paymentData.merchantKey +
-      paymentData.order_number +
-      paymentData.amount +
-      paymentData.currency;
-    const hashBuffer = await crypto.subtle.digest(
-      "SHA-512",
-      encoder.encode(dataToHash)
-    );
-    digest = Array.from(new Uint8Array(hashBuffer))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  }
+      // 2️⃣ Prepare Monri form fields
+      const formData = {
+        authenticity_token: data.authenticity_token,
+        digest: data.digest,
+        order_number: orderNumber,
+        amount,
+        currency,
+        transaction_type: "purchase",
+        order_info: "Online order",
+          // --- Localization ---
+   language: "ba-hr",  // ✅ Correct language tag
+  locale: "bs-BA",    // Optional, can help with formatting
+       ch_full_name: shipping.fullName || "",
+      ch_address: shipping.address || "",
+      ch_city: shipping.city || "",
+      ch_zip: shipping.zip || "",
+      ch_country: "BA", // optionally extend with country selector
+      ch_phone: formattedPhone || "",
+      ch_email: shipping.email || "",
+      
+        success_url_override: "https://backendsvkwbshp.onrender.com/api/payment/success",
+        cancel_url: "https://backendsvkwbshp.onrender.com/api/payment/cancel",
+        callback_url: "https://backendsvkwbshp.onrender.com/api/payment/callback",
+      };
 
-  script.setAttribute("data-authenticity-token", paymentData.authenticity_token);
-  script.setAttribute("data-order-number", paymentData.order_number);
-  script.setAttribute("data-amount", paymentData.amount);
-  script.setAttribute("data-currency", paymentData.currency);
-  script.setAttribute("data-digest", digest);
-  script.setAttribute("data-transaction-type", "purchase");
-  script.setAttribute("data-language", "ba");
-  script.setAttribute("data-order-info", "Book Order");
+      // 3️⃣ Dynamically create and submit form
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://ipgtest.monri.com/v2/form"; // TEST endpoint
 
-  // Customer info
-  Object.entries(paymentData.customer).forEach(([key, value]) => {
-    script.setAttribute(`data-${key}`, value);
-  });
+      Object.entries(formData).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
 
-  form.appendChild(script);
-  document.body.appendChild(form);
+      document.body.appendChild(form);
+      form.submit();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Greška pri plaćanju.");
+    }
+  };
 
-  // Wait a tiny bit to ensure MonriLightbox is attached
-  setTimeout(() => {
-    if (!window.MonriLightbox) return;
-
-    const lightbox = window.MonriLightbox;
-
-    // Register event handlers
-    lightbox.on("success", (resp) => {
-      console.log("Payment successful:", resp);
-      clearCart();
-      alert("Payment completed successfully!");
-      form.remove(); // remove form after success
-    });
-
-    lightbox.on("close", () => {
-      console.log("Lightbox closed by user");
-      form.remove(); // remove form on cancel
-    });
-
-    lightbox.on("error", (err) => {
-      console.error("Payment error:", err);
-      alert("Payment failed. Please try again.");
-      form.remove(); // remove form on error
-    });
-
-    // Open Lightbox
-    lightbox.open();
-  }, 100); // 100ms delay ensures script is ready
-};
 
 
 
 const handleCheckout = () => {
-  startPayment();
+  handlePay();
 };
+
+
+//
 
   return (
     <Box  sx={{
     display: "flex",
     flexDirection: { xs: "column-reverse", md: "row" },
     gap: 4,
-    marginTop: { xs: "4rem", md: "6rem" },
+    marginTop: { xs: "2.5rem", sm:"3.5rem", md: "6rem" },
     marginBottom: { xs: "4rem", md: "6rem" },
     alignItems: "flex-start", // ensures both children start at the top
-    p:1
+    pt:1,
+    background:"white"
   }}>
-<Box sx={{ width: { xs: "100%", md: "70%" } }}>
+<Box sx={{ width: { xs: "100%", md: "70%" }, padding:"1rem",  minHeight:"100lvh", background:"white" }}>
       <CheckoutStepper
   shipping={shipping}
   handleChange={handleChange}
   handleCheckout={handleCheckout}
+   setShipping={setShipping}
   cart={cart}
 />
 </Box>
-     <Box sx={{ width: { xs: "100%", md: "30%" } }}>
+     <Box sx={{ width: { xs: "100%", md: "30%" }, display:{xs:"none", md:"flex"} }}>
       {/* Cart Summary */}
      <Box
   sx={{
     flex: 2,
-    background: "#f0f0f0",
+    //background: "#f0f0f0",
     borderRadius: 3,
     p: 1,
     
@@ -193,7 +153,7 @@ const handleCheckout = () => {
 >
   {/* Header */}
   <Typography
-    variant="h5"
+    variant="h6"
     sx={{ mb: 3, color: "#313131", fontWeight: "bold" }}
   >
     🛒 Vaša korpa (
@@ -256,7 +216,7 @@ const handleCheckout = () => {
               {/* Title & Meta */}
               <Box>
                 <Typography
-                  color="#f9f9f9"
+                  color="#f0f0f0"
                   fontWeight="bold"
                   sx={{ fontSize: "1rem" }}
                 >
@@ -326,32 +286,17 @@ const handleCheckout = () => {
   <Divider sx={{ borderColor: "#333", mt: 3, mb: 2 }} />
 <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
   {/* Price of all books */}
-  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
-      Cijena knjiga:
-    </Typography>
-    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
-      {total.toFixed(2)} BAM
-    </Typography>
-  </Box>
+  
 
-  {/* Dostava */}
-  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
-      Dostava:
-    </Typography>
-    <Typography variant="h7" sx={{ color: "#313131", fontWeight: "bold" }}>
-      8.00 BAM
-    </Typography>
-  </Box>
+  
 
   {/* Grand total */}
   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <Typography variant="h5" sx={{ color: "#f33600", fontWeight: "bold" }}>
-      Ukupno:
+    <Typography variant="h6" sx={{ color: "#313131", fontWeight: "bold" }}>
+      Cijena knjiga u korpi:
     </Typography>
-    <Typography variant="h5" sx={{ color: "#f33600", fontWeight: "bold" }}>
-      {(total + 8).toFixed(2)} BAM
+    <Typography variant="h6" sx={{ color: "#f33600", fontWeight: "bold" }}>
+      {(total).toFixed(2)} BAM
     </Typography>
   </Box>
 </Box>

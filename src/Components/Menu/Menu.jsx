@@ -44,14 +44,14 @@ const kategorije = [
       "Istorijski roman",
       "Psihološki roman",
       "Triler / Krimi",
+      "Drama",
+      "Poezija",
+      "Klasici",
       "Naučna fantastika (Sci-Fi)",
       "Fantastika / Fantasy",
       "Domaći roman",
       "Strani roman",
       "Pripovijetke i novele",
-      "Drama",
-      "Poezija",
-      "Klasici",
       "Humoristička književnost",
       "Mitologija",
     ],
@@ -234,14 +234,19 @@ const handleRemoveFilter = (key) => {
   >
       {/*Filters athat are applied*/ }
 {/* Active Filters Bar */}
-<ActiveFilters filters={filter} onRemove={handleRemoveFilter} kategorije={kategorije} />
-
+<Box sx={{  mb: 2 }}>
+  <ActiveFilters
+    filters={filter}
+    onRemove={handleRemoveFilter}
+    kategorije={kategorije}
+  />
+</Box>
 
 
       {/* Decorative header bar */}
       <Box
         sx={{
-          height: { xs: "2rem", md: "3rem" },
+          height: { xs: "2rem", md: "2rem" },
           width: "100%",
           background: `repeating-linear-gradient(
             45deg,

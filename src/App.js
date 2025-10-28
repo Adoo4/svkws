@@ -118,7 +118,7 @@ function App() {
 
             <AuthNotifier />
             {/* Main content */}
-            <main style={{ flex: 1, overflow: "hidden" }}>
+            <main style={{ flex: 1, overflow: "hidden", background:"white" }}>
               <AuthRedirect />
 
               <Routes>
