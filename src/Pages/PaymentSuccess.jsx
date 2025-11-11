@@ -77,7 +77,7 @@ export default function PaymentSuccess() {
             )}
             {amount && (
               <Box component="span" sx={{ display: "block", mb: 1 }}>
-                Iznos: {amount} BAM
+                Iznos:  {(amount / 100).toFixed(2)} BAM
               </Box>
             )}
             Zahvaljujemo vam na kupovini. Uskoro ćete primiti potvrdu putem e-maila.
