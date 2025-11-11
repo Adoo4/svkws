@@ -174,6 +174,41 @@ const removeMutation = useMutation({
     await queryClient.cancelQueries(["cart"]);
     const previousCart = queryClient.getQueryData(["cart"]);
 
+    queryClient.setQueryData(["cart"], (old) => {
+      if (!old) return old;
+
+      const newItems = old.items.filter((item) => item.book._id !== bookId);
+      const newTotalCart = newItems.reduce((acc, i) => acc + i.itemTotal, 0);
+      const totalWithDelivery = newTotalCart + (old.delivery || 0);
+
+      return {
+        ...old,
+        items: newItems,
+        totalCart: newTotalCart,
+        totalWithDelivery,
+      };
+    });
+
+    return { previousCart };
+  },
+  onError: (_err, _vars, ctx) => {
+    queryClient.setQueryData(["cart"], ctx.previousCart);
+    enqueueSnackbar("Greška pri uklanjanju iz korpe", { variant: "error" });
+  },
+});
+/*
+const removeMutation = useMutation({
+  mutationFn: async (bookId) => {
+    const token = await getToken({ template: "backend" });
+    return axios.delete(
+      `https://backendsvkwbshp.onrender.com/api/cart/${bookId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  },
+  onMutate: async (bookId) => {
+    await queryClient.cancelQueries(["cart"]);
+    const previousCart = queryClient.getQueryData(["cart"]);
+
     queryClient.setQueryData(["cart"], (old) => ({
       ...old,
       items: old.items.filter((item) => item.book._id !== bookId),
@@ -186,6 +221,7 @@ const removeMutation = useMutation({
     enqueueSnackbar("Greška pri uklanjanju iz korpe", { variant: "error" });
   },
 });
+*/
 
 
   const debouncedAddToCart = useMemo(
