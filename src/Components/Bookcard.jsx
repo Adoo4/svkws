@@ -21,8 +21,6 @@ import DrawIcon from '@mui/icons-material/Draw';
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { SignedIn } from '@clerk/clerk-react';
 import  { memo } from "react";
 import Tooltip from "@mui/material/Tooltip";

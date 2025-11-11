@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -38,22 +38,26 @@ export default function CheckoutPage() {
     totalWithDelivery: 0,
   });
 
-  const deliveryPrices = {
+const deliveryPrices = useMemo(
+  () => ({
     bhposta: 4.5,
     euroexpress: 10,
     storepickup: 0,
-  };
+  }),
+  [] // empty deps = only created once
+);
 
- useEffect(() => {
+useEffect(() => {
   if (!cart?.items) return;
   const deliveryCost = deliveryPrices[shipping.deliveryMethod] || 0;
   const totalCart = cart.totalCart ?? 0;
+
   setTotals({
     totalCart,
     delivery: deliveryCost,
     totalWithDelivery: totalCart + deliveryCost,
   });
-}, [cart, shipping.deliveryMethod]);
+}, [cart, shipping.deliveryMethod, deliveryPrices]);
 
 
 
@@ -128,7 +132,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const handleCheckout = () => handlePay();
+
 
   return (
     <Box

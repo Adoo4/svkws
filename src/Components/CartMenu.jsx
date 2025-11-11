@@ -20,7 +20,6 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function CartMenu({
   cart,
-  setCart,
   cartMenu,
   setCartMenu,
   updateCartItem,
@@ -38,13 +37,7 @@ export default function CartMenu({
     enqueueSnackbar("Korpa ispražnjena", { variant: "info" });
   };
 
-{/*if (!cart || !cart?.items) {
-  return (
-    <Drawer anchor="right" open={cartMenu} onClose={() => setCartMenu(false)}>
-      <Box sx={{ p: 3, color: "#f9f9f9" }}>Učitavanje korpe...</Box>
-    </Drawer>
-  );
-}*/}
+
   const list = () => (
     <Box
       sx={{
