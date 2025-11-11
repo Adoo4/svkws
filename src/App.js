@@ -148,7 +148,7 @@ function App() {
                   element={<CheckoutPage cart={cart} />}
                 />
                
-                <Route path="/payment-success" element={<PaymentSuccess />} />
+                <Route path="/success" element={<PaymentSuccess />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route
                   path="/sign-up"
