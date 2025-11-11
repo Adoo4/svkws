@@ -31,6 +31,8 @@ import { useWishlist } from "../Utils.js/useWishlist"; // your hook
 import useCart from "../Utils.js/useCart";
 import { darken } from "@mui/material/styles";
 import { useUser, useClerk } from "@clerk/clerk-react"; // make sure both are imported
+import { Bookmark, BookmarkBorder } from "@mui/icons-material";
+import { motion } from "framer-motion";
 
 const kategorije = [
   {
@@ -145,7 +147,7 @@ const BookCard = ({ book, setDrawerData, toggleDrawer,  updateCartItem }) => {
   const { isSignedIn } = useUser();
   const theme = useTheme();
   const isNew = book.isNew;
-  const hasDiscount = book.discount?.amount > 0;
+
   const navigate = useNavigate();
 const { enqueueSnackbar } = useSnackbar();
 const {  isAdding, addToCart } = useCart();
@@ -154,6 +156,8 @@ const clerk = useClerk();
    // state to control heart icon
  // local state for heart icon
   const [inWishlist, setInWishlist] = useState(false);
+
+  
 
   // sync with wishlist
   useEffect(() => {
@@ -181,10 +185,13 @@ const clerk = useClerk();
 
 
 
-  const finalPrice = hasDiscount
-    ? (book.price * (1 - book.discount.amount / 100)).toFixed(2)
-    : book.price.toFixed(2);
+const hasDiscount = book.discount &&
+  book.discount.amount > 0 &&
+  (!book.discount.validUntil || new Date(book.discount.validUntil) > new Date());
 
+const finalPrice = hasDiscount
+  ? (book.price * (100 - book.discount.amount)) / 100
+  : book.price;
 
 
 
@@ -208,6 +215,12 @@ const formatCategoryName = (name) => {
 
 
   return (
+    <motion.div
+  animate={{
+    backgroundColor: inWishlist ? darken("#b9b9b9ff", 0.4) : "#ffffff",
+  }}
+  transition={{ duration: 0.3, ease: "easeInOut" }}
+>
    <Card
   elevation={0}
   sx={{
@@ -222,10 +235,16 @@ const formatCategoryName = (name) => {
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",
-    background: inWishlist ? darken("#b9b9b9ff", 0.4) : "#ffffff",
-    border:  "1px solid transparent",
-    boxShadow: 2,
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+       backgroundColor: inWishlist
+      ? darken("#b9b9b9ff", 0.4)
+      : "#ffffff",
+
+    // single transition covering background-color, transform and shadow
+    border: "1px solid transparent",
+boxShadow: 2,
+transition:
+  "background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease",
+willChange: "background-color, transform, box-shadow",
     [theme.breakpoints.up("sm")]: {
       "&:hover": {
         
@@ -253,6 +272,7 @@ const formatCategoryName = (name) => {
   />
 )}
 
+{/* Discount Badge */}
 {hasDiscount && (
   <Chip
     label={`-${book.discount.amount}%`}
@@ -260,7 +280,7 @@ const formatCategoryName = (name) => {
     size="small"
     sx={{
       position: "absolute",
-      top: isNew ? 36 : 8, // move below "Novo" if both exist
+      top: isNew ? 36 : 8,
       left: 8,
       zIndex: 5,
       fontWeight: "bold",
@@ -285,20 +305,36 @@ const formatCategoryName = (name) => {
 >
   {/* Wishlist Icon - only if signed in */}
   <SignedIn>
-    <IconButton
-      onClick={handleWishlistClick}
-      sx={{
-        bgcolor: inWishlist ? "#ca1f1fff" : "rgba(255,255,255,0.9)",
-        "&:hover": { bgcolor: "rgba(255,255,255,1)" },
-        p: 0.5,
-      }}
-    >
-      {inWishlist ? (
-        <BookmarkIcon sx={{ fontSize: "1.5rem", color: "white" }} />
-      ) : (
-        <BookmarkBorderIcon sx={{ fontSize: "1.5rem", color: "#262626" }} />
-      )}
-    </IconButton>
+    <Tooltip title={inWishlist ? "Ukloni iz liste želja" : "Dodaj u listu želja"}>
+      <motion.div
+        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.05 }}
+        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+      >
+        <IconButton
+          onClick={handleWishlistClick}
+          aria-label={
+            inWishlist ? "Ukloni iz liste želja" : "Dodaj u listu želja"
+          }
+          sx={{
+            bgcolor: inWishlist ? "#ca1f1f" : "rgba(255,255,255,0.9)",
+            p: 0.7,
+            transition: "all 0.25s ease",
+            boxShadow: inWishlist ? "0 2px 6px rgba(0,0,0,0.25)" : "none",
+            "&:hover": {
+              bgcolor: inWishlist ? "#b71b1b" : "rgba(255,255,255,1)",
+              boxShadow: "0 3px 8px rgba(0,0,0,0.2)",
+            },
+          }}
+        >
+          {inWishlist ? (
+            <Bookmark sx={{ fontSize: "1.6rem", color: "white" }} />
+          ) : (
+            <BookmarkBorder sx={{ fontSize: "1.6rem", color: "#262626" }} />
+          )}
+        </IconButton>
+      </motion.div>
+    </Tooltip>
   </SignedIn>
 
   {/* Search / Details Icon - always visible */}
@@ -568,40 +604,40 @@ const formatCategoryName = (name) => {
       </Typography>
 
       {/* Price */}
-      <Box sx={{ mt: 1 }}>
-        {hasDiscount ? (
-          <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
-            <Typography
-              sx={{
-                fontWeight: "bold",
-                color: "#f33600",
-                fontSize: { xs: "0.8rem", sm: "1rem" },
-              }}
-            >
-              {finalPrice} KM
-            </Typography>
-            <Typography
-              sx={{
-                textDecoration: "line-through",
-                color: "#999",
-                fontSize: { xs: "0.65rem", sm: "0.8rem" },
-              }}
-            >
-              {book.price.toFixed(2)} KM
-            </Typography>
-          </Box>
-        ) : (
-          <Typography
-            sx={{
-              fontWeight: "bold",
-              color: inWishlist ? "#f1f1f1" : "#262626",
-              fontSize: { xs: "0.8rem", sm: "1rem" },
-            }}
-          >
-            {book.price?.toFixed(2)} KM
-          </Typography>
-        )}
-      </Box>
+   <Box sx={{ mt: 1 }}>
+  {hasDiscount ? (
+    <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          color: "#f33600",
+          fontSize: { xs: "0.8rem", sm: "1rem" },
+        }}
+      >
+        {finalPrice.toFixed(2)} KM
+      </Typography>
+      <Typography
+        sx={{
+          textDecoration: "line-through",
+          color: "#999",
+          fontSize: { xs: "0.65rem", sm: "0.8rem" },
+        }}
+      >
+        {book.price.toFixed(2)} KM
+      </Typography>
+    </Box>
+  ) : (
+    <Typography
+      sx={{
+        fontWeight: "bold",
+        color: inWishlist ? "#f1f1f1" : "#262626",
+        fontSize: { xs: "0.8rem", sm: "1rem" },
+      }}
+    >
+      {book.price.toFixed(2)} KM
+    </Typography>
+  )}
+</Box>
     </CardContent>
 
     {/* Actions */}
@@ -656,12 +692,12 @@ const formatCategoryName = (name) => {
   size="small"
   onClick={() => {
     if (!isSignedIn) {
-      clerk.openSignIn(); // 👈 trigger Clerk login
+      clerk.openSignIn();
     } else {
-      addToCart(book);
+      addToCart(book); // 👈 this is correct, matches the debounced function
     }
   }}
-  disabled={isAdding} // 👈 remove !isSignedIn here
+  disabled={isAdding}
   startIcon={<ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />}
   sx={{
     flex: 1,
@@ -678,6 +714,7 @@ const formatCategoryName = (name) => {
   Dodaj
 </Button>
 
+
     
   </Tooltip>
 </CardActions>
@@ -685,6 +722,7 @@ const formatCategoryName = (name) => {
 
   </Box>
 </Card>
+</motion.div>
 
   );
 };

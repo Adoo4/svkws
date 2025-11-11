@@ -137,7 +137,7 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
   }}
     icon={
       <Badge
-        badgeContent={cart?.reduce((sum, item) => sum + item.quantity, 0) || 0}
+        badgeContent={cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0}
         color="error"
         overlap="circular"
         sx={{

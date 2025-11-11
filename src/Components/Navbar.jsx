@@ -13,10 +13,11 @@ import {
 } from "@clerk/clerk-react";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
-import HomeIcon from "@mui/icons-material/Home";
-import StoreIcon from "@mui/icons-material/Store";
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import StoreMallDirectoryOutlinedIcon from '@mui/icons-material/StoreMallDirectoryOutlined';
 import MobileMenu from "./MobileMenu";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
+import ShoppingCartOutlinedIcon  from '@mui/icons-material/ShoppingCartOutlined';
 import LoginIcon from "@mui/icons-material/Login";
 
 import BookmarkIcon from "@mui/icons-material/Bookmark";
@@ -52,7 +53,13 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
   const isShopOrCheckout =
     location.pathname === "/shop" ||
     location.pathname === "/checkout" ||
-    location.pathname === "/Uslovikupovine";
+    location.pathname === "/Uslovikupovine" ||
+    location.pathname === "/Privatnost" ||
+    location.pathname === "/OpštiUsloviPoslovanja" ||
+    location.pathname === "/PolitikaPovrataiReklamacije" ||
+    location.pathname === "/Sigurnost" ||
+    location.pathname === "/Politikekolačića" ||
+    location.pathname === "/success";
   const backgroundColor =
     scrolled || isShopOrCheckout ? "#262626" : "transparent";
 
@@ -152,7 +159,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
     },
   }}
   onClick={() => navigate("/home")}
-  startIcon={<HomeIcon />}
+  startIcon={<HomeOutlinedIcon />}
 >
   <Box sx={{ display: { xs: "none", sm: "inline" } }}>POČETNA</Box>
 </Button>
@@ -198,7 +205,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
     },
   }}
   onClick={() => navigate("/shop")}
-  startIcon={<StoreIcon />}
+  startIcon={<StoreMallDirectoryOutlinedIcon />}
 >
   <Box sx={{ display: { xs: "none", sm: "inline" } }}>BOOKSTORE</Box>
 </Button>
@@ -214,7 +221,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
     ) : (
       <Badge
   badgeContent={
-    cart?.reduce((sum, item) => sum + item.quantity, 0) || 0
+    cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0
   }
   invisible={isLoadingCart}
   sx={{
@@ -227,7 +234,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
     },
   }}
 >
-  <ShoppingCartIcon
+  <ShoppingCartOutlinedIcon
     sx={{
       fontSize: { xs: "1.3rem", sm: "1.5" },
       color: "#f9f9f9",

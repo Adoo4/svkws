@@ -147,6 +147,7 @@ function App() {
                   path="/checkout"
                   element={<CheckoutPage cart={cart} />}
                 />
+               
                 <Route path="/payment-success" element={<PaymentSuccess />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route
@@ -185,6 +186,7 @@ function App() {
                   path="/PolitikaKolačića"
                   element={<PolitikaKolačića />}
                 />
+              
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="*" element={<Navigate to="/home" replace />} />
               </Routes>

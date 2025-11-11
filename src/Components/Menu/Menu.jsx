@@ -26,7 +26,7 @@ import Language from "./LanguageSelect";
 import IsNewSwitch from "./IsNewSwitch";
 import ActiveFilters from "./ActiveFIlters";
 import DiscountSwitch from "./DiscountSwitch";
-
+import { alpha } from "@mui/material/styles"
 
 const kategorije = [
   {
@@ -371,26 +371,38 @@ const handleRemoveFilter = (key) => {
                     <Grid container spacing={1} sx={{ pl: 2 }}>
                       {kategorija.podkategorije.map((pod, i) => (
                         <Grid item xs={6} key={pod}>
-                          <ListItemButton
-                            sx={{
-                              padding:{xs:"0.3rem", sm:"0.3rem"},
-                              gap:"0.5rem",
-                              borderRadius: "6px",
-                              color: "#f7f7f7",
-                              background:"#292929ff",
-                              "&:hover": {
-                                backgroundColor: `${kategorija.boja}22`,
-                              },
-                            }}
-                            selected={selectedIndex === idx * 100 + i}
-                            onClick={() => {
-                              handleSubcategoryClick(
-                                kategorija,
-                                pod,
-                                idx * 100 + i
-                              ); window.scrollTo(0, 0); }
-                            }
-                          >
+                         <ListItemButton
+  sx={{
+    px: 1.5,
+    py: 0.5,
+    gap: "0.6rem",
+    borderRadius: "14px",
+    fontWeight: 500,
+    fontSize: { xs: "0.75rem", sm: "0.85rem" },
+    color: "white",
+    backgroundColor: (theme) => alpha(kategorija.boja, 0.15), // soft tinted bg like Chip
+    border: "1px solid transparent",
+    transition: "all 0.25s ease",
+    "&:hover": {
+      backgroundColor: (theme) => alpha(kategorija.boja, 0.25),
+      borderColor: kategorija.boja,
+      transform: "translateX(3px)",
+    },
+    "&.Mui-selected": {
+      backgroundColor: (theme) => alpha(kategorija.boja, 0.35),
+      borderColor: kategorija.boja,
+      color: "#fff",
+      "&:hover": {
+backgroundColor: (theme) => alpha(kategorija.boja, 0.45),
+      },
+    },
+  }}
+  selected={selectedIndex === idx * 100 + i}
+  onClick={() => {
+    handleSubcategoryClick(kategorija, pod, idx * 100 + i);
+    window.scrollTo(0, 0);
+  }}
+>
                             <ListItemText
                               primary={
                                 <Typography

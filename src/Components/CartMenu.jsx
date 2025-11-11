@@ -38,9 +38,13 @@ export default function CartMenu({
     enqueueSnackbar("Korpa ispražnjena", { variant: "info" });
   };
 
-  const round = (num, decimals = 2) =>
-    Math.round((num + Number.EPSILON) * 10 ** decimals) / 10 ** decimals;
-
+{/*if (!cart || !cart?.items) {
+  return (
+    <Drawer anchor="right" open={cartMenu} onClose={() => setCartMenu(false)}>
+      <Box sx={{ p: 3, color: "#f9f9f9" }}>Učitavanje korpe...</Box>
+    </Drawer>
+  );
+}*/}
   const list = () => (
     <Box
       sx={{
@@ -65,138 +69,81 @@ export default function CartMenu({
         }}
       >
         <Typography variant="h6" sx={{ color: "#f9f9f9", fontWeight: "bold" }}>
-          Vaša korpa ({cart.reduce((sum, item) => sum + item.quantity, 0)}{" "}
-          artikala)
+          Vaša korpa ({cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0} artikala)
         </Typography>
       </Box>
 
       <Divider sx={{ borderColor: "#444" }} />
 
       <List sx={{ mt: 1 }}>
-        {cart.length === 0 ? (
-          <Typography sx={{ p: 2, textAlign: "center", color: "#aaa" }}>
-            Vaša korpa je prazna
+        {!cart?.items || cart?.items.length === 0 ? (
+  <Typography sx={{ p: 2, textAlign: "center", color: "#aaa" }}>
+    Vaša korpa je prazna
+  </Typography>
+) : (
+ cart?.items.map(({ book, quantity, itemTotal }) => {
+    const hasDiscount = book.discount && new Date(book.discount.validUntil) > new Date();
+
+    return (
+      <ListItem key={book._id} alignItems="flex-start" disablePadding sx={{ mb: 2, borderRadius: 2 }}>
+      <ListItemAvatar>
+        <Avatar
+          variant="square"
+          src={book.coverImage}
+          alt={book.title}
+          onClick={() =>
+            navigate(`/${book._id}`, { state: { book, category: book.subCategory } })
+          }
+          sx={{
+            width: { xs: 80, sm: 100, md: 130 },
+            height: { xs: 100, sm: 130, md: 150 },
+            borderRadius: 2,
+            "& img": { objectFit: "contain" },
+          }}
+        />
+      </ListItemAvatar>
+
+                 <ListItemText
+        sx={{ ml: 1, mr: 1 }}
+        primary={
+          <Typography variant="subtitle1" fontWeight="bold" noWrap sx={{ color: "#f9f9f9" }}>
+            {book.title}
           </Typography>
-        ) : (
-          cart.map((book) => {
-            const isDiscountValid =
-              book.discount && new Date(book.discount.validUntil) > new Date();
+        }
+        secondary={
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, mt: 0.5 }}>
+            <Typography variant="body2" color="#bbb" noWrap>
+              {book.author}
+            </Typography>
 
-            const price = isDiscountValid
-              ? round(book.price * (1 - book.discount.amount / 100))
-              : book.price;
+            <Typography variant="body2" sx={{ color: "#aaa", fontWeight: 500 }}>
+              Količina:{" "}
+              <Typography component="span" fontWeight="bold" color="#f9f9f9">
+                {quantity}
+              </Typography>
+            </Typography>
 
-            return (
-              <ListItem
-                key={book._id}
-                alignItems="flex-start"
-                disablePadding
-                sx={{
-                  alignItems: "center",
+           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+  <Typography variant="body1" fontWeight="bold" sx={{ color: hasDiscount ? "#f33600" : "#f9f9f9" }}>
+     {(itemTotal ?? (book.price * quantity)).toFixed(2)} BAM
+  </Typography>
 
-                  mb: 2,
-                  borderRadius: 2,
-                }}
-              >
-                <ListItemAvatar>
-                  <Avatar
-                    variant="square"
-                    src={book.coverImage}
-                    alt={book.title}
-                    onClick={(e) => {
-                      navigate(`/${book?._id}`, {
-                        state: { book, category: book.subCategory },
-                      });
-                    }}
-                    sx={{
-                      width: { xs: 80, sm: 100, md: 130 },
-                      height: { xs: 100, sm: 130, md: 150 },
-                      borderRadius: 2,
-                      "& img": {
-                        objectFit: "contain", // ensure image scales without cropping
-                        width: "100%",
-                        height: "100%",
-                      },
-                    }}
-                  />
-                </ListItemAvatar>
+  {hasDiscount && (
+    <Typography
+      variant="body2"
+      sx={{ textDecoration: "line-through", color: "#ff0000ff", fontSize: "0.8rem" }}
+    >
+       {book.price.toFixed(2)} BAM
+    </Typography>
+  )}
 
-                <ListItemText
-                  sx={{ ml: 1, mr: 1 }}
-                  primary={
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="bold"
-                      noWrap
-                      sx={{ color: "#f9f9f9" }}
-                    >
-                      {book.title}
-                    </Typography>
-                  }
-                  secondary={
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        gap: 0.5,
-                        mt: 0.5,
-                      }}
-                    >
-                      {/* Author */}
-                      <Typography variant="body2" color="#bbb" noWrap>
-                        {book.author}
-                      </Typography>
+  
+</Box>
+<Typography variant="caption" sx={{ color: "#888" }}>
+ Jedinična cijena: {(itemTotal/quantity).toFixed(2)} BAM
+</Typography>
 
-                      {/* Quantity */}
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "#aaa", fontWeight: 500 }}
-                      >
-                        Količina:{" "}
-                        <Typography
-                          component="span"
-                          fontWeight="bold"
-                          color="#f9f9f9"
-                        >
-                          {book.quantity}
-                        </Typography>
-                      </Typography>
-
-                      {/* Price Row */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        <Typography
-                          variant="body1"
-                          fontWeight="bold"
-                          sx={{
-                            color: isDiscountValid ? "#f33600" : "#f9f9f9",
-                          }}
-                        >
-                          {(price * book.quantity).toFixed(2)} BAM
-                        </Typography>
-
-                        {isDiscountValid && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              textDecoration: "line-through",
-                              color: "#999",
-                              fontWeight: "normal",
-                              fontSize: "0.8rem",
-                            }}
-                          >
-                            {(book.price * book.quantity).toFixed(2)} BAM
-                          </Typography>
-                        )}
-                      </Box>
-                    </Box>
+          </Box>
                   }
                 />
 
@@ -209,59 +156,56 @@ export default function CartMenu({
                     ml: 1,
                   }}
                 >
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      updateCartItem(book._id, book.quantity + 1);
-                      enqueueSnackbar(`Povećana količina: ${book.title}`, {
-                        variant: "success",
-                      });
-                    }}
-                    sx={{
-                      color: "#515151",
-                      "&:hover": { color: "#388e3c" },
-                      mb: 0.5,
-                      background: "#282828",
-                    }}
-                  >
-                    <AddIcon />
-                  </IconButton>
+               <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", ml: 1 }}>
+  <IconButton
+    size="small"
+    onClick={() => {
+      updateCartItem(book._id, quantity + 1);
+      enqueueSnackbar(`Povećana količina: ${book.title}`, { variant: "success" });
+    }}
+    sx={{
+      color: "#515151",
+      "&:hover": { color: "#388e3c" },
+      mb: 0.5,
+      background: "#282828",
+    }}
+  >
+    <AddIcon />
+  </IconButton>
 
-                  <Typography
-                    sx={{
-                      color: "#f9f9f9",
-                      fontWeight: "bold",
-                      minWidth: 24,
-                      textAlign: "center",
-                    }}
-                  >
-                    {book.quantity}
-                  </Typography>
+  <Typography
+    sx={{
+      color: "#f9f9f9",
+      fontWeight: "bold",
+      minWidth: 24,
+      textAlign: "center",
+    }}
+  >
+    {quantity}
+  </Typography>
 
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      if (book.quantity === 1) {
-                        removeCartItem(book._id);
-                        enqueueSnackbar(`Knjiga uklonjena: ${book.title}`, {
-                          variant: "warning",
-                        });
-                      } else {
-                        updateCartItem(book._id, book.quantity - 1);
-                        enqueueSnackbar(`Smanjena količina: ${book.title}`, {
-                          variant: "info",
-                        });
-                      }
-                    }}
-                    sx={{
-                      color: "#414141",
-                      "&:hover": { color: "#d32f2f" },
-                      mt: 0.5,
-                      background: "#282828",
-                    }}
-                  >
-                    <RemoveIcon />
-                  </IconButton>
+  <IconButton
+    size="small"
+    onClick={() => {
+      if (quantity === 1) {
+        removeCartItem(book._id);
+        enqueueSnackbar(`Knjiga uklonjena: ${book.title}`, { variant: "warning" });
+      } else {
+        updateCartItem(book._id, quantity - 1);
+        enqueueSnackbar(`Smanjena količina: ${book.title}`, { variant: "info" });
+      }
+    }}
+    sx={{
+      color: "#414141",
+      "&:hover": { color: "#d32f2f" },
+      mt: 0.5,
+      background: "#282828",
+    }}
+  >
+    <RemoveIcon />
+  </IconButton>
+</Box>
+
                 </Box>
               </ListItem>
             );
@@ -269,7 +213,7 @@ export default function CartMenu({
         )}
       </List>
 
-      {cart.length > 0 && (
+     {cart?.items?.length > 0 && (
         <Box
           sx={{
             p: 3,
@@ -281,30 +225,18 @@ export default function CartMenu({
           }}
         >
           {/* Total */}
-          <Typography
-            variant="h6"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              color: "#f9f9f9",
-              fontWeight: "bold",
-              fontSize: { xs: "1rem", sm: "1.2rem" },
-            }}
-          >
-            Total:{" "}
-            {cart
-              .reduce((sum, item) => {
-                const isDiscountValid =
-                  item.discount &&
-                  new Date(item.discount.validUntil) > new Date();
-                const price = isDiscountValid
-                  ? item.price * (1 - item.discount.amount / 100)
-                  : item.price;
-                return sum + price * item.quantity;
-              }, 0)
-              .toFixed(2)}{" "}
-            BAM
-          </Typography>
+         <Typography
+  variant="h6"
+  sx={{
+    display: "flex",
+    justifyContent: "space-between",
+    color: "#f9f9f9",
+    fontWeight: "bold",
+    fontSize: { xs: "1rem", sm: "1.2rem" },
+  }}
+>
+  Total: {cart.totalCart.toFixed(2)} BAM
+</Typography>
 
           {/* Buttons */}
           <Box
@@ -341,8 +273,7 @@ export default function CartMenu({
             </Button>
 
             {/* Clear Cart */}
-            <Button
-               onClick={handleClearCart} disabled={!cart.length}
+            <Button onClick={handleClearCart} disabled={!cart?.items?.length}
               variant="outlined"
               fullWidth
               sx={{
