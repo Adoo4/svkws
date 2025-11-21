@@ -8,12 +8,43 @@ import './Carousel-style.css';
 import { Link,  Stack } from '@mui/material';
 import { Facebook, Instagram } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import  { useRef, useEffect } from 'react';
 
 
 const Home = () => {
- 
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
+ const videoRef = useRef(null);
+
+  // Create the autoplay plugin
+  const autoplay = Autoplay({ delay: 5000, stopOnInteraction: false });
+
+  // Create embla carousel
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplay]);
+
+  // Pause autoplay until video ends
+  useEffect(() => {
+    if (!emblaApi) return; // wait for emblaApi to exist
+    const autoplayPlugin = emblaApi.plugins().autoplay;
+    if (!autoplayPlugin) return;
+
+    // Stop autoplay initially
+    autoplayPlugin.stop();
+
+    const videoEl = videoRef.current;
+    if (!videoEl) return;
+
+    const handleVideoEnded = () => {
+      autoplayPlugin.play(); // resume autoplay
+      emblaApi.scrollNext(); // move to next slide
+    };
+
+    videoEl.addEventListener('ended', handleVideoEnded);
+    return () => videoEl.removeEventListener('ended', handleVideoEnded);
+  }, [emblaApi]);
+
+
+
+
   const isXsScreen = useMediaQuery("(max-width:600px)");
   const containerHeight = isXsScreen ? "100lvh" : "100lvh";
   let navigate = useNavigate();
@@ -57,14 +88,36 @@ const Home = () => {
       <div className="embla__container" style={{ height: containerHeight }}>
 
         
-        <div className="embla__slide" >
+       {/* <div className="embla__slide" >
           <img
            loading="eager"
            fetchpriority="high"
             src="https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"
             alt=""
           />
-        </div>
+        </div>*/}
+
+      <div className="embla__slide">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    poster="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
+     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+  >
+    <source src="/final_landing_video_high.webm" type="video/webm" />
+   
+    {/* Fallback image if video is not supported */}
+    <img
+      src="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
+      alt="Landing page hero"
+       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    />
+  </video>
+</div>
+
+
         <div className="embla__slide">
           <img
            loading="lazy"

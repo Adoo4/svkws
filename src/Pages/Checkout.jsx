@@ -108,8 +108,7 @@ useEffect(() => {
         ch_email: shipping.email || "",
         success_url_override: "https://svkbkstr.netlify.app/success",
         cancel_url: "https://backendsvkwbshp.onrender.com/api/payment/cancel",
-        callback_url:
-          "https://backendsvkwbshp.onrender.com/api/payment/callback",
+        callback_url: "https://backendsvkwbshp.onrender.com/api/payment/callback",
       };
 
       const form = document.createElement("form");

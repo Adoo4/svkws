@@ -117,8 +117,8 @@ export default function CartMenu({
             </Typography>
 
            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-  <Typography variant="body1" fontWeight="bold" sx={{ color: hasDiscount ? "#f33600" : "#f9f9f9" }}>
-     {(itemTotal ?? (book.price * quantity)).toFixed(2)} BAM
+  <Typography variant="body1" fontWeight="bold" sx={{ color: hasDiscount ? "#4caf50" : "#f9f9f9" }}>
+     {(itemTotal/quantity).toFixed(2)} BAM
   </Typography>
 
   {hasDiscount && (
@@ -132,8 +132,23 @@ export default function CartMenu({
 
   
 </Box>
-<Typography variant="caption" sx={{ color: "#888" }}>
- Jedinična cijena: {(itemTotal/quantity).toFixed(2)} BAM
+<Typography
+  variant="body2"
+  sx={{
+    color: "text.secondary",
+    fontWeight: 500,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    mt: 0.5,
+  }}
+>
+  <Box component="span" sx={{ color: "#666" }}>
+    Ukupno:
+  </Box>
+  <Box component="span" sx={{ color: "#f33600", fontWeight: 600 }}>
+    {(itemTotal ?? (book.price * quantity)).toFixed(2)} BAM
+  </Box>
 </Typography>
 
           </Box>

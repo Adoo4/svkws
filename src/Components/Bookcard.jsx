@@ -215,7 +215,7 @@ const formatCategoryName = (name) => {
   return (
     <motion.div
   animate={{
-    backgroundColor: inWishlist ? darken("#b9b9b9ff", 0.4) : "#ffffff",
+    
   }}
   transition={{ duration: 0.3, ease: "easeInOut" }}
 >
@@ -234,7 +234,7 @@ const formatCategoryName = (name) => {
     display: "flex",
     flexDirection: "column",
        backgroundColor: inWishlist
-      ? darken("#b9b9b9ff", 0.4)
+      ? darken("#5c5c5cff", 0.4)
       : "#ffffff",
 
     // single transition covering background-color, transform and shadow

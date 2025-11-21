@@ -49,7 +49,7 @@ function App() {
   const [drawerOpen3, setDrawerOpen3] = useState(false);
 
   const [loading, setLoading] = useState(true);
-  const imageUrl = "https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"; 
+  const imageUrl = "public/final_landing_video_high.webm"; 
 
 
 
