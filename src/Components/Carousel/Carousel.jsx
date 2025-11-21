@@ -13,33 +13,42 @@ import  { useRef, useEffect } from 'react';
 
 const Home = () => {
 
- const videoRef = useRef(null);
+  const videoRef = useRef(null);
 
-  // Create the autoplay plugin
-  const autoplay = Autoplay({ delay: 5000, stopOnInteraction: false });
+  // Create autoplay plugin but don't start immediately
+  const autoplay = Autoplay({ delay: 5000, stopOnInteraction: false, playOnInit: false });
 
-  // Create embla carousel
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplay]);
 
-  // Pause autoplay until video ends
+  // Control autoplay based on video readiness
   useEffect(() => {
-    if (!emblaApi) return; // wait for emblaApi to exist
+    if (!emblaApi) return;
     const autoplayPlugin = emblaApi.plugins().autoplay;
     if (!autoplayPlugin) return;
-
-    // Stop autoplay initially
-    autoplayPlugin.stop();
 
     const videoEl = videoRef.current;
     if (!videoEl) return;
 
+    // Start Embla autoplay once video ends
     const handleVideoEnded = () => {
-      autoplayPlugin.play(); // resume autoplay
-      emblaApi.scrollNext(); // move to next slide
+      autoplayPlugin.play();
+      emblaApi.scrollNext();
+    };
+
+    // Optionally, start video when it can play
+    const handleCanPlay = () => {
+      videoEl.play().catch(() => {});
+      // Keep Embla paused until video ends
+      autoplayPlugin.stop();
     };
 
     videoEl.addEventListener('ended', handleVideoEnded);
-    return () => videoEl.removeEventListener('ended', handleVideoEnded);
+    videoEl.addEventListener('canplay', handleCanPlay);
+
+    return () => {
+      videoEl.removeEventListener('ended', handleVideoEnded);
+      videoEl.removeEventListener('canplay', handleCanPlay);
+    };
   }, [emblaApi]);
 
 
@@ -85,55 +94,39 @@ const Home = () => {
     <Box sx={{ position: 'relative' }}>
     {/* Embla Carousel */}
     <div className="embla" ref={emblaRef}>
-      <div className="embla__container" style={{ height: containerHeight }}>
+    <div className="embla__container" style={{ height: containerHeight }}>
+  <div className="embla__slide">
+    <video
+      ref={videoRef}
+      autoPlay
+      muted
+      playsInline
+      onCanPlay={() => videoRef.current.play()}
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        poster="https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"
+    >
+      <source src="/final_landing_video_high.webm" type="video/webm" />
+      
+    </video>
+  </div>
 
-        
-       {/* <div className="embla__slide" >
-          <img
-           loading="eager"
-           fetchpriority="high"
-            src="https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"
-            alt=""
-          />
-        </div>*/}
-
-      <div className="embla__slide">
-  <video
-    autoPlay
-    muted
-    loop
-    playsInline
-    poster="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
-     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-  >
-    <source src="/final_landing_video_high.webm" type="video/webm" />
-   
-    {/* Fallback image if video is not supported */}
+  {/* Then the rest of the slides */}
+  <div className="embla__slide">
     <img
+      loading="lazy"
       src="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
-      alt="Landing page hero"
-       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      alt=""
     />
-  </video>
+  </div>
+  <div className="embla__slide">
+    <img
+      loading="lazy"
+      src="https://i.postimg.cc/j5jQ1LvG/hot-air-balloons-dotting-sky-mountain-range.jpg"
+      alt=""
+    />
+  </div>
 </div>
 
-
-        <div className="embla__slide">
-          <img
-           loading="lazy"
-            src="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
-            alt=""
-          />
-        </div>
-        <div className="embla__slide">
-          <img
-           loading="lazy"
-            src="https://i.postimg.cc/j5jQ1LvG/hot-air-balloons-dotting-sky-mountain-range.jpg"
-            alt=""
-          />
-        </div>
-        
-      </div>
     </div>
 
     <Stack direction="column" sx={{
