@@ -100,6 +100,7 @@ const Home = () => {
       ref={videoRef}
       autoPlay
       muted
+      loop
       playsInline
       onCanPlay={() => videoRef.current.play()}
       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -188,38 +189,29 @@ const Home = () => {
     >
        
 <Typography
-      variant="h2"
-      sx={{
-        fontWeight: 'bold',
-        fontSize: { xs: '2rem', md: '4rem', lg: '4rem' },
-        color: '#f9f9f9',
-        textShadow: '2px 2px 6px rgba(0,0,0,0.7)',
-        animation: 'fadeInDown 1s ease forwards',
-        '@keyframes fadeInDown': {
-          '0%': { opacity: 0, transform: 'translateY(-50px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
-        },
-      }}
-    >
-      {slideTexts[selectedIndex]?.title}
-    </Typography>
+  variant="h2"
+  className="fadeInDown"
+  sx={{
+    fontWeight: 'bold',
+    fontSize: { xs: '2rem', md: '4rem', lg: '4rem' },
+    color: '#f9f9f9',
+    textShadow: '2px 2px 6px rgba(0,0,0,0.7)',
+  }}
+>
+  {slideTexts[selectedIndex]?.title}
+</Typography>
 
-    <Typography
-      variant="h5"
-      sx={{
-        color: '#f9f9f9',
-        fontSize: { xs: '1rem', md: '1.5rem', lg: '2rem' },
-        textShadow: '1px 1px 4px rgba(0,0,0,0.6)',
-        animation: 'fadeInUp 1.2s ease forwards',
-        
-        '@keyframes fadeInUp': {
-          '0%': { opacity: 0, transform: 'translateY(50px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
-        },
-      }}
-    >
-      {slideTexts[selectedIndex]?.subtitle}
-    </Typography>
+   <Typography
+  variant="h5"
+  className="fadeInUp"
+  sx={{
+    fontSize: { xs: '1rem', md: '1.5rem', lg: '2rem' },
+    color: '#f9f9f9',
+    textShadow: '1px 1px 4px rgba(0,0,0,0.6)',
+  }}
+>
+  {slideTexts[selectedIndex]?.subtitle}
+</Typography>
       <Box
         sx={{
           display: 'flex',
