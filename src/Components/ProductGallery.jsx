@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import BookCard from "../Components/Bookcard";
+import BookCard from "./Bookcard/Bookcard";
 import BookCardSkeleton from "../Components/BookCardSkeleton";
 
 
