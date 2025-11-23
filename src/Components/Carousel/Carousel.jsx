@@ -1,257 +1,208 @@
-import React, { useCallback } from 'react';
-import { DotButton, useDotButton } from './Carousel-accessory';
-import Autoplay from 'embla-carousel-autoplay';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import { Box, Typography, Button } from '@mui/material';
-import { useMediaQuery } from "@mui/material";
-import './Carousel-style.css';
-import { Link,  Stack } from '@mui/material';
+import Autoplay from 'embla-carousel-autoplay';
+import { Box, Typography, Button, Stack, Link } from '@mui/material';
 import { Facebook, Instagram } from '@mui/icons-material';
+import { useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import  { useRef, useEffect } from 'react';
+import { DotButton, useDotButton } from './Carousel-accessory';
+import './Carousel-style.css';
 
+const AUTOPLAY_DELAY = 5000;
+const autoplayPlugin = Autoplay({ delay: AUTOPLAY_DELAY, stopOnInteraction: false, playOnInit: false });
 
-const Home = () => {
-
-  const videoRef = useRef(null);
-
-  // Create autoplay plugin but don't start immediately
-  const autoplay = Autoplay({ delay: 5000, stopOnInteraction: false, playOnInit: false });
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplay]);
-
-  // Control autoplay based on video readiness
-  useEffect(() => {
-    if (!emblaApi) return;
-    const autoplayPlugin = emblaApi.plugins().autoplay;
-    if (!autoplayPlugin) return;
-
-    const videoEl = videoRef.current;
-    if (!videoEl) return;
-
-    // Start Embla autoplay once video ends
-    const handleVideoEnded = () => {
-      autoplayPlugin.play();
-      emblaApi.scrollNext();
-    };
-
-    // Optionally, start video when it can play
-    const handleCanPlay = () => {
-      videoEl.play().catch(() => {});
-      // Keep Embla paused until video ends
-      autoplayPlugin.stop();
-    };
-
-    videoEl.addEventListener('ended', handleVideoEnded);
-    videoEl.addEventListener('canplay', handleCanPlay);
-
-    return () => {
-      videoEl.removeEventListener('ended', handleVideoEnded);
-      videoEl.removeEventListener('canplay', handleCanPlay);
-    };
-  }, [emblaApi]);
-
-
-
-
-  const isXsScreen = useMediaQuery("(max-width:600px)");
-  const containerHeight = isXsScreen ? "100lvh" : "100lvh";
-  let navigate = useNavigate();
-  const onNavButtonClick = useCallback((emblaApi) => {
-    const autoplay = emblaApi?.plugins()?.autoplay;
-    if (!autoplay) return;
-
-    const resetOrStop =
-      autoplay.options.stopOnInteraction === false
-        ? autoplay.reset
-        : autoplay.stop;
-
-    resetOrStop();
-  }, []);
-
-  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
-    emblaApi,
-    onNavButtonClick
-  );
-
-
-  const slideTexts = [
+const slideTexts = [
   {
-    title: "Klik do knjige",
-    subtitle: " Brzo i jednostavno pronađi svoje omiljene knjige. Pretražuj i uživaj u najboljim ponudama za najtraženije naslove.",
+    title: 'Klik do knjige',
+    subtitle: 'Brzo i jednostavno pronađi svoje omiljene knjige. Pretražuj i uživaj u najboljim ponudama za najtraženije naslove.',
   },
   {
-    title: "Znanje Počinje sa Pravom Knjigom",
-    subtitle: "Pronađi inspiraciju na svakoj stranici",
+    title: 'Znanje Počinje sa Pravom Knjigom',
+    subtitle: 'Pronađi inspiraciju na svakoj stranici',
   },
   {
-    title: "Najbolje Ponude za Najtraženije Naslove",
-    subtitle: "Knjige koje želiš, po cijenama koje voliš",
+    title: 'Najbolje Ponude za Najtraženije Naslove',
+    subtitle: 'Knjige koje želiš, po cijenama koje voliš',
   },
 ];
 
+const Home = () => {
+  const videoRef = useRef(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplayPlugin]);
+  const isXsScreen = useMediaQuery('(max-width:600px)');
+  const navigate = useNavigate();
+
+  const containerHeight = useMemo(() => (isXsScreen ? '100lvh' : '100lvh'), [isXsScreen]); // keep if you plan to change later
+
+  // Safe, stable callback invoked from DotButton or other nav UI
+  const onNavButtonClick = useCallback((embla) => {
+    const autoplay = embla?.plugins?.().autoplay;
+    if (!autoplay) return;
+
+    const action = autoplay.options?.stopOnInteraction === false ? autoplay.reset : autoplay.stop;
+    if (typeof action === 'function') action.call(autoplay);
+  }, []);
+
+  // Hook for dots: useDotButton expects stable emblaApi and callback
+  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi, onNavButtonClick);
+
+  // Manage video <-> embla autoplay behaviour
+  useEffect(() => {
+    if (!emblaApi) return;
+    const autoplay = emblaApi.plugins?.().autoplay;
+    if (!autoplay) return;
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Ensure autoplay is stopped while video playing
+    autoplay.stop();
+
+    const handleEnded = () => {
+      // resume embla autoplay and move to next slide once video finished
+      autoplay.play();
+      try { emblaApi.scrollNext(); } catch (e) { /* ignore */ }
+    };
+
+    const handleCanPlay = async () => {
+      // Attempt to play video; if autoplay is blocked, do nothing
+      try {
+        await video.play();
+      } catch (err) {
+        // play may be blocked by browser policy; keep embla paused
+      }
+      autoplay.stop();
+    };
+
+    video.addEventListener('ended', handleEnded);
+    video.addEventListener('canplay', handleCanPlay);
+
+    return () => {
+      video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('canplay', handleCanPlay);
+    };
+  }, [emblaApi]);
+
+  // Ensure autoplay stops when user interacts with embla manually
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onUserScroll = () => {
+      const autoplay = emblaApi.plugins?.().autoplay;
+      if (autoplay) autoplay.stop();
+    };
+    emblaApi.on && emblaApi.on('pointerDown', onUserScroll);
+    return () => {
+      emblaApi.off && emblaApi.off('pointerDown', onUserScroll);
+    };
+  }, [emblaApi]);
+
   return (
     <Box sx={{ position: 'relative' }}>
-    {/* Embla Carousel */}
-    <div className="embla" ref={emblaRef}>
-    <div className="embla__container" style={{ height: containerHeight }}>
-  <div className="embla__slide">
-    <video
-      ref={videoRef}
-      autoPlay
-      muted
-      loop
-      playsInline
-      onCanPlay={() => videoRef.current.play()}
-      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        poster="https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"
-    >
-      <source src="/final_landing_video_high.webm" type="video/webm" />
-      
-    </video>
-  </div>
-
-  {/* Then the rest of the slides */}
-  <div className="embla__slide">
-    <img
-      loading="lazy"
-      src="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
-      alt=""
-    />
-  </div>
-  <div className="embla__slide">
-    <img
-      loading="lazy"
-      src="https://i.postimg.cc/j5jQ1LvG/hot-air-balloons-dotting-sky-mountain-range.jpg"
-      alt=""
-    />
-  </div>
-</div>
-
-    </div>
-
-    <Stack direction="column" sx={{
-        position: 'absolute',
-        top: '30%', // Adjust as needed for positioning
-        left: '1.2rem',
-        transform: 'translateX(-50%)',
-        textAlign: 'center',
-        zIndex: 2,
-        color: 'white',
-        padding: '1rem',
-        width: '3rem',
-        borderRadius:"0px 15px 15px 0px",
-        backgroundColor:"#111",
-    
-        display:"flex",
-        flexDirection:"column",
-        
-      }} spacing={2} justifyContent={{ xs: 'center', md: 'flex-start' }}>
-            <Link
-              href="https://www.facebook.com/svjetlostkomerc"
-              target="_blank"
-              rel="noopener"
-              color="inherit"
-              aria-label="Facebook"
-              sx={{ transition: 'color 0.3s', '&:hover': { color: '#4267B2' } }}
+      <div className="embla" ref={emblaRef}>
+        <div className="embla__container" style={{ height: containerHeight }}>
+          <div className="embla__slide">
+            <video
+              ref={videoRef}
+              muted
+              playsInline
+              // removed loop and autoPlay attributes so we control playback explicitly
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              poster="https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"
+              aria-label="Promotional video"
             >
-              <Facebook />
-            </Link>
-            <Link
-              href="https://www.instagram.com/svjetlostkomerc"
-              target="_blank"
-              rel="noopener"
-              color="inherit"
-              aria-label="Instagram"
-              sx={{ transition: 'color 0.3s', '&:hover': { color: '#E1306C' } }}
-            >
-              <Instagram />
-            </Link>
-          </Stack>
-  
-    {/* Text and Icons positioned on top of the carousel */}
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '50%', // Adjust as needed for positioning
-        left: '50%',
-        transform: 'translateX(-50%)',
-        textAlign: 'center',
-        zIndex: 2,
-        color: 'white',
-        padding: '1rem',
-        width: '100%',
-    
-        display:"flex",
-        flexDirection:"column",
-        
-      }}
-    >
-       
-<Typography
-  variant="h2"
-  className="fadeInDown"
-  sx={{
-    fontWeight: 'bold',
-    fontSize: { xs: '2rem', md: '4rem', lg: '4rem' },
-    color: '#f9f9f9',
-    textShadow: '2px 2px 6px rgba(0,0,0,0.7)',
-  }}
->
-  {slideTexts[selectedIndex]?.title}
-</Typography>
+              <source src="/final_landing_video_high.webm" type="video/webm" />
+            </video>
+          </div>
 
-   <Typography
-  variant="h5"
-  className="fadeInUp"
-  sx={{
-    fontSize: { xs: '1rem', md: '1.5rem', lg: '2rem' },
-    color: '#f9f9f9',
-    textShadow: '1px 1px 4px rgba(0,0,0,0.6)',
-  }}
->
-  {slideTexts[selectedIndex]?.subtitle}
-</Typography>
+          <div className="embla__slide">
+            <img
+              loading="lazy"
+              src="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
+              alt="Educational illustration with books and characters"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+
+          <div className="embla__slide">
+            <img
+              loading="lazy"
+              src="https://i.postimg.cc/j5jQ1LvG/hot-air-balloons-dotting-sky-mountain-range.jpg"
+              alt="Hot air balloons over mountains"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Social links: repositioned for better accessibility & predictable layout */}
+      <Stack
+        direction="column"
+        sx={{
+          position: 'absolute',
+          top: '30%',
+          left: 8,
+          zIndex: 2,
+          color: 'white',
+          p: 1,
+          borderRadius: '0 15px 15px 0',
+          backgroundColor: '#111',
+        }}
+        spacing={2}
+      >
+        <Link href="https://www.facebook.com/svjetlostkomerc" target="_blank" rel="noopener" color="inherit" aria-label="Facebook">
+          <Facebook />
+        </Link>
+        <Link href="https://www.instagram.com/svjetlostkomerc" target="_blank" rel="noopener" color="inherit" aria-label="Instagram">
+          <Instagram />
+        </Link>
+      </Stack>
+
+      {/* Centered overlay text */}
       <Box
         sx={{
-          display: 'flex',
-          gap: '1rem',
-          color: 'white',
-          mt: '1rem',
-          justifyContent: 'center',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 2,
+          color: '#f9f9f9',
+          width: '100%',
+          px: 2,
+          textAlign: 'center',
         }}
       >
-         <Button variant="outlined"
-  sx={{ borderRadius: "12px", textTransform: "none", flex: { xs: 1, sm: "unset" }, borderColor: "#f9f9f9", color: "#f9f9f9", fontSize: { xs: "0.8rem", sm: "1rem" }, "&:hover": { borderColor: "#f33600", color: "#f33600" } }}
-  onClick={()=>navigate("/shop")}
->
-  BOOKSTORE
-</Button>
-        
+        <Typography variant="h2" className="fadeInDown" sx={{ fontWeight: 'bold', fontSize: { xs: '2rem', md: '4rem' }, textShadow: '2px 2px 6px rgba(0,0,0,0.7)' }}>
+          {slideTexts[selectedIndex]?.title}
+        </Typography>
+
+        <Typography variant="h5" className="fadeInUp" sx={{ mt: 1, fontSize: { xs: '1rem', md: '1.5rem' }, textShadow: '1px 1px 4px rgba(0,0,0,0.6)' }}>
+          {slideTexts[selectedIndex]?.subtitle}
+        </Typography>
+
+        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 2 }}>
+          <Button
+            variant="outlined"
+            sx={{ borderRadius: 2, textTransform: 'none', borderColor: '#f9f9f9', color: '#f9f9f9' }}
+            onClick={() => navigate('/shop')}
+            aria-label="Open bookstore"
+          >
+            BOOKSTORE
+          </Button>
+        </Box>
       </Box>
-     
-      
+
+      {/* Dots */}
+      <Box sx={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 1, zIndex: 3 }}>
+        {scrollSnaps.map((_, idx) => (
+          <DotButton
+            key={idx}
+            onClick={() => onDotButtonClick(idx)}
+            className={idx === selectedIndex ? 'embla__dot embla__dot--selected' : 'embla__dot'}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
+      </Box>
     </Box>
-    <Box
-  sx={{
-    position: 'absolute',
-    bottom: '1rem',
-    left: '10%',
-    transform: 'translateX(-10%)',
-    display: 'flex',
-    gap: '0.5rem',
-    zIndex: 3,
-  }}
->
-  {scrollSnaps.map((_, index) => (
-    <DotButton
-      key={index}
-      onClick={() => onDotButtonClick(index)}
-      className={index === selectedIndex ? 'embla__dot embla__dot--selected' : 'embla__dot'}
-    />
-  ))}
-</Box>
-  </Box>
   );
 };
 

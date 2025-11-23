@@ -97,17 +97,19 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              
             }}
+           
           >
             <img
-              src="/svklogo.svg"
+              src="/logo8.svg"
               alt="logo"
                onClick={() => navigate("/home")}
               style={{
-                width: "90%",
-                height: "90%",
+                width: "13rem",
+                height: "auto",
                 objectFit: "contain",
-                filter: "drop-shadow(0px 0px 3px rgba(249,249,249,0.4))",
+              
               }}
             />
           </Box>
