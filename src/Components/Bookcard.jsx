@@ -1,144 +1,40 @@
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import CardActions from "@mui/material/CardActions";
-import Chip from "@mui/material/Chip";
-import { useTheme } from "@mui/material/styles";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import  { useState, useEffect } from "react";
-import ImportContactsIcon from "@mui/icons-material/ImportContacts";
-import ChildCareIcon from "@mui/icons-material/ChildCare";
-import ArticleIcon from "@mui/icons-material/Article";
-import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
-import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
-import InterestsIcon from "@mui/icons-material/Interests";
-import BiotechIcon from '@mui/icons-material/Biotech';
-import DrawIcon from '@mui/icons-material/Draw';
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Box,
+  Typography,
+  Button,
+  Chip,
+  IconButton,
+  Tooltip
+} from "@mui/material";
+
+import {
+  InfoOutlined as InfoOutlinedIcon,
+  ShoppingCart as ShoppingCartIcon,
+  ImportContacts as ImportContactsIcon,
+  SearchOutlined as SearchOutlinedIcon,
+  BookmarkBorder,
+  Bookmark,
+
+} from "@mui/icons-material";
+
+import { SignedIn, useUser, useClerk } from "@clerk/clerk-react";
+
+import React, { memo, useState, useEffect, useMemo, useCallback } from "react";
+
+
+import { useTheme, darken } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import { SignedIn } from '@clerk/clerk-react';
-import  { memo } from "react";
-import Tooltip from "@mui/material/Tooltip";
 import { useSnackbar } from "notistack";
 import { useWishlist } from "../Utils.js/useWishlist"; // your hook
 import useCart from "../Utils.js/useCart";
-import { darken } from "@mui/material/styles";
-import { useUser, useClerk } from "@clerk/clerk-react"; // make sure both are imported
-import { Bookmark, BookmarkBorder } from "@mui/icons-material";
 import { motion } from "framer-motion";
+import kategorije from "../Utils.js/kategorije";
 
-const kategorije = [
-  {
-    naziv: "Sve Knjige",
-    ikona: <ImportContactsIcon />,
-    boja: "#2a9d8f",
-  },
-  {
-    naziv: "Beletristika",
-    ikona: <DrawIcon />,
-    boja: "#9c5fe0",
-    podkategorije: [
-      "Roman",
-      "Ljubavni roman",
-      "Istorijski roman",
-      "Psihološki roman",
-      "Triler / Krimi",
-      "Naučna fantastika (Sci-Fi)",
-      "Fantastika / Fantasy",
-      "Domaći roman",
-      "Strani roman",
-      "Pripovijetke i novele",
-      "Drama",
-      "Poezija",
-      "Klasici",
-      "Humoristička književnost",
-    ],
-  },
-  {
-    naziv: "Literatura za djecu i mlade",
-    ikona: <ChildCareIcon />,
-    boja: "#16a3d8",
-    podkategorije: [
-      "Bajke i basne",
-      "Ilustrirane knjige",
-      "Knjige za prve čitače",
-      "Teen romani / Young Adult",
-      "Edukativne knjige za djecu",
-      "Stripovi i slikovnice",
-    ],
-  },
-  {
-    naziv: "Naučna i stručna literatura",
-    ikona: <BiotechIcon />,
-    boja: "#60dce8",
-    podkategorije: [
-      "Pravo",
-      "Ekonomija i biznis",
-      "Psihologija",
-      "Medicina",
-      "Tehnika i IT",
-      "Prirodne nauke",
-      "Društvene nauke",
-      "Obrazovanje i pedagogija",
-    ],
-  },
-  {
-    naziv: "Publicistika",
-    ikona: <ArticleIcon />,
-    boja: "#8ad346",
-    podkategorije: [
-      "Biografije i autobiografije",
-      "Eseji",
-      "Putopisi",
-      "Istorija",
-      "Filozofija",
-      "Religija i duhovnost",
-      "Politika i društvo",
-    ],
-  },
-  {
-    naziv: "Samopomoć i razvoj",
-    ikona: <SelfImprovementIcon   />,
-    boja: "#ffb703",
-    podkategorije: [
-      "Lični razvoj",
-      "Motivacija i uspjeh",
-      "Zdravlje i wellness",
-      "Mindfulness i meditacija",
-      "Ljubavni i partnerski odnosi",
-      "Roditeljstvo i porodica",
-    ],
-  },
-  {
-    naziv: "Kuharice i gastronomija",
-    ikona: <RestaurantMenuIcon />,
-    boja: "#fb8500",
-    podkategorije: [
-      "Nacionalna kuhinja",
-      "Zdrava ishrana",
-      "Vegetarijanska / veganska kuhinja",
-      "Slatkiši i peciva",
-    ],
-  },
-  {
-    naziv: "Hobiji i slobodno vrijeme",
-    ikona: <InterestsIcon />,
-    boja: "#d64e12",
-    podkategorije: [
-      "Uradi sam (DIY)",
-      "Umjetnost i dizajn",
-      "Moda i stil",
-      "Baštovanstvo",
-      "Sport i fitness",
-      "Putovanja i vodiči",
-    ],
-  },
-];
 
 
 const BookCard = ({ book, setDrawerData, toggleDrawer,  updateCartItem }) => {
@@ -158,9 +54,9 @@ const clerk = useClerk();
   
 
   // sync with wishlist
-  useEffect(() => {
-    setInWishlist(wishlist.some((item) => item._id === book._id));
-  }, [wishlist, book]);
+ useEffect(() => {
+  setInWishlist(wishlist.some(item => item._id === book._id));
+}, [wishlist, book._id]);
 
   const handleWishlistClick = (e) => {
     e.stopPropagation();
@@ -180,7 +76,19 @@ const clerk = useClerk();
     }
   };
 
+  const categoryMatch = useMemo(() => {
+  return kategorije.find(
+    (k) =>
+      k.naziv === book.mainCategory ||
+      k.podkategorije?.includes(book.subCategory)
+  );
+}, [book.mainCategory, book.subCategory]);
 
+const openDetails = useCallback(() => {
+  navigate(`/${book._id}${window.location.search}`, {
+    state: { book, category: book.subCategory },
+  });
+}, [book]);
 
 
 const hasDiscount = book.discount &&
@@ -190,11 +98,6 @@ const hasDiscount = book.discount &&
 const finalPrice = hasDiscount
   ? (book.price * (100 - book.discount.amount)) / 100
   : book.price;
-
-
-
-
-
 
 // Then when rendering cart, compute price:
 const formatCategoryName = (name) => {
@@ -207,9 +110,11 @@ const formatCategoryName = (name) => {
 };
 
 
-  const mainCategory = kategorije.find(
+ const mainCategory = useMemo(() => {
+  return kategorije.find(
     (k) => k.naziv.toLowerCase() === book.mainCategory?.toLowerCase()
   );
+}, [book.mainCategory]);
 
 
   return (
@@ -337,7 +242,7 @@ willChange: "background-color, transform, box-shadow",
 
   {/* Search / Details Icon - always visible */}
   <IconButton
-    onClick={() => navigate(`/${book._id}${window.location.search}`, { state: { book, category: book.subCategory } })}
+   onClick={openDetails}
     sx={{ display:{md:"none"},
       bgcolor: "#262626",
       "&:hover": { bgcolor: "rgba(255,255,255,1)" },
@@ -445,22 +350,8 @@ willChange: "background-color, transform, box-shadow",
     px: 1,
     py: 0.2,
     borderRadius: "16px",
-    bgcolor: (() => {
-      const kat = kategorije.find(
-        (k) =>
-          k.naziv === book.mainCategory ||
-          k.podkategorije?.includes(book.subCategory)
-      );
-      return kat?.boja + "33" || "#e0e0e0"; // subtle transparent background
-    })(),
-    color: (() => {
-      const kat = kategorije.find(
-        (k) =>
-          k.naziv === book.mainCategory ||
-          k.podkategorije?.includes(book.subCategory)
-      );
-      return kat?.boja || "#313131";
-    })(),
+    bgcolor: categoryMatch?.boja,
+    color: categoryMatch?.boja,
     fontSize: "0.65rem",
     fontWeight: 600,
     whiteSpace: "nowrap",

@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Chip, Typography, Divider } from "@mui/material";
 import { alpha } from "@mui/material";
 
