@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { useWishlist } from "../../Utils.js/useWishlist"; // your hook
 import useCart from "../../Utils.js/useCart";
-import { motion } from "framer-motion";
 import kategorije from "../../Utils.js/kategorije";
 import { cardStyle } from "./cardstyle";
 import CardImage from "../Bookcard/Image";
@@ -126,10 +125,7 @@ const discountBadgeSx = useMemo(
 );
 
 const discountBadgeTop = isNew ? 36 : 8;
-
-
   return (
-    
       <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
         {/* Badges */}
        {isNew && (
