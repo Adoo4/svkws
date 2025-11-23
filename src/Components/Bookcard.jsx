@@ -88,7 +88,7 @@ const openDetails = useCallback(() => {
   navigate(`/${book._id}${window.location.search}`, {
     state: { book, category: book.subCategory },
   });
-}, [book]);
+}, [book, navigate]);
 
 
 const hasDiscount = book.discount &&
