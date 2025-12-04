@@ -179,6 +179,8 @@ const ProductGallery = ({
 </Box>
 
 
+
+
       {/* Pagination */}
       {!loading && totalPages > 1 && (
         <Box

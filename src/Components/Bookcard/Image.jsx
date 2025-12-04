@@ -16,7 +16,7 @@
       component="img"
       image={book?.coverImage}
       alt={book.title}
-      loading="eager"
+      loading="lazy"
       sx={{
         height: { xs: 250, sm: 200, md: 270 },
         objectFit: "contain",

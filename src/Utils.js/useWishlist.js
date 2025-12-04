@@ -31,7 +31,8 @@ export const useWishlist = () => {
       );
       return res.data.items;
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity,    // never automatically refetch
+  cacheTime: Infinity,       // don’t garbage collect the wishlist
     enabled: isLoaded && isSignedIn,
   });
 

@@ -15,7 +15,7 @@ const Home = () => {
   })
   return(
     <Box sx={{ minHeight:"100lvh", display:"flex", flexDirection:"column", gap:"0rem", background:"black"}}>
-    <Carousel/>
+   <Carousel/>
     <Iconlist/>
 
     

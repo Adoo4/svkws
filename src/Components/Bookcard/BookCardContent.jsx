@@ -54,56 +54,63 @@ const BookCardContent = ({
         }}
       >
         {/* XS Compact Version */}
-        <Box
-          sx={{
-            display: { xs: "flex", md: "none" },
-            alignItems: "center",
-            width: "100%",
-            gap: 0.2,
-            px: 1,
-            py: 0.2,
-            borderRadius: "16px",
-            bgcolor: categoryMatch?.boja,
-            color: categoryMatch?.boja,
-            fontSize: "0.65rem",
-            fontWeight: 600,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {/* Icon */}
-          {(() => {
-            const kat = kategorije.find(
-              (k) =>
-                k.naziv === book.mainCategory ||
-                k.podkategorije?.includes(book.subCategory)
-            );
-            return kat?.ikona ? (
-              <Box sx={{ display: "flex", alignItems: "center", fontSize: "1rem" }}>
-                {kat.ikona}
-              </Box>
-            ) : (
-              <ImportContactsIcon sx={{ fontSize: "1rem" }} />
-            );
-          })()}
+    <Box
+  sx={{
+    display: { xs: "flex", md: "none" },
+    alignItems: "center",
+    width: "fit-content",
+    maxWidth: "100%",
+    gap: 0.6,
+    px: 1,
+    py: 0.35,
+    borderRadius: "999px",
+    bgcolor: `${categoryMatch?.boja}20`, // ✨ soft translucent background
+    backdropFilter: "blur(4px)",
+    border: `1px solid ${categoryMatch?.boja}50`, // subtle outline
+    color: categoryMatch?.boja,
+    boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+    overflow: "hidden",
+  }}
+>
+  {/* Icon */}
+  {(() => {
+    const kat = kategorije.find(
+      (k) =>
+        k.naziv === book.mainCategory ||
+        k.podkategorije?.includes(book.subCategory)
+    );
+    return kat?.ikona ? (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          fontSize: "1rem",
+          color: categoryMatch?.boja,
+        }}
+      >
+        {kat.ikona}
+      </Box>
+    ) : (
+      <ImportContactsIcon sx={{ fontSize: "1rem" }} />
+    );
+  })()}
 
-          {/* Subcategory text */}
-          <Typography
-            component="span"
-            sx={{
-              ml: 0.5,
-              color: inWishlist ? "#f1f1f1" : "#262626",
-              fontWeight: 600,
-              lineHeight: 1.2,
-              fontSize: "0.65rem",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {book.subCategory}
-          </Typography>
-        </Box>
+  {/* Subcategory text */}
+  <Typography
+    component="span"
+    sx={{
+      fontSize: "0.70rem",
+      fontWeight: 600,
+      color: "#262626",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+    }}
+  >
+    {book.subCategory}
+  </Typography>
+</Box>
+
 
         {/* SM+ Full Category Display */}
         {mainCategory && (

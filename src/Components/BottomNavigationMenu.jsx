@@ -56,19 +56,23 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
     <Box sx={{ pb: 3, zIndex: "99", display: { xs: "flex", lg: "none" } }} ref={ref}>
       <CssBaseline />
 
-      <Paper
-        sx={{
-          position: "fixed",
-          bottom: hidden ? "-60px" : 0, // slide off-screen when hidden
-          left: 0,
-          right: 0,
-          height: 50,
-          transition: "bottom 0.4s ease", // smooth hide/show
-        }}
-        elevation={3}
-      >
+    <Paper
+  sx={{
+    position: "fixed",
+    bottom: hidden ? "-60px" : 0,
+    left: 0,
+    right: 0,
+    height: 50,
+    transition: "bottom 0.4s ease",
+    background: "transparent",     // 🔥 let glass effect show through
+    boxShadow: "none",             // remove default shadow
+    backdropFilter: "none",        // Paper should not blur (BottomNav will)
+  }}
+  elevation={0}
+>
+
           
-       <BottomNavigation
+      <BottomNavigation
   showLabels
   value={value}
   onChange={(event, newValue) => {
@@ -78,9 +82,13 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
     display: "flex",
     alignItems: "center",
     justifyContent: "space-around",
-    background: "#1e1e1e",
+    background: "rgba(30, 30, 30, 0.55)",  // 🔥 glass effect base
     boxShadow: "0 -2px 8px rgba(0,0,0,0.4)",
-    borderTop: "1px solid rgba(255,255,255,0.1)",
+    backdropFilter: "blur(12px)",          // stronger glass
+    WebkitBackdropFilter: "blur(12px)",
+    borderTop: "1px solid rgba(255,255,255,0.08)", // subtle glass border
+    transition: "background 0.3s ease",
+
     "& .MuiBottomNavigationAction-root": {
       color: "#bdbdbd",
       minWidth: "60px",
@@ -91,19 +99,23 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
         transform: "scale(1.05)",
       },
     },
+
     "& .Mui-selected": {
       color: "#ffffff",
     },
+
     "& .MuiBottomNavigationAction-label": {
       fontSize: "0.7rem",
       fontWeight: 500,
       letterSpacing: "0.5px",
     },
+
     "& .MuiSvgIcon-root": {
       fontSize: "1.3rem",
     },
   }}
 >
+
   <BottomNavigationAction
     label="FILTRIRAJ"
     onClick={(event) => toggleDrawer2(!leftDrawerOpen)(event)}

@@ -65,15 +65,25 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
 
   return (
     <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 999 }}>
-      <AppBar
-        position="fixed"
-        elevation={0} // 🔥 disables default shadow
-        sx={{
-          height: { xs: "3rem", sm: "4rem" },
-          backgroundColor: backgroundColor, // dark base background
-          transition: "background-color 0.3s ease",
-        }}
-      >
+     <AppBar
+  position="fixed"
+  elevation={0}
+  sx={{
+    height: { xs: "3rem", sm: "4rem" },
+    background: scrolled || isShopOrCheckout
+  ? "rgba(38, 38, 38, 0.6)"
+  : "transparent",
+
+backdropFilter: scrolled || isShopOrCheckout
+  ? "blur(10px)"
+  : "none",
+
+WebkitBackdropFilter: scrolled || isShopOrCheckout
+  ? "blur(10px)"
+  : "none", 
+    transition: "background 0.3s ease",
+  }}
+>
         <Toolbar
           disableGutters
           sx={{
@@ -90,29 +100,29 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
 
           {/* Logo */}
           <Box
-            sx={{
-              height: "100%",
-              width: { xs: "8rem", sm: "12vw" },
-              minWidth: "8rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              
-            }}
-           
-          >
-            <img
-              src="/logo8.svg"
-              alt="logo"
-               onClick={() => navigate("/home")}
-              style={{
-                width: "13rem",
-                height: "auto",
-                objectFit: "contain",
-              
-              }}
-            />
-          </Box>
+  sx={{
+    height: "100%",
+    width: { xs: "8rem", md: "12vw" },
+    minWidth: "8rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }}
+>
+  <Box
+    component="img"
+    src="\logo13.png"
+    alt="logo"
+    onClick={() => navigate("/home")}
+    sx={{
+      width: { xs: "10rem", md: "15rem" },
+      cursor: "pointer",
+      height: "auto",
+      objectFit: "contain",
+    }}
+  />
+</Box>
+
 
           {/* Nav links */}
           <Box
