@@ -60,8 +60,7 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
     location.pathname === "/Sigurnost" ||
     location.pathname === "/Politikekolačića" ||
     location.pathname === "/success";
-  const backgroundColor =
-    scrolled || isShopOrCheckout ? "#262626" : "transparent";
+
 
   return (
     <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 999 }}>
