@@ -41,7 +41,7 @@ export default function CheckoutPage() {
 const deliveryPrices = useMemo(
   () => ({
     bhposta: 4.5,
-    euroexpress: 10,
+    brzapošta: 10,
     storepickup: 0,
   }),
   [] // empty deps = only created once

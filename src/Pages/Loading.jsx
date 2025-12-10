@@ -87,8 +87,8 @@ const location = useLocation();
       >
         <Box
           component={motion.img}
-          src="/svklogo.svg"
-          alt="SVjetlostkomerc Logo"
+          src="/logofinal.svg"
+          alt="Bookstore Logo"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 1.8, ease: "easeIn" }}

@@ -202,8 +202,8 @@ export default function CheckoutStepper({
                     price: "4,50 KM",
                   },
                   {
-                    id: "euroexpress",
-                    label: "Euro Express",
+                    id: "brzapošta",
+                    label: "Brza pošta",
                     description: "Brza dostava širom BiH",
                     price: "10,00 KM",
                   },

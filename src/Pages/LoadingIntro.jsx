@@ -41,8 +41,8 @@ export default function LoadingScreen({ onFinish }  ) {
       >
          <Box
       component={motion.img}
-      src="/svklogo.svg"
-      alt="SVjetlostkomerc Logo"
+      src="/logofinal.svg"
+      alt="Bookstore Logo"
       initial={{ opacity: 0, y: -10 }} // start hidden & slightly up
       animate={{ opacity: 1, y: 0 }}   // fade in & slide down
       transition={{ delay: 1.5, duration: 1.8, ease: "easeIn" }} // starts 1s later

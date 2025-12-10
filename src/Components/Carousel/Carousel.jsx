@@ -140,7 +140,7 @@ const Home = () => {
         sx={{
           position: 'absolute',
           top: '30%',
-          left: 8,
+          left: 0,
           zIndex: 2,
           color: 'white',
           p: 1,
@@ -149,10 +149,10 @@ const Home = () => {
         }}
         spacing={2}
       >
-        <Link href="https://www.facebook.com/svjetlostkomerc" target="_blank" rel="noopener" color="inherit" aria-label="Facebook">
+        <Link href="https://www.facebook.com/knjizarasvjetlost" target="_blank" rel="noopener" color="inherit" aria-label="Facebook">
           <Facebook />
         </Link>
-        <Link href="https://www.instagram.com/svjetlostkomerc" target="_blank" rel="noopener" color="inherit" aria-label="Instagram">
+        <Link href="https://www.instagram.com/knjizaresvjetlost/" target="_blank" rel="noopener" color="inherit" aria-label="Instagram">
           <Instagram />
         </Link>
       </Stack>

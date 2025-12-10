@@ -20,11 +20,12 @@ const [hover, setHover] = useState(false);
   return (
    <>
   {/* Top Navigation Bar (mobile only) */}
- <Toolbar sx={{ display: { xs: "flex", md: "none" } }}>
+ <Toolbar sx={{ display: { xs: "flex", md: "none" }, padding: 0, justifyContent: "space-between" }}>
   <Box
     sx={{ cursor: "pointer" }}
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
+   
   >
     <Hamburger
       toggled={isOpen}

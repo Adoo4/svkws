@@ -49,7 +49,7 @@ function App() {
   const [drawerOpen3, setDrawerOpen3] = useState(false);
 
   const [loading, setLoading] = useState(true);
-  const imageUrl = "/final_landing_video_high.webm"; 
+  /*const imageUrl = "/final_landing_video_high.webm"; 
 
 
 
@@ -67,7 +67,34 @@ function App() {
       setTimeout(() => setLoading(false), 6000); // optional delay
     };
     img.onerror = () => setLoading(false);
-  }, []);
+  }, []); */
+
+  const videoUrl = "/final_landing_video_high.webm";
+
+useEffect(() => {
+  // Skip loading if user already visited
+  if (sessionStorage.getItem("hasVisitedBefore")) {
+    setLoading(false);
+    return;
+  }
+
+  const video = document.createElement("video");
+  video.src = videoUrl;
+  video.preload = "auto";
+
+  video.onloadeddata = () => {
+    sessionStorage.setItem("hasVisitedBefore", "true");
+
+    // Optional delay to show loader animation
+    setTimeout(() => setLoading(false), 6000);
+  };
+
+  video.onerror = () => setLoading(false);
+
+  // Start preloading
+  video.load();
+}, []);
+
 
   return (
     <SnackbarProvider

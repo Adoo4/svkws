@@ -39,7 +39,7 @@ const paymentName = paymentNames[paymentOption] || "Nije odabrano";
 
   const deliveryNames = {
   bhposta: "BH pošta",
-  euroexpress: "Euro Express",
+  brzapošta: "Brza pošta",
   storepickup: "Preuzimanje u trgovini",
 };
 

@@ -110,11 +110,11 @@ WebkitBackdropFilter: scrolled || isShopOrCheckout
 >
   <Box
     component="img"
-    src="\logo13.png"
+    src="\logofinal.svg"
     alt="logo"
     onClick={() => navigate("/home")}
     sx={{
-      width: { xs: "10rem", md: "15rem" },
+      width: { xs: "10rem", md: "12rem" },
       cursor: "pointer",
       height: "auto",
       objectFit: "contain",

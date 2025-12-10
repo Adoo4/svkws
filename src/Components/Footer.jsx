@@ -69,11 +69,10 @@ const SimpleFooter = () => {
   >
        <Box
       component="img"
-      src="/logotip_svjetlostkomerc.gif"
-      alt="Svjetlostkomerc Logo"
+      src="/logofinal.svg"
+      alt="Svjetlostkomerc Bookstore Logo"
       sx={{
-        filter: "brightness(0) invert(1)",
-        opacity: 0.7,
+        
         width: { xs: "200px", md: "320px" },
         maxWidth: "100%",
       }}
@@ -147,7 +146,7 @@ const SimpleFooter = () => {
       </Typography>
       <Stack direction="row" spacing={2}>
         <Link
-          href="https://www.facebook.com/knjizarasvjetlost/?locale=hr_HR"
+          href="https://www.facebook.com/knjizarasvjetlost"
           target="_blank"
           rel="noopener"
           aria-label="Facebook"
@@ -161,7 +160,7 @@ const SimpleFooter = () => {
           <Facebook fontSize="medium" />
         </Link>
         <Link
-          href="https://www.instagram.com/svjetlostkomerc"
+          href="https://www.instagram.com/knjizaresvjetlost/"
           target="_blank"
           rel="noopener"
           aria-label="Instagram"
