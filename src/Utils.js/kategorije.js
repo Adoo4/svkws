@@ -45,7 +45,10 @@ const kategorije = ([
       "Knjige za prve čitače",
       "Teen romani / Young Adult",
       "Edukativne knjige za djecu",
-      "Stripovi i slikovnice",
+      "Stripovi",
+      "Lektire", 
+      "Enciklopedije i priručnici",
+      "Slikovnice"
     ],
   },
   {
@@ -73,6 +76,7 @@ const kategorije = ([
       "Putopisi",
       "Historija",
       "Filozofija",
+      "Astrofizika",
       "Religija i duhovnost",
       "Politika i društvo",
     ],
