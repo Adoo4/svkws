@@ -1,6 +1,6 @@
 export const cardStyle = (inWishlist, theme) => ({
   minWidth: { xs: "166px", sm: "210px" },
-  maxWidth: { xs: "29vw", sm: "220px", md: "230px" },
+  maxWidth: { xs: "29vw", sm: "220px", md: "260px" },
   flexGrow: 1,
   borderRadius: 4,
   cursor: "pointer",

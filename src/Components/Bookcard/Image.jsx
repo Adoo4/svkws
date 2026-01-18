@@ -18,7 +18,7 @@
       alt={book.title}
       loading="lazy"
       sx={{
-        height: { xs: 250, sm: 200, md: 270 },
+        height: { xs: 250, sm: 200, md: 290 },
         objectFit: "contain",
         width: "100%",
         aspectRatio: "3 / 4",

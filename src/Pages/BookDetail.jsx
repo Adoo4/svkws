@@ -1,5 +1,4 @@
-import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -13,53 +12,72 @@ import {
   Grid,
   Button,
   Skeleton,
+  Tooltip,
 } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import LanguageIcon from "@mui/icons-material/Language";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import {
+  FavoriteBorder as FavoriteBorderIcon,
+  ShoppingCart as ShoppingCartIcon,
+  MenuBook as MenuBookIcon,
+  Language as LanguageIcon,
+  CalendarToday as CalendarTodayIcon,
+  PeopleAlt as PeopleAltIcon,
+  LocalLibrary as LocalLibraryIcon,
+  ConfirmationNumber as ConfirmationNumberIcon,
+  
+} from "@mui/icons-material";
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
+
+import AspectRatioIcon from "@mui/icons-material/AspectRatio"; // for Dimensions
 import RelatedBooks from "../Components/RelatedBooks";
-import { round } from "../Utils.js/round";
-import { useUser } from "@clerk/clerk-react";
-import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
-import Tooltip from "@mui/material/Tooltip";
-import { useSnackbar } from "notistack";
-import { useWishlist } from "../Utils.js/useWishlist";
 import ShareButton from "../Components/ShareButton";
-import { useClerk } from "@clerk/clerk-react";
+import { useSnackbar } from "notistack";
+import { useUser, useClerk } from "@clerk/clerk-react";
+import { useWishlist } from "../Utils.js/useWishlist";
+import useCart from "../Utils.js/useCart";
+
 
 export default function BookDetail({ addToCart }) {
-  const { id } = useParams(); // book id from route
+  const { id } = useParams();
+  const location = useLocation();
+  const { book: initialBook } = location.state || {};
+  const [book, setBook] = useState(initialBook);
+  const [loading, setLoading] = useState(!initialBook);
+const { cart, addToCart: addToCartFromHook } = useCart();
+  const { isSignedIn } = useUser();
+  const clerk = useClerk();
+  const { enqueueSnackbar } = useSnackbar();
+
   const {
     wishlist,
     addToWishlist,
     removeFromWishlist,
     isLoading: wishlistLoading,
   } = useWishlist();
-  const location = useLocation();
-  const { book: initialBook } = location.state || {};
-  const [book, setBook] = useState(initialBook);
-  const [loading, setLoading] = useState(true);
-  const { isSignedIn } = useUser();
-  const { enqueueSnackbar } = useSnackbar();
-  const clerk = useClerk();
-  /* eslint-disable react-hooks/exhaustive-deps */
+const handleAddToCart = () => {
+  const cartItem = cart.items.find((i) => i.book._id === book._id);
+  const cartQuantity = cartItem?.quantity || 0;
 
-  /* eslint-enable react-hooks/exhaustive-deps */
+  if (cartQuantity + 1 > book.quantity) {
+    enqueueSnackbar(`Ne možete dodati više od ${book.quantity} jedinica u korpu`, { variant: "warning" });
+    return;
+  }
+
+  addToCartFromHook(book);
+  enqueueSnackbar(`Dodano u korpu: ${book.title}`, { variant: "success" });
+};
+
+
   useEffect(() => {
-    setBook(null); // reset state
-    window.scrollTo(0, 0); // scroll to top
-    axios
-      .get(`https://backendsvkwbshp.onrender.com/api/books/${id}`)
-      .then((res) => {
-        setBook(res.data);
-        setLoading(false);
-      })
-      .catch((err) => console.error("Book fetch error:", err));
-  }, [id]);
+  if (!initialBook) {
+    setLoading(true);
+    axios.get(`https://backendsvkwbshp.onrender.com/api/books/${id}`)
+      .then(res => setBook(res.data))
+      .finally(() => setLoading(false));
+  }
+}, [id, initialBook]); // ✅ correct dependencies
+
+
+  const finalPrice = book?.discountAmount > 0 ? book.discountedPrice : book.priceWithVAT || book.price;
 
   return (
     <Box
@@ -68,11 +86,9 @@ export default function BookDetail({ addToCart }) {
         minHeight: "100vh",
         background: "#313131",
         p: { xs: 2, md: 4 },
-        position: "relative"
       }}
     >
       {loading ? (
-        // Skeleton while loading
         <Card
           sx={{
             maxWidth: 1100,
@@ -85,25 +101,11 @@ export default function BookDetail({ addToCart }) {
             bgcolor: "#313131",
           }}
         >
-          {/* Cover Skeleton */}
-          <Skeleton
-            variant="rectangular"
-            height={500}
-            sx={{ width: { xs: "100%", md: 350 } }}
-          />
-
+          <Skeleton variant="rectangular" height={500} sx={{ width: { xs: "100%", md: 350 } }} />
           <CardContent sx={{ flex: 1, p: { xs: 2, md: 4 } }}>
-            {/* Title & Author */}
             <Skeleton variant="text" sx={{ width: "60%", height: 40 }} />
             <Skeleton variant="text" sx={{ width: "40%", height: 30 }} />
-
-            {/* Description */}
-            <Skeleton
-              variant="rectangular"
-              sx={{ width: "100%", height: 200, mt: 2 }}
-            />
-
-            {/* Info Grid */}
+            <Skeleton variant="rectangular" sx={{ width: "100%", height: 200, mt: 2 }} />
             <Grid container spacing={2} sx={{ mt: 2 }}>
               {Array.from({ length: 6 }).map((_, i) => (
                 <Grid item xs={6} md={4} key={i}>
@@ -111,20 +113,12 @@ export default function BookDetail({ addToCart }) {
                 </Grid>
               ))}
             </Grid>
-
-            {/* Add to Cart / Wishlist Skeleton */}
-            <Skeleton
-              variant="rectangular"
-              sx={{ width: "100%", height: 50, mt: 2 }}
-            />
+            <Skeleton variant="rectangular" sx={{ width: "100%", height: 50, mt: 2 }} />
           </CardContent>
         </Card>
       ) : (
-        <>
-
-        
-          {/* Real Book Content */}
-          {book && (
+        book && (
+          <>
             <Card
               sx={{
                 maxWidth: 1100,
@@ -139,11 +133,11 @@ export default function BookDetail({ addToCart }) {
               }}
               elevation={0}
             >
-              
+              {/* Cover */}
               <CardMedia
                 component="img"
-                image={book?.coverImage}
-                alt={book?.title}
+                image={book.coverImage || "/fallback-cover.jpg"}
+                alt={book.title}
                 sx={{
                   width: { xs: "100%", md: 350 },
                   height: { xs: 500, md: "auto" },
@@ -152,158 +146,90 @@ export default function BookDetail({ addToCart }) {
                   borderBottom: { xs: "1px solid #444", md: "none" },
                 }}
               />
+
+              {/* Book Content */}
               <CardContent sx={{ flex: 1, p: { xs: 2, md: 4 } }}>
-                {/* Title & Chip */}
-                
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gap={2}
-                  mb={2}
-                  flexWrap="wrap"
-                >
-                  
-                  <Typography
-                    variant="h5"
-                    fontWeight="bold"
-                    sx={{
-                      fontSize: { xs: "1.3rem", md: "2rem" },
-                      color: "#f9f9f9",
-                    }}
-                  >
+                {/* Title & Chips */}
+                <Box display="flex" alignItems="center" gap={2} flexWrap="wrap" mb={2}>
+                  <Typography variant="h5" fontWeight="bold" sx={{ fontSize: { xs: "1.3rem", md: "2rem" } }}>
                     {book.title}
                   </Typography>
-                  {book.isNew && (
+                  {book.isNew && <Chip label="Novo" sx={{ bgcolor: "green", color: "#fff", fontWeight: "bold" }} />}
+                  {book.discountAmount > 0 && (
                     <Chip
-                      label="Novo"
-                      sx={{
-                        bgcolor: "green",
-                        color: "#fff",
-                        fontWeight: "bold",
-                      }}
+                      label={`${book.discountAmount}% Off`}
+                      sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold" }}
                     />
                   )}
-
-                  
-                  
                   <ShareButton />
                 </Box>
 
                 {/* Author */}
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontSize: { xs: "0.9rem", md: "1.0rem" },
-                    color: "#ccc",
-                  }}
-                >
+                <Typography variant="subtitle1" sx={{ fontSize: { xs: "0.9rem", md: "1rem" }, color: "#ccc" }}>
                   Autor:{" "}
                   {book.author
                     ?.split(" ")
-                    .map((word) =>
-                      word
-                        ? word.charAt(0).toUpperCase() +
-                          word.slice(1).toLowerCase()
-                        : ""
-                    )
+                    .map((w) => (w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : ""))
                     .join(" ")}
                 </Typography>
 
                 {/* Description */}
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 3,
-                    mt: 1,
-                    fontSize: { xs: "0.75rem", md: "0.85rem" },
-                    color: "#ddd",
-                  }}
-                >
+                <Typography variant="body2" sx={{ mt: 1, mb: 3, fontSize: { xs: "0.75rem", md: "0.85rem" }, color: "#ddd" }}>
                   {book.description}
                 </Typography>
-                
 
                 <Divider sx={{ my: 2, borderColor: "#444" }} />
 
-                {/* Info Grid */}
-                <Grid container spacing={3} sx={{ mb: 3 }}>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <MenuBookIcon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">
-                      Format: {book.format}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <LanguageIcon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">
-                      Jezik: {book.language}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <CalendarTodayIcon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">
-                      Godina izdanja: {book.publicationYear}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <PeopleAltIcon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">
-                      Izdavač: {book.publisher}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <LocalLibraryIcon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">
-                      Stranica: {book.pages}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={4}
-                    display="flex"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <ConfirmationNumberIcon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">ISBN: {book.isbn}</Typography>
-                  </Grid>
-                </Grid>
+              {/* Info Grid */}
+<Grid container spacing={2} sx={{ mb: 3 }}>
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+    <MenuBookIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Format: {book.format}</Typography>
+  </Grid>
+
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+    <LanguageIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Jezik: {book.language}</Typography>
+  </Grid>
+
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+    <CalendarTodayIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Godina izdanja: {book.publicationYear}</Typography>
+  </Grid>
+
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+    <PeopleAltIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Izdavač: {book.publisher}</Typography>
+  </Grid>
+
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+    <LocalLibraryIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">Stranica: {book.pages}</Typography>
+  </Grid>
+
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+    <ConfirmationNumberIcon sx={{ color: "#f9f9f9" }} />
+    <Typography variant="body2">ISBN: {book.isbn}</Typography>
+  </Grid>
+
+  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+    <Typography sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "#f9f9f9" }} variant="body2">
+      <Typography variant="body2">🔖</Typography> TR: {book.TR}
+    </Typography>
+  </Grid>
+
+  {/* Barcode */}
+<Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+  <ConfirmationNumberIcon sx={{ color: "#f9f9f9" }} />
+  <Typography variant="body2">Barcode: {book.barcode}</Typography>
+</Grid>
+
+{/* Dimensions */}
+<Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
+  <AspectRatioIcon sx={{ color: "#f9f9f9" }} />
+  <Typography variant="body2">Dimensions: {book.dimensions}</Typography>
+</Grid>
+</Grid>
 
                 {/* Price & Actions */}
                 <Box
@@ -312,33 +238,15 @@ export default function BookDetail({ addToCart }) {
                   alignItems={{ xs: "flex-start", sm: "center" }}
                   justifyContent="space-between"
                   gap={2}
-                  mt={4}
+                  mt={2}
                 >
                   <Box display="flex" gap={1} alignItems="center">
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                        color: "#f33600",
-                        fontSize: { xs: "1.2rem", md: "1.5rem" },
-                      }}
-                    >
-                      {book.discount?.amount > 0
-                        ? round(
-                            book.price * (1 - book.discount.amount / 100)
-                          ).toFixed(2)
-                        : book.price.toFixed(2)}{" "}
-                      KM
+                    <Typography sx={{ fontWeight: "bold", color: "#f33600", fontSize: { xs: "1.2rem", md: "1.5rem" } }}>
+                      {finalPrice.toFixed(2)} KM
                     </Typography>
-
-                    {book.discount?.amount > 0 && (
-                      <Typography
-                        sx={{
-                          textDecoration: "line-through",
-                          color: "#999",
-                          fontSize: { xs: "0.9rem", md: "1rem" },
-                        }}
-                      >
-                        {book.price.toFixed(2)} KM
+                    {book.discountAmount > 0 && (
+                      <Typography sx={{ textDecoration: "line-through", color: "#999", fontSize: { xs: "0.9rem", md: "1rem" } }}>
+                        {book.priceWithVAT?.toFixed(2)} KM
                       </Typography>
                     )}
                   </Box>
@@ -357,101 +265,81 @@ export default function BookDetail({ addToCart }) {
                         "&:hover": { borderColor: "#f33600", color: "#f33600" },
                       }}
                       fullWidth
-                      disabled={!isSignedIn || wishlistLoading} // ✅ use it here
+                      disabled={!isSignedIn || wishlistLoading}
                       onClick={() => {
                         if (!book) return;
-
-                        const alreadyInWishlist = wishlist.some(
-                          (b) => b._id === book._id
-                        );
-
+                        const alreadyInWishlist = wishlist.some((b) => b._id === book._id);
                         if (alreadyInWishlist) {
                           removeFromWishlist(book._id);
-                          enqueueSnackbar(
-                            `${book.title} uklonjeno iz liste želja`,
-                            { variant: "info" }
-                          );
+                          enqueueSnackbar(`${book.title} uklonjeno iz liste želja`, { variant: "info" });
                         } else {
                           addToWishlist(book);
-                          enqueueSnackbar(
-                            `${book.title} dodano u listu želja`,
-                            { variant: "success" }
-                          );
+                          enqueueSnackbar(`${book.title} dodano u listu želja`, { variant: "success" });
                         }
                       }}
                     >
-                      {wishlist.some((b) => b._id === book._id)
-                        ? "Ukloni iz liste želja"
-                        : "Dodaj u listu želja"}
+                      {wishlist.some((b) => b._id === book._id) ? "Ukloni iz liste želja" : "Dodaj u listu želja"}
                     </Button>
 
-                    {/* Cart button */}
-                    <Tooltip
-                      title={
-                        !isSignedIn
-                          ? "Morate biti prijavljeni da biste dodavali knjige u korpu"
-                          : ""
-                      }
-                      arrow
-                    >
-                      <span>
-                        <Button
-                          variant="contained"
-                          startIcon={<ShoppingCartIcon />}
-                          sx={{
-                            borderRadius: "12px",
-                            textTransform: "none",
-                            flex: { xs: 1, sm: "unset" },
-                            fontSize: { xs: "0.60rem", sm: "0.7rem" },
-                            bgcolor: "#f33600",
-                            "&:hover": { bgcolor: "#d62d00" },
-                          }}
-                          fullWidth
-                          onClick={() => {
-                            if (!isSignedIn) {
-                              clerk.openSignIn(); // 👈 trigger Clerk modal/redirect
-                            } else {
-                              addToCart(book);
-                              enqueueSnackbar(`Dodano u korpu: ${book.title}`, {
-                                variant: "success",
-                              });
-                            }
-                          }}
-                        >
-                          Dodaj u korpu
-                        </Button>
-                      </span>
-                    </Tooltip>
+               <Tooltip
+  title={
+    !isSignedIn
+      ? "Morate biti prijavljeni da biste dodavali knjige u korpu"
+      : book.quantity <= 0
+      ? "Nema dovoljno na stanju"
+      : ""
+  }
+  arrow
+>
+  <span>
+    <Button
+      variant="contained"
+      startIcon={
+        book.quantity > 0 ? (
+          <ShoppingCartIcon />
+        ) : (
+          <NotInterestedIcon />
+        )
+      }
+      sx={{
+        borderRadius: "12px",
+        textTransform: "none",
+        flex: { xs: 1, sm: "unset" },
+        fontSize: { xs: "0.60rem", sm: "0.7rem" },
+        bgcolor: book.quantity > 0 ? "#f33600" : "#888",
+        "&:hover": {
+          bgcolor: book.quantity > 0 ? "#d62d00" : "#888",
+        },
+      }}
+      fullWidth
+      disabled={!isSignedIn || book.quantity <= 0}
+     onClick={handleAddToCart}
+
+    >
+      {book.quantity > 0 ? "Dodaj u korpu" : "Nema na stanju"}
+    </Button>
+  </span>
+</Tooltip>
+
                   </Box>
                 </Box>
               </CardContent>
             </Card>
-          )}
 
-          <Divider sx={{ my: 2, borderColor: "#444" }} />
-          <Typography
-            variant="subtitle1"
-            mb={2}
-            sx={{ color: "#ccc", display: "flex", justifyContent: "center" }}
-          >
-            Možda će vam se i ovo svidjeti
-          </Typography>
-          {/* Related Books Section */}
-          {book && (
-            <Box
-              mt={5}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <RelatedBooks book={book} />
-            </Box>
-          )}
-        </>
+            <Divider sx={{ my: 4, borderColor: "#444" }} />
+
+            <Typography variant="subtitle1" mb={2} sx={{ color: "#ccc", textAlign: "center" }}>
+              Možda će vam se i ovo svidjeti
+            </Typography>
+
+            {/* Related Books */}
+            {book && (
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                <RelatedBooks book={book} />
+              </Box>
+            )}
+          </>
+        )
       )}
     </Box>
   );

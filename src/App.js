@@ -26,20 +26,18 @@ import PolitikaPovrataiReklamacije from "./Pages/PolitikaPovrata.jsx";
 import Sigurnost from "./Pages/Sigurnost.jsx";
 import PolitikaKolačića from "./Pages/Politikekolačića.jsx";
 import PaymentSuccess from "./Pages/PaymentSuccess.jsx";
+import AdminRoute from "./admin/AdminRoute";
+import AdminDashboard from "./admin/AdminDashboard";
 
 import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
 
 function App() {
-  const { cart, addToCart, updateCartItem, removeCartItem, clearCart } = useCart();
-  const {
-    wishlist,
-    addToWishlist,
-    removeFromWishlist,
-    clearWishlist,
-  } = useWishlist();
+  const { cart, addToCart, updateCartItem, removeCartItem, clearCart } =
+    useCart();
+  const { wishlist, addToWishlist, removeFromWishlist, clearWishlist } =
+    useWishlist();
   const [cartMenu, setCartMenu] = useState(false);
-
 
   // Keep localStorage in sync when wishlist changes
   useEffect(() => {
@@ -71,30 +69,29 @@ function App() {
 
   const videoUrl = "/final_landing_video_high.webm";
 
-useEffect(() => {
-  // Skip loading if user already visited
-  if (sessionStorage.getItem("hasVisitedBefore")) {
-    setLoading(false);
-    return;
-  }
+  useEffect(() => {
+    // Skip loading if user already visited
+    if (sessionStorage.getItem("hasVisitedBefore")) {
+      setLoading(false);
+      return;
+    }
 
-  const video = document.createElement("video");
-  video.src = videoUrl;
-  video.preload = "auto";
+    const video = document.createElement("video");
+    video.src = videoUrl;
+    video.preload = "auto";
 
-  video.onloadeddata = () => {
-    sessionStorage.setItem("hasVisitedBefore", "true");
+    video.onloadeddata = () => {
+      sessionStorage.setItem("hasVisitedBefore", "true");
 
-    // Optional delay to show loader animation
-    setTimeout(() => setLoading(false), 6000);
-  };
+      // Optional delay to show loader animation
+      setTimeout(() => setLoading(false), 6000);
+    };
 
-  video.onerror = () => setLoading(false);
+    video.onerror = () => setLoading(false);
 
-  // Start preloading
-  video.load();
-}, []);
-
+    // Start preloading
+    video.load();
+  }, []);
 
   return (
     <SnackbarProvider
@@ -145,7 +142,7 @@ useEffect(() => {
 
             <AuthNotifier />
             {/* Main content */}
-            <main style={{ flex: 1, overflow: "hidden", background:"white" }}>
+            <main style={{ flex: 1, overflow: "hidden", background: "white" }}>
               <AuthRedirect />
 
               <Routes>
@@ -174,7 +171,7 @@ useEffect(() => {
                   path="/checkout"
                   element={<CheckoutPage cart={cart} />}
                 />
-               
+
                 <Route path="/success" element={<PaymentSuccess />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route
@@ -213,9 +210,17 @@ useEffect(() => {
                   path="/PolitikaKolačića"
                   element={<PolitikaKolačića />}
                 />
-              
+
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="*" element={<Navigate to="/home" replace />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  }
+                />
               </Routes>
             </main>
 
@@ -235,14 +240,14 @@ useEffect(() => {
         />
 
         <WishlistDrawer
-  open={drawerOpen3}
-  onClose={() => setDrawerOpen3(false)}
-  wishlist={wishlist}
-  addToWishlist={addToWishlist}
-  removeFromWishlist={removeFromWishlist}
-  clearWishlist={clearWishlist}
-  addToCart={addToCart}
-/>
+          open={drawerOpen3}
+          onClose={() => setDrawerOpen3(false)}
+          wishlist={wishlist}
+          addToWishlist={addToWishlist}
+          removeFromWishlist={removeFromWishlist}
+          clearWishlist={clearWishlist}
+          addToCart={addToCart}
+        />
       </Router>
     </SnackbarProvider>
   );

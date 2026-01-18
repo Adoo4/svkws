@@ -8,14 +8,15 @@ import {
   ListItemAvatar,
   Avatar,
 } from "@mui/material";
-import { useAuth } from "@clerk/clerk-react";
+ import { useUser } from "@clerk/clerk-react";
 import useCart from "../Utils.js/useCart";
 import CheckoutStepper from "../Components/CheckoutStepper";
 import axios from "axios";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 
 export default function CheckoutPage() {
-  const { user } = useAuth();
+ 
+const { user } = useUser();
   const { cart, isLoading } = useCart();
   const [orderNumber, setOrderNumber] = useState(null);
 
@@ -293,11 +294,8 @@ if (isLoading) {
                             fontWeight="bold"
                             fontSize="1rem"
                           >
-                            {(
-                              itemTotal ??
-                              (discountedPrice ?? book.price) * quantity
-                            ).toFixed(2)}{" "}
-                            KM
+                           {item.itemTotal.toFixed(2)} KM
+
                           </Typography>
 
                           {validDiscount && (

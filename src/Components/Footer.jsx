@@ -29,6 +29,7 @@ const SimpleFooter = () => {
     px: { xs: 2, md: 6 },
     py: { xs: 3, md: 6 },
     mt: "auto",
+    zIndex: 1000,
   }}
 >
   {/* Decorative Header */}
@@ -58,26 +59,38 @@ const SimpleFooter = () => {
     flexDirection: { xs: "column", md: "row" },
   }}
 >
-    {/* Logo */}
-    <Grid
-    item
-    xs={12}
-    md={3}
-    display="flex"
-    justifyContent={{ xs: "center", md: "flex-start" }}
-    textAlign={{ xs: "center", md: "left" }}
-  >
-       <Box
-      component="img"
-      src="/logofinal.svg"
-      alt="Svjetlostkomerc Bookstore Logo"
-      sx={{
-        
-        width: { xs: "200px", md: "320px" },
-        maxWidth: "100%",
-      }}
-    />
-    </Grid>
+   <Grid
+  item
+  xs={12}
+  md={4}
+  display="flex"
+  flexDirection="column" // stack vertically
+  alignItems={{ xs: "center", md: "flex-start" }} // center on mobile, left on desktop
+  gap={0} // space between logos
+>
+  {/* Website Logo */}
+  <Box
+    component="img"
+    src="/logofinal.png"
+    alt="Svjetlostkomerc Bookstore Logo"
+    sx={{
+      width: { xs: "200px", md: "420px" },
+      maxWidth: "100%",
+    }}
+  />
+
+  {/* Payment Gateway Logo */}
+  <Box
+    component="img"
+    src="/monri_footer_negativ.png"
+    alt="Monri Payment Logo"
+    sx={{
+      width: { xs: "100px", md: "150px" },
+      maxWidth: "100%",
+    }}
+  />
+</Grid>
+
 
     {/* Company Info */}
     <Grid

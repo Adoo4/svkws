@@ -2,6 +2,8 @@ import { CardActions, Button, Tooltip } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 const BookCardActionsBottom = ({
   book,
@@ -12,6 +14,7 @@ const BookCardActionsBottom = ({
   clerk,
 }) => {
   const navigate = useNavigate();
+  const outOfStock = book.quantity <= 0;
 
   return (
     <CardActions
@@ -64,35 +67,38 @@ const BookCardActionsBottom = ({
         arrow
       >
         <Button
-          variant="contained"
-          size="small"
-          onClick={() => {
-            if (!isSignedIn) {
-              clerk.openSignIn();
-            } else {
-              addToCart(book);
-            }
-          }}
-          disabled={isAdding}
-          startIcon={
-            <ShoppingCartIcon
-              sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }}
-            />
-          }
-          sx={{
-            flex: 1,
-            px: { xs: 1, sm: 1.5 },
-            fontSize: { xs: "0.60rem", sm: "0.7rem" },
-            borderRadius: "12px",
-            textTransform: "none",
-            bgcolor: "#313131",
-            color: "#fff",
-            "&:hover": { bgcolor: "#d62d00" },
-            boxShadow: "none",
-          }}
-        >
-          Dodaj
-        </Button>
+  variant="contained"
+  disabled={isAdding || outOfStock}
+  size="small"
+  onClick={() => {
+    if (!isSignedIn) {
+      clerk.openSignIn();
+    } else {
+      addToCart(book);
+    }
+  }}
+  startIcon={
+    !outOfStock ? (
+      <ShoppingCartIcon
+        sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }}
+      />
+    ) : <RemoveShoppingCartIcon/>
+  }
+  sx={{
+  flex: 1,
+  px: { xs: 1, sm: 1.5 },
+  fontSize: { xs: "0.60rem", sm: "0.7rem" },
+  borderRadius: "12px",
+  textTransform: "none",
+  bgcolor: "#313131",
+  color: "#fff",
+  "&:hover": { bgcolor: "#d62d00" },
+  boxShadow: "none",
+}}
+>
+  Dodaj
+</Button>
+
       </Tooltip>
     </CardActions>
   );

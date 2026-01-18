@@ -143,7 +143,7 @@ const ProductGallery = ({
   <Grid
     container
     spacing={{ xs: "3vw", sm: 2, md: 3 }}
-    columns={{ xs: 4, sm: 8, md: 12 }}
+    columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
     justifyContent="center"
   >
     {!loading && safeBooks.length > 0 &&
@@ -152,7 +152,8 @@ const ProductGallery = ({
           item
           xs={2}  // ✅ two per row on mobile
           sm={4}  // ✅ two per row on tablet
-          md={3}  // ✅ four per row on desktop
+          md={4}  // ✅ four per row on desktop
+          lg={1}  // ✅ four per row on desktop
           key={book._id}
           sx={{
             display: "flex",
