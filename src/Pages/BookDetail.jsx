@@ -31,7 +31,7 @@ import AspectRatioIcon from "@mui/icons-material/AspectRatio"; // for Dimensions
 import RelatedBooks from "../Components/RelatedBooks";
 import ShareButton from "../Components/ShareButton";
 import { useSnackbar } from "notistack";
-import { useUser, useClerk } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import { useWishlist } from "../Utils.js/useWishlist";
 import useCart from "../Utils.js/useCart";
 
@@ -44,7 +44,7 @@ export default function BookDetail({ addToCart }) {
   const [loading, setLoading] = useState(!initialBook);
 const { cart, addToCart: addToCartFromHook } = useCart();
   const { isSignedIn } = useUser();
-  const clerk = useClerk();
+  
   const { enqueueSnackbar } = useSnackbar();
 
   const {

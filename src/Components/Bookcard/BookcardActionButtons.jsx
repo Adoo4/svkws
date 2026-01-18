@@ -2,7 +2,7 @@ import { CardActions, Button, Tooltip } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
-import NotInterestedIcon from '@mui/icons-material/NotInterested';
+
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 const BookCardActionsBottom = ({

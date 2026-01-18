@@ -1,8 +1,6 @@
 import { CardContent, Typography, Box } from "@mui/material";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import kategorije from "../../Utils.js/kategorije";
-import WhatshotIcon from "@mui/icons-material/Whatshot";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { Chip } from '@mui/material';
 
 const BookCardContent = ({
@@ -15,13 +13,9 @@ const BookCardContent = ({
   formatCategoryName,
 }) => {
 
-  const priceWithVAT =
-  book.priceWithVAT ??
-  (book.price ? book.price * 1.17 : 0);
+  
 
-const discounted =
-  book.discountedPrice ??
-  priceWithVAT;
+
 
 
   
