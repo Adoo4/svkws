@@ -10,7 +10,7 @@ export default function BooksDataGrid() {
   });
 
   const [sortModel, setSortModel] = useState([]);
-  const [filters, _setFilters] = useState({});
+  const [filters] = useState({});
 
   // Serialize sortModel and filters to stabilize React Query key and DataGrid remount
   const stableSort = JSON.stringify(sortModel);
@@ -22,6 +22,8 @@ export default function BooksDataGrid() {
     sortModel,
     filters,
   });
+
+
 
   const columns = [
   { field: "_id", headerName: "ID", width: 220, cellClassName: "smallFont" },
