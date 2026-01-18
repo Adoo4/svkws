@@ -200,7 +200,7 @@ useEffect(() => {
           {cart.items
             .filter((item) => item.book)
             .map((item) => {
-              const { book, quantity, itemTotal, discountedPrice } = item;
+              const { book, quantity } = item;
               const validDiscount =
                 book.discount?.amount > 0 && book.discountedPrice < book.price;
 if (isLoading) {
