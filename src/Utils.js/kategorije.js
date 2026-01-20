@@ -20,7 +20,7 @@ const kategorije = ([
     podkategorije: [
       "Roman",
       "Ljubavni roman",
-      "Istorijski roman",
+      "Historijski roman",
       "Psihološki roman",
       "Triler / Krimi",
       "Drama",
@@ -48,7 +48,8 @@ const kategorije = ([
       "Stripovi",
       "Lektire", 
       "Enciklopedije i priručnici",
-      "Slikovnice"
+      "Slikovnice",
+      "Vjerske knjige za djecu",
     ],
   },
   {
