@@ -50,6 +50,7 @@ const kategorije = ([
       "Enciklopedije i priručnici",
       "Slikovnice",
       "Vjerske knjige za djecu",
+      "Bojanke"
     ],
   },
   {
