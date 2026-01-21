@@ -91,7 +91,7 @@ const chipHoverBg = (color, opacity) => alpha(color, opacity);
         
           onClick={() => {
             handleCategoryClick(kategorija);
-            window.scrollTo(0, 0);
+            
           }}
           aria-expanded={openCategory === kategorija.naziv.toLowerCase()}
           sx={{
