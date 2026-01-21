@@ -1,6 +1,6 @@
 import { useParams, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import {  useState } from "react";
+
 import {
   Box,
   Typography,
@@ -40,9 +40,7 @@ import useBook from "../Utils.js/useBookByID"; // ✅ your React Query hook
 export default function BookDetail({ addToCart }) {
   const { id } = useParams();
   const location = useLocation();
-  const { book: initialBook } = location.state || {};
-  
-  const [loading, setLoading] = useState(!initialBook);
+  const { book: initialBook } = location.state || {};;
 const { cart, addToCart: addToCartFromHook } = useCart();
   const { isSignedIn } = useUser();
   
@@ -67,7 +65,7 @@ const handleAddToCart = () => {
   enqueueSnackbar(`Dodano u korpu: ${book.title}`, { variant: "success" });
 };
 
-const { data: book, isLoading, isError } = useBook(id);
+const { data: book, isLoading } = useBook(id);
 
   const finalPrice = book
   ? book.discountAmount > 0

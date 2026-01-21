@@ -176,7 +176,7 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
         })}
       </List>
     );
-  }, [wishlist, navigate]);
+  }, [wishlist, navigate, handleAddToCart, handleRemove]);
 
   if (isLoading) {
     return (

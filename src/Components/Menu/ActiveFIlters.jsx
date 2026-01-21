@@ -8,13 +8,6 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
     return cat?.boja || "#313131";
   };
 
-  // Hide component if no filters are active
-  const hasFilters =
-    filters.mainCategory ||
-    filters.subCategory ||
-    filters.language ||
-    filters.isNew ||
-    filters.discount;
 
   
 
