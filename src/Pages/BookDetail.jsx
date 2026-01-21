@@ -1,5 +1,4 @@
-import { useParams, useLocation } from "react-router-dom";
-import {  useState } from "react";
+import { useParams } from "react-router-dom";
 
 import {
   Box,
@@ -39,8 +38,6 @@ import useBook from "../Utils.js/useBookByID"; // ✅ your React Query hook
 
 export default function BookDetail({ addToCart }) {
   const { id } = useParams();
-  const location = useLocation();
-  const { book: initialBook } = location.state || {};;
 const { cart, addToCart: addToCartFromHook } = useCart();
   const { isSignedIn } = useUser();
   

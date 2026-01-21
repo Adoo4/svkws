@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
@@ -26,20 +26,26 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const handleRemove = (bookId) => {
-    removeFromWishlist(bookId);
-    enqueueSnackbar("Knjiga je uklonjena iz liste želja", { variant: "info" });
-  };
+  const handleRemove = useCallback(
+    (bookId) => {
+      removeFromWishlist(bookId);
+      enqueueSnackbar("Knjiga je uklonjena iz liste želja", { variant: "info" });
+    },
+    [removeFromWishlist, enqueueSnackbar]
+  );
 
-  const handleAddToCart = (book) => {
-    addToCart(book);
-    enqueueSnackbar("Knjiga je dodana u korpu", { variant: "success" });
-  };
+ const handleAddToCart = useCallback(
+    (book) => {
+      addToCart(book);
+      enqueueSnackbar("Knjiga je dodana u korpu", { variant: "success" });
+    },
+    [addToCart, enqueueSnackbar]
+  );
 
-  const handleClearWishlist = () => {
+  const handleClearWishlist = useCallback(() => {
     clearWishlist();
     enqueueSnackbar("Lista želja ispražnjena", { variant: "info" });
-  };
+  }, [clearWishlist, enqueueSnackbar]);
 
   const bookList = useMemo(() => {
     if (!wishlist.length) {
