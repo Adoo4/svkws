@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Button from "@mui/material/Button";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Typography } from "@mui/material";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Button,
+  IconButton,
+  Badge,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import {
   SignedIn,
   SignedOut,
@@ -12,59 +16,121 @@ import {
   UserButton,
   useUser,
 } from "@clerk/clerk-react";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
+import { useNavigate, useLocation } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import StoreMallDirectoryOutlinedIcon from "@mui/icons-material/StoreMallDirectoryOutlined";
-import MobileMenu from "./MobileMenu";
+import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import LoginIcon from "@mui/icons-material/Login";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import CircularProgress from "@mui/material/CircularProgress";
+import LoginIcon from "@mui/icons-material/Login";
+import MobileMenu from "./MobileMenu";
 import useCart from "../Utils.js/useCart";
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import { useWishlist } from "../Utils.js/useWishlist"; // your hook
+import { useWishlist } from "../Utils.js/useWishlist";
 
+const NAV_LINKS = [
+  {
+    label: "POČETNA",
+    path: "/home",
+    icon: <HomeOutlinedIcon />,
+  },
+  {
+    label: "BOOKSTORE",
+    path: "/shop",
+    icon: <StoreMallDirectoryOutlinedIcon />,
+  },
+];
 
-export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
+const ADMIN_LINK = {
+  label: "ADMIN",
+  path: "/admin",
+  icon: <GridViewOutlinedIcon />,
+};
+
+const shopRoutes = [
+  "/shop",
+  "/checkout",
+  "/Uslovikupovine",
+  "/Privatnost",
+  "/OpštiUsloviPoslovanja",
+  "/PolitikaPovrataiReklamacije",
+  "/Sigurnost",
+  "/Politikekolačića",
+  "/success",
+  "/admin",
+];
+
+const ButtonAppBar = ({ cart, setCartMenu, setDrawerOpen3 }) => {
   const location = useLocation();
-  const { wishlist, isLoading: isLoadingWishlist } = useWishlist();
-  const { isLoading: isLoadingCart } = useCart();
-  const [scrolled, setScrolled] = useState(false);
-
   const navigate = useNavigate();
   const { user, isLoaded } = useUser();
-  
+  const { wishlist, isLoading: isLoadingWishlist } = useWishlist();
+  const { isLoading: isLoadingCart } = useCart();
 
+  const [scrolled, setScrolled] = useState(false);
 
+  // ---------------- PERFORMANCE: optimized scroll handler ----------------
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isShopOrCheckout =
-    location.pathname === "/shop" ||
-    location.pathname === "/checkout" ||
-    location.pathname === "/Uslovikupovine" ||
-    location.pathname === "/Privatnost" ||
-    location.pathname === "/OpštiUsloviPoslovanja" ||
-    location.pathname === "/PolitikaPovrataiReklamacije" ||
-    location.pathname === "/Sigurnost" ||
-    location.pathname === "/Politikekolačića" ||
-    location.pathname === "/success"||
-    location.pathname === "/admin";
+  const isShopOrCheckout = shopRoutes.includes(location.pathname);
+
+  // ---------------- REUSABLE NAV BUTTON ----------------
+  const NavButton = ({ label, path, icon, isSelected = false }) => (
+    <Button
+      startIcon={icon}
+      onClick={() => navigate(path)}
+      aria-current={isSelected ? "page" : undefined}
+      sx={{
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "0.70rem",
+        display: { xs: "none", md: "flex" },
+        color: "#f9f9f9",
+        backgroundColor: "transparent",
+        borderRadius: 2,
+        px: 2.5,
+        py: 1.2,
+        fontWeight: 600,
+        position: "relative",
+        overflow: "hidden",
+        transition: "all 0.3s ease",
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          bottom: 4,
+          left: "50%",
+          width: isSelected ? "60%" : "0%",
+          height: "2px",
+          background: "linear-gradient(90deg, #d62d00, #ff5722)",
+          transition: "all 0.3s ease",
+          transform: "translateX(-50%)",
+          borderRadius: 2,
+        },
+        "&:hover": {
+          color: "#d62d00",
+          textShadow: "0 0 8px rgba(214,45,0,0.5)",
+        },
+        "&:hover::after": { width: "60%" },
+      }}
+    >
+      <Box sx={{ display: { xs: "none", sm: "inline" } }}>{label}</Box>
+    </Button>
+  );
 
   return (
-    <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 999 }}>
+    <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 1300 }}>
       <AppBar
         position="fixed"
         elevation={0}
@@ -72,11 +138,10 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
           height: { xs: "3rem", sm: "4rem" },
           background:
             scrolled || isShopOrCheckout
-              ? "rgba(38, 38, 38, 0.6)"
+              ? "rgba(38,38,38,0.6)"
               : "transparent",
-
-          backdropFilter: scrolled || isShopOrCheckout ? "blur(10px)" : "none",
-
+          backdropFilter:
+            scrolled || isShopOrCheckout ? "blur(10px)" : "none",
           WebkitBackdropFilter:
             scrolled || isShopOrCheckout ? "blur(10px)" : "none",
           transition: "background 0.3s ease",
@@ -87,186 +152,48 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
           sx={{
             px: { xs: 2, sm: 4 },
             height: "100%",
-            width: "100%",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          {/* Mobile menu button */}
+          {/* Mobile menu */}
           <MobileMenu />
 
           {/* Logo */}
-         <Box
-  sx={{
-    height: "100%",
-    width: { xs: "10rem", md: "12vw" },
-    minWidth: "8rem",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center", // aligns children (logo) to right
-  }}
->
-  <Box
-    component="img"
-    src="\logofinal.png"
-    alt="logo"
-    onClick={() => navigate("/home")}
-    sx={{
-      width: { xs: "12rem", md: "20rem" },
-      cursor: "pointer",
-      height: "auto",
-      objectFit: "contain",
-    }}
-  />
-</Box>
-
-
-          {/* Nav links */}
           <Box
+            component="img"
+            src="/logofinal.png"
+            alt="logo"
+            onClick={() => navigate("/home")}
             sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: { xs: "0rem", md: "1.5rem" },
-              mr: { xs: 0, sm: 4 },
-              fontSize: "0.80rem",
+              width: { xs: "12rem", md: "20rem" },
+              height: "auto",
+              objectFit: "contain",
+              cursor: "pointer",
             }}
-          >
+          />
+
+          {/* Nav buttons */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: { md: 1.5 } }}>
             {isLoaded && user?.publicMetadata?.role === "admin" && (
-  <Button
-    sx={{
-      fontFamily: "'Inter', sans-serif",
-      fontSize: "0.70rem",
-      display: { xs: "none", md: "flex" },
-      color: "#f9f9f9",
-      backgroundColor: "transparent",
-      borderRadius: 2,
-      px: 2.5,
-      py: 1.2,
-      fontWeight: 600,
-      position: "relative",
-      overflow: "hidden",
-      transition: "all 0.3s ease",
-      "&::after": {
-        content: '""',
-        position: "absolute",
-        bottom: 4,
-        left: "50%",
-        width: "0%",
-        height: "2px",
-        background: "linear-gradient(90deg, #ff9800, #ff5722)",
-        transition: "all 0.3s ease",
-        transform: "translateX(-50%)",
-        borderRadius: 2,
-      },
-      "&:hover": {
-        color: "#ff9800",
-        textShadow: "0 0 8px rgba(255,152,0,0.5)",
-      },
-      "&:hover::after": { width: "60%" },
-    }}
-    onClick={() => navigate("/admin")}
-    startIcon={<GridViewOutlinedIcon />}
-  >
-    <Box sx={{ display: { xs: "none", sm: "inline" } }}>
-      ADMIN
-    </Box>
-  </Button>
-)}
+              <NavButton
+                {...ADMIN_LINK}
+                isSelected={location.pathname === ADMIN_LINK.path}
+              />
+            )}
 
-            <Button
-              sx={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "0.70rem",
-                display: { xs: "none", md: "flex" },
-                color: "#f9f9f9",
-                backgroundColor: "transparent",
-                borderRadius: 2,
-                px: 2.5,
-                py: 1.2,
-                fontWeight: 600,
-                position: "relative",
-                overflow: "hidden",
-                transition: "all 0.3s ease",
-                "&::after": {
-                  content: '""',
-                  position: "absolute",
-                  bottom: 4,
-                  left: "50%",
-                  width: "0%",
-                  height: "2px",
-                  background: "linear-gradient(90deg, #d62d00, #ff5722)",
-                  transition: "all 0.3s ease",
-                  transform: "translateX(-50%)",
-                  borderRadius: 2,
-                },
-                "&:hover": {
-                  color: "#d62d00",
-                  textShadow: "0 0 8px rgba(214,45,0,0.5)",
-                },
-                "&:hover::after": { width: "60%" },
-                "&.Mui-selected": {
-                  color: "#d62d00",
-                  "&::after": { width: "60%" },
-                },
-              }}
-              onClick={() => navigate("/home")}
-              startIcon={<HomeOutlinedIcon />}
-            >
-              <Box sx={{ display: { xs: "none", sm: "inline" } }}>POČETNA</Box>
-            </Button>
+            {NAV_LINKS.map((link) => (
+              <NavButton
+                key={link.path}
+                {...link}
+                isSelected={location.pathname === link.path}
+              />
+            ))}
 
-            <Button
-              sx={{
-                fontFamily: "'Inter', sans-serif", // ✅ clean accented letters
-                fontSize: "0.70rem",
-                display: { xs: "none", md: "flex" },
-                color: "#f9f9f9",
-                backgroundColor: "transparent",
-                borderRadius: 2,
-                px: 2.5,
-                py: 1.2,
-                fontWeight: 600,
-                position: "relative",
-                overflow: "hidden",
-                transition: "all 0.3s ease",
-                "&::after": {
-                  content: '""',
-                  position: "absolute",
-                  bottom: 4,
-                  left: "50%",
-                  width: "0%",
-                  height: "2px",
-                  background: "linear-gradient(90deg, #d62d00, #ff5722)",
-                  transition: "all 0.3s ease",
-                  transform: "translateX(-50%)",
-                  borderRadius: 2,
-                },
-                "&:hover": {
-                  color: "#d62d00",
-                  textShadow: "0 0 8px rgba(214,45,0,0.5)",
-                },
-                "&:hover::after": {
-                  width: "60%",
-                },
-                "&.Mui-selected": {
-                  color: "#d62d00",
-                  "&::after": {
-                    width: "60%",
-                  },
-                },
-              }}
-              onClick={() => navigate("/shop")}
-              startIcon={<StoreMallDirectoryOutlinedIcon />}
-            >
-              <Box sx={{ display: { xs: "none", sm: "inline" } }}>
-                BOOKSTORE
-              </Box>
-            </Button>
-
-            {/* Cart */}
-
+            {/* ----------------- SignedIn actions ----------------- */}
             <SignedIn>
+              {/* Cart */}
               {setCartMenu && (
                 <IconButton aria-label="cart" onClick={() => setCartMenu(true)}>
                   {isLoadingCart ? (
@@ -274,26 +201,23 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
                   ) : (
                     <Badge
                       badgeContent={
-                        cart?.items?.reduce(
-                          (sum, item) => sum + item.quantity,
-                          0
-                        ) || 0
+                        cart?.items?.reduce((sum, i) => sum + i.quantity, 0) || 0
                       }
                       invisible={isLoadingCart}
                       sx={{
                         "& .MuiBadge-badge": {
                           backgroundColor: "#d62d00",
-                          color: "#f9f9f9",
+                          color: "#fff",
                           fontWeight: "bold",
-                          minWidth: "18px",
-                          height: "18px",
+                          minWidth: 18,
+                          height: 18,
                         },
                       }}
                     >
                       <ShoppingCartOutlinedIcon
                         sx={{
-                          fontSize: { xs: "1.3rem", sm: "1.5" },
-                          color: "#f9f9f9",
+                          fontSize: { xs: "1.3rem", sm: "1.5rem" },
+                          color: "#fff",
                           transition: "color 0.3s ease",
                           "&:hover": { color: "#d62d00" },
                         }}
@@ -303,96 +227,50 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
                 </IconButton>
               )}
 
-              {/*Wish list*/}
-              <IconButton
-                aria-label="wishlist"
-                onClick={() => setDrawerOpen3(true)}
-              >
+              {/* Wishlist */}
+              <IconButton aria-label="wishlist" onClick={() => setDrawerOpen3(true)}>
                 {isLoadingWishlist ? (
-                  <CircularProgress size={20} sx={{ color: "#f9f9f9" }} />
+                  <CircularProgress size={20} sx={{ color: "#fff" }} />
                 ) : (
                   <Badge
                     badgeContent={wishlist.length}
                     invisible={wishlist.length === 0}
                     sx={{
                       "& .MuiBadge-badge": {
-                        backgroundColor: "#464646ff",
-                        color: "#f9f9f9",
+                        backgroundColor: "#464646",
+                        color: "#fff",
                         fontWeight: "bold",
-                        minWidth: "18px",
-                        height: "18px",
+                        minWidth: 18,
+                        height: 18,
                       },
                     }}
                   >
-                    {wishlist.length > 0 ? (
-                      <BookmarkIcon
-                        sx={{
-                          color: "#f9f9f9",
-                          "&:hover": { color: "#d62d00" },
-                        }}
-                      />
-                    ) : (
-                      <BookmarkBorderIcon
-                        sx={{
-                          color: "#f9f9f9",
-                          "&:hover": { color: "#d62d00" },
-                        }}
-                      />
-                    )}
+                    {wishlist.length > 0 ? <BookmarkIcon sx={{ color: "#fff" }} /> : <BookmarkBorderIcon sx={{ color: "#fff" }} />}
                   </Badge>
                 )}
               </IconButton>
 
-              <Box sx={{ marginLeft: "0.5rem" }}>
+              <Box sx={{ ml: 0.5 }}>
                 <UserButton />
               </Box>
             </SignedIn>
 
+            {/* ----------------- SignedOut actions ----------------- */}
             <SignedOut>
               <SignInButton mode="modal">
                 <Button
-                  variant="contained"
                   startIcon={<LoginIcon />}
-                  sx={(theme) => ({
-                    height: { xs: "1.5rem", sm: "2.2rem", md: "2.4rem" },
+                  sx={{
                     borderRadius: "50px",
                     px: { xs: 1.5, sm: 3, md: 4 },
                     fontSize: { xs: "0.65rem", sm: "0.7rem", md: "0.8rem" },
                     fontWeight: 600,
-                    minWidth: { xs: "70px", sm: "120px", md: "150px" },
                     color: "#fff",
-                    backgroundColor: "transparent", // semi-transparent on transparent navbar
-                    boxShadow: "none",
-                    transition: "all 0.3s ease",
-                    "& .MuiButton-startIcon": {
-                      mr: { xs: 0.3, sm: 1 },
-                      fontSize: { xs: "0.9rem", sm: "1.2rem" },
-                    },
-                    "& .MuiButton-startIcon .MuiSvgIcon-root": {
-                      fontSize: { xs: "1.5rem", md: "1.2rem" },
-                    },
-                    "&:hover": {
-                      backgroundColor: "#ff3c1a",
-                      boxShadow: "0 4px 12px rgba(214,45,0,0.4)",
-                    },
-                    [theme.breakpoints.down("xs")]: {
-                      minWidth: "60px",
-                      px: 1,
-                      fontSize: "0.6rem",
-                      "& .MuiButton-startIcon": {
-                        fontSize: "0.8rem",
-                        mr: 0.2,
-                      },
-                    },
-                  })}
+                    backgroundColor: "transparent",
+                    "&:hover": { backgroundColor: "#ff3c1a" },
+                  }}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: "0.70rem",
-                      fontWeight: "bold",
-                      display: { xs: "none", md: "block" },
-                    }}
-                  >
+                  <Typography sx={{ display: { xs: "none", md: "block" }, fontWeight: "bold", fontSize: "0.7rem" }}>
                     PRIJAVA
                   </Typography>
                 </Button>
@@ -403,4 +281,6 @@ export default function ButtonAppBar({ cart, setCartMenu, setDrawerOpen3 }) {
       </AppBar>
     </Box>
   );
-}
+};
+
+export default ButtonAppBar;

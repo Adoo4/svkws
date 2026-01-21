@@ -1,3 +1,5 @@
+import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import {
   Box,
   Typography,
@@ -18,58 +20,42 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../Utils.js/useWishlist";
-export default function WishlistDrawer({
-  open,
-  onClose,
-  addToCart,
-  cart
-}) {
+
+const WishlistDrawer = ({ open, onClose, addToCart }) => {
   const { wishlist, isLoading, removeFromWishlist, clearWishlist } = useWishlist();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-    if (isLoading) {
-    return <div style={{ padding: "1rem", color: "#fff" }}>Loading...</div>;
-  }
+  const handleRemove = (bookId) => {
+    removeFromWishlist(bookId);
+    enqueueSnackbar("Knjiga je uklonjena iz liste želja", { variant: "info" });
+  };
 
-  const list = () => (
+  const handleAddToCart = (book) => {
+    addToCart(book);
+    enqueueSnackbar("Knjiga je dodana u korpu", { variant: "success" });
+  };
 
-    
-    <Box
-      sx={{
-        width: { xs: 300, sm: 400, md: 450 },
-        p: 1,
-        background: "#1f1f1f",
-        height: "100%",
-        overflowY: "auto",
-        color: "#f9f9f9",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-          Moja lista želja ({wishlist.length})
-        </Typography>
-        <IconButton onClick={onClose} sx={{ color: "#f9f9f9" }}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
+  const handleClearWishlist = () => {
+    clearWishlist();
+    enqueueSnackbar("Lista želja ispražnjena", { variant: "info" });
+  };
 
-      <Divider sx={{ borderColor: "#444" }} />
-
-      {wishlist.length === 0 ? (
+  const bookList = useMemo(() => {
+    if (!wishlist.length) {
+      return (
         <Typography sx={{ p: 2, textAlign: "center", color: "#aaa" }}>
           Lista želja je prazna.
         </Typography>
-      ) : (
-        <List sx={{ mt: 1 }}>
-          {wishlist.map((book) => (
+      );
+    }
+
+    return (
+      <List sx={{ mt: 1 }}>
+        {wishlist.map((book) => {
+          const hasDiscount = book.discountAmount > 0;
+
+          return (
             <ListItem
               key={book._id}
               alignItems="flex-start"
@@ -83,29 +69,26 @@ export default function WishlistDrawer({
                 mr: 1,
               }}
             >
+              {/* Book Image */}
               <ListItemAvatar>
                 <Avatar
                   variant="square"
                   src={book.coverImage}
                   alt={book.title}
-                  onClick={(e) => {
-                    navigate(`/${book?._id}`, {
-                      state: { book, category: book.subCategory },
-                    });
-                  }}
+                  onClick={() =>
+                    navigate(`/${book._id}`, { state: { book, category: book.subCategory } })
+                  }
                   sx={{
                     width: { xs: 80, sm: 100, md: 130 },
                     height: { xs: 100, sm: 130, md: 150 },
                     borderRadius: 2,
-                    "& img": {
-                      objectFit: "contain",
-                      width: "100%",
-                      height: "100%",
-                    },
+                    "& img": { objectFit: "contain", width: "100%", height: "100%" },
+                    cursor: "pointer",
                   }}
                 />
               </ListItemAvatar>
 
+              {/* Book Info */}
               <ListItemText
                 sx={{ ml: 2, mr: 1 }}
                 primary={
@@ -114,12 +97,37 @@ export default function WishlistDrawer({
                   </Typography>
                 }
                 secondary={
-                  <Typography variant="body2" color="#bbb" noWrap>
-                    {book.author || ""}
-                  </Typography>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                    <Typography variant="body2" color="#bbb" noWrap>
+                      {book.author || ""}
+                    </Typography>
+
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1 }}>
+                      <Typography variant="subtitle2" color="#fff" fontWeight="bold">
+                        {book.discountedPrice.toFixed(2)} KM
+                      </Typography>
+
+                      {hasDiscount && (
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "#bbb", textDecoration: "line-through" }}
+                        >
+                          {book.priceWithVAT.toFixed(2)} KM
+                        </Typography>
+                      )}
+
+                      <Typography
+                        variant="caption"
+                        sx={{ color: book.quantity > 0 ? "#4caf50" : "#f44336" }}
+                      >
+                        {book.quantity > 0 ? `Dostupno: ${book.quantity}` : "Nema na lageru"}
+                      </Typography>
+                    </Box>
+                  </Box>
                 }
               />
 
+              {/* Actions */}
               <Box
                 sx={{
                   display: "flex",
@@ -127,52 +135,36 @@ export default function WishlistDrawer({
                   alignItems: "center",
                   justifyContent: "center",
                   ml: 1,
-                  gap: "1rem",
+                  gap: 1.5,
                 }}
               >
                 <Tooltip title="Izbriši iz liste" arrow>
                   <IconButton
                     size="small"
-                      onClick={() => {
-                      removeFromWishlist(book._id);
-                      enqueueSnackbar("Knjiga je uklonjena iz liste želja", {
-                        variant: "info",
-                      });
-                    }}
+                    onClick={() => handleRemove(book._id)}
                     sx={{
                       color: "#f44336",
                       bgcolor: "#2b2b2b",
-                      "&:hover": {
-                        color: "#fff",
-                        bgcolor: "#d32f2f",
-                      },
-                      borderRadius: 10,
-                      
+                      "&:hover": { color: "#fff", bgcolor: "#d32f2f" },
+                      borderRadius: 1.25,
                     }}
                   >
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>
 
-                {/* Add to cart */}
                 <Tooltip title="Prebaci ovu knjigu u korpu" arrow>
                   <IconButton
                     size="small"
-                     onClick={() => {
-                      addToCart(book);
-                      enqueueSnackbar("Knjiga je dodana u korpu", {
-                        variant: "success",
-                      });
-                    }}
+                    disabled={book.quantity === 0}
+                    onClick={() => handleAddToCart(book)}
                     sx={{
                       color: "#fff",
                       bgcolor: "#313131",
-                      "&:hover": {
-                        color: "#fff",
-                        bgcolor: "#388e3c",
-                      },
-                      borderRadius: 10,
-                      
+                      "&:hover": { bgcolor: "#388e3c" },
+                      borderRadius: 1.25,
+                      opacity: book.quantity === 0 ? 0.5 : 1,
+                      cursor: book.quantity === 0 ? "not-allowed" : "pointer",
                     }}
                   >
                     <ShoppingCartIcon />
@@ -180,38 +172,17 @@ export default function WishlistDrawer({
                 </Tooltip>
               </Box>
             </ListItem>
-          ))}
-        </List>
-      )}
+          );
+        })}
+      </List>
+    );
+  }, [wishlist, navigate]);
 
-      {wishlist.length > 0 && (
-        <Box sx={{ p: 3, display: "flex", flexDirection: "column", gap: 2 }}>
-          <Tooltip title="Obriši sve artikle iz liste želja" arrow>
-            <Button
-              onClick={() => {
-                clearWishlist();
-                enqueueSnackbar("lista želja ispražnjena", { variant: "info" });
-              }}
-              variant="outlined"
-              fullWidth
-              sx={{
-                borderRadius: "12px",
-                textTransform: "none",
-                fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                borderColor: "#fff",
-                color: "#fff",
-                py: 1.2,
-                fontWeight: 400,
-                "&:hover": { borderColor: "#d62d00", color: "#d62d00" },
-              }}
-            >
-              Isprazni Listu
-            </Button>
-          </Tooltip>
-        </Box>
-      )}
-    </Box>
-  );
+  if (isLoading) {
+    return (
+      <Box sx={{ p: 2, color: "#fff", textAlign: "center" }}>Loading...</Box>
+    );
+  }
 
   return (
     <Drawer
@@ -226,7 +197,62 @@ export default function WishlistDrawer({
         },
       }}
     >
-      {list()}
+      <Box sx={{ width: "100%", p: 1, height: "100%", overflowY: "auto" }}>
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 2,
+            mt: 9,
+          }}
+        >
+          <Typography variant="h6" fontWeight="bold">
+            Moja lista želja ({wishlist.length})
+          </Typography>
+          <IconButton onClick={onClose} sx={{ color: "#f9f9f9" }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        <Divider sx={{ borderColor: "#444" }} />
+
+        {bookList}
+
+        {/* Clear Wishlist */}
+        {wishlist.length > 0 && (
+          <Box sx={{ p: 3 }}>
+            <Tooltip title="Obriši sve artikle iz liste želja" arrow>
+              <Button
+                onClick={handleClearWishlist}
+                variant="outlined"
+                fullWidth
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                  borderColor: "#fff",
+                  color: "#fff",
+                  py: 1.2,
+                  fontWeight: 400,
+                  "&:hover": { borderColor: "#d62d00", color: "#d62d00" },
+                }}
+              >
+                Isprazni Listu
+              </Button>
+            </Tooltip>
+          </Box>
+        )}
+      </Box>
     </Drawer>
   );
-}
+};
+
+WishlistDrawer.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  addToCart: PropTypes.func.isRequired,
+};
+
+export default WishlistDrawer;

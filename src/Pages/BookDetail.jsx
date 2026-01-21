@@ -34,13 +34,14 @@ import { useSnackbar } from "notistack";
 import { useUser } from "@clerk/clerk-react";
 import { useWishlist } from "../Utils.js/useWishlist";
 import useCart from "../Utils.js/useCart";
+import useBook from "../Utils.js/useBookByID"; // ✅ your React Query hook
 
 
 export default function BookDetail({ addToCart }) {
   const { id } = useParams();
   const location = useLocation();
   const { book: initialBook } = location.state || {};
-  const [book, setBook] = useState(initialBook);
+  
   const [loading, setLoading] = useState(!initialBook);
 const { cart, addToCart: addToCartFromHook } = useCart();
   const { isSignedIn } = useUser();
@@ -66,18 +67,14 @@ const handleAddToCart = () => {
   enqueueSnackbar(`Dodano u korpu: ${book.title}`, { variant: "success" });
 };
 
+const { data: book, isLoading, isError } = useBook(id);
 
-  useEffect(() => {
-  if (!initialBook) {
-    setLoading(true);
-    axios.get(`https://backendsvkwbshp.onrender.com/api/books/${id}`)
-      .then(res => setBook(res.data))
-      .finally(() => setLoading(false));
-  }
-}, [id, initialBook]); // ✅ correct dependencies
+  const finalPrice = book
+  ? book.discountAmount > 0
+    ? book.discountedPrice
+    : book.priceWithVAT ?? book.price
+  : 0; // fallback value while loading
 
-
-  const finalPrice = book?.discountAmount > 0 ? book.discountedPrice : book.priceWithVAT || book.price;
 
   return (
     <Box
@@ -88,7 +85,7 @@ const handleAddToCart = () => {
         p: { xs: 2, md: 4 },
       }}
     >
-      {loading ? (
+      {isLoading ? (
         <Card
           sx={{
             maxWidth: 1100,
@@ -227,7 +224,7 @@ const handleAddToCart = () => {
 {/* Dimensions */}
 <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1}>
   <AspectRatioIcon sx={{ color: "#f9f9f9" }} />
-  <Typography variant="body2">Dimensions: {book.dimensions}</Typography>
+  <Typography variant="body2">Dimenzije: {book.dimensions}</Typography>
 </Grid>
 </Grid>
 

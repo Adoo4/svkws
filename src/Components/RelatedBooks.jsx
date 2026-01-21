@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import {
   Box,
   Typography,
@@ -18,60 +16,111 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "../Style/RelatedBooksSwiper.css";
+import useRelatedBooks from "../Utils.js/useRelatedBooks";
+import { memo } from "react";
 
+// ----------------------
+// Skeleton Loader Card
+// ----------------------
+const SkeletonCard = memo(() => (
+  <Card sx={{ bgcolor: "#2a2a2a", borderRadius: 2, width: 230, mx: "auto" }}>
+    <Skeleton variant="rectangular" width="100%" height={300} />
+    <CardContent>
+      <Skeleton variant="text" width="80%" height={24} />
+      <Skeleton variant="text" width="60%" height={20} />
+    </CardContent>
+  </Card>
+));
+
+// ----------------------
+// Single Book Card
+// ----------------------
+const RelatedBookCard = memo(({ book, onClick }) => (
+  <Card
+    sx={{
+      bgcolor: "#313131",
+      color: "#fff",
+      borderRadius: 2,
+      cursor: "pointer",
+      maxWidth: 260,
+      mx: "auto",
+      transition: "transform 0.2s, box-shadow 0.2s",
+      "&:hover": {
+        transform: "translateY(-5px)",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.5)",
+      },
+      "&:focus": {
+        outline: "2px solid #90caf9",
+        outlineOffset: 2,
+      },
+    }}
+    onClick={onClick}
+    tabIndex={0}
+    aria-label={`Open details for ${book.title}`}
+  >
+    <CardMedia
+      component="img"
+      image={book.coverImage || "/fallback-cover.jpg"}
+      alt={book.title || "Book cover"}
+      height={300}
+      loading="lazy"
+      sx={{ objectFit: "contain" }}
+    />
+    <CardContent>
+      <Typography variant="subtitle1" noWrap fontWeight="bold">
+        {book.title}
+      </Typography>
+      <Typography variant="body2" noWrap color="#ccc">
+        {book.author}
+      </Typography>
+    </CardContent>
+  </Card>
+));
+
+// ----------------------
+// Main Component
+// ----------------------
 export default function RelatedBooks({ book }) {
   const navigate = useNavigate();
-  const [relatedBooks, setRelatedBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   const theme = useTheme();
-  const isBelowLg = useMediaQuery(theme.breakpoints.down("lg")); // xs, sm, md
-  const isLgUp = useMediaQuery(theme.breakpoints.up("lg"));     // lg & xl
+  const isBelowLg = useMediaQuery(theme.breakpoints.down("lg"));
+  const isLgUp = useMediaQuery(theme.breakpoints.up("lg"));
 
-  // ✅ FINAL DECISION LOGIC
+  // Fetch related books via React Query hook
+  const { data: relatedBooks = [], isLoading, isError } = useRelatedBooks(book);
+
+  // Determine if Swiper should be used
   const useSwiper = isBelowLg || (isLgUp && relatedBooks.length > 6);
 
-  useEffect(() => {
-    if (!book) return;
-
-    axios
-      .get(
-        `https://backendsvkwbshp.onrender.com/api/books/related/${book._id}?category=${encodeURIComponent(
-          book.mainCategory
-        )}`
-      )
-      .then((res) => {
-        setRelatedBooks(res.data);
-        setLoading(false);
-      })
-      .catch((err) =>
-        console.error("Related books fetch error:", err.response || err)
-      );
-  }, [book]);
-
-  if (loading) {
+  // ----------------------
+  // Loading state
+  // ----------------------
+  if (isLoading) {
     return (
       <Grid container spacing={3}>
-        {Array.from({ length: 3 }).map((_, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index} display="flex" justifyContent="center">
-            <Card sx={{ bgcolor: "#2a2a2a", borderRadius: 2, width: 230 }}>
-              <Skeleton variant="rectangular" width="100%" height={300} />
-              <CardContent>
-                <Skeleton variant="text" width="80%" height={24} />
-                <Skeleton variant="text" width="60%" height={20} />
-              </CardContent>
-            </Card>
+        {Array.from({ length: Math.min(relatedBooks.length, 5) || 3 }).map((_, i) => (
+          <Grid item xs={12} sm={6} md={4} key={i} display="flex" justifyContent="center">
+            <SkeletonCard />
           </Grid>
         ))}
       </Grid>
     );
   }
 
-  if (!relatedBooks.length) {
-    return <Typography sx={{ color: "#ccc" }}>No related books found.</Typography>;
+  // ----------------------
+  // Error or empty state
+  // ----------------------
+  if (isError || !relatedBooks.length) {
+    return (
+      <Typography sx={{ color: "#ccc", textAlign: "center", mt: 2 }}>
+        No related books found.
+      </Typography>
+    );
   }
 
-  // ✅ USE useSwiper HERE
+  // ----------------------
+  // Render books
+  // ----------------------
   return useSwiper ? (
     <Box className="related-swiper" sx={{ width: "100%" }}>
       <Swiper
@@ -90,81 +139,22 @@ export default function RelatedBooks({ book }) {
       >
         {relatedBooks.map((b) => (
           <SwiperSlide key={b._id}>
-            <Card
-              sx={{
-                bgcolor: "#313131",
-                color: "#fff",
-                borderRadius: 2,
-                cursor: "pointer",
-                maxWidth: 260,
-                mx: "auto",
-                transition: "0.2s",
-                "&:hover": {
-                  transform: "translateY(-5px)",
-                  boxShadow: "0 8px 20px rgba(0,0,0,0.5)",
-                },
-              }}
-              onClick={() =>
-                navigate(`/${b._id}`, { state: { book: b, category: b.subCategory } })
-              }
-            >
-              <CardMedia
-                component="img"
-                image={b.coverImage}
-                alt={b.title}
-                height={300}
-                sx={{ objectFit: "contain" }}
-              />
-              <CardContent>
-                <Typography variant="subtitle1" noWrap fontWeight="bold">
-                  {b.title}
-                </Typography>
-                <Typography variant="body2" noWrap color="#ccc">
-                  {b.author}
-                </Typography>
-              </CardContent>
-            </Card>
+            <RelatedBookCard
+              book={b}
+              onClick={() => navigate(`/${b._id}`, { state: { book: b, category: b.subCategory } })}
+            />
           </SwiperSlide>
         ))}
       </Swiper>
     </Box>
   ) : (
-    <Grid container spacing={1}>
+    <Grid container spacing={2}>
       {relatedBooks.map((b) => (
         <Grid item xs={12} sm={6} md={2} key={b._id}>
-          <Card
-            sx={{
-              bgcolor: "#313131",
-              color: "#fff",
-              borderRadius: 2,
-              cursor: "pointer",
-              maxWidth: 260,
-              transition: "0.2s",
-              "&:hover": {
-                transform: "translateY(-5px)",
-                boxShadow: "0 8px 20px rgba(0,0,0,0.5)",
-              },
-            }}
-            onClick={() =>
-              navigate(`/${b._id}`, { state: { book: b, category: b.subCategory } })
-            }
-          >
-            <CardMedia
-              component="img"
-              image={b.coverImage}
-              alt={b.title}
-              height={300}
-              sx={{ objectFit: "contain" }}
-            />
-            <CardContent>
-              <Typography variant="subtitle1" noWrap fontWeight="bold">
-                {b.title}
-              </Typography>
-              <Typography variant="body2" noWrap color="#ccc">
-                {b.author}
-              </Typography>
-            </CardContent>
-          </Card>
+          <RelatedBookCard
+            book={b}
+            onClick={() => navigate(`/${b._id}`, { state: { book: b, category: b.subCategory } })}
+          />
         </Grid>
       ))}
     </Grid>

@@ -78,7 +78,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
     },
     [setFilter, setPage]
   );
-
+const chipHoverBg = (color, opacity) => alpha(color, opacity);
   const renderedCategories = React.useMemo(() => {
   return kategorije.map((kategorija, idx) => {
     const isSveKnjige =
@@ -88,11 +88,14 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
       <React.Fragment key={kategorija.naziv}>
         {/* Main category button */}
         <ListItemButton
+        
           onClick={() => {
             handleCategoryClick(kategorija);
             window.scrollTo(0, 0);
           }}
+          aria-expanded={openCategory === kategorija.naziv.toLowerCase()}
           sx={{
+            
             display: "flex",
             gap: "1rem",
             minWidth: "100%",
@@ -107,6 +110,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
               transform: "translateX(3px)",
             },
           }}
+          
         >
           <ListItemIcon
             sx={{
@@ -167,24 +171,20 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                         fontWeight: 500,
                         fontSize: { xs: "0.75rem", sm: "0.85rem" },
                         color: "white",
-                        backgroundColor: (theme) =>
-                          alpha(kategorija.boja, 0.15),
+                       backgroundColor: chipHoverBg(kategorija.boja, 0.25),
                         border: "1px solid transparent",
                         transition: "all 0.25s ease",
                         "&:hover": {
-                          backgroundColor: (theme) =>
-                            alpha(kategorija.boja, 0.25),
+                          backgroundColor: chipHoverBg(kategorija.boja, 0.25),
                           borderColor: kategorija.boja,
                           transform: "translateX(3px)",
                         },
                         "&.Mui-selected": {
-                          backgroundColor: (theme) =>
-                            alpha(kategorija.boja, 0.35),
+                         backgroundColor: chipHoverBg(kategorija.boja, 0.25),
                           borderColor: kategorija.boja,
                           color: "#fff",
                           "&:hover": {
-                            backgroundColor: (theme) =>
-                              alpha(kategorija.boja, 0.45),
+                            backgroundColor: chipHoverBg(kategorija.boja, 0.25),
                           },
                         },
                       }}
@@ -197,7 +197,9 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
                         );
                         window.scrollTo(0, 0);
                       }}
+                       aria-expanded={openCategory === kategorija.naziv.toLowerCase()}
                     >
+                      
                       <ListItemText
                         primary={
                           <Typography
@@ -264,19 +266,17 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
     >
       {/* Scrollable content on small/medium, static on large */}
       <Box
-        sx={{
-          flex: "1 1 auto",
-          overflowY: {
-            xs: "auto",
-            sm: "auto",
-            md: "auto",
-            lg: "visible",
-            xl: "visible",
-          },
-          pr: "0.5rem",
-          pb: "10rem", // extra bottom padding for switches
-        }}
-      >
+  sx={{
+    flex: "1 1 auto",
+    overflowY: { xs: "auto", sm: "auto", md: "auto", lg: "visible" },
+    pr: "0.5rem",
+    pb: "10rem",
+    "&::-webkit-scrollbar": { width: "4px" },
+    "&::-webkit-scrollbar-thumb": { backgroundColor: "rgba(255,255,255,0.3)", borderRadius: "2px" },
+    scrollbarWidth: "thin",
+    scrollbarColor: "rgba(255,255,255,0.3) transparent",
+  }}
+>
         {/*Filters athat are applied*/}
         {/* Active Filters Bar */}
         <Box sx={{ mb: 2 }}>
