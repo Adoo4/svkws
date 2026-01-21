@@ -57,9 +57,10 @@ export default function CartMenu({
           alignItems: "center",
           justifyContent: "space-between",
           mb: 2,
-          p: 2,
+          p: 1,
           borderRadius: 2,
           backgroundColor: "transparent", // semi-transparent background
+          mt: 9
         }}
       >
         <Typography variant="h6" sx={{ color: "#f9f9f9", fontWeight: "bold" }}>
