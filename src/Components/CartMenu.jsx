@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import {
   Box,
   Typography,
@@ -17,6 +17,7 @@ import { useSnackbar } from "notistack"; // add this at the top
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function CartMenu({
   cart,
@@ -27,12 +28,12 @@ export default function CartMenu({
   clearCart,
 }) {
   const navigate = useNavigate();
-  const totalItems = useMemo(() => cart?.items?.reduce((sum, i) => sum + i.quantity, 0) || 0, [cart]);
+  const totalItems = useMemo(
+    () => cart?.items?.reduce((sum, i) => sum + i.quantity, 0) || 0,
+    [cart],
+  );
 
   const { enqueueSnackbar } = useSnackbar(); // initialize snackbar
-  useEffect(() => {
-    console.log("cart:", cart);
-  }, [cart]);
 
   const handleClearCart = () => {
     clearCart(); // your function to empty the cart
@@ -60,14 +61,18 @@ export default function CartMenu({
           p: 1,
           borderRadius: 2,
           backgroundColor: "transparent", // semi-transparent background
-          mt: 9
+          mt: {xs:5, md:8},
         }}
       >
         <Typography variant="h6" sx={{ color: "#f9f9f9", fontWeight: "bold" }}>
-          Vaša korpa (
-          {totalItems}{" "}
-          artikala)
+          Vaša korpa ({totalItems} artikala)
         </Typography>
+        <IconButton
+          onClick={() => setCartMenu(false)}
+          sx={{ color: "#f9f9f9" }}
+        >
+          <CloseIcon />
+        </IconButton>
       </Box>
 
       <Divider sx={{ borderColor: "#444" }} />
@@ -111,6 +116,8 @@ export default function CartMenu({
 
                 <ListItemText
                   sx={{ ml: 1, mr: 1 }}
+                    primaryTypographyProps={{ component: "div" }}
+  secondaryTypographyProps={{ component: "div" }}
                   primary={
                     <Typography
                       variant="subtitle1"
@@ -224,24 +231,27 @@ export default function CartMenu({
                   >
                     <IconButton
                       size="small"
+                      disabled={quantity >= book.quantity} // visually disables button
                       onClick={() => {
-                        if (quantity + 1 > book.quantity) {
-                          enqueueSnackbar(
-                            `Samo ${book.quantity} jedinica dostupno`,
-                            { variant: "warning" },
-                          );
-                          return;
-                        }
+                        // ⚠️ Logical check: do nothing if quantity >= stock
+                        if (quantity >= book.quantity) return;
+
+                        // Only update cart if we are below stock
                         updateCartItem(book._id, quantity + 1);
+
                         enqueueSnackbar(`Povećana količina: ${book.title}`, {
                           variant: "success",
                         });
                       }}
                       sx={{
-                        color: "#515151",
-                        "&:hover": { color: "#388e3c" },
-                        mb: 0.5,
+                        color: quantity >= book.quantity ? "#666" : "#515151",
                         background: "#282828",
+                        cursor:
+                          quantity >= book.quantity ? "not-allowed" : "pointer",
+                        "&:hover": {
+                          color: quantity >= book.quantity ? "#666" : "#388e3c",
+                        },
+                        mb: 0.5,
                       }}
                     >
                       <AddIcon />
@@ -324,7 +334,7 @@ export default function CartMenu({
             }}
           >
             {/* Checkout */}
-    
+
             <Button
               startIcon={<ShoppingCartIcon />}
               variant="contained"

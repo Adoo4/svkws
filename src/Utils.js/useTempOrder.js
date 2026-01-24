@@ -31,7 +31,7 @@ export const useTempOrder = () => {
       queryClient.invalidateQueries(["tempOrders"]);
     },
     onError: (error) => {
-      console.error("❌ Error creating temp order:", error);
+  
       enqueueSnackbar("Greška pri kreiranju privremene narudžbe.", { variant: "error" });
     },
   });

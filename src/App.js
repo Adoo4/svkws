@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Navbar from "./Components/Navbar";
+import Navbar from "./Components/Navbar/Navbar.jsx";
 import Footer from "./Components/Footer";
 import Home from "./Pages/Home";
 import Shop from "./Pages/Shop";
@@ -28,6 +28,7 @@ import PolitikaKolačića from "./Pages/Politikekolačića.jsx";
 import PaymentSuccess from "./Pages/PaymentSuccess.jsx";
 import AdminRoute from "./admin/AdminRoute";
 import AdminDashboard from "./admin/AdminDashboard";
+import PaymentCancel from "./Pages/PaymentCancel.jsx";
 
 import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
@@ -44,7 +45,7 @@ function App() {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
   }, [wishlist]);
 
-  const [drawerOpen3, setDrawerOpen3] = useState(false);
+  const [wishlistOpen, setWishlistOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
   /*const imageUrl = "/final_landing_video_high.webm"; 
@@ -136,8 +137,8 @@ function App() {
               addToCart={addToCart}
               updateCartItem={updateCartItem}
               removeCartItem={removeCartItem}
-              drawerOpen3={drawerOpen3}
-              setDrawerOpen3={setDrawerOpen3}
+              wishlistOpen={wishlistOpen}
+              setWishlistOpen={setWishlistOpen}
             />
 
             <AuthNotifier />
@@ -173,6 +174,7 @@ function App() {
                 />
 
                 <Route path="/success" element={<PaymentSuccess />} />
+                <Route path="/payment-cancel" element={<PaymentCancel />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route
                   path="/sign-up"
@@ -240,8 +242,8 @@ function App() {
         />
 
         <WishlistDrawer
-          open={drawerOpen3}
-          onClose={() => setDrawerOpen3(false)}
+          open={wishlistOpen}
+          onClose={() => setWishlistOpen(false)}
           wishlist={wishlist}
           addToWishlist={addToWishlist}
           removeFromWishlist={removeFromWishlist}

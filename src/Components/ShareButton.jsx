@@ -8,7 +8,7 @@ function ShareButton() {
           text: "Pogledaj ovo!",
           url: window.location.href, // current page URL
         });
-        console.log("Shared successfully!");
+        
       } catch (error) {
         console.error("Error sharing:", error);
       }

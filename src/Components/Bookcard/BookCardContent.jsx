@@ -2,18 +2,23 @@ import { CardContent, Typography, Box } from "@mui/material";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import kategorije from "../../Utils.js/kategorije";
 import { Chip } from '@mui/material';
+import CardImage from "./Image";
+import WishlistButton from "./WishlistButton";
 
 const BookCardContent = ({
   book,
   inWishlist,
   categoryMatch,
   mainCategory,
-  finalPrice,
   hasDiscount,
-  formatCategoryName,
+  handleWishlistClick,
+  openDetails,
+  shlist
 }) => {
 
-  
+  const displayPrice = hasDiscount
+  ? book.discountedPrice
+  : book.priceWithVAT;
 
 
 
@@ -80,13 +85,13 @@ const BookCardContent = ({
       {/* Categories */}
       {/* Categories + Right-side Icons */}
       {/* Quantity message */}
-<Box sx={{ mb: 0.5 }}>
+<Box sx={{ mb: 0.5, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
   {book.quantity === 0 && (
     <Chip
       label="Nema na stanju"
       color="error"
       size="small"
-      sx={{ fontSize: "0.65rem", height: 18, px: 0.5 }}
+      sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }}
     />
   )}
 
@@ -95,7 +100,7 @@ const BookCardContent = ({
       label={`Samo ${book.quantity} na stanju`}
       color="warning"
       size="small"
-      sx={{ fontSize: "0.65rem", height: 18, px: 0.5 }}
+      sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }}
     />
   )}
 
@@ -104,9 +109,15 @@ const BookCardContent = ({
       label="Ima na stanju"
       color="success"
       size="small"
-      sx={{ fontSize: "0.65rem", height: 18, px: 0.5 }}
+      sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }}
     />
   )}
+
+   <WishlistButton
+        inWishlist={inWishlist}
+        handleWishlistClick={handleWishlistClick}
+        openDetails={openDetails}
+      />
 </Box>
 
 {/* Categories + Right-side Icons */}
@@ -213,6 +224,8 @@ const BookCardContent = ({
             overflow: "hidden",
           }}
         >
+
+          
           {/* Sub Category */}
           {book.subCategory && (
             <Typography
@@ -220,7 +233,7 @@ const BookCardContent = ({
               sx={{
                 fontWeight: 400,
                 fontSize: "0.6rem",
-                textTransform: "uppercase",
+                
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -272,7 +285,7 @@ const BookCardContent = ({
           }}
         >
           {/* Discounted price with fallback */}
-          {(book.discountedPrice ?? (book.priceWithVAT ?? book.price * 1.17) ?? 0).toFixed(2)} KM
+           {displayPrice.toFixed(2)} KM
         </Typography>
         <Typography
           sx={{
@@ -282,7 +295,7 @@ const BookCardContent = ({
           }}
         >
           {/* Original price with VAT fallback */}
-          {(book.priceWithVAT ?? book.price * 1.17 ?? 0).toFixed(2)} KM
+          {book.priceWithVAT.toFixed(2)} KM
         </Typography>
       </Box>
       <Typography sx={{ fontSize: "0.65rem", color: "text.secondary" }}>
@@ -298,7 +311,8 @@ const BookCardContent = ({
           fontSize: { xs: "0.8rem", sm: "1rem" },
         }}
       >
-        {(book.priceWithVAT ?? book.price * 1.17 ?? 0).toFixed(2)} KM
+        {displayPrice.toFixed(2)} KM
+
       </Typography>
       <Typography sx={{ fontSize: "0.65rem", color: "text.secondary" }}>
         *PDV uključen u cijenu

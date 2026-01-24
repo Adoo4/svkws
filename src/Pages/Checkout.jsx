@@ -41,7 +41,7 @@ const { user } = useUser();
 
 const deliveryPrices = useMemo(
   () => ({
-    bhposta: 4.5,
+    bhposta: 7,
     brzapošta: 10,
     storepickup: 0,
   }),
@@ -107,7 +107,7 @@ useEffect(() => {
         ch_country: "BA",
         ch_phone: formattedPhone || "",
         ch_email: shipping.email || "",
-        success_url_override: "https://svkbkstr.netlify.app/success",
+        success_url_override: "https://bookstore.ba/success",
         cancel_url: "https://backendsvkwbshp.onrender.com/api/payment/cancel",
         callback_url: "https://backendsvkwbshp.onrender.com/api/payment/callback",
       };
@@ -127,7 +127,7 @@ useEffect(() => {
       document.body.appendChild(form);
       form.submit();
     } catch (error) {
-      console.error("Payment error:", error);
+     
       alert("Greška pri plaćanju.");
     }
   };

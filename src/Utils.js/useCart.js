@@ -62,6 +62,7 @@ const useCart = () => {
         { bookId, quantity },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
     },
     onMutate: async () => {
       await queryClient.cancelQueries(["cart"]);
@@ -69,6 +70,7 @@ const useCart = () => {
       return { previousCart };
     },
     onSuccess: () => queryClient.invalidateQueries(["cart"]),
+    
     onError: (_err, _vars, ctx) => {
       queryClient.setQueryData(["cart"], ctx.previousCart);
       enqueueSnackbar("Greška pri ažuriranju korpe", { variant: "error" });

@@ -1,5 +1,11 @@
-import { useEffect } from "react";
-import { Box, Typography, Button, Card, CardContent } from "@mui/material";
+import { useEffect, useMemo, useRef } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+} from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useNavigate, useLocation } from "react-router-dom";
 import useCart from "../Utils.js/useCart";
@@ -9,85 +15,102 @@ export default function PaymentSuccess() {
   const location = useLocation();
   const { clearCart } = useCart();
 
-  // Parse Monri query parameters
-  const params = new URLSearchParams(location.search);
+  const hasClearedRef = useRef(false);
+
+  const params = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search]
+  );
+
   const orderNumber = params.get("order_number");
   const amount = params.get("amount");
 
+  const formattedAmount = useMemo(() => {
+    if (!amount) return null;
+    return `${(Number(amount) / 100).toFixed(2)} BAM`;
+  }, [amount]);
+
   useEffect(() => {
-    // ✅ Clear cart on success
-    clearCart();
+    if (!hasClearedRef.current) {
+      clearCart();
+      hasClearedRef.current = true;
+    }
   }, [clearCart]);
 
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         display: "flex",
-        justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f5f5f5",
-        p: 2,
+        justifyContent: "center",
+        bgcolor: "#f4f6f8",
+        px: 2,
       }}
     >
       <Card
         sx={{
-          maxWidth: 500,
+          maxWidth: 520,
           width: "100%",
-          textAlign: "center",
-          p: 3,
           borderRadius: 4,
-          boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
         }}
       >
-        <CardContent>
+        <CardContent sx={{ p: { xs: 3, sm: 4 }, textAlign: "center" }}>
           <CheckCircleOutlineIcon
-            sx={{ fontSize: 80, color: "#28a745", mb: 2 }}
+            sx={{
+              fontSize: 84,
+              color: "#2e7d32",
+              mb: 2,
+            }}
+            aria-hidden
           />
-          <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
-            Uplata uspješna!
+
+          <Typography variant="h5" fontWeight={700} gutterBottom>
+            Uplata uspješna
           </Typography>
 
           <Typography
-            variant="body1"
             sx={{
+              mt: 2,
               mb: 3,
-              color: "#4a4a4a",
-              lineHeight: 1.7,
-              fontSize: { xs: "0.9rem", sm: "1rem" },
-              textAlign: "center",
-              backgroundColor: "rgba(76, 175, 80, 0.08)",
+              px: { xs: 2, sm: 3 },
+              py: { xs: 2, sm: 2.5 },
+              bgcolor: "rgba(76,175,80,0.08)",
               borderLeft: "4px solid #4caf50",
-              borderRadius: "8px",
-              p: { xs: 2, sm: 3 },
-              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+              borderRadius: 2,
+              color: "#2e2e2e",
+              lineHeight: 1.7,
               fontWeight: 500,
             }}
           >
-            <Box
-              component="span"
-              sx={{ display: "block", color: "#2e7d32", fontWeight: 600, mb: 1 }}
-            >
-              ✅ Vaša uplata je uspješno izvršena!
+            <Box component="span" sx={{ display: "block", mb: 1 }}>
+              ✅ Vaša uplata je uspješno izvršena.
             </Box>
+
             {orderNumber && (
               <Box component="span" sx={{ display: "block", fontWeight: 600 }}>
                 Broj narudžbe: {orderNumber}
               </Box>
             )}
-            {amount && (
-              <Box component="span" sx={{ display: "block", mb: 1 }}>
-                Iznos:  {(amount / 100).toFixed(2)} BAM
+
+            {formattedAmount && (
+              <Box component="span" sx={{ display: "block", mt: 0.5 }}>
+                Iznos: {formattedAmount}
               </Box>
             )}
-            Zahvaljujemo vam na kupovini. Uskoro ćete primiti potvrdu putem e-maila.
+
             <Box component="span" sx={{ display: "block", mt: 1 }}>
-              Za sve dodatne informacije obratite se na{" "}
+              Potvrdu kupovine ćete uskoro dobiti putem e-maila.
+            </Box>
+
+            <Box component="span" sx={{ display: "block", mt: 1 }}>
+              Pitanja?{" "}
               <Box
                 component="a"
                 href="mailto:info@svjetlostkomerc.ba"
                 sx={{
-                  color: "#1e88e5",
+                  color: "#1565c0",
                   fontWeight: 600,
                   textDecoration: "none",
                   "&:hover": { textDecoration: "underline" },
@@ -95,20 +118,25 @@ export default function PaymentSuccess() {
               >
                 info@svjetlostkomerc.ba
               </Box>
-              .
             </Box>
           </Typography>
 
           <Button
             variant="contained"
-            sx={{
-              backgroundColor: "#d62d00",
-              "&:hover": { backgroundColor: "#b82400" },
-              px: 4,
-              py: 1,
-              borderRadius: 3,
-            }}
+            size="large"
             onClick={() => navigate("/")}
+            sx={{
+              mt: 2,
+              px: 4,
+              py: 1.2,
+              borderRadius: 3,
+              bgcolor: "#d62d00",
+              fontWeight: 600,
+              textTransform: "none",
+              "&:hover": {
+                bgcolor: "#b82400",
+              },
+            }}
           >
             Nazad na početnu
           </Button>

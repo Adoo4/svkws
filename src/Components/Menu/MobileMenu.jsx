@@ -10,6 +10,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton, useClerk } from "@clerk/
 import { useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react"; // make sure you installed this
 
+
 export default function FullScreenMenu() {
   const [isOpen, setOpen] = useState(false);
   const { signOut } = useClerk();
@@ -17,6 +18,7 @@ export default function FullScreenMenu() {
 
   const toggleDrawer = (state) => () => setOpen(state);
 const [hover, setHover] = useState(false);
+
   return (
    <>
   {/* Top Navigation Bar (mobile only) */}
@@ -170,6 +172,11 @@ const [hover, setHover] = useState(false);
     </List>
 
     <Divider sx={{ bgcolor: "#313131", my: 2 }} />
+
+    
+
+
+    
   </Drawer>
 </>
 

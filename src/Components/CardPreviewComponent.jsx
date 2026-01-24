@@ -10,6 +10,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 
 export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }) {
   if (!drawerData) return null;
@@ -31,6 +32,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
           flexDirection: "column",
           height: "100%",
           overflow: "hidden",
+          paddingTop:{xs:"3rem", md:"4rem"}
         },
       }}
     >
@@ -56,9 +58,20 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
       {/* Book Info */}
       <Box sx={{ px: 2, py: 2, display: "flex", flexDirection: "column", gap: 2, flexGrow: 1, overflowY: "auto" }}>
         {/* Title */}
-        <Typography variant="h6" sx={{ fontWeight: "bold", lineHeight: 1.3 }}>
-          {drawerData.title}
+        <Typography variant="h7" sx={{ fontWeight: "bold", lineHeight: 1.3 }}>
+          {drawerData.title}          {/* Badges */}
+        {(drawerData.isNew || (drawerData.discount && drawerData.discount.amount > 0)) && (
+  <Grid item xs={12} display="flex" gap={1} mt={0.5}>
+    {drawerData.isNew && (
+      <Chip label="Novo" size="small" color="success" sx={{ fontSize: "0.7rem" }} />
+    )}
+   {drawerData.discountAmount > 0 && (
+  <Chip label={`${drawerData.discountAmount}% Popust`} size="small" color="error" sx={{ fontSize: "0.7rem" }} />
+)}
+  </Grid>
+)}
         </Typography>
+        
 
         {/* Key Info Grid */}
         <Grid container spacing={1} alignItems="center">
@@ -75,7 +88,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
 
           {/* Price */}
           <Grid item xs={12} sm={6} display="flex" alignItems="center" gap={0.5}>
-            <AttachMoneyIcon sx={{ fontSize: 18, opacity: 0.8 }} />
+            <LocalOfferIcon sx={{ fontSize: 18, opacity: 0.8 }} />
             <Typography sx={{ fontSize: "0.75rem", color: "#f7f7f7f7" }}>{finalPrice} KM</Typography>
           </Grid>
 
@@ -111,17 +124,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
             </Typography>
           </Grid>
 
-          {/* Badges */}
-        {(drawerData.isNew || (drawerData.discount && drawerData.discount.amount > 0)) && (
-  <Grid item xs={12} display="flex" gap={1} mt={0.5}>
-    {drawerData.isNew && (
-      <Chip label="Novo" size="small" color="success" sx={{ fontSize: "0.7rem" }} />
-    )}
-   {drawerData.discountAmount > 0 && (
-  <Chip label={`${drawerData.discountAmount}% Popust`} size="small" color="error" sx={{ fontSize: "0.7rem" }} />
-)}
-  </Grid>
-)}
+ 
 
         </Grid>
 

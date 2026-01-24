@@ -31,7 +31,7 @@ export default function CompleteProfile() {
       alert("Delivery info saved!");
       window.location.href = "/";
     } catch (err) {
-      console.error(err);
+      
       alert("Failed to save delivery info.");
     }
   };

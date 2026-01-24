@@ -26,7 +26,7 @@ export default function SelectedListItem({ filter, setFilter, page, setPage }) {
   const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
   const handleCategoryClick = React.useCallback(
     (kategorija) => {
-      if (kategorija.naziv.toLowerCase() === "sve kategorije") {
+      if (kategorija.naziv.toLowerCase() === "sve kategorije") { 
         // ✅ Do NOT reset language/isNew/discount here
         setFilter((prev) => ({
           ...prev,
@@ -124,9 +124,10 @@ const chipHoverBg = (color, opacity) => alpha(color, opacity);
           <ListItemText
             primary={
               <Typography
-                variant="caption"
+                variant="body1"
                 sx={{
                   fontSize: { xs: "0.7rem", sm: "0.8rem" },
+                  fontWeight: "100",
                   color: "#f7f7f7f7",
                 }}
               >
@@ -158,7 +159,7 @@ const chipHoverBg = (color, opacity) => alpha(color, opacity);
             timeout="auto"
             unmountOnExit
           >
-            <List component="div" disablePadding>
+            <List component="h1" disablePadding>
               <Grid container spacing={1} sx={{ pl: 2 }}>
                 {kategorija.podkategorije.map((pod, i) => (
                   <Grid item xs={6} key={pod}>
@@ -168,8 +169,8 @@ const chipHoverBg = (color, opacity) => alpha(color, opacity);
                         py: 0.5,
                         gap: "0.6rem",
                         borderRadius: "14px",
-                        fontWeight: 500,
-                        fontSize: { xs: "0.75rem", sm: "0.85rem" },
+                       fontSize: { xs: "0.65rem", sm: "0.75rem" },
+          fontWeight: 500,
                         color: "white",
                        backgroundColor: chipHoverBg(kategorija.boja, 0.25),
                         border: "1px solid transparent",
@@ -308,7 +309,7 @@ const chipHoverBg = (color, opacity) => alpha(color, opacity);
           component="nav"
           subheader={
             <ListSubheader
-              component="div"
+              component="h1"
               sx={{
                 fontWeight: "400",
                 fontSize: "0.80rem",

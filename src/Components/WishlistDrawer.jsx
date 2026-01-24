@@ -22,24 +22,27 @@ import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../Utils.js/useWishlist";
 
 const WishlistDrawer = ({ open, onClose, addToCart }) => {
-  const { wishlist, isLoading, removeFromWishlist, clearWishlist } = useWishlist();
+  const { wishlist, isLoading, removeFromWishlist, clearWishlist } =
+    useWishlist();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const handleRemove = useCallback(
     (bookId) => {
       removeFromWishlist(bookId);
-      enqueueSnackbar("Knjiga je uklonjena iz liste želja", { variant: "info" });
+      enqueueSnackbar("Knjiga je uklonjena iz liste želja", {
+        variant: "info",
+      });
     },
-    [removeFromWishlist, enqueueSnackbar]
+    [removeFromWishlist, enqueueSnackbar],
   );
 
- const handleAddToCart = useCallback(
+  const handleAddToCart = useCallback(
     (book) => {
       addToCart(book);
       enqueueSnackbar("Knjiga je dodana u korpu", { variant: "success" });
     },
-    [addToCart, enqueueSnackbar]
+    [addToCart, enqueueSnackbar],
   );
 
   const handleClearWishlist = useCallback(() => {
@@ -82,13 +85,19 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
                   src={book.coverImage}
                   alt={book.title}
                   onClick={() =>
-                    navigate(`/${book._id}`, { state: { book, category: book.subCategory } })
+                    navigate(`/${book._id}`, {
+                      state: { book, category: book.subCategory },
+                    })
                   }
                   sx={{
                     width: { xs: 80, sm: 100, md: 130 },
                     height: { xs: 100, sm: 130, md: 150 },
                     borderRadius: 2,
-                    "& img": { objectFit: "contain", width: "100%", height: "100%" },
+                    "& img": {
+                      objectFit: "contain",
+                      width: "100%",
+                      height: "100%",
+                    },
                     cursor: "pointer",
                   }}
                 />
@@ -97,19 +106,34 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
               {/* Book Info */}
               <ListItemText
                 sx={{ ml: 2, mr: 1 }}
+                primaryTypographyProps={{ component: "div" }}
+                secondaryTypographyProps={{ component: "div" }}
                 primary={
                   <Typography variant="subtitle1" fontWeight="bold" noWrap>
                     {book.title}
                   </Typography>
                 }
                 secondary={
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}
+                  >
                     <Typography variant="body2" color="#bbb" noWrap>
                       {book.author || ""}
                     </Typography>
 
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1 }}>
-                      <Typography variant="subtitle2" color="#fff" fontWeight="bold">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: 1,
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle2"
+                        color="#fff"
+                        fontWeight="bold"
+                      >
                         {book.discountedPrice.toFixed(2)} KM
                       </Typography>
 
@@ -124,9 +148,13 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
 
                       <Typography
                         variant="caption"
-                        sx={{ color: book.quantity > 0 ? "#4caf50" : "#f44336" }}
+                        sx={{
+                          color: book.quantity > 0 ? "#4caf50" : "#f44336",
+                        }}
                       >
-                        {book.quantity > 0 ? `Dostupno: ${book.quantity}` : "Nema na lageru"}
+                        {book.quantity > 0
+                          ? `Dostupno: ${book.quantity}`
+                          : "Nema na lageru"}
                       </Typography>
                     </Box>
                   </Box>
@@ -160,21 +188,23 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
                 </Tooltip>
 
                 <Tooltip title="Prebaci ovu knjigu u korpu" arrow>
-                  <IconButton
-                    size="small"
-                    disabled={book.quantity === 0}
-                    onClick={() => handleAddToCart(book)}
-                    sx={{
-                      color: "#fff",
-                      bgcolor: "#313131",
-                      "&:hover": { bgcolor: "#388e3c" },
-                      borderRadius: 1.25,
-                      opacity: book.quantity === 0 ? 0.5 : 1,
-                      cursor: book.quantity === 0 ? "not-allowed" : "pointer",
-                    }}
-                  >
-                    <ShoppingCartIcon />
-                  </IconButton>
+                  <span>
+                    <IconButton
+                      size="small"
+                      disabled={book.quantity === 0}
+                      onClick={() => handleAddToCart(book)}
+                      sx={{
+                        color: "#fff",
+                        bgcolor: "#313131",
+                        "&:hover": { bgcolor: "#388e3c" },
+                        borderRadius: 1.25,
+                        opacity: book.quantity === 0 ? 0.5 : 1,
+                        cursor: book.quantity === 0 ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      <ShoppingCartIcon />
+                    </IconButton>
+                  </span>
                 </Tooltip>
               </Box>
             </ListItem>
@@ -211,7 +241,8 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
             alignItems: "center",
             justifyContent: "space-between",
             mb: 2,
-            mt: 9,
+             p: 1,  
+            mt: {xs:5, md:8},
           }}
         >
           <Typography variant="h6" fontWeight="bold">

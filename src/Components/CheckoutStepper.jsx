@@ -164,142 +164,152 @@ export default function CheckoutStepper({
         );
 
       case 1:
-        return (
-          <Box
-            sx={{
-              p: { sm: 3, md: "1.5rem 10rem" },
-              backgroundColor: "#fff",
-              borderRadius: 3,
-              minHeight: { xs: "74lvh", md: "62lvh" },
-              pb: { xs: 8, md: 0 },
-            }}
-          >
-            <Typography
-              variant="h6"
-              fontWeight="bold"
+  return (
+    <Box
+      sx={{
+        p: { sm: 3, md: "1.5rem 10rem" },
+        backgroundColor: "#fff",
+        borderRadius: 3,
+        minHeight: { xs: "74lvh", md: "62lvh" },
+        pb: { xs: 8, md: 0 },
+      }}
+    >
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        sx={{
+          color: "#262626",
+          mb: 2,
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+        }}
+      >
+        🚚 Način dostave
+      </Typography>
+
+      <FormControl component="fieldset" sx={{ width: "100%" }}>
+        <RadioGroup
+          name="deliveryMethod"
+          value={shipping.deliveryMethod || ""}
+          onChange={handleInputChange}
+        >
+          {[
+            {
+              id: "bhposta",
+              label: "BH Pošta (BiH)",
+              description: "Dostava putem BH pošte unutar BiH",
+              price: "7 KM",
+              disabled: false,
+            },
+            {
+              id: "brzapošta",
+              label: "Brza pošta",
+              description: "Brza dostava širom BiH",
+              price: "USKORO",//"10,00 KM",
+              disabled: true,
+            },
+            {
+              id: "storepickup",
+              label: "Preuzimanje u trgovini",
+              description:
+                "Bez dodatnih troškova. Preuzmite pošiljku u jednoj od naših podružnica i to u vremenu od 8:00 do 16:00 radnim danom ili subotom",
+              price: "USKORO",//"0,00 KM",
+              disabled: true,
+            },
+          ].map((option) => (
+            <Paper
+              key={option.id}
+              elevation={shipping.deliveryMethod === option.id ? 4 : 1}
               sx={{
-                color: "#262626",
+                p: 2,
                 mb: 2,
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
+                borderRadius: 2,
+                border:
+                  shipping.deliveryMethod === option.id
+                    ? "1px solid #34bf48"
+                    : "1px solid #eee",
+                backgroundColor:
+                  shipping.deliveryMethod === option.id ? "#f2fff2ff" : "#fff",
+                transition: "0.3s",
+                "&:hover": {
+                  boxShadow: !option.disabled ? "0 4px 16px rgba(0,0,0,0.08)" : "none",
+                },
+                cursor: option.disabled ? "not-allowed" : "pointer",
+                opacity: option.disabled ? 0.5 : 1,
+              }}
+              onClick={() => {
+                if (!option.disabled) {
+                  handleInputChange({
+                    target: {
+                      name: "deliveryMethod",
+                      value: option.id,
+                      price: option.price,
+                    },
+                  });
+                }
               }}
             >
-              🚚 Način dostave
-            </Typography>
-
-            <FormControl component="fieldset" sx={{ width: "100%" }}>
-              <RadioGroup
-                name="deliveryMethod"
-                value={shipping.deliveryMethod || ""}
-                onChange={handleInputChange}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                }}
               >
-                {[
-                  {
-                    id: "bhposta",
-                    label: "BH Pošta (BiH)",
-                    description: "Dostava putem BH pošte unutar BiH",
-                    price: "4,50 KM",
-                  },
-                  {
-                    id: "brzapošta",
-                    label: "Brza pošta",
-                    description: "Brza dostava širom BiH",
-                    price: "10,00 KM",
-                  },
-                  {
-                    id: "storepickup",
-                    label: "Preuzimanje u trgovini",
-                    description:
-                      "Bez dodatnih troškova. Preuzmite pošiljku u jednoj od naših podružnica i to u vremenu od 8:00 do 16:00 radnim danom ili subotom",
-                    price: "0,00 KM",
-                  },
-                ].map((option) => (
-                  <Paper
-                    key={option.id}
-                    elevation={shipping.deliveryMethod === option.id ? 4 : 1}
+                {/* Left: radio + label + description */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flex: 1,
+                  }}
+                >
+                  <Radio
+                    checked={shipping.deliveryMethod === option.id}
                     sx={{
-                      p: 2,
-                      mb: 2,
-                      borderRadius: 2,
-                      border:
-                        shipping.deliveryMethod === option.id
-                          ? "1px solid #34bf48"
-                          : "1px solid #eee",
-                      backgroundColor:
-                        shipping.deliveryMethod === option.id
-                          ? "#f2fff2ff"
-                          : "#fff",
-                      transition: "0.3s",
-                      "&:hover": { boxShadow: "0 4px 16px rgba(0,0,0,0.08)" },
-                      cursor: "pointer",
+                      color: "#34bf48",
+                      mt: "3px",
                     }}
-                    onClick={() =>
-                      handleInputChange({
-                        target: {
-                          name: "deliveryMethod",
-                          value: option.id,
-                          price: option.price, // optionally include price
-                        },
-                      })
-                    }
-                  >
-                    <Box
+                    disabled={option.disabled}
+                  />
+                  <Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.5 }}>
+                      {option.label}
+                    </Typography>
+                    <Typography
+                      variant="body2"
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "100%",
+                        color: "text.secondary",
+                        whiteSpace: "pre-line",
+                        fontSize: "0.75rem",
                       }}
                     >
-                      {/* Left: radio + label + description */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          flex: 1,
-                        }}
-                      >
-                        <Radio
-                          checked={shipping.deliveryMethod === option.id}
-                          sx={{ color: "#34bf48", mt: "3px" }}
-                        />
-                        <Box>
-                          <Typography
-                            variant="subtitle1"
-                            sx={{ fontWeight: 600, mb: 0.5 }}
-                          >
-                            {option.label}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: "text.secondary",
-                              whiteSpace: "pre-line",
-                              fontSize: "0.75rem",
-                            }}
-                          >
-                            {option.description}
-                          </Typography>
-                        </Box>
-                      </Box>
+                      {option.description}
+                    </Typography>
+                  </Box>
+                </Box>
 
-                      {/* Right: price */}
-                      <Box sx={{ flexShrink: 0, ml: 2 }}>
-                        <Typography
-                          variant="subtitle2"
-                          sx={{ color: "#ff4b2b", fontWeight: 500 }}
-                        >
-                          {option.price}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Paper>
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </Box>
-        );
+                {/* Right: price */}
+                <Box sx={{ flexShrink: 0, ml: 2 }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      color: option.disabled ? "#999" : "#ff4b2b",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {option.price}
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          ))}
+        </RadioGroup>
+      </FormControl>
+    </Box>
+  );
 
       case 2:
         return (

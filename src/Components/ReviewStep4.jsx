@@ -1,437 +1,265 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Box,
   Typography,
   Divider,
   List,
-   ListItem,
+  ListItem,
   Grid,
   Paper,
-  Button, CircularProgress
+  Button,
+  CircularProgress,
 } from "@mui/material";
-
 import { useTempOrder } from "../Utils.js/useTempOrder";
 import { useAuth } from "@clerk/clerk-react";
 
-
-
-
 export default function ReviewStep({
-  cart = { items: [], totalCart: 0, totalWithDelivery: 0 },
+  cart = { items: [] },
   shipping = {},
   deliveryOption = "",
   paymentOption = "",
   totalCart = 0,
   delivery = 0,
   totalWithDelivery = 0,
-  orderNumber = 0,
-  handlePay
-  
+  orderNumber = "",
+  handlePay,
 }) {
+  const { user } = useAuth();
+  const { createTempOrder, isCreating } = useTempOrder();
 
-const paymentNames = {
-  card: "Kartično plaćanje",
-  cash: "Pouzećem",
-  bank: "Plaćanje na žiro račun",
-};
-
-const paymentName = paymentNames[paymentOption] || "Nije odabrano";
-
-  const deliveryNames = {
-  bhposta: "BH pošta",
-  brzapošta: "Brza pošta",
-  storepickup: "Preuzimanje u trgovini",
-};
-
-const deliveryName = deliveryNames[deliveryOption] || "Nije odabrano";
-
-const { user } = useAuth();
-
-const { createTempOrder, isCreating } = useTempOrder();
-
- const handleCreateTempOrder = () => {
-   
-
-  
-
-    const tempOrder = {
-       orderNumber: String(orderNumber),
-        paymentOption: String(paymentOption),
-      status: "pending",
-      userEmail: user?.emailAddresses[0]?.emailAddress,
-      shipping: {
-        fullName: shipping.fullName,
-        address: shipping.address,
-        city: shipping.city,
-        zip: shipping.zip,
-        email: shipping.email,
-        phone: shipping.phone,
-        deliveryMethod: shipping.deliveryMethod,
-      },
-      totals: {
-        subtotal: totalCart,
-        delivery: delivery,
-        total: totalWithDelivery,
-      },
+  /* ----------------------------------
+     Memoized labels (performance-safe)
+  ---------------------------------- */
+  const paymentName = useMemo(() => {
+    const map = {
+      card: "Kartično plaćanje",
+      cash: "Pouzećem",
+      bank: "Plaćanje na žiro račun",
     };
+    return map[paymentOption] ?? "Nije odabrano";
+  }, [paymentOption]);
 
- createTempOrder(tempOrder, {
-      onSuccess: (data) => {
-        console.log("✅ Temporary order created:", data);
-        // 👉 here you can redirect to Monri create-payment endpoint
-      },
-    });
+  const deliveryName = useMemo(() => {
+    const map = {
+      bhposta: "BH pošta",
+      brzapošta: "Brza pošta",
+      storepickup: "Preuzimanje u trgovini",
+    };
+    return map[deliveryOption] ?? "Nije odabrano";
+  }, [deliveryOption]);
+
+  /* ----------------------------------
+     Validation guard
+  ---------------------------------- */
+  const isValidOrder =
+    cart?.items?.length > 0 &&
+    shipping.fullName &&
+    shipping.address &&
+    shipping.city &&
+    shipping.zip &&
+    shipping.email &&
+    paymentOption &&
+    deliveryOption;
+
+  /* ----------------------------------
+     Order factory (clean architecture)
+  ---------------------------------- */
+  const buildTempOrder = () => ({
+    orderNumber: String(orderNumber),
+    paymentOption,
+    status: "pending",
+    userEmail: user?.emailAddresses?.[0]?.emailAddress ?? "",
+    shipping: {
+      fullName: shipping.fullName,
+      address: shipping.address,
+      city: shipping.city,
+      zip: shipping.zip,
+      email: shipping.email,
+      phone: shipping.phone,
+      deliveryMethod: shipping.deliveryMethod,
+    },
+    totals: {
+      subtotal: totalCart,
+      delivery,
+      total: totalWithDelivery,
+    },
+  });
+
+  const handleCreateTempOrder = async () => {
+    const tempOrder = buildTempOrder();
+    return createTempOrder(tempOrder);
   };
 
-  const handleCheckout = () => {
-    handleCreateTempOrder();
-  
-    handlePay();
-  }
+  /* ----------------------------------
+     Transactional checkout (CRITICAL)
+  ---------------------------------- */
+  const handleCheckout = async () => {
+    if (isCreating) return;
+
+    if (!isValidOrder) {
+      alert("Molimo popunite sve podatke prije nastavka.");
+      return;
+    }
+
+    try {
+      await handleCreateTempOrder(); // 1️⃣ create order
+      await handlePay();             // 2️⃣ then redirect to payment
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      alert("Došlo je do greške. Pokušajte ponovo.");
+    }
+  };
 
   return (
-<Box
-  sx={{
-    p: {  sm: 2 },
-    maxWidth: 1200,
-    mx: "auto",
-    borderRadius: 3,
-    color: "#333",
-    
-  }}
->
-  {/* SHIPPING INFO */}
-    <Paper
-      sx={{
-        p: { xs: 2, sm: 3 },
-        borderRadius: 3,
-        bgcolor: "#fff",
-        mb: 3,
-        boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-      }}
-    >
-      <Typography
-    variant="h7"
-    fontWeight="bold"
-    sx={{
-      color: "#ff4b2b",
-      mb: 1,
-      display: "flex",
-      alignItems: "center",
-      gap: 1,
-    }}
-  >
-    🏠 Podaci za dostavu
-  </Typography>
-
-      <Grid container spacing={{ xs: 4, sm: 4, md: 4, lg: 17 }}>
-        
-        {[
-          {
-            title: "Lični podaci",
-            fields: [
-              { label: "Ime i prezime", value: shipping.fullName },
-              { label: "Email", value: shipping.email },
-              { label: "Telefon", value: shipping.phone },
-            ],
-          },
-          {
-            title: "Adresa dostave",
-            fields: [
-              { label: "Adresa", value: shipping.address },
-              { label: "Grad", value: shipping.city },
-              { label: "Poštanski broj", value: shipping.zip },
-            ],
-          },
-        ].map((section, i) => (
-          <Grid item xs={12} sm={6} key={i}>
-            <Typography fontWeight="bold" sx={{ mb: 1, color: "#222" }}>
-              {section.title}
-            </Typography>
-            
-            {section.fields.map((f, j) => (
-              <Typography key={j} sx={{ color: "#555", fontSize:"0.85rem" }}>
-                <strong>{f.label}:</strong> {f.value || "-"}
-              </Typography>
-              
-            ))}
-            
-          </Grid>
-        ))}
-        
-      </Grid>
-    </Paper>
-
-   {/* DELIVERY + PAYMENT */}
-<Box
-  sx={{
-    display: "flex",
-    flexDirection: { xs: "column", sm: "row" },
-    gap: 2.5,
-    mb: 3,
-  }}
->
-  {/* Način dostave */}
-  <Paper
-    onClick={() => console.log("Open delivery options")}
-    sx={{
-      flex: 1,
-      p: 2,
-      borderRadius: 4,
-      cursor: "pointer",
-      transition: "all 0.3s ease",
-      bgcolor: "#fff",
-      boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
-      border: "1px solid transparent",
-      
-      
-    }}
-  >
-    <Typography
-      variant="h7"
-      fontWeight="bold"
-      sx={{
-        color: "#ff4b2b",
-        mb: 1,
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-      }}
-    >
-      🚚 Način dostave
-    </Typography>
-  <Typography
-  color="#444"
-  variant="body1"
-  sx={{ fontSize: "0.80rem", display: "flex", justifyContent: "space-between" }}
->
-  {deliveryName}
-  <Box>{delivery.toFixed(2)} KM</Box>
-</Typography>
-  </Paper>
-
-  {/* Način plaćanja */}
-  <Paper
-    onClick={() => console.log("Open payment options")}
-    sx={{
-      flex: 1,
-      p: 2,
-      borderRadius: 4,
-      cursor: "pointer",
-      transition: "all 0.3s ease",
-      bgcolor: "#fff",
-      boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
-      border: "1px solid transparent",
-    
-    }}
-  >
-    <Typography
-      variant="h7"
-      fontWeight="bold"
-      sx={{
-        color: "#ff4b2b",
-        mb: 1,
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-      }}
-    >
-      💳 Način plaćanja
-    </Typography>
-   <Typography color="#444" variant="body1" sx={{fontSize:"0.80rem"}}>
-  {paymentName}
-</Typography>
-  </Paper>
-</Box>
-
-
-  {/* CART ITEMS */}
-  <Box sx={{ mb: 4 }}>
-   
-
-  {cart?.items?.length > 0 ? (
-  <Paper
-    sx={{
-      bgcolor: "#fff",
-      borderRadius: 3,
-      boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-      p: { xs: 2, sm: 2 },
-    }}
-  >
-
-     <Typography
-      variant="h7"
-      fontWeight="bold"
-      textAlign="left"
-      sx={{ color: "#ff4b2b", mb: 2 }}
-    >
-      🛒 Proizvodi u korpi
-    </Typography>
-    <List disablePadding>
-  {cart.items.map((item, index) => (
-    <React.Fragment key={item.book._id}>
-      <ListItem
-        alignItems="flex-start"
-        sx={{
-          mt: 2,
-          display: "flex",
-          flexDirection: { xs: "row", sm: "row" },
-          alignItems: { xs: "flex-start", sm: "center" },
-          gap: 1,
-          py: 1.5,
-          padding: "0rem",
-        }}
-      >
-        {/* IMAGE */}
-        <Box
-          component="img"
-          src={item.book.coverImage}
-          alt={item.book.title}
-          sx={{
-            width: "auto",
-            height: 80,
-            objectFit: "contain",
-            bgcolor: "#f5f5f5",
-            borderRadius: 2,
-            flexShrink: 0,
-          }}
-        />
-
-        {/* INFO */}
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography
-            variant="subtitle1"
-            fontWeight="bold"
-            color="#222"
-            sx={{ lineHeight: 1.3 }}
-          >
-            {item.book.title}
-          </Typography>
-          <Typography variant="body2" color="#666" sx={{ fontSize: "0.80rem" }}>
-            {item.book.author}
-          </Typography>
-          <Typography variant="body2" color="#555" sx={{ fontSize: "0.80rem" }}>
-            Količina: <strong>{item.quantity}</strong>
-          </Typography>
-        </Box>
-
-        {/* PRICE */}
-        <Typography
-          variant="body1"
-          fontWeight="bold"
-          color="#262626"
-          sx={{ minWidth: 80, textAlign: { xs: "right", sm: "right" } }}
-        >
-          {(item.itemTotal ?? item.book.price * item.quantity).toFixed(2)} KM
+    <Box sx={{ p: { sm: 2 }, maxWidth: 1200, mx: "auto" }}>
+      {/* SHIPPING INFO */}
+      <Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
+        <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b" mb={1}>
+          🏠 Podaci za dostavu
         </Typography>
-      </ListItem>
 
-      {/* Divider between items */}
-      {index < cart.items.length - 1 && (
-        <Divider sx={{ borderColor: "#eee", my: 1 }} />
-      )}
-    </React.Fragment>
-  ))}
-</List>
+        <Grid container spacing={4}>
+          {[
+            {
+              title: "Lični podaci",
+              fields: [
+                ["Ime i prezime", shipping.fullName],
+                ["Email", shipping.email],
+                ["Telefon", shipping.phone],
+              ],
+            },
+            {
+              title: "Adresa dostave",
+              fields: [
+                ["Adresa", shipping.address],
+                ["Grad", shipping.city],
+                ["Poštanski broj", shipping.zip],
+              ],
+            },
+          ].map((section, i) => (
+            <Grid item xs={12} sm={6} key={i}>
+              <Typography fontWeight="bold" mb={1}>
+                {section.title}
+              </Typography>
+              {section.fields.map(([label, value], j) => (
+                <Typography key={j} fontSize="0.85rem">
+                  <strong>{label}:</strong> {value || "-"}
+                </Typography>
+              ))}
+            </Grid>
+          ))}
+        </Grid>
+      </Paper>
 
-  </Paper>
-) : (
-  <Typography color="#777" align="center" sx={{ mt: 3 }}>
-    Vaša korpa je prazna.
-  </Typography>
-)}
+      {/* DELIVERY + PAYMENT */}
+      <Grid container spacing={2.5} mb={3}>
+        <Grid item xs={12} sm={6}>
+          <Paper sx={{ p: 2, borderRadius: 3 }}>
+            <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b">
+              🚚 Način dostave
+            </Typography>
+            <Box display="flex" justifyContent="space-between" fontSize="0.85rem">
+              <span>{deliveryName}</span>
+              <span>{delivery.toFixed(2)} KM</span>
+            </Box>
+          </Paper>
+        </Grid>
 
-  </Box>
+        <Grid item xs={12} sm={6}>
+          <Paper sx={{ p: 2, borderRadius: 3 }}>
+            <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b">
+              💳 Način plaćanja
+            </Typography>
+            <Typography fontSize="0.85rem">{paymentName}</Typography>
+          </Paper>
+        </Grid>
+      </Grid>
 
-  {/* TOTAL SECTION */}
-  <Paper
-    sx={{
-      p: { xs: 2, sm: 3 },
-      borderRadius: 3,
-      bgcolor: "#fff",
-      boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-    }}
-  >
-  <Typography
-  variant="h7"
-  fontWeight="bold"
-  sx={{
-    color: "#ff4b2b",
-    mb: 1,
-    display: "flex",
-    alignItems: "center",
-    gap: 1,
-  }}
->
-  ✅ Ukupan iznos
-</Typography>
-   <Divider sx={{ mb: 2, borderColor: "#eee" }} />
-<Grid container justifyContent="space-between" mb={1}>
-  <Typography sx={{ fontSize: "0.8rem" }}>Ukupno u korpi:</Typography>
-  <Typography sx={{ fontSize: "0.8rem" }}>{totalCart.toFixed(2)} KM</Typography>
-</Grid>
-    <Grid container justifyContent="space-between" mb={1}>
-     <Typography sx={{fontSize:"0.8rem"}}>Dostava:</Typography>
-      <Typography sx={{fontSize:"0.8rem"}}>{delivery.toFixed(2)} KM</Typography>
-    </Grid>
-    <Divider sx={{ my: 1, borderColor: "#eee" }} />
-    <Grid container justifyContent="space-between">
-      <Typography variant="h7" fontWeight="bold">
-       Ukupno: 
-      </Typography>
-      <Typography variant="h7" fontWeight="bold" color="#ff4b2b">
-        {totalWithDelivery.toFixed(2)} KM
-      </Typography>
-    </Grid>
-  </Paper>
+      {/* CART ITEMS */}
+      <Paper sx={{ p: 2, mb: 3, borderRadius: 3 }}>
+        <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b" mb={2}>
+          🛒 Proizvodi u korpi
+        </Typography>
 
+        {cart.items.length ? (
+          <List disablePadding>
+            {cart.items.map((item, index) => {
+              if (!item.book) return null;
+              const book = item.book;
 
-<Button
-  variant="contained"
-  fullWidth
-  onClick={handleCheckout}
-  disabled={isCreating || !cart?.items?.length}
-  sx={{
-    mt: 2,
-    bgcolor: "#f33600",
-    color: "white",
-    fontWeight: "bold",
-    textTransform: "none",
-    borderRadius: 2,
-    py: 1.5,
-    boxShadow: "0 3px 10px rgba(243, 54, 0, 0.3)",
-    transition: "all 0.3s ease",
-    "&:hover": {
-      bgcolor: "#d62d00",
-      transform: "translateY(-2px)",
-      boxShadow: "0 6px 14px rgba(243, 54, 0, 0.4)",
-    },
-    "&:disabled": {
-      bgcolor: "#ccc",
-      color: "#666",
-      boxShadow: "none",
-      transform: "none",
-    },
-  }}
->
-  {isCreating ? (
-    <>
-      <CircularProgress
-        size={22}
-        color="inherit"
-        sx={{ mr: 1 }}
-      />
-      Obrada...
-    </>
-  ) : (
-    "Završi kupovinu"
-  )}
-</Button>
+              return (
+                <React.Fragment key={book._id}>
+                  <ListItem sx={{ px: 0 }}>
+                    <Box
+                      component="img"
+                      src={book.coverImage || "/placeholder-book.png"}
+                      alt={`Knjiga: ${book.title}`}
+                      sx={{ height: 80, mr: 2 }}
+                    />
+                    <Box flexGrow={1}>
+                      <Typography fontWeight="bold">{book.title}</Typography>
+                      <Typography fontSize="0.8rem">{book.author}</Typography>
+                      <Typography fontSize="0.8rem">
+                        Količina: <strong>{item.quantity}</strong>
+                      </Typography>
+                    </Box>
+                    <Typography fontWeight="bold">
+                      {(item.itemTotal ?? book.price * item.quantity).toFixed(2)} KM
+                    </Typography>
+                  </ListItem>
+                  {index < cart.items.length - 1 && <Divider />}
+                </React.Fragment>
+              );
+            })}
+          </List>
+        ) : (
+          <Typography align="center" color="#777">
+            Vaša korpa je prazna.
+          </Typography>
+        )}
+      </Paper>
 
-</Box>
+      {/* TOTAL */}
+      <Paper sx={{ p: 3, borderRadius: 3 }}>
+        <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b">
+          ✅ Ukupan iznos
+        </Typography>
+        <Divider sx={{ my: 1 }} />
+        <Grid container justifyContent="space-between">
+          <Typography>Ukupno u korpi:</Typography>
+          <Typography>{totalCart.toFixed(2)} KM</Typography>
+        </Grid>
+        <Grid container justifyContent="space-between">
+          <Typography>Dostava:</Typography>
+          <Typography>{delivery.toFixed(2)} KM</Typography>
+        </Grid>
+        <Divider sx={{ my: 1 }} />
+        <Grid container justifyContent="space-between">
+          <Typography fontWeight="bold">Ukupno:</Typography>
+          <Typography fontWeight="bold" color="#ff4b2b">
+            {totalWithDelivery.toFixed(2)} KM
+          </Typography>
+        </Grid>
+      </Paper>
 
-
-
+      {/* CHECKOUT BUTTON */}
+      <Button
+        fullWidth
+        variant="contained"
+        aria-label="Završi kupovinu"
+        onClick={handleCheckout}
+        disabled={!isValidOrder || isCreating}
+        sx={{ mt: 2, bgcolor: "#f33600", py: 1.5 }}
+      >
+        {isCreating ? (
+          <>
+            <CircularProgress size={22} color="inherit" sx={{ mr: 1 }} />
+            Obrada...
+          </>
+        ) : (
+          "Završi kupovinu"
+        )}
+      </Button>
+    </Box>
   );
 }
-

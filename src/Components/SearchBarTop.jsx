@@ -35,7 +35,7 @@ const SearchBarTop = ({  setDrawerData, toggleDrawer }) => {
         "https://backendsvkwbshp.onrender.com/api/books/search",
         { params: { q: value } }
       );
-      console.log(res.data)
+    
       setSuggestions(res.data);
     } catch (err) {
       console.error("Search error full:", err);

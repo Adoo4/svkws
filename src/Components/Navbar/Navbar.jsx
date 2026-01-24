@@ -24,9 +24,9 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import LoginIcon from "@mui/icons-material/Login";
-import MobileMenu from "./MobileMenu";
-import useCart from "../Utils.js/useCart";
-import { useWishlist } from "../Utils.js/useWishlist";
+import MobileMenu from "../Menu/MobileMenu";
+import useCart from "../../Utils.js/useCart";
+import { useWishlist } from "../../Utils.js/useWishlist";
 
 const NAV_LINKS = [
   {
@@ -60,7 +60,11 @@ const shopRoutes = [
   "/admin",
 ];
 
-const ButtonAppBar = ({ cart, setCartMenu, setDrawerOpen3 }) => {
+const ButtonAppBar = ({ cart,
+  cartMenu,
+  wishlistOpen,
+  setCartMenu,
+  setWishlistOpen, }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isLoaded } = useUser();
@@ -163,11 +167,12 @@ const ButtonAppBar = ({ cart, setCartMenu, setDrawerOpen3 }) => {
           {/* Logo */}
           <Box
             component="img"
-            src="/logofinal.png"
+            src="/logofinal.svg"
             alt="logo"
             onClick={() => navigate("/home")}
             sx={{
-              width: { xs: "12rem", md: "20rem" },
+              alignContent:"center",
+              width: { xs: "10rem", md: "13rem" },
               height: "auto",
               objectFit: "contain",
               cursor: "pointer",
@@ -195,7 +200,10 @@ const ButtonAppBar = ({ cart, setCartMenu, setDrawerOpen3 }) => {
             <SignedIn>
               {/* Cart */}
               {setCartMenu && (
-                <IconButton aria-label="cart" onClick={() => setCartMenu(true)}>
+                <IconButton aria-label="cart" onClick={() => {
+    setWishlistOpen(false);     // 👈 close wishlist
+    setCartMenu((prev) => !prev); // 👈 toggle cart
+  }}>
                   {isLoadingCart ? (
                     <CircularProgress size={20} sx={{ color: "#f9f9f9" }} />
                   ) : (
@@ -228,7 +236,14 @@ const ButtonAppBar = ({ cart, setCartMenu, setDrawerOpen3 }) => {
               )}
 
               {/* Wishlist */}
-              <IconButton aria-label="wishlist" onClick={() => setDrawerOpen3(true)}>
+             <IconButton
+  aria-label="wishlist"
+  onClick={() => {
+    setCartMenu(false);            // 👈 close cart
+    setWishlistOpen((prev) => !prev); // 👈 toggle wishlist
+  }}
+>
+
                 {isLoadingWishlist ? (
                   <CircularProgress size={20} sx={{ color: "#fff" }} />
                 ) : (
@@ -245,7 +260,17 @@ const ButtonAppBar = ({ cart, setCartMenu, setDrawerOpen3 }) => {
                       },
                     }}
                   >
-                    {wishlist.length > 0 ? <BookmarkIcon sx={{ color: "#fff" }} /> : <BookmarkBorderIcon sx={{ color: "#fff" }} />}
+                    {wishlist.length > 0 ? <BookmarkIcon   sx={{
+                          fontSize: { xs: "1.3rem", sm: "1.5rem" },
+                          color: "#fff",
+                          transition: "color 0.3s ease",
+                          "&:hover": { color: "#d62d00" },
+                        }} /> : <BookmarkBorderIcon   sx={{
+                          fontSize: { xs: "1.3rem", sm: "1.5rem" },
+                          color: "#fff",
+                          transition: "color 0.3s ease",
+                          "&:hover": { color: "#d62d00" },
+                        }} />}
                   </Badge>
                 )}
               </IconButton>

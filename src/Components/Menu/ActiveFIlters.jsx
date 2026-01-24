@@ -73,7 +73,7 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
     p: { xs: 1, sm: 2 },
     mb: { xs: 1, sm: 2 },
     maxHeight: "10rem",
-    height: "10rem",
+    height: {xs:"9rem", md:"10rem"},
     overflowY: "auto",
     transition: "all 0.3s ease-in-out",
     gap: 1,

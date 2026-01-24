@@ -71,10 +71,10 @@ const SimpleFooter = () => {
   {/* Website Logo */}
   <Box
     component="img"
-    src="/logofinal.png"
+    src="/logofinal.svg"
     alt="Svjetlostkomerc Bookstore Logo"
     sx={{
-      width: { xs: "200px", md: "420px" },
+      width: { xs: "200px", md: "250px" },
       maxWidth: "100%",
     }}
   />

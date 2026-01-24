@@ -14,7 +14,7 @@ const LeftDrawerMenu = ({ open, setOpen, setFilter, filter, allBooks, page,  set
       PaperProps={{
         sx: {
           backgroundColor: "#262626",
-          width: { xs: 270, md: 430 }, overflow:"hidden"
+          width: { xs: 270, md: 430 }, overflow:"hidden", paddingTop:"3rem"
         },
       }}
     >

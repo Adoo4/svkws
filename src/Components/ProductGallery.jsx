@@ -43,13 +43,6 @@ const ProductGallery = ({
   return books.slice(0, Math.min(books.length, 20)); // Option 1 logic
 }, [books]);
 
-
-
-// Example: "/books/fiction" -> ["books", "fiction"]
-
-
-
-
   return (
     <Box
       sx={{
@@ -65,40 +58,6 @@ const ProductGallery = ({
         boxShadow: "1px 0 10px rgba(0, 0, 0, 0.1)",
       }}
     >
-
-{/*<Typography
-    variant="h5"
-    component="h1"
-    fontWeight={500}
-    textAlign="left"
-    sx={{
-      color: "#2e2e2e",
-      fontSize: { xs: "0.9rem", md: "1.1rem" },
-      width: "100%",
-      mt: { xs: 1, md: 3 },
-      mb: { xs: 2, md: 4 },
-      letterSpacing: "0.4px",
-      textTransform: "capitalize",
-    }}
-  >
-    {displayTitle}
-
-    
-    {sub && (
-      <Box
-        component="span"
-        sx={{
-          ml: 0.5,
-          color: "text.secondary",
-          fontWeight: 400,
-          fontSize: { xs: "0.9rem", md: "1.05rem" },
-          opacity: 0.75,
-        }}
-      >
-        / {sub}
-      </Box>
-    )}
-  </Typography>*/}
 
 
       {/* Loading Skeleton */}

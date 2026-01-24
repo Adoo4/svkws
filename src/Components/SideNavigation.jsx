@@ -50,7 +50,7 @@ export default function LeftDrawerOnly() {
   const handleClose = () => setOpen(false);
 
   return (
-    <Box sx={{ marginTop: "5rem", position: "relative" }}>
+    <Box sx={{ marginTop: "6rem", position: "relative" }}>
       {/* Hamburger Button */}
       <Box sx={buttonStyle}>
         <Button onClick={handleOpen} sx={{ color: "white", minWidth: 0, padding: 0 }}>
