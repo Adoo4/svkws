@@ -1,7 +1,6 @@
 import { Box, Chip } from "@mui/material";
 import CardImage from "../Bookcard/Image";
 import BookCardContent from "../Bookcard/BookCardContent";
-import WishlistButton from "./WishlistButton";
 import BookCardActionsBottom from "./BookcardActionButtons";
 
 const BookCardDesktop = ({

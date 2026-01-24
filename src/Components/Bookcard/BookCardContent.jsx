@@ -2,7 +2,6 @@ import { CardContent, Typography, Box } from "@mui/material";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import kategorije from "../../Utils.js/kategorije";
 import { Chip } from '@mui/material';
-import CardImage from "./Image";
 import WishlistButton from "./WishlistButton";
 
 const BookCardContent = ({
