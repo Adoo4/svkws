@@ -55,24 +55,10 @@
   },
   "reactSnap": {
     "include": [
-      "/",
-      "/home",
-      "/shop",
-      "/checkout",
-      "/success",
-      "/payment-cancel",
-      "/sign-in",
-      "/sign-up",
-      "/complete-profile",
-      "/UsloviKupovine",
-      "/Privatnost",
-      "/OpštiUsloviPoslovanja",
-      "/PolitikaPovrataiReklamacije",
-      "/Sigurnost",
-      "/PolitikaKolačića",
-      "/admin",
-      "/books/*"
-    ],
+    "/shop",
+    "/books/book-1-slug",
+    "/books/book-2-slug"
+  ],
     "inlineCss": true,
     "minifyHtml": true,
     "puppeteerArgs": [
@@ -100,7 +86,7 @@
 
   
   "reactSnap": {
-  "exclude": ["/shop", "/checkout"],
+  "exclude": ["/shop", "/checkout", "/", "/home" ],
 
     "presets": ["react-app"],
   "plugins": ["@babel/plugin-proposal-optional-chaining"]
