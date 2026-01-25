@@ -18,6 +18,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CloseIcon from "@mui/icons-material/Close";
+import zIndex from "@mui/material/styles/zIndex";
 
 export default function CartMenu({
   cart,
@@ -48,6 +49,7 @@ export default function CartMenu({
         background: "#1f1f1f",
         height: "100%",
         overflowY: "auto",
+        zIndex:200
       }}
       role="presentation"
       onKeyDown={() => setCartMenu(false)}
