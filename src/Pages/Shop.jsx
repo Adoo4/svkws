@@ -97,8 +97,8 @@ let CategoryMenu = ({
     filter.mainCategory || filter.subCategory
       ? `${filter.mainCategory ? filter.mainCategory + " - " : ""}${
           filter.subCategory || ""
-        } | MyBookStore`
-      : "MyBookStore"
+        } | Bookstore.ba`
+      : "Bookstore.ba"
   }
   description={`Pronađite najbolje knjige iz ${filter.mainCategory || "raznih kategorija"}${
     filter.subCategory ? `, posebno ${filter.subCategory}` : ""
