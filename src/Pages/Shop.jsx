@@ -11,7 +11,7 @@ import CartMenu from "../Components/CartMenu";
 import BottomNavigationMenu from "../Components/BottomNavigationMenu";
 import useBooks from "../Utils.js/useBooks";
 import { useCallback } from "react";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import SEO from "../Utils.js/SEO";
 
 let CategoryMenu = ({
