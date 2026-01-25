@@ -42,9 +42,7 @@ function App() {
 
   // Keep localStorage in sync when wishlist changes
   useEffect(() => {
-    if (typeof window !== "undefined") {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  }
   }, [wishlist]);
 
   const [wishlistOpen, setWishlistOpen] = useState(false);
@@ -55,27 +53,28 @@ function App() {
   const videoUrl = "/final_landing_video_high.webm";
 
   useEffect(() => {
-  if (typeof window === "undefined") return; // skip during SSR/prerender
+    // Skip loading if user already visited
+    if (sessionStorage.getItem("hasVisitedBefore")) {
+      setLoading(false);
+      return;
+    }
 
-  if (sessionStorage.getItem("hasVisitedBefore")) {
-    setLoading(false);
-    return;
-  }
+    const video = document.createElement("video");
+    video.src = videoUrl;
+    video.preload = "auto";
 
-  const video = document.createElement("video");
-  video.src = videoUrl;
-  video.preload = "auto";
+    video.onloadeddata = () => {
+      sessionStorage.setItem("hasVisitedBefore", "true");
 
-  video.onloadeddata = () => {
-    sessionStorage.setItem("hasVisitedBefore", "true");
-    setTimeout(() => setLoading(false), 6000);
-  };
+      // Optional delay to show loader animation
+      setTimeout(() => setLoading(false), 6000);
+    };
 
-  video.onerror = () => setLoading(false);
+    video.onerror = () => setLoading(false);
 
-  video.load();
-}, []);
-
+    // Start preloading
+    video.load();
+  }, []);
 
   return (
     <SnackbarProvider

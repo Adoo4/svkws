@@ -103,7 +103,7 @@ let CategoryMenu = ({
   description={`Pronađite najbolje knjige iz ${filter.mainCategory || "raznih kategorija"}${
     filter.subCategory ? `, posebno ${filter.subCategory}` : ""
   }. Novi naslovi, popusti i popularne knjige.`}
-  url={typeof window !== "undefined" ? window.location.href : ""}
+  url={window.location.href}
   ogImage="/og-image.png"
 />
 

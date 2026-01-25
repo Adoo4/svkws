@@ -48,7 +48,7 @@ const { data: book, isLoading } = useBookBySlug(!isObjectId ? slug : null);
 
 // Redirect old ID URLs → slug
 useEffect(() => {
-   if (typeof window === "undefined") return;
+  
   if (isObjectId) {
     axios
       .get(`https://backendsvkwbshp.onrender.com/api/books/redirect/${slug}`)

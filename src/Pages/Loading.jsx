@@ -18,7 +18,6 @@ const LoadingDevice = ({ imageUrl }) => {
 const location = useLocation();
   useEffect(() => {
     // If user has visited before, skip loading
-     if (typeof window === "undefined") return; // ✅ React Snap safe
     if (sessionStorage.getItem("hasVisitedBefore")) {
       setLoading(false);
       if (location.pathname === "/") navigate("/home");
@@ -44,7 +43,6 @@ const location = useLocation();
   }, [imageUrl, navigate, location.pathname]);
 
   useEffect(() => {
-     if (typeof window === "undefined") return; // ✅ React Snap safe
     if (!isImageLoaded) return;
 
     const timer = setTimeout(() => {
@@ -57,7 +55,6 @@ const location = useLocation();
 
 
   useEffect(() => {
-     if (typeof window === "undefined") return; // ✅ React Snap safe
   if (loading) {
     document.body.style.overflow = "hidden";
   } else {

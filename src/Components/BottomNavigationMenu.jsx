@@ -23,11 +23,10 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, s
   const scrollTimeout = React.useRef(null);
 
   React.useEffect(() => {
-     if (typeof window === "undefined") return; // ✅ React Snap safe
+    
     ref.current.ownerDocument.body.scrollTop = 0;
   }, [value]);
   React.useEffect(() => {
-     if (typeof window === "undefined") return;
   const handleScroll = () => {
     const currentScroll = window.scrollY;
 

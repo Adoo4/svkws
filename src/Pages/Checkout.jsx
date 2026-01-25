@@ -74,7 +74,6 @@ useEffect(() => {
 }, []);
 
   const handlePay = async () => {
-     if (typeof window === "undefined") return; // React Snap safe
     try {
      
 
@@ -113,7 +112,7 @@ useEffect(() => {
         cancel_url: "https://backendsvkwbshp.onrender.com/api/payment/cancel",
         callback_url: "https://backendsvkwbshp.onrender.com/api/payment/callback",
       };
-   if (typeof document !== "undefined") {
+
       const form = document.createElement("form");
       form.method = "POST";
       form.action = "https://ipgtest.monri.com/v2/form";
@@ -128,10 +127,10 @@ useEffect(() => {
 
       document.body.appendChild(form);
       form.submit();
+    } catch (error) {
+     
+      alert("Greška pri plaćanju.");
     }
-  } catch (error) {
-    alert("Greška pri plaćanju.");
-  }
   };
 
 

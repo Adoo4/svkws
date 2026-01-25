@@ -54,7 +54,6 @@ const termsData = [
 const TermsAndConditionsPage = () => {
 
     useEffect(() => {
-       if (typeof window === "undefined") return; // React Snap safe
    window.scrollTo({
       top: 0,          // scroll to top
       behavior: "smooth" // optional smooth scroll

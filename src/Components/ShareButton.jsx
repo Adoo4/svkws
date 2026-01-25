@@ -1,7 +1,7 @@
 import ShareIcon from '@mui/icons-material/Share';
 function ShareButton() {
   const handleShare = async () => {
-     if (typeof window === "undefined") return;
+    
     if (navigator.share) {
       try {
         await navigator.share({
