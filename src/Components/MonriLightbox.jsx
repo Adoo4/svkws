@@ -4,6 +4,7 @@ export default function MonriLightbox({ paymentData, onSuccess, onClose, onError
   const containerRef = useRef();
 
   useEffect(() => {
+     if (typeof window === "undefined") return; // ✅ React Snap safe
     if (!paymentData) return;
 
     const existingScript = containerRef.current.querySelector("script");

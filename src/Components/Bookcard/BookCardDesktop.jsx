@@ -22,7 +22,7 @@ const BookCardDesktop = ({
     <>
       {/* Badges */}
       {book.isNew && (
-        <Chip label="Novo" color="success" size="small" sx={{ position: "absolute", top: 8, left: 8, zIndex:200 }} />
+        <Chip label="Novo" color="success" size="small" sx={{ position: "absolute", top: 8, left: 8, zIndex:2 }} />
       )}
 
       {hasDiscount && (

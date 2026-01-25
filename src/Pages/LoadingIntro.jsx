@@ -18,7 +18,7 @@ export default function LoadingScreen({ onFinish }  ) {
 }, [navigate, onFinish]);
 
   return (
-    <Box sx={{ minHeight: "100vh", width:"100%", bgcolor: "#262626", display:"flex", justifyContent:"center", alignItems:"center" }}>
+    <Box sx={{ minHeight: "100vh", width:"100%", bgcolor: "#262626", display:"flex", justifyContent:"center", alignItems:"center", }}>
       {/* Your animated loader */}
       <section className="container">
         <div className="square"></div>

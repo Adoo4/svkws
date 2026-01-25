@@ -42,57 +42,40 @@ function App() {
 
   // Keep localStorage in sync when wishlist changes
   useEffect(() => {
+    if (typeof window !== "undefined") {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }
   }, [wishlist]);
 
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
   const [loading, setLoading] = useState(true);
-  /*const imageUrl = "/final_landing_video_high.webm"; 
-
-
-
-  useEffect(() => {
-    // If user visited before, skip loading
-    if (sessionStorage.getItem("hasVisitedBefore")) {
-      setLoading(false);
-      return;
-    }
-
-    const img = new Image();
-    img.src = imageUrl;
-    img.onload = () => {
-      sessionStorage.setItem("hasVisitedBefore", "true");
-      setTimeout(() => setLoading(false), 6000); // optional delay
-    };
-    img.onerror = () => setLoading(false);
-  }, []); */
+  
 
   const videoUrl = "/final_landing_video_high.webm";
 
   useEffect(() => {
-    // Skip loading if user already visited
-    if (sessionStorage.getItem("hasVisitedBefore")) {
-      setLoading(false);
-      return;
-    }
+  if (typeof window === "undefined") return; // skip during SSR/prerender
 
-    const video = document.createElement("video");
-    video.src = videoUrl;
-    video.preload = "auto";
+  if (sessionStorage.getItem("hasVisitedBefore")) {
+    setLoading(false);
+    return;
+  }
 
-    video.onloadeddata = () => {
-      sessionStorage.setItem("hasVisitedBefore", "true");
+  const video = document.createElement("video");
+  video.src = videoUrl;
+  video.preload = "auto";
 
-      // Optional delay to show loader animation
-      setTimeout(() => setLoading(false), 6000);
-    };
+  video.onloadeddata = () => {
+    sessionStorage.setItem("hasVisitedBefore", "true");
+    setTimeout(() => setLoading(false), 6000);
+  };
 
-    video.onerror = () => setLoading(false);
+  video.onerror = () => setLoading(false);
 
-    // Start preloading
-    video.load();
-  }, []);
+  video.load();
+}, []);
+
 
   return (
     <SnackbarProvider
@@ -124,6 +107,7 @@ function App() {
               display: "flex",
               flexDirection: "column",
               minHeight: "100vh",
+              
             }}
           >
             {/* Navbar */}
@@ -182,7 +166,7 @@ function App() {
                 />
                 <Route path="/complete-profile" element={<CompleteProfile />} />
                 <Route
-                  path="/:id"
+                  path="/books/:slug"
                   element={
                     <BookDetail
                       cart={cart}

@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { ClerkProvider } from '@clerk/clerk-react'
+import { ClerkProvider } from '@clerk/clerk-react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { hrHR } from "@clerk/localizations";
-
+import { HelmetProvider } from "react-helmet-async";
 
 const clerkKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -22,18 +22,21 @@ const customHr = {
 };
 
 if (!clerkKey) {
-  throw new Error('Missing Publishable Key')
+  throw new Error('Missing Publishable Key');
 }
+
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
-    <ClerkProvider publishableKey={clerkKey} localization={customHr}>  
-      <QueryClientProvider client={queryClient} appearance={{
-    variables: { locale: "hr" },
-  }}>
-    <App />
-    </QueryClientProvider>
-     </ClerkProvider>
+  <HelmetProvider>
+    <ClerkProvider publishableKey={clerkKey} localization={customHr}>
+      <QueryClientProvider
+        client={queryClient}
+        appearance={{ variables: { locale: "hr" } }}
+      >
+        <App />
+      </QueryClientProvider>
+    </ClerkProvider>
+  </HelmetProvider>
 );
-
-

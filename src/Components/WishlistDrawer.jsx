@@ -84,11 +84,12 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
                   variant="square"
                   src={book.coverImage}
                   alt={book.title}
-                  onClick={() =>
-                    navigate(`/${book._id}`, {
-                      state: { book, category: book.subCategory },
-                    })
-                  }
+                   onClick={() => {
+  const search = typeof window !== "undefined" ? window.location.search : "";
+  navigate(`/books/${book.slug}${search}`, {
+    state: { book, category: book.subCategory },
+  });
+}}
                   sx={{
                     width: { xs: 80, sm: 100, md: 130 },
                     height: { xs: 100, sm: 130, md: 150 },

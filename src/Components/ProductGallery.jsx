@@ -160,10 +160,7 @@ const ProductGallery = ({
             page={currentPage}
             onChange={(e, value) => {
               setPage(value);
-              window.scrollTo({
-                top: 0, // scroll to top
-                behavior: "smooth", // optional smooth scroll
-              });
+             
             }}
             shape="rounded"
             variant="outlined"

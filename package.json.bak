@@ -30,7 +30,6 @@
     "notistack": "^3.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-helmet": "^6.1.0",
     "react-helmet-async": "^2.0.5",
     "react-router": "^7.8.0",
     "react-router-dom": "^7.5.3",
@@ -41,43 +40,11 @@
     "swiper": "^11.2.10",
     "web-vitals": "^2.1.4"
   },
-  "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
-    "react-snap": "^1.23.0",
-    "sitemap": "^9.0.0"
-  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && react-snap",
-    "generate-sitemap": "node scripts/generateSitemap.js",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "reactSnap": {
-    "include": [
-      "/",
-      "/home",
-      "/shop",
-      "/checkout",
-      "/success",
-      "/payment-cancel",
-      "/sign-in",
-      "/sign-up",
-      "/complete-profile",
-      "/UsloviKupovine",
-      "/Privatnost",
-      "/OpštiUsloviPoslovanja",
-      "/PolitikaPovrataiReklamacije",
-      "/Sigurnost",
-      "/PolitikaKolačića",
-      "/admin",
-      "/books/*"
-    ],
-    "inlineCss": true,
-    "minifyHtml": true,
-    "puppeteerArgs": [
-      "--no-sandbox"
-    ]
   },
   "eslintConfig": {
     "extends": [
@@ -96,15 +63,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-
-  
-  "reactSnap": {
-  "exclude": ["/shop", "/checkout"],
-
-    "presets": ["react-app"],
-  "plugins": ["@babel/plugin-proposal-optional-chaining"]
-}
-  
-  
+  }
 }

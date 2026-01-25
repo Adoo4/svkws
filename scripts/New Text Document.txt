@@ -1,0 +1,80 @@
+ scriptsgenerateSitemap.js
+const fs = require(fs);
+const path = require(path);
+const axios = require(axios);
+const { SitemapStream, streamToPromise } = require(sitemap);
+
+const BASE_URL = httpswww.yourdomain.com;  change to your live domain
+
+ Static pages
+const staticPages = [
+  ,
+  home,
+  shop,
+  checkout,
+  success,
+  payment-cancel,
+  sign-in,
+  sign-up,
+  complete-profile,
+  UsloviKupovine,
+  Privatnost,
+  OpštiUsloviPoslovanja,
+  PolitikaPovrataiReklamacije,
+  Sigurnost,
+  PolitikaKolačića,
+  admin
+];
+
+ Fetch all books from your API
+async function fetchAllBooks() {
+  const limit = 1000;  max books per request (adjust if needed)
+  let page = 1;
+  let allBooks = [];
+  let totalPages = 1;
+
+  do {
+    const res = await axios.get(
+      httpsbackendsvkwbshp.onrender.comapibooks,
+      { params { page, limit } }
+    );
+    const data = res.data;
+    allBooks.push(...data.books);
+    totalPages = data.totalPages;
+    page++;
+  } while (page = totalPages);
+
+  return allBooks;
+}
+
+async function generateSitemap() {
+  try {
+    console.log(📦 Fetching books from API...);
+    const books = await fetchAllBooks();
+    console.log(`✅ Fetched ${books.length} books.`);
+
+    const urls = [
+      ...staticPages.map((url) = ({ url, changefreq weekly, priority 0.8 })),
+      ...books.map((book) = ({
+        url `books${book._id}`,
+        changefreq weekly,
+        priority 0.9
+      }))
+    ];
+
+    const sitemap = new SitemapStream({ hostname BASE_URL });
+    urls.forEach((u) = sitemap.write(u));
+    sitemap.end();
+
+    const sitemapOutput = await streamToPromise(sitemap);
+    const outputPath = path.resolve(__dirname, ..publicsitemap.xml);
+
+    fs.writeFileSync(outputPath, sitemapOutput.toString());
+    console.log(`🌐 sitemap.xml generated at ${outputPath}`);
+  } catch (err) {
+    console.error(❌ Error generating sitemap, err);
+    process.exit(1);
+  }
+}
+
+generateSitemap();

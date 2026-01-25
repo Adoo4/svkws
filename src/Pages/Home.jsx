@@ -11,6 +11,7 @@ import '@fontsource/playfair-display/400-italic.css';
 const Home = () => {
 
   useEffect(()=>{
+     if (typeof window === "undefined") return;
      window.scrollTo(0, 0); // scroll to top
   })
   return(

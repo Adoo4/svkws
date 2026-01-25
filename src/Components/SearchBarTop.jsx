@@ -187,7 +187,7 @@ const handleSearch = (e) => {
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/${book._id}`, {
+                      navigate(`/books/${book.slug}`, {
                         state: { book, category: book.subCategory },
                       });
                     }}

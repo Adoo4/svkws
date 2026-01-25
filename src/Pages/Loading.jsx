@@ -18,6 +18,7 @@ const LoadingDevice = ({ imageUrl }) => {
 const location = useLocation();
   useEffect(() => {
     // If user has visited before, skip loading
+     if (typeof window === "undefined") return; // ✅ React Snap safe
     if (sessionStorage.getItem("hasVisitedBefore")) {
       setLoading(false);
       if (location.pathname === "/") navigate("/home");
@@ -43,6 +44,7 @@ const location = useLocation();
   }, [imageUrl, navigate, location.pathname]);
 
   useEffect(() => {
+     if (typeof window === "undefined") return; // ✅ React Snap safe
     if (!isImageLoaded) return;
 
     const timer = setTimeout(() => {
@@ -53,7 +55,24 @@ const location = useLocation();
     return () => clearTimeout(timer);
   }, [isImageLoaded, navigate, location.pathname]);
 
+
+  useEffect(() => {
+     if (typeof window === "undefined") return; // ✅ React Snap safe
+  if (loading) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [loading]);
+
   if (!loading) return null;
+
+
+  
 
   return (
     <div className="LoaderWrapper">
@@ -93,7 +112,7 @@ const location = useLocation();
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 1.8, ease: "easeIn" }}
           sx={{
-            height: { xs: 20, sm: 30, md: 30 },
+            height: { xs: 20, sm: 30, md: 50 },
             width: "auto",
             objectFit: "contain",
             mb: 0.5,

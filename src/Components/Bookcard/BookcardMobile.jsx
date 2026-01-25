@@ -35,7 +35,7 @@ const BookCardMobile = ({
           flexDirection: "column",
           alignItems:"flex-end",
           gap: 0.5,
-          zIndex: 200,
+          zIndex: 2,
 
         }}
       >

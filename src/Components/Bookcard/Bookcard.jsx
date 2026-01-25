@@ -47,9 +47,9 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   );
 
   const openDetails = useCallback(() => {
-    navigate(`/${book._id}${window.location.search}`, {
-      state: { book, category: book.subCategory },
-    });
+   navigate(`/books/${book.slug}${window.location.search}`, {
+  state: { book, category: book.subCategory },
+});
   }, [book, navigate]);
 
   /* ---------------- Derived state ---------------- */

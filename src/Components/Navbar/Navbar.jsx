@@ -75,6 +75,7 @@ const ButtonAppBar = ({ cart,
 
   // ---------------- PERFORMANCE: optimized scroll handler ----------------
   useEffect(() => {
+     if (typeof window === "undefined") return;
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {

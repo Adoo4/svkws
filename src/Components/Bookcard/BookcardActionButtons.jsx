@@ -35,11 +35,11 @@ const BookCardActionsBottom = ({
       <Button
         variant="outlined"
         size="small"
-        onClick={() => {
-          navigate(`/${book._id}${window.location.search}`, {
-            state: { book, category: book.subCategory },
-          });
-        }}
+     onClick={() => {
+    navigate(`/books/${book.slug}${window.location.search}`, {
+      state: { book, category: book.subCategory },
+    });
+  }}
         startIcon={
           <InfoOutlinedIcon
             sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }}

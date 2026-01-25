@@ -1,21 +1,20 @@
-import * as React from "react";
+
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
-import { Grid, Chip } from "@mui/material";
+import { Grid, Chip, Divider } from "@mui/material";
 
 import PersonIcon from "@mui/icons-material/Person";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import LanguageIcon from "@mui/icons-material/Language";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+
 
 export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }) {
   if (!drawerData) return null;
 
- const finalPrice = drawerData.discountedPrice?.toFixed(2) || drawerData.priceWithVAT?.toFixed(2) || drawerData.price.toFixed(2);
+ 
 
 
   return (
@@ -25,13 +24,13 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
       onClose={toggleDrawer(false)}
       PaperProps={{
         sx: {
-          width: { xs: 250, sm: 320, md: 360 },
+          width: { xs: 200, sm: 320, md: 300 },
           background: "linear-gradient(to bottom, #262626, #262626)",
           color: "#f9f9f9",
           display: "flex",
           flexDirection: "column",
           height: "100%",
-          overflow: "hidden",
+          overflow: "auto",
           paddingTop:{xs:"3rem", md:"4rem"}
         },
       }}
@@ -56,7 +55,18 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
       </Box>
 
       {/* Book Info */}
-      <Box sx={{ px: 2, py: 2, display: "flex", flexDirection: "column", gap: 2, flexGrow: 1, overflowY: "auto" }}>
+      <Box
+  sx={{
+    px: 1,
+    py: 1,
+    display: "flex",
+    flexDirection: "column",
+    gap: 1,
+    flex: 1,
+    overflowY: "auto",
+  }}
+>
+
         {/* Title */}
         <Typography variant="h7" sx={{ fontWeight: "bold", lineHeight: 1.3 }}>
           {drawerData.title}          {/* Badges */}
@@ -74,7 +84,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
         
 
         {/* Key Info Grid */}
-        <Grid container spacing={1} alignItems="center">
+        <Grid container spacing={0} alignItems="center">
           {/* Author */}
           <Grid item xs={12} sm={6} display="flex" alignItems="center" gap={0.5}>
             <PersonIcon sx={{ fontSize: 18, opacity: 0.8 }} />
@@ -86,68 +96,84 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
             </Typography>
           </Grid>
 
-          {/* Price */}
-          <Grid item xs={12} sm={6} display="flex" alignItems="center" gap={0.5}>
-            <LocalOfferIcon sx={{ fontSize: 18, opacity: 0.8 }} />
-            <Typography sx={{ fontSize: "0.75rem", color: "#f7f7f7f7" }}>{finalPrice} KM</Typography>
-          </Grid>
+         
 
           {/* Language */}
-          <Grid item xs={12} sm={6} display="flex" alignItems="center" gap={0.5}>
-            <LanguageIcon sx={{ fontSize: 18, opacity: 0.8 }} />
-            <Typography sx={{ fontSize: "0.75rem", color: "#f7f7f7f7" }}>{drawerData.language}</Typography>
+          <Grid item xs={6} sm={6} display="flex" alignItems="center" gap={0.5}>
+            <LanguageIcon sx={{ fontSize: 16, opacity: 0.8 }} />
+            <Typography sx={{ fontSize: {xs:"0.70rem", md:"0.75"}, color: "#f7f7f7f7" }}>{drawerData.language}</Typography>
           </Grid>
 
           {/* Pages */}
-          <Grid item xs={12} sm={6} display="flex" alignItems="center" gap={0.5}>
-            <MenuBookIcon sx={{ fontSize: 18, opacity: 0.8 }} />
-            <Typography sx={{ fontSize: "0.75rem", color: "#f7f7f7f7" }}>{drawerData.pages} stranica</Typography>
+          <Grid item xs={6} sm={6} display="flex" alignItems="center" gap={0.5}>
+            <MenuBookIcon sx={{ fontSize: 16, opacity: 0.8 }} />
+            <Typography sx={{ fontSize: {xs:"0.70rem", md:"0.75"}, color: "#f7f7f7f7" }}>{drawerData.pages} stranica</Typography>
           </Grid>
 
           {/* Publisher */}
-          <Grid item xs={12} sm={6} display="flex" alignItems="center" gap={0.5}>
-            <CorporateFareIcon sx={{ fontSize: 18, opacity: 0.8 }} />
-            <Typography sx={{ fontSize: "0.75rem", color: "#f7f7f7f7" }}>{drawerData.publisher}</Typography>
+          <Grid item xs={6} sm={6} display="flex" alignItems="center" gap={0.5}>
+            <CorporateFareIcon sx={{ fontSize: 16, opacity: 0.8 }} />
+            <Typography sx={{ fontSize: {xs:"0.70rem", md:"0.75"}, color: "#f7f7f7f7" }}>{drawerData.publisher}</Typography>
           </Grid>
 
           {/* Publication Year */}
-          <Grid item xs={12} sm={6} display="flex" alignItems="center" gap={0.5}>
-            <AttachMoneyIcon sx={{ fontSize: 18, opacity: 0.8, visibility: "hidden" }} /> {/* spacer */}
-            <Typography sx={{ fontSize: "0.75rem", color: "#f7f7f7f7" }}>{drawerData.publicationYear}</Typography>
+          <Grid item xs={6} sm={6} display="flex" alignItems="center" gap={0.5}>
+            <AttachMoneyIcon sx={{ fontSize: 16, opacity: 0.8, visibility: "visible" }} /> {/* spacer */}
+            <Typography sx={{ fontSize: {xs:"0.70rem", md:"0.75"}, color: "#f7f7f7f7" }}>{drawerData.publicationYear}</Typography>
           </Grid>
 
-          {/* Stock / Quantity */}
-          <Grid item xs={12} display="flex" alignItems="center" gap={0.5}>
-            <Inventory2Icon sx={{ fontSize: 18, opacity: 0.8 }} />
-            <Typography sx={{ fontSize: "0.75rem", color: "#f7f7f7f7" }}>
-              {drawerData.quantity > 0 ? `${drawerData.quantity} na stanju` : "Nema na stanju"}
-            </Typography>
-          </Grid>
+         
 
  
 
         </Grid>
-
+                <Divider/>
         {/* Description */}
         <Typography
-          variant="body2"
-          sx={{
-            fontSize: { xs: "0.75rem", sm: "0.8rem", md: "0.85rem" },
-            lineHeight: { xs: 1.6, md: 1.7 },
-            color: "rgba(245,245,245,0.88)",
-            textAlign: { xs: "left", sm: "justify" },
-            whiteSpace: "pre-line",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-            maxHeight: { xs: 250, md: 300 },
-            overflowY: "auto",
-            pr: 1.5,
-            "&::-webkit-scrollbar": { width: "4px" },
-            "&::-webkit-scrollbar-thumb": { backgroundColor: "rgba(255,255,255,0.25)", borderRadius: "8px" },
-          }}
-        >
-          {drawerData.description || "No description available."}
-        </Typography>
+  variant="body2"
+  sx={{
+    fontSize: {
+      xs: "0.8rem",
+      sm: "0.80rem",
+      md: "0.80rem",
+    },
+    lineHeight: {
+      xs: 1.75,
+      sm: 1.8,
+      md: 1.85,
+    },
+    color: "rgba(255,255,255,0.92)",
+    textAlign: "left",
+    whiteSpace: "pre-line",
+    wordBreak: "break-word",
+
+    mt: 1,
+    pr: 1.5,
+
+    maxHeight: { xs: "none", sm: 240, md: "100%" },
+    overflowY: { xs: "visible", sm: "auto" },
+
+    /* Chrome / Edge / Safari */
+    "&::-webkit-scrollbar": {
+      width: "2px",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "transparent",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(255,255,255,0.25)",
+      borderRadius: "8px",
+    },
+
+    /* Firefox */
+    scrollbarWidth: "thin",
+    scrollbarColor: "rgba(255,255,255,0.25) transparent",
+  }}
+>
+  {drawerData.description || "No description available."}
+</Typography>
+
+
       </Box>
     </Drawer>
   );

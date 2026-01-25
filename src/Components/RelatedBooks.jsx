@@ -141,7 +141,7 @@ export default function RelatedBooks({ book }) {
           <SwiperSlide key={b._id}>
             <RelatedBookCard
               book={b}
-              onClick={() => navigate(`/${b._id}`, { state: { book: b, category: b.subCategory } })}
+              onClick={() => navigate(`/books/${b.slug}`, { state: { book: b, category: b.subCategory } })}
             />
           </SwiperSlide>
         ))}
@@ -153,7 +153,7 @@ export default function RelatedBooks({ book }) {
         <Grid item xs={12} sm={6} md={2} key={b._id}>
           <RelatedBookCard
             book={b}
-            onClick={() => navigate(`/${b._id}`, { state: { book: b, category: b.subCategory } })}
+            onClick={() => navigate(`/books/${b.slug}`, { state: { book: b, category: b.subCategory } })}
           />
         </Grid>
       ))}

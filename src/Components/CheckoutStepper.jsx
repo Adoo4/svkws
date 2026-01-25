@@ -53,7 +53,7 @@ export default function CheckoutStepper({
     fullName: /^[A-Za-zÀ-ž]+ [A-Za-zÀ-ž]+(?: [A-Za-zÀ-ž]+)*$/,
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     phone: /^[0-9]{8,12}$/,
-    address: /^[A-Za-z0-9čšđžćČŠĐŽĆ\s,.-]{5,}$/,
+    address: /^[A-Za-z0-9čšđžćČŠĐŽĆ\s,./-]{3,}$/,
     city: /^[A-Za-zÀ-ž\s]{2,}$/,
     zip: /^[0-9]{4,10}$/,
   };
