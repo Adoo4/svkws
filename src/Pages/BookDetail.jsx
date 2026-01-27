@@ -71,31 +71,33 @@ useEffect(() => {
   if (!book) return null;
 
   const finalPrice =
-    book.discountAmount > 0 ? book.discountedPrice : book.priceWithVAT ?? book.price;
+  book.discountAmount > 0
+    ? book.discountedPrice // already calculated on backend
+    : book.mpc;           // use MPC as fallback
 
   // JSON-LD structured data for the book
   const jsonLdBook = {
-    "@context": "https://schema.org",
-    "@type": "Book",
-    name: book.title,
-    author: book.author,
-    isbn: book.isbn,
-    image: book.coverImage || "/og-image.png",
-    publisher: book.publisher,
-    datePublished: book.publicationYear,
-    numberOfPages: book.pages,
-    inLanguage: book.language,
-    offers: {
-      "@type": "Offer",
-      price: finalPrice,
-      priceCurrency: "BAM",
-      availability:
-        book.quantity > 0
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-      url: window.location.href,
-    },
-  };
+  "@context": "https://schema.org",
+  "@type": "Book",
+  name: book.title,
+  author: book.author,
+  isbn: book.isbn,
+  image: book.coverImage || "/og-image.png",
+  publisher: book.publisher,
+  datePublished: book.publicationYear,
+  numberOfPages: book.pages,
+  inLanguage: book.language,
+  offers: {
+    "@type": "Offer",
+    price: finalPrice,   // now using MPC/discountedPrice
+    priceCurrency: "BAM",
+    availability:
+      book.quantity > 0
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+    url: window.location.href,
+  },
+};
 
   // Breadcrumb JSON-LD for SEO
   const jsonLdBreadcrumb = {
@@ -257,7 +259,7 @@ useEffect(() => {
                   </Typography>
                   {book.discountAmount > 0 && (
                     <Typography sx={{ textDecoration: "line-through", color: "#999", fontSize: { xs: "0.9rem", md: "1rem" } }}>
-                      {book.priceWithVAT?.toFixed(2)} KM
+                      {book.mpc?.toFixed(2)} KM
                     </Typography>
                   )}
                 </Box>

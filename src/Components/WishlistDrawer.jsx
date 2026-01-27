@@ -142,7 +142,7 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
                           variant="body2"
                           sx={{ color: "#bbb", textDecoration: "line-through" }}
                         >
-                          {book.priceWithVAT.toFixed(2)} KM
+                          {book.mpc.toFixed(2)} KM
                         </Typography>
                       )}
 

@@ -15,6 +15,7 @@ const Home = () => {
      window.scrollTo(0, 0); // scroll to top
   })
   return(
+    
     <Box sx={{ minHeight:"100lvh", display:"flex", flexDirection:"column", gap:"0rem", background:"black"}}>
    <Carousel/>
     <Iconlist/>

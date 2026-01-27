@@ -88,7 +88,7 @@ export default function CartMenu({
           cart?.items.map(({ book, quantity, itemTotal }) => {
             const hasDiscount =
               book.discount?.amount > 0 &&
-              book.discountedPrice < book.priceWithVAT;
+              book.discountedPrice < book.mpc;
 
             return (
               <ListItem
@@ -184,7 +184,7 @@ export default function CartMenu({
                               fontSize: "0.8rem",
                             }}
                           >
-                            {book.priceWithVAT.toFixed(2)} BAM
+                            {book.mpc.toFixed(2)} BAM
                           </Typography>
                         )}
                       </Box>

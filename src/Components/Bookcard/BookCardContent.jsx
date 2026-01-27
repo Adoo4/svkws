@@ -16,8 +16,8 @@ const BookCardContent = ({
 }) => {
 
   const displayPrice = hasDiscount
-  ? book.discountedPrice
-  : book.priceWithVAT;
+  ? book.discountedPrice  // already calculated on backend
+  : book.mpc;             // use MPC as fallback
 
 
 
@@ -294,7 +294,7 @@ const BookCardContent = ({
           }}
         >
           {/* Original price with VAT fallback */}
-          {book.priceWithVAT.toFixed(2)} KM
+          {book.mpc.toFixed(2)} KM
         </Typography>
       </Box>
       <Typography sx={{ fontSize: "0.65rem", color: "text.secondary" }}>

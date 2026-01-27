@@ -20,7 +20,7 @@ const BookCardMobile = ({
 }) => {
   const finalPrice = hasDiscount
     ? book.discountedPrice
-    : book.priceWithVAT;
+    : book.mpc;
 
 
   return (
@@ -197,7 +197,7 @@ const BookCardMobile = ({
           color: "text.disabled",
         }}
       >
-        {book.priceWithVAT.toFixed(2)} KM
+        {book.mpc.toFixed(2)} KM
       </Typography>
     </>
   ) : (
