@@ -8,6 +8,7 @@ import '@fontsource/playfair-display/400-italic.css';
 
 
 
+
 const Home = () => {
 
   useEffect(()=>{
