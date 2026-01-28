@@ -105,9 +105,10 @@ const Home = () => {
               ref={videoRef}
               muted
               playsInline
+              loop
               // removed loop and autoPlay attributes so we control playback explicitly
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              poster="https://i.postimg.cc/T38Bvycw/funny-image-with-kid.jpg"
+              poster="/hero-poster.jpg"
               aria-label="Promotional video"
             >
               <source src="/final_landing_video_high.webm" type="video/webm" />
@@ -117,16 +118,17 @@ const Home = () => {
           <div className="embla__slide">
             <img
               loading="lazy"
-              src="https://i.postimg.cc/nhtqv85J/international-day-education-cartoon-style.jpg"
+              src="/international-day-education-cartoon-style-converted-from-jpg.webp"
               alt="Educational illustration with books and characters"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
+ffmpeg -i final_landing_video_high.webm -ss 00:00:02.000 -vframes 1 hero-poster.jpg
 
           <div className="embla__slide">
             <img
               loading="lazy"
-              src="https://i.postimg.cc/j5jQ1LvG/hot-air-balloons-dotting-sky-mountain-range.jpg"
+              src="/hot-air-balloons-dotting-sky-mountain-range-converted-from-jpg.webp"
               alt="Hot air balloons over mountains"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
