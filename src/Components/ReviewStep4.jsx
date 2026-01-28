@@ -204,7 +204,7 @@ export default function ReviewStep({
                       </Typography>
                     </Box>
                     <Typography fontWeight="bold">
-                      {(item.itemTotal ?? book.price * item.quantity).toFixed(2)} KM
+                      {(item.itemTotal ?? book.mpc * item.quantity).toFixed(2)} KM
                     </Typography>
                   </ListItem>
                   {index < cart.items.length - 1 && <Divider />}
