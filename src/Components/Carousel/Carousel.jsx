@@ -116,13 +116,22 @@ const Home = () => {
           </div>
 
           <div className="embla__slide">
-            <img
-              loading="lazy"
-              src="/international-day-education-cartoon-style-converted-from-jpg.webp"
-              alt="Educational illustration with books and characters"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </div>
+  <img
+    src="/international-day-education-1280.webp"
+    srcSet="
+      /international-day-education-768.webp 768w,
+      /international-day-education-1280.webp 1280w,
+      /international-day-education-1920.webp 1920w
+    "
+    sizes="100vw"
+    alt="Educational illustration with books and characters"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+  />
+</div>
+
 
 
           <div className="embla__slide">
