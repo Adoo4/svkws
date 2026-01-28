@@ -123,7 +123,7 @@ const Home = () => {
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
-ffmpeg -i final_landing_video_high.webm -ss 00:00:02.000 -vframes 1 hero-poster.jpg
+
 
           <div className="embla__slide">
             <img
