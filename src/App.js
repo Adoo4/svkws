@@ -14,7 +14,7 @@ import BookDetail from "./Pages/BookDetail";
 import CompleteProfile from "./Pages/CompleteProfile";
 import AuthRedirect from "./Components/AuthRedirect";
 import CartMenu from "./Components/CartMenu";
-import LoadingDevice from "./Pages/Loading";
+
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import WishlistDrawer from "./Components/WishlistDrawer";
 import { SnackbarProvider } from "notistack";
@@ -47,35 +47,10 @@ function App() {
 
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
-  const [loading, setLoading] = useState(true);
+ 
   
 
-  const videoUrl = "/final_landing_video_high.webm";
-
-  useEffect(() => {
-    // Skip loading if user already visited
-    if (sessionStorage.getItem("hasVisitedBefore")) {
-      setLoading(false);
-      return;
-    }
-
-    const video = document.createElement("video");
-    video.src = videoUrl;
-    video.preload = "auto";
-
-    video.onloadeddata = () => {
-      sessionStorage.setItem("hasVisitedBefore", "true");
-
-      // Optional delay to show loader animation
-      setTimeout(() => setLoading(false), 6000);
-    };
-
-    video.onerror = () => setLoading(false);
-
-    // Start preloading
-    video.load();
-  }, []);
-
+  
   return (
     <SnackbarProvider
       maxSnack={3}
@@ -98,9 +73,7 @@ function App() {
       }}
     >
       <Router>
-        {loading ? (
-          <LoadingDevice /> // show loader while loading
-        ) : (
+      
           <div
             style={{
               display: "flex",
@@ -212,7 +185,7 @@ function App() {
             {/* Footer */}
             <Footer />
           </div>
-        )}
+        )
 
         {/* Cart overlay */}
         <CartMenu
