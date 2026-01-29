@@ -146,7 +146,7 @@ const Home = () => {
           /internationalDay-1280px.webp 1280w,
           /internationalDay-1920px.webp 1920w
         "
-        sizes="100vw"
+         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 100vw, 1920px"
         width="1920"
         height="940"
         alt="Educational illustration with books and characters"
@@ -166,7 +166,7 @@ const Home = () => {
           /hot-air-balloons-1280px.webp 1280w,
           /hot-air-balloons-1920px.webp 1920w
         "
-        sizes="100vw"
+         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 100vw, 1920px"
         width="1920"
         height="940"
         alt="Educational illustration with books and characters"

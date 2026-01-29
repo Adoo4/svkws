@@ -17,17 +17,18 @@ const SimpleFooter = () => {
   const navigate = useNavigate();
 
   return (
-    <Box
-      component="footer"
-      sx={{
-        backgroundColor: isHome ? "#000" : "#262626",
-        color: "#f9f9f9",
-        px: { xs: 2, md: 6 },
-        py: { xs: 3, md: 6 },
-        mt: "auto",
-        zIndex: 1000,
-      }}
-    >
+<Box
+  component="footer"
+  sx={{
+  minHeight: { xs: 380, md: 300 },
+    backgroundColor: isHome ? "#000" : "#262626",
+    color: "#f9f9f9",
+    px: { xs: 2, md: 6 },
+    py: { xs: 3, md: 6 },
+    mt: "auto",
+    zIndex: 1000,
+  }}
+>
       {/* Decorative Header */}
       <Box
         sx={{
@@ -65,32 +66,39 @@ const SimpleFooter = () => {
           gap={2}
         >
           {/* Website Logo */}
-          <Box
-            component="img"
-            src="/logofinal.svg"
-            alt="Svjetlostkomerc Logo"
-            width={250}
-            height={60}
-            sx={{
-              maxWidth: "100%",
-              objectFit: "contain",
-              aspectRatio: "250/60",
-            }}
-          />
+         <Box
+  component="img"
+  src="/logofinal.svg"
+  alt="Svjetlostkomerc Logo"
+  width={250}
+  height={60}
+  sx={{
+    maxWidth: "100%",
+    objectFit: "contain",
+   aspectRatio: "250/60",
+ display: "block",
+  }}
+/>
+
+
+
+
+
 
           {/* Payment Gateway Logo */}
           <Box
-            component="img"
-            src="/monri_footer_negativ.png"
-            alt="Monri Payment Logo"
-            width={150}
-            height={75}
-            sx={{
-              maxWidth: "100%",
-              objectFit: "contain",
-              aspectRatio: "150/75",
-            }}
-          />
+  component="img"
+  src="/monri_footer_negativ.png"
+  alt="Monri Payment Logo"
+  width={250}
+  height={60}
+  sx={{
+    maxWidth: "100%",
+    objectFit: "contain",
+  aspectRatio: "250/60",
+  display: "block",
+  }}
+/>
         </Grid>
 
         {/* Company Info */}

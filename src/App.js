@@ -185,7 +185,7 @@ function App() {
             {/* Footer */}
             <Footer />
           </div>
-        )
+        
 
         {/* Cart overlay */}
         <CartMenu
