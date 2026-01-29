@@ -129,7 +129,7 @@ const Home = () => {
         playsInline
         loop
         preload="metadata"
-        poster="/hero-poster.jpg"
+        poster="/hero-poster.webp"
         aria-label="Promotional video"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       >
