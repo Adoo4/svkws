@@ -157,19 +157,25 @@ const Home = () => {
       />
     </div>
 
-    {/* Slide 3 — NON-LCP IMAGE */}
+    {/* Slide 3 — LCP IMAGE (IMPORTANT) */}
     <div className="embla__slide">
       <img
-        src="/hot-air-balloons-dotting-sky-mountain-range-converted-from-jpg.webp"
-        loading="lazy"
-        decoding="async"
+        src="/internationalDay-1280.webp"
+        srcSet="
+          /hot-air-balloons-768px.webp 768w,
+          /hot-air-balloons-1280px.webp 1280w,
+          /hot-air-balloons-1920px.webp 1920w
+        "
+        sizes="100vw"
         width="1920"
         height="940"
-        alt="Hot air balloons over mountains"
+        alt="Educational illustration with books and characters"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
     </div>
-
   </div>
 </div>
 
