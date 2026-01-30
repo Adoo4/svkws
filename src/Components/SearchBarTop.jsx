@@ -157,12 +157,13 @@ const handleSearch = (e) => {
               sx={{ width: 40, height: "auto", objectFit: "contain" }}
             />
           </ListItemAvatar>
-          <ListItemText
-            primary={book.title}
-            secondary={book.author}
-            primaryTypographyProps={{ noWrap: true, fontSize: "0.9rem", fontWeight: 500 }}
-            secondaryTypographyProps={{ noWrap: true, fontSize: "0.75rem", color: "text.secondary" }}
-          />
+         <ListItemText
+  primary={book.title}
+  secondary={`${book.author} • ${book.mpc ? `Cijena: ${book.mpc} KM` : ''}`}
+  primaryTypographyProps={{ noWrap: true, fontSize: "0.9rem", fontWeight: 500 }}
+  secondaryTypographyProps={{ noWrap: true, fontSize: "0.75rem", color: "text.secondary" }}
+/>
+
                 <Box
                   sx={{
                     display: "flex",
