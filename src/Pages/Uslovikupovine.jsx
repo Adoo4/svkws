@@ -1,6 +1,6 @@
 // TermsAndConditionsPage.jsx
 import React, { useEffect } from "react";
-import { Typography, Box, Divider } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 
 const termsData = [
   {
