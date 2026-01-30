@@ -103,7 +103,7 @@ export default function ReviewStep({
 
     try {
       await handleCreateTempOrder(); // 1️⃣ create order
-      await handlePay();             // 2️⃣ then redirect to payment
+      await handlePay(); // 2️⃣ then redirect to payment
     } catch (error) {
       console.error("Checkout failed:", error);
       alert("Došlo je do greške. Pokušajte ponovo.");
@@ -114,7 +114,12 @@ export default function ReviewStep({
     <Box sx={{ p: { sm: 2 }, maxWidth: 1200, mx: "auto" }}>
       {/* SHIPPING INFO */}
       <Paper sx={{ p: 3, mb: 3, borderRadius: 3 }}>
-        <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b" mb={1}>
+        <Typography
+          variant="subtitle1"
+          fontWeight="bold"
+          color="#ff4b2b"
+          mb={1}
+        >
           🏠 Podaci za dostavu
         </Typography>
 
@@ -158,7 +163,11 @@ export default function ReviewStep({
             <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b">
               🚚 Način dostave
             </Typography>
-            <Box display="flex" justifyContent="space-between" fontSize="0.85rem">
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              fontSize="0.85rem"
+            >
               <span>{deliveryName}</span>
               <span>{delivery.toFixed(2)} KM</span>
             </Box>
@@ -177,7 +186,12 @@ export default function ReviewStep({
 
       {/* CART ITEMS */}
       <Paper sx={{ p: 2, mb: 3, borderRadius: 3 }}>
-        <Typography variant="subtitle1" fontWeight="bold" color="#ff4b2b" mb={2}>
+        <Typography
+          variant="subtitle1"
+          fontWeight="bold"
+          color="#ff4b2b"
+          mb={2}
+        >
           🛒 Proizvodi u korpi
         </Typography>
 
@@ -189,24 +203,40 @@ export default function ReviewStep({
 
               return (
                 <React.Fragment key={book._id}>
-                  <ListItem sx={{ px: 0 }}>
-                    <Box
-                      component="img"
-                      src={book.coverImage || "/placeholder-book.png"}
-                      alt={`Knjiga: ${book.title}`}
-                      sx={{ height: 80, mr: 2 }}
-                    />
-                    <Box flexGrow={1}>
-                      <Typography fontWeight="bold">{book.title}</Typography>
-                      <Typography fontSize="0.8rem">{book.author}</Typography>
-                      <Typography fontSize="0.8rem">
-                        Količina: <strong>{item.quantity}</strong>
-                      </Typography>
-                    </Box>
-                    <Typography fontWeight="bold">
-                      {(item.itemTotal ?? book.mpc * item.quantity).toFixed(2)} KM
-                    </Typography>
-                  </ListItem>
+                <ListItem
+  sx={{
+    px: 0,
+    py: 0.5,          // minimalni vertikalni padding
+  
+  }}
+>
+  <Box
+    component="img"
+    src={book.coverImage || "/placeholder-book.png"}
+    alt={`Knjiga: ${book.title}`}
+    sx={{
+      width: "100px",        // fiksna širina
+      height: "auto",   // održava proporcije
+      mr: 2,            // razmak od teksta
+      objectFit: "contain",
+      display: "inline", // uklanja inline descender space
+      flexShrink: 0,    // ne smanjuje se u flex containeru
+    }}
+  />
+
+  <Box flexGrow={1}>
+    <Typography fontWeight="bold">{book.title}</Typography>
+    <Typography fontSize="0.8rem">{book.author}</Typography>
+    <Typography fontSize="0.8rem">
+      Količina: <strong>{item.quantity}</strong>
+    </Typography>
+  </Box>
+
+  <Typography fontWeight="bold">
+    {(item.itemTotal ?? book.mpc * item.quantity).toFixed(2)} KM
+  </Typography>
+</ListItem>
+
                   {index < cart.items.length - 1 && <Divider />}
                 </React.Fragment>
               );
@@ -225,10 +255,23 @@ export default function ReviewStep({
           ✅ Ukupan iznos
         </Typography>
         <Divider sx={{ my: 1 }} />
-        <Grid container justifyContent="space-between">
-          <Typography>Ukupno u korpi:</Typography>
-          <Typography>{totalCart.toFixed(2)} KM</Typography>
+        <Grid container direction="column">
+          <Grid
+            item
+            container
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography>Ukupno u korpi:</Typography>
+            <Typography>{totalCart.toFixed(2)} KM</Typography>
+          </Grid>
+          <Grid item container justifyContent="flex-end">
+            <Typography variant="caption" color="textSecondary">
+              PDV 17% uračunat u cijenu
+            </Typography>
+          </Grid>
         </Grid>
+
         <Grid container justifyContent="space-between">
           <Typography>Dostava:</Typography>
           <Typography>{delivery.toFixed(2)} KM</Typography>

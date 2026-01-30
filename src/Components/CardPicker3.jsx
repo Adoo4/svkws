@@ -1,7 +1,15 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const CardPicker = ({ FormControl, RadioGroup, shipping, handleInputChange, Paper, FormControlLabel, Radio }) => {
+const CardPicker = ({
+  FormControl,
+  RadioGroup,
+  shipping,
+  handleInputChange,
+  Paper,
+  FormControlLabel,
+  Radio,
+}) => {
   const paymentOptions = [
     {
       id: "card",
@@ -15,6 +23,7 @@ const CardPicker = ({ FormControl, RadioGroup, shipping, handleInputChange, Pape
       description: "Plaćanje gotovinom pri preuzimanju paketa",
       disabled: true,
     },
+
     {
       id: "bank",
       label: "Plaćanje na žiro račun",
@@ -22,6 +31,56 @@ const CardPicker = ({ FormControl, RadioGroup, shipping, handleInputChange, Pape
       disabled: true,
     },
   ];
+
+const cardLogos = [
+  {
+    src: "/Cards/Diners50.gif",
+    href: "https://www.dinersclub.com",
+    alt: "Diners Club",
+  },
+  {
+    src: "/Cards/Visa 2015 50.gif",
+    href: "https://www.visa.com",
+    alt: "Visa",
+  },
+  {
+    src: "/Cards/Discover50.gif",
+    href: "https://www.discover.com",
+    alt: "Discover",
+  },
+  {
+    src: "/Cards/ms_vrt_opt_pos_53_2x.png",
+    href: "https://brand.mastercard.com/brandcenter/more-about-our-brands.html",
+    alt: "Maestro",
+  },
+  {
+    src: "/Cards/mc_vrt_opt_pos_46_3x.png",
+    href: "https://www.mastercard.com",
+    alt: "Mastercard",
+  },
+];
+
+
+const securityLogos = [
+  {
+    src: "/Payment Security logo/diners_sigurna kupnja.png",
+    alt: "Diners Sigurna Kupnja",
+  },
+  {
+    src: "/Payment Security logo/mc_idcheck_hrz_rgb_pos.png",
+    alt: "Mastercard ID Check",
+  },
+  {
+    src: "/Payment Security logo/visa-secure-blk_72dpi.jpg",
+    alt: "Visa Secure",
+  },
+  {
+    src: "/Payment Security logo/monri_badge.png",
+    alt: "Monri Secure Payment",
+  },
+];
+
+
 
   return (
     <Box
@@ -33,7 +92,6 @@ const CardPicker = ({ FormControl, RadioGroup, shipping, handleInputChange, Pape
         pb: { xs: 8, md: 0 },
       }}
     >
-      {/* Section header */}
       <Typography
         variant="h6"
         fontWeight="bold"
@@ -67,17 +125,10 @@ const CardPicker = ({ FormControl, RadioGroup, shipping, handleInputChange, Pape
                     ? "1px solid #34bf48"
                     : "1px solid #eee",
                 backgroundColor:
-                  shipping.paymentMethod === option.id
-                    ? "#f2fff2ff"
-                    : "#fff",
+                  shipping.paymentMethod === option.id ? "#f2fff2ff" : "#fff",
                 transition: "0.3s",
                 cursor: option.disabled ? "not-allowed" : "pointer",
                 opacity: option.disabled ? 0.5 : 1,
-                "&:hover": {
-                  boxShadow: !option.disabled
-                    ? "0 4px 16px rgba(0,0,0,0.08)"
-                    : "none",
-                },
               }}
               onClick={() => {
                 if (!option.disabled) {
@@ -89,23 +140,177 @@ const CardPicker = ({ FormControl, RadioGroup, shipping, handleInputChange, Pape
             >
               <FormControlLabel
                 value={option.id}
-                control={<Radio sx={{ color: "#34bf48" }} disabled={option.disabled} />}
+                control={
+                  <Radio sx={{ color: "#34bf48" }} disabled={option.disabled} />
+                }
+                sx={{ width: "100%", m: 0 }}
                 label={
                   <Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ fontWeight: 600, mb: 0.5 }}
+                    >
                       {option.label}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary", fontSize: "0.75rem" }}>
+
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "text.secondary",
+                        fontSize: "0.75rem",
+                        mb: 1,
+                      }}
+                    >
                       {option.description}
                     </Typography>
+
+                    {/* ✅ Card logos ONLY for card payment */}
+                    {option.id === "card" && (
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: { xs: 1, sm: 1.5, lg: 2 },
+      flexWrap: { xs: "wrap", lg: "nowrap" },
+      mt: 1,
+    }}
+  >
+    {cardLogos.map((logo) => (
+      <Box
+        key={logo.src}
+        component="a"
+        href={logo.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        sx={{
+          display: "inline-flex",
+          alignItems: "center",
+          cursor: "pointer",
+        }}
+      >
+        <Box
+          component="img"
+          src={logo.src}
+          alt={logo.alt}
+          sx={{
+            height: { xs: 24, sm: 28, lg: 32 },
+            width: "auto",
+            objectFit: "contain",
+            filter: "grayscale(10%)",
+            transition: "0.2s ease",
+            "&:hover": {
+              filter: "grayscale(0%)",
+              transform: "scale(1.05)",
+            },
+          }}
+        />
+      </Box>
+    ))}
+
+    
+  </Box>
+  
+)}
+
+
                   </Box>
+                  
                 }
-                sx={{ width: "100%", mb: 0 }}
+
               />
+              {/* 🔒 Payment security logos – ONLY ONCE */}
+
+              
             </Paper>
           ))}
         </RadioGroup>
+        
       </FormControl>
+
+          {/* 🔒 Payment security logos – ONLY ONCE (correct placement) */}
+     {shipping.paymentMethod === "card" && (
+  <Box
+    sx={{
+      mt: 4,
+      pt: 2,
+      borderTop: "1px solid #eee",
+      textAlign: "center",
+    }}
+  >
+    <Typography variant="caption" sx={{ mb: 1, display: "block" }}>
+      SIGURNO PLAĆANJE
+    </Typography>
+
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        gap: { xs: 2, sm: 3 }, // minimalni razmak između logotipa
+        flexWrap: "wrap",
+        alignItems: "center",
+      }}
+    >
+      {/* Diners */}
+      <Box
+        component="img"
+        src={securityLogos.find((logo) => logo.alt.includes("Diners")).src}
+        alt="Diners secure online shopping"
+        sx={{
+          height: { xs: 35, sm: 50 },
+          objectFit: "contain",
+          m: 0.5, // bel prostor oko loga
+        }}
+      />
+
+      {/* Mastercard® Identity Check™ */}
+      <Box
+        component="img"
+        src={securityLogos.find((logo) => logo.alt.includes("Mastercard")).src}
+        alt="Mastercard® Identity Check™"
+        sx={{
+          height: { xs: 35, sm: 50 },
+          objectFit: "contain",
+          m: 0.5,
+        }}
+      />
+
+      {/* Visa Secure */}
+      <Box
+        component="img"
+        src={securityLogos.find((logo) => logo.alt.includes("Visa")).src}
+        alt="Visa Secure"
+        sx={{
+          height: { xs: 35, sm: 50 },
+          objectFit: "contain",
+          m: 0.5,
+        }}
+      />
+
+      {/* Monri Payments – PSP */}
+      <Box
+        component="a"
+        href="http://monri.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        sx={{ display: "inline-block", m: 0.5 }}
+      >
+        <Box
+          component="img"
+          src={securityLogos.find((logo) => logo.alt.includes("Monri")).src}
+          alt="Monri Payments"
+          sx={{
+            height: { xs: 35, sm: 50 },
+            objectFit: "contain",
+          }}
+        />
+      </Box>
+    </Box>
+  </Box>
+)}
+
+      
     </Box>
   );
 };

@@ -139,14 +139,59 @@ const SimpleFooter = () => {
               variant="body2"
               sx={{ fontSize: { xs: "0.7rem", md: "0.8rem" }, color: "#f9f9f9", opacity: 0.7, lineHeight: 1.4 }}
             >
+
+
+              
               JIB: 4200177160001 | PDV: 200177160001
             </Typography>
-            <Typography
+             <Typography
               variant="body2"
               sx={{ fontSize: { xs: "0.7rem", md: "0.8rem" }, color: "#f9f9f9", opacity: 0.7, lineHeight: 1.4 }}
             >
-              Žiro račun: Intesa SanPaolo 1540012000158885
+              Upisano u sudski registar Općinskog suda u Sarajevu, broj: 065-0-RegZ-25-015083
             </Typography>
+             <Typography
+              variant="body2"
+              sx={{ fontSize: { xs: "0.7rem", md: "0.8rem" }, color: "#f9f9f9", opacity: 0.7, lineHeight: 1.4 }}
+            >
+              Matični broj subjekta upisa: 65-02-0021-11 (stari broj 1-1235)
+            </Typography>
+             <Typography
+  variant="body2"
+  sx={{
+    fontSize: { xs: "0.7rem", md: "0.8rem" },
+    color: "#f9f9f9",
+    opacity: 0.85,
+    mb: 0.5,
+    fontWeight: 500,
+  }}
+>
+  Žiro računi:
+</Typography>
+
+{[
+  { bank: "Unicredit Banka", number: "3389002211315218" },
+  { bank: "Ziraat Banka", number: "1861010310261991" },
+  { bank: "Intesa SanPaolo", number: "1540012000158885" },
+].map((item) => (
+  <Typography
+    key={item.number}
+    variant="body2"
+    sx={{
+      fontSize: { xs: "0.7rem", md: "0.8rem" },
+      color: "#f9f9f9",
+      opacity: 0.65,
+      lineHeight: 1.5,
+    }}
+  >
+    <strong>{item.bank}:</strong> {item.number}
+  </Typography>
+))}
+
+            
+
+
+
             <Typography
               variant="body2"
               sx={{ fontSize: { xs: "0.7rem", md: "0.8rem" }, color: "#f9f9f9", opacity: 0.7, lineHeight: 1.4 }}

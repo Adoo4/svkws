@@ -26,11 +26,28 @@ const paymentSecurityData = [
     content:
       "Naš cilj je da Vam omogućimo sigurnu, brzu i pouzdanu kupovinu. Ukoliko imate bilo kakvih pitanja ili sumnji u vezi sigurnosti plaćanja, slobodno nas kontaktirajte kako bismo Vam pružili sve potrebne informacije.",
   },
+  {
+    title: "6. Sigurnost plaćanja kreditnim karticama",
+    content:
+      `Poverljivost Vaših podataka je zaštićena korištenjem najnovije verzije TLS enkripcije. Online stranice za naplatu su osigurane korištenjem Secure Socket Layer (SSL) protokola sa 128-bitnom enkripcijom podataka. SSL enkripcija štiti podatke od neovlaštenog pristupa tokom njihove transmisije.\n
+Ovo omogućava siguran transfer podataka i sprečava neovlašteni pristup tokom komunikacije između korisnika i Monri WebPay Payment Gateway-a i obrnuto.\n
+Monri WebPay Payment Gateway i finansijske institucije razmenjuju podatke koristeći svoj virtualni privatni mrežni (VPN) kanal, koji je takođe zaštićen od neovlaštenog pristupa.\n
+Monri Payments je PCI DSS Level 1 sertifikovan provajder platnih usluga regulisan od strane Visa i Mastercard pravila.\n
+Brojevi kreditnih kartica se ne pohranjuju kod trgovca i nisu dostupni neovlašćenim osobama.`,
+  },
 ];
 
 const PaymentSecurityPage = () => {
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", p: 3, marginTop: "6rem", color: "#262626" }}>
+    <Box
+      sx={{
+        maxWidth: 900,
+        mx: "auto",
+        p: 3,
+        marginTop: "6rem",
+        color: "#262626",
+      }}
+    >
       <Typography
         variant="h4"
         gutterBottom
@@ -42,13 +59,17 @@ const PaymentSecurityPage = () => {
 
       {paymentSecurityData.map((item, index) => (
         <Box key={index} sx={{ mb: 4 }}>
-          <Typography variant="h6" sx={{ fontWeight: 800, color: "#262626" }} gutterBottom>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 800, color: "#262626" }}
+            gutterBottom
+          >
             {item.title}
           </Typography>
-          <Typography variant="body3" whiteSpace="pre-line">
+          <Typography variant="body2" whiteSpace="pre-line">
             {item.content}
           </Typography>
-          {index < paymentSecurityData.length - 1 && <Divider sx={{ mt: 3 }} />}
+          {index < paymentSecurityData.length - 1 }
         </Box>
       ))}
 

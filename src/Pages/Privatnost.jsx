@@ -38,6 +38,14 @@ const privacyData = [
     content:
       "Webshop zadržava pravo izmjene ove politike privatnosti. Sve promjene objavljuju se na web stranici, a preporučuje se korisnicima da povremeno provjere politiku privatnosti.",
   },
+  {
+    title: "8. Izjava o privatnosti i zaštiti ličnih podataka",
+    content:
+      `Webshop omogućava korisnicima da odbiju učestvovanje u marketinškim kampanjama i da ne pristanu na otkrivanje svojih ličnih podataka trećim stranama.\n
+Obavezujemo se da ćemo prikupljati samo osnovne informacije potrebne za ispunjenje naših obaveza prema kupcima. Informišemo korisnike o načinu prikupljanja informacija i redovno im dajemo mogućnost da odluče kako će se njihove informacije koristiti, uključujući i mogućnost da njihovo ime bude uključeno ili izostavljeno sa marketinških lista.\n
+Sve informacije o korisnicima su strogo zaštićene i dostupne samo zaposlenima kojima su potrebne za obavljanje poslova.\n
+Svi naši zaposleni i poslovni partneri odgovorni su za pridržavanje principa zaštite povjerljivosti podataka.`,
+  },
 ];
 
 const PrivacyPolicyPage = () => {
@@ -57,10 +65,10 @@ const PrivacyPolicyPage = () => {
           <Typography variant="h6" sx={{ fontWeight: 800, color: "#262626" }} gutterBottom>
             {item.title}
           </Typography>
-          <Typography variant="body3" whiteSpace="pre-line">
+          <Typography variant="body2" whiteSpace="pre-line">
             {item.content}
           </Typography>
-          {index < privacyData.length - 1 && <Divider sx={{ mt: 3 }} />}
+          {index < privacyData.length - 1 }
         </Box>
       ))}
 
