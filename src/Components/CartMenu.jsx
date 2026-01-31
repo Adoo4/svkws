@@ -172,7 +172,7 @@ export default function CartMenu({
                           fontWeight="bold"
                           sx={{ color: hasDiscount ? "#4caf50" : "#f9f9f9" }}
                         >
-                          {book.discountedPrice.toFixed(2)} BAM
+                          {book.discountedPrice.toFixed(2)} KM
                         </Typography>
 
                         {hasDiscount && (
@@ -184,7 +184,7 @@ export default function CartMenu({
                               fontSize: "0.8rem",
                             }}
                           >
-                            {book.mpc.toFixed(2)} BAM
+                            {book.mpc.toFixed(2)} KM
                           </Typography>
                         )}
                       </Box>
@@ -206,7 +206,7 @@ export default function CartMenu({
                           component="span"
                           sx={{ color: "#f33600", fontWeight: 600 }}
                         >
-                          {itemTotal.toFixed(2)} BAM
+                          {itemTotal.toFixed(2)} KM
                         </Box>
                       </Typography>
                     </Box>
@@ -233,7 +233,7 @@ export default function CartMenu({
                   >
                     <IconButton
                       size="small"
-                      disabled={quantity >= book.quantity} // visually disables button
+                      disabled={quantity >= book.quantity} // visually disables button //////////////////KVANITET dodati +2
                       onClick={() => {
                         // ⚠️ Logical check: do nothing if quantity >= stock
                         if (quantity >= book.quantity) return;
@@ -324,7 +324,7 @@ export default function CartMenu({
               fontSize: { xs: "1rem", sm: "1.2rem" },
             }}
           >
-            Total: {cart.totalCart.toFixed(2)} BAM
+            Total: {cart.totalCart.toFixed(2)} KM
           </Typography>
 
           {/* Buttons */}

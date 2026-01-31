@@ -13,6 +13,7 @@ import useBooks from "../Utils.js/useBooks";
 import { useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import SEO from "../Utils.js/SEO";
+import BookSortBar from "../Components/BookSortBar";
 
 let CategoryMenu = ({
   cart,
@@ -40,6 +41,12 @@ let CategoryMenu = ({
     discount: searchParams.get("discount") === "true",
   });
 
+  const [sort, setSort] = useState("");
+const [order, setOrder] = useState("asc");
+
+
+
+
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
   useEffect(() => {
@@ -53,7 +60,7 @@ let CategoryMenu = ({
     };
     setSearchParams(params);
   }, [filter, page, setSearchParams]);
-  const { books, isLoading, totalPages } = useBooks(filter, page, 20);
+  const { books, isLoading, totalPages } = useBooks(filter, page, 20, sort, order);
 
   //const [bo = useState([]);
   const [booksCopy] = useState([]);
@@ -121,21 +128,26 @@ let CategoryMenu = ({
         <Box
           sx={{
             width: "100%",
-            height: { xs: "12lvh", md: "15lvh" },
+           
             background: "#262626",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            flexDirection:{xs:"column", lg:"row"}
           }}
         >
+          
           <SearchBarTop
             booksCopy={books}
             setCart={addToCart}
             toggleDrawer={toggleDrawer}
             setDrawerData={setDrawerData}
+            
           />
-        </Box>
-
+        
+        <BookSortBar sort={sort} setSort={setSort} order ={order} setOrder={setOrder} />
+        
+</Box>
         <Box
           sx={{
             marginTop: "1rem",

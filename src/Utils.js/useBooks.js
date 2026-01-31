@@ -1,13 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const useBooks = (filters = {}, page = 1, limit = 20) => {
+const useBooks = (
+  filters = {},
+  page = 1,
+  limit = 20,
+  sort = "relevance",
+  order = "asc"
+) => {
   const stableFilters = JSON.stringify(filters); // 🚀 prevents queryKey duplication
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["books", stableFilters, page],
+    queryKey: ["books", stableFilters, page, sort, order],
     queryFn: async () => {
-      const params = { ...filters, page, limit };
+      const params = { ...filters, page, limit, sort, order };
       const res = await axios.get(
         "https://backendsvkwbshp.onrender.com/api/books",
         { params }

@@ -1,16 +1,22 @@
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
-import { Grid, Chip, Divider } from "@mui/material";
-
+import { Grid, Chip, Divider, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LanguageIcon from "@mui/icons-material/Language";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 
+
 export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }) {
+
+   const navigate = useNavigate()
   if (!drawerData) return null;
+
+ 
 
   return (
     <Drawer
@@ -19,7 +25,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
       onClose={toggleDrawer(false)}
       PaperProps={{
         sx: {
-          width: { xs: 230, sm: 320, md: 400 },
+          width: { xs: 230, sm: 250, md: 300 },
           height: "100%",
           background: "linear-gradient(to bottom, #262626, #262626)",
           color: "#f9f9f9",
@@ -35,7 +41,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
         sx={{
           position: "relative",
           width: "100%",
-          minHeight: {xs:350, sm:300},
+          minHeight: {xs:350, sm:370, md: 450, lg:450},
           height:"100%",
           maxHeight: 500, // optional: limit huge images
           overflow: "hidden",
@@ -127,7 +133,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
 
           {/* Publication Year */}
           <Grid item xs={6} sm={6} display="flex" alignItems="center" gap={0.5}>
-            <AttachMoneyIcon sx={{ fontSize: 16, opacity: 0.8 }} />
+            <CalendarMonthIcon sx={{ fontSize: 16, opacity: 0.8 }} />
             <Typography sx={{ fontSize: { xs: "0.70rem", md: "0.75rem" }, color: "#f7f7f7f7" }}>
               {drawerData.publicationYear}
             </Typography>
@@ -149,6 +155,41 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
         >
           {drawerData.description || "No description available."}
         </Typography>
+        <Button
+  onClick={() => {
+    navigate(`/books/${drawerData.slug}${window.location.search}`, {
+      state: { drawerData, category: drawerData.subCategory },
+    });
+  }}
+  fullWidth
+  sx={{
+    mt: 2,
+    textTransform: "none",
+    fontSize: "0.85rem",
+    fontWeight: 600,
+    letterSpacing: "0.4px",
+    color: "#f9f9f9",
+    border: "1px solid rgba(255,255,255,0.25)",
+    borderRadius: "10px",
+    py: 0.8,
+    background:
+      "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+    backdropFilter: "blur(6px)",
+    transition: "all 0.25s ease",
+    "&:hover": {
+      background:
+        "linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05))",
+      borderColor: "rgba(255,255,255,0.5)",
+      transform: "translateY(-1px)",
+    },
+    "&:active": {
+      transform: "translateY(0)",
+    },
+  }}
+>
+  Još Detalja
+</Button>
+
       </Box>
     </Drawer>
   );

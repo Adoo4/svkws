@@ -36,6 +36,8 @@ const ProductGallery = ({
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  
+
   // Safe fallback
   const safeBooks = useMemo(() => {
   // If the backend returns fewer than requested, show whatever is available

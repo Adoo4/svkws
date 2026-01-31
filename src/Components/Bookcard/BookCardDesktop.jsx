@@ -30,7 +30,7 @@ const BookCardDesktop = ({
           label={`-${book.discount.amount}%`}
           color="error"
           size="small"
-          sx={{ position: "absolute", top: book.isNew ? 36 : 8, left: 8, zIndex:200 }}
+          sx={{ position: "absolute", top: book.isNew ? 36 : 8, left: 8, zIndex:2 }}
         />
       )}
 
