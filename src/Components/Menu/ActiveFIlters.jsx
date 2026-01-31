@@ -1,14 +1,17 @@
 import { Box, Chip, Typography, Divider } from "@mui/material";
 import { alpha } from "@mui/material";
+import React, {useMemo} from 'react'
 
 export default function ActiveFilters({ filters, onRemove, kategorije }) {
   // Helper to get category color
-  const getCategoryColor = (categoryName) => {
-    const cat = kategorije.find((k) => k.naziv === categoryName);
-    return cat?.boja || "#313131";
-  };
+  const categoryColors = React.useMemo(() => {
+  const map = {};
+  kategorije.forEach((k) => (map[k.naziv] = k.boja));
+  return map;
+}, [kategorije]);
 
-
+const getCategoryColor = (category) =>
+  categoryColors[category] || "#888"; // fallback color
   
 
   // -----------------------
@@ -35,33 +38,34 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
   // -----------------------
   // Filters to display
   // -----------------------
-  const activeChips = [
-    filters.mainCategory && {
-      label: filters.mainCategory,
-      sx: chipStyle(getCategoryColor(filters.mainCategory)),
-      onDelete: () => onRemove("mainCategory"),
-    },
-    filters.subCategory && {
-      label: filters.subCategory,
-      sx: chipStyle(getCategoryColor(filters.mainCategory), 0.08, 0.18),
-      onDelete: () => onRemove("subCategory"),
-    },
-    filters.language && {
-      label: filters.language,
-      sx: chipStyle("#007e2aff"),
-      onDelete: () => onRemove("language"),
-    },
-    filters.isNew && {
-      label: "Novo",
-      sx: chipStyle("#ff6f61"),
-      onDelete: () => onRemove("isNew"),
-    },
-    filters.discount && {
-      label: "Popust",
-      sx: chipStyle("#ffb703"),
-      onDelete: () => onRemove("discount"),
-    },
-  ].filter(Boolean);
+const activeChips = useMemo(() => [
+  filters.mainCategory && {
+    label: filters.mainCategory,
+    sx: chipStyle(getCategoryColor(filters.mainCategory)),
+    onDelete: () => onRemove("mainCategory"),
+  },
+  filters.subCategory && {
+    label: filters.subCategory,
+    sx: chipStyle(getCategoryColor(filters.mainCategory), 0.08, 0.18),
+    onDelete: () => onRemove("subCategory"),
+  },
+  filters.language && {
+    label: filters.language,
+    sx: chipStyle("#007e2aff"),
+    onDelete: () => onRemove("language"),
+  },
+  filters.isNew && {
+    label: "Novo",
+    sx: chipStyle("#ff6f61"),
+    onDelete: () => onRemove("isNew"),
+  },
+  filters.discount && {
+    label: "Popust",
+    sx: chipStyle("#ffb703"),
+    onDelete: () => onRemove("discount"),
+  },
+].filter(Boolean), [filters, categoryColors, onRemove]);
+
 
   return (
    <Box

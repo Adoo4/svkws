@@ -1,9 +1,11 @@
 import { Box, Chip } from "@mui/material";
+import React from 'react'
 import CardImage from "../Bookcard/Image";
 import BookCardContent from "../Bookcard/BookCardContent";
 import BookCardActionsBottom from "./BookcardActionButtons";
+import  { memo } from "react";
 
-const BookCardDesktop = ({
+const BookCardDesktop = React.memo(({
   book,
   inWishlist,
   hasDiscount,
@@ -61,6 +63,6 @@ const BookCardDesktop = ({
       </Box>
     </>
   );
-};
+})
 
-export default BookCardDesktop;
+export default memo(BookCardDesktop);

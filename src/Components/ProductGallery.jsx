@@ -38,12 +38,7 @@ const ProductGallery = ({
 
   
 
-  // Safe fallback
-  const safeBooks = useMemo(() => {
-  // If the backend returns fewer than requested, show whatever is available
-  if (!books || books.length === 0) return [];
-  return books.slice(0, Math.min(books.length, 20)); // Option 1 logic
-}, [books]);
+ const displayedBooks = books || [];
 
   return (
     <Box
@@ -74,7 +69,7 @@ const ProductGallery = ({
       )}
 
       {/* Empty State */}
-      {!loading && safeBooks.length === 0 && (
+      {!loading && displayedBooks.length === 0 && (
         <Box
           sx={{
             display: "flex",
@@ -107,8 +102,8 @@ const ProductGallery = ({
     columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
     justifyContent="center"
   >
-    {!loading && safeBooks.length > 0 &&
-      safeBooks.map((book) => (
+    {!loading && displayedBooks.length > 0 &&
+      displayedBooks.map((book) => (
         <Grid
           item
           xs={2}  // ✅ two per row on mobile

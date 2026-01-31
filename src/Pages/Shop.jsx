@@ -49,21 +49,23 @@ const [order, setOrder] = useState("asc");
 
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
-  useEffect(() => {
-    const params = {
-      ...(filter.mainCategory && { mainCategory: filter.mainCategory }),
-      ...(filter.subCategory && { subCategory: filter.subCategory }),
-      ...(filter.language && { language: filter.language }),
-      ...(filter.isNew && { isNew: "true" }),
-      ...(filter.discount && { discount: "true" }),
-      page: page.toString(),
-    };
-    setSearchParams(params);
-  }, [filter, page, setSearchParams]);
+ useEffect(() => {
+  const params = new URLSearchParams();
+
+  if (filter.mainCategory) params.set("mainCategory", filter.mainCategory);
+  if (filter.subCategory) params.set("subCategory", filter.subCategory);
+  if (filter.language) params.set("language", filter.language);
+  if (filter.isNew) params.set("isNew", "true");
+  if (filter.discount) params.set("discount", "true");
+  params.set("page", page.toString());
+
+  if (params.toString() !== searchParams.toString()) {
+    setSearchParams(params, { replace: true });
+  }
+}, [filter, page]);
   const { books, isLoading, totalPages } = useBooks(filter, page, 20, sort, order);
 
-  //const [bo = useState([]);
-  const [booksCopy] = useState([]);
+
 
   const toggleDrawer = useCallback(
     (open) => (event) => {
@@ -175,9 +177,9 @@ const [order, setOrder] = useState("asc");
             <Menu
               setFilter={setFilter}
               filter={filter}
-              booksCopy={booksCopy}
+              
               books={books}
-              allBooks={booksCopy}
+             
               page={page}
               setPage={setPage}
             />
@@ -209,9 +211,9 @@ const [order, setOrder] = useState("asc");
           setOpen={setLeftDrawerOpen}
           setFilter={setFilter}
           filter={filter}
-          booksCopy={booksCopy}
+          
           books={books}
-          allBooks={booksCopy}
+
           page={page}
           setPage={setPage}
         />

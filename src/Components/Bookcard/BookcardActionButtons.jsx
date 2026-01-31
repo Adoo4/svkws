@@ -2,6 +2,9 @@ import { CardActions, Button, Tooltip } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
+import { memo } from "react";
+import { useMemo, useCallback } from "react";
+
 
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
@@ -14,7 +17,31 @@ const BookCardActionsBottom = ({
   clerk,
 }) => {
   const navigate = useNavigate();
-  const outOfStock = book.quantity <= 0;
+ const outOfStock = useMemo(() => book.quantity <= 0, [book.quantity]);
+
+const cartIcon = useMemo(() => 
+  !outOfStock ? (
+    <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
+  ) : (
+    <RemoveShoppingCartIcon />
+  ),
+  [outOfStock]
+);
+
+
+const handleDetailsClick = useCallback(() => {
+  navigate(`/books/${book.slug}${window.location.search}`, {
+    state: { book, category: book.subCategory },
+  });
+}, [book, navigate]);
+
+const handleAddToCartClick = useCallback(() => {
+  if (!isSignedIn) {
+    clerk.openSignIn();
+  } else {
+    addToCart(book);
+  }
+}, [isSignedIn, clerk, addToCart, book]);
 
   return (
     <CardActions
@@ -35,11 +62,7 @@ const BookCardActionsBottom = ({
       <Button
         variant="outlined"
         size="small"
-     onClick={() => {
-    navigate(`/books/${book.slug}${window.location.search}`, {
-      state: { book, category: book.subCategory },
-    });
-  }}
+     onClick={ handleDetailsClick}
         startIcon={
           <InfoOutlinedIcon
             sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }}
@@ -70,20 +93,8 @@ const BookCardActionsBottom = ({
   variant="contained"
   disabled={isAdding || outOfStock}
   size="small"
-  onClick={() => {
-    if (!isSignedIn) {
-      clerk.openSignIn();
-    } else {
-      addToCart(book);
-    }
-  }}
-  startIcon={
-    !outOfStock ? (
-      <ShoppingCartIcon
-        sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }}
-      />
-    ) : <RemoveShoppingCartIcon/>
-  }
+  onClick={handleAddToCartClick}
+  startIcon={cartIcon}
   sx={{
   flex: 1,
   px: { xs: 1, sm: 1.5 },
@@ -104,4 +115,4 @@ const BookCardActionsBottom = ({
   );
 };
 
-export default BookCardActionsBottom;
+export default memo(BookCardActionsBottom);

@@ -3,8 +3,9 @@ import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import kategorije from "../../Utils.js/kategorije";
 import { Chip } from '@mui/material';
 import WishlistButton from "./WishlistButton";
+import React, { memo, useMemo } from "react";
 
-const BookCardContent = ({
+const BookCardContent = memo( ({
   book,
   inWishlist,
   categoryMatch,
@@ -15,9 +16,7 @@ const BookCardContent = ({
   shlist
 }) => {
 
-  const displayPrice = hasDiscount
-  ? book.discountedPrice  // already calculated on backend
-  : book.mpc;             // use MPC as fallback
+ const displayPrice = useMemo(() => hasDiscount ? book.discountedPrice : book.mpc, [hasDiscount, book]);
 
 
 
@@ -323,6 +322,6 @@ const BookCardContent = ({
 
     </CardContent>
   );
-};
+});
 
 export default BookCardContent;

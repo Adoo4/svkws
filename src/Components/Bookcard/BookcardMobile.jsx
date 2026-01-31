@@ -1,6 +1,7 @@
 import { Box, Chip, Typography, Button } from "@mui/material";
 import CardImage from "../Bookcard/Image";
 import WishlistButton from "./WishlistButton";
+import React, { memo } from "react";
 
 import Battery0BarOutlinedIcon from "@mui/icons-material/Battery0BarOutlined";
 import Battery3BarOutlinedIcon from "@mui/icons-material/Battery3BarOutlined";
@@ -283,4 +284,4 @@ const BookCardMobile = ({
   );
 };
 
-export default BookCardMobile;
+export default memo(BookCardMobile);

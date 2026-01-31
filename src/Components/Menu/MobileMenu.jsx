@@ -9,9 +9,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { SignedIn, SignedOut, SignInButton, UserButton, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react"; // make sure you installed this
+import React, { memo } from "react";
 
 
-export default function FullScreenMenu() {
+const FullScreenMenu = memo(function FullScreenMenu() {
   const [isOpen, setOpen] = useState(false);
   const { signOut } = useClerk();
   const navigate = useNavigate();
@@ -181,4 +182,6 @@ const [hover, setHover] = useState(false);
 </>
 
   );
-}
+})
+
+export default FullScreenMenu

@@ -24,12 +24,8 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   const clerk = useClerk();
   const navigate = useNavigate();
 
-  const [inWishlist, setInWishlist] = useState(false);
+  const inWishlist = useMemo(() => wishlist.some(item => item._id === book._id), [wishlist, book._id]);
 
-  /* ---------------- Wishlist sync ---------------- */
-  useEffect(() => {
-    setInWishlist(wishlist.some((item) => item._id === book._id));
-  }, [wishlist, book._id]);
 
   /* ---------------- Handlers ---------------- */
   const handleWishlistClick = useCallback(
@@ -53,9 +49,12 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   }, [book, navigate]);
 
   /* ---------------- Derived state ---------------- */
-  const hasDiscount =
+  const hasDiscount = useMemo(() => {
+  return (
     book.discount?.amount > 0 &&
-    (!book.discount?.validUntil || new Date(book.discount.validUntil) > new Date());
+    (!book.discount?.validUntil || new Date(book.discount.validUntil) > new Date())
+  );
+}, [book.discount]);
 
   const categoryMatch = useMemo(
     () =>
@@ -76,21 +75,35 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   );
 
   /* ---------------- Shared props ---------------- */
-  const sharedProps = {
-    book,
-    inWishlist,
-    hasDiscount,
-    categoryMatch,
-    mainCategory,
-    handleWishlistClick,
-    openDetails,
-    setDrawerData,
-    toggleDrawer,
-    isSignedIn,
-    addToCart,
-    isAdding,
-    clerk,
-  };
+ const sharedProps = useMemo(() => ({
+  book,
+  inWishlist,
+  hasDiscount,
+  categoryMatch,
+  mainCategory,
+  handleWishlistClick,
+  openDetails,
+  setDrawerData,
+  toggleDrawer,
+  isSignedIn,
+  addToCart,
+  isAdding,
+  clerk,
+}), [
+  book,
+  inWishlist,
+  hasDiscount,
+  categoryMatch,
+  mainCategory,
+  handleWishlistClick,
+  openDetails,
+  setDrawerData,
+  toggleDrawer,
+  isSignedIn,
+  addToCart,
+  isAdding,
+  clerk
+]);
 
   return (
     <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
