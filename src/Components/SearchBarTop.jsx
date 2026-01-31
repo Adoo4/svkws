@@ -186,13 +186,15 @@ const handleSearch = (e) => {
                         color: "#d62d00",
                       },
                     }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/books/${book.slug}`, {
-                        state: { book, category: book.subCategory },
-                      });
-                    }}
+                    onClick={() => {
+    navigate(`/books/${book.slug}${window.location.search}`, {
+      state: { book, category: book.subCategory },
+    });
+  }}
                   >
+
+
+                    
                     <VisibilityIcon fontSize="small" />
                   </Box>
 <SignedIn>

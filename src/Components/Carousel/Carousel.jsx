@@ -232,6 +232,7 @@ const Home = () => {
         <Typography
           variant="h2"
           className="fadeInDown"
+          
           sx={{
             fontWeight: "bold",
             fontSize: { xs: "2rem", md: "4rem" },
@@ -243,6 +244,7 @@ const Home = () => {
 
         <Typography
           variant="h5"
+          component="h1"
           className="fadeInUp"
           sx={{
             mt: 1,
