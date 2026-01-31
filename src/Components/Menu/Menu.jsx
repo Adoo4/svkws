@@ -21,7 +21,7 @@ import DiscountSwitch from "./DiscountSwitch";
 import { alpha } from "@mui/material/styles";
 import kategorije from "../../Utils.js/kategorije.js";
 
-export default function SelectedListItem({ filter, setFilter, page, setPage }) {
+const SelectedListItem = ({ filter, setFilter, setPage }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   const [openCategory, setOpenCategory] = React.useState(null); // Track which category is open
   const handleCategoryClick = React.useCallback(
@@ -371,3 +371,4 @@ const chipHoverBg = (color, opacity) => alpha(color, opacity);
     </Box>
   );
 }
+export default React.memo(SelectedListItem);

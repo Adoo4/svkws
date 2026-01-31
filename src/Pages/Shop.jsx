@@ -177,9 +177,6 @@ useEffect(() => {
             <Menu
               setFilter={setFilter}
               filter={filter}
-              
-              books={books}
-             
               page={page}
               setPage={setPage}
             />
