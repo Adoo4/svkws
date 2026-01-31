@@ -78,9 +78,9 @@ const BooksSortBar = ({ sort, setSort, order, setOrder }) => {
   }}
 
         >
-          <MenuItem value="">Bez sortiranja</MenuItem>
-          <MenuItem value="title">Naziv</MenuItem>
-          <MenuItem value="price">Cijena</MenuItem>
+          <MenuItem value="" sx={{fontSize:"0.8rem"}}>Bez sortiranja</MenuItem>
+          <MenuItem value="title" sx={{fontSize:"0.8rem"}}>Naziv</MenuItem>
+          <MenuItem value="price" sx={{fontSize:"0.8rem"}}>Cijena</MenuItem>
         </Select>
       </FormControl>
 
