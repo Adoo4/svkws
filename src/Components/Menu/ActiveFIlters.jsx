@@ -10,8 +10,6 @@ export default function ActiveFilters({ filters, onRemove, kategorije }) {
   return map;
 }, [kategorije]);
 
-const getCategoryColor = (category) =>
-  categoryColors[category] || "#888"; // fallback color
   
 
   // -----------------------
@@ -41,12 +39,16 @@ const getCategoryColor = (category) =>
 const activeChips = useMemo(() => [
   filters.mainCategory && {
     label: filters.mainCategory,
-    sx: chipStyle(getCategoryColor(filters.mainCategory)),
+    sx: chipStyle(categoryColors[filters.mainCategory] || "#888"),
     onDelete: () => onRemove("mainCategory"),
   },
   filters.subCategory && {
     label: filters.subCategory,
-    sx: chipStyle(getCategoryColor(filters.mainCategory), 0.08, 0.18),
+    sx: chipStyle(
+      categoryColors[filters.mainCategory] || "#888",
+      0.08,
+      0.18
+    ),
     onDelete: () => onRemove("subCategory"),
   },
   filters.language && {
@@ -65,6 +67,7 @@ const activeChips = useMemo(() => [
     onDelete: () => onRemove("discount"),
   },
 ].filter(Boolean), [filters, categoryColors, onRemove]);
+
 
 
   return (

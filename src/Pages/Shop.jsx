@@ -49,7 +49,7 @@ const [order, setOrder] = useState("asc");
 
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
- useEffect(() => {
+useEffect(() => {
   const params = new URLSearchParams();
 
   if (filter.mainCategory) params.set("mainCategory", filter.mainCategory);
@@ -62,7 +62,7 @@ const [order, setOrder] = useState("asc");
   if (params.toString() !== searchParams.toString()) {
     setSearchParams(params, { replace: true });
   }
-}, [filter, page]);
+}, [filter, page, searchParams, setSearchParams]);
   const { books, isLoading, totalPages } = useBooks(filter, page, 20, sort, order);
 
 

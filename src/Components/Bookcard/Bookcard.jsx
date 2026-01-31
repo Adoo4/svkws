@@ -1,6 +1,6 @@
 import { Card, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { memo, useState, useEffect, useMemo, useCallback } from "react";
+import { memo, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { useUser, useClerk } from "@clerk/clerk-react";
