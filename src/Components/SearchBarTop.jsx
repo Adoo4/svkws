@@ -21,19 +21,11 @@ import { useDebounce } from "../Utils.js/useDebounce";
 import { SignedIn } from "@clerk/clerk-react";
 import useCart from "../Utils.js/useCart";
 
-import BookSortBar from "./BookSortBar";
-
 const SearchBarTop = ({ setDrawerData, toggleDrawer }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
   const { addToCart } = useCart();
-
-
-
-  const [sortBy, setSortBy] = useState("relevance");
-
-
 
   const fetchSuggestions = async (value) => {
     try {
@@ -119,7 +111,7 @@ const SearchBarTop = ({ setDrawerData, toggleDrawer }) => {
                   <CloseIcon sx={{ fontSize: "1.1rem" }} />
 
                 </IconButton>
-                <BookSortBar sortBy={sortBy} setSortBy={setSortBy} />
+                
               </InputAdornment>
             ),
             inputProps: {

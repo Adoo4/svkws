@@ -122,7 +122,7 @@ const securityLogos = [
                 borderRadius: 2,
                 border:
                   shipping.paymentMethod === option.id
-                    ? "1px solid #34bf48"
+                    ? "1px solid #353535"
                     : "1px solid #eee",
                 backgroundColor:
                   shipping.paymentMethod === option.id ? "#f2fff2ff" : "#fff",

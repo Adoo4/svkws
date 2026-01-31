@@ -94,6 +94,7 @@ const BookCardMobile = ({
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
               mb: 0.4,
+              color: inWishlist? "#c7c7c7" : "text.secondary" ,
             }}
           >
             {book.title}
@@ -110,7 +111,7 @@ const BookCardMobile = ({
          <Typography
   sx={{
     fontSize: { xs: "0.75rem", sm: "0.85rem" }, // responsive font size
-    color: "text.secondary",
+    color: inWishlist? "#c7c7c7" : "text.secondary" ,
     mb: 0.6,
     lineHeight: 1.2,
     display: "-webkit-box",       // for line clamp
@@ -151,7 +152,7 @@ const BookCardMobile = ({
          <Typography
   sx={{
     fontSize: { xs: "0.7rem", sm: "0.8rem" }, // responsive font size
-    color: "text.secondary",
+    color: inWishlist? "#c7c7c7" : "text.secondary" ,
     mb: 0.6,
     lineHeight: 1.1,
     display: "-webkit-box",       // for line clamp

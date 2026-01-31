@@ -53,7 +53,7 @@ const BooksSortBar = ({ sort, setSort, order, setOrder }) => {
         py: 0.5,
         borderRadius: "16px",
         mt: {xs:1,lg:"4rem"},
-        mr:"1rem"
+        mr:{lg:"1rem"}
       }}
     >
       <Typography
