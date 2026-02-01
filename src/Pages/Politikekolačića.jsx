@@ -43,7 +43,7 @@ const CookiePolicyPage = () => {
           <Typography variant="body3" whiteSpace="pre-line">
             {item.content}
           </Typography>
-          {index < cookiePolicyData.length - 1 && <Divider sx={{ mt: 3 }} />}
+          {index < cookiePolicyData.length - 1 }
         </Box>
       ))}
 

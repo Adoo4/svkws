@@ -241,56 +241,86 @@ const stockState =
             {/* Book Content */}
             <CardContent sx={{ flex: 1, p: { xs: 2, md: 4 } }}>
               {/* Title & Chips */}
-              <Box
-                display="flex"
-                alignItems="center"
-                gap={2}
-                flexWrap="wrap"
-                mb={2}
-              >
-                <Typography
-                  variant="h5"
-                  fontWeight="bold"
-                  sx={{ fontSize: { xs: "1.3rem", md: "2rem" } }}
-                >
-                  {book.title}
-                </Typography>
-                {book.isNew && (
-                  <Chip
-                    label="Novo"
-                    sx={{ bgcolor: "green", color: "#fff", fontWeight: "bold" }}
-                  />
-                )}
-                {book.discountAmount > 0 && (
-                  <Chip
-                    label={`${book.discountAmount}% Off`}
-                    sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold" }}
-                  />
-                )}
+            <Box
+  display="flex"
+  alignItems="center"
+  gap={1.5}
+  flexWrap="wrap"
+  mb={2}
+>
+  <Typography
+    variant="h5"
+    fontWeight="bold"
+    sx={{ fontSize: { xs: "1.3rem", md: "2rem" } }}
+  >
+    {book.title}
+  </Typography>
+
+  {/* Common chip style */}
+  {book.isNew && (
+    <Chip
+      label="Novo"
+      size="small"
+      sx={{
+        bgcolor: "green",
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: "0.75rem",
+        height: 26,
+        px: 1.5,
+        borderRadius: "12px",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
+      }}
+    />
+  )}
+
+  {book.discountAmount > 0 && (
+    <Chip
+      label={`${book.discountAmount}% Off`}
+      size="small"
+      sx={{
+        bgcolor: "red",
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: "0.75rem",
+        height: 26,
+        px: 1.5,
+        borderRadius: "12px",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
+      }}
+    />
+  )}
+
+  <Chip
+    label={
+      stockState === "ok"
+        ? "Dostupno"
+        : stockState === "low"
+          ? "Niske zalihe"
+          : "Nema na stanju"
+    }
+    size="small"
+    sx={{
+      height: 26,
+      fontSize: "0.75rem",
+      fontWeight: 600,
+      color: "#fff",
+      px: 1.5,
+      borderRadius: "12px",
+      boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
+      bgcolor:
+        stockState === "ok"
+          ? "success.main"
+          : stockState === "low"
+            ? "warning.main"
+            : "error.main",
+    }}
+  />
+
+
+                
                 <ShareButton />
 
-                <Chip
-                  label={
-                    stockState === "ok"
-                      ? "Dostupno"
-                      : stockState === "low"
-                        ? "Niske zalihe"
-                        : "Nema"
-                  }
-                  size="small"
-                  sx={{
-                    height: 22,
-                    fontSize: "0.7rem",
-                    fontWeight: 600,
-                    color: "#fff",
-                    bgcolor:
-                      stockState === "ok"
-                        ? "success.main"
-                        : stockState === "low"
-                          ? "warning.main"
-                          : "error.main",
-                  }}
-                />
               </Box>
 
               {/* Author */}

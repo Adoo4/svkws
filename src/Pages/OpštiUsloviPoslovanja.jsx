@@ -58,7 +58,7 @@ const TermsConditionsPage = () => {
           <Typography variant="body3" whiteSpace="pre-line">
             {item.content}
           </Typography>
-          {index < termsConditionsData.length - 1 && <Divider sx={{ mt: 3 }} />}
+          {index < termsConditionsData.length - 1 }
         </Box>
       ))}
 
