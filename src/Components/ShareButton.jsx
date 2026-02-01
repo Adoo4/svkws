@@ -8,11 +8,12 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 
 
 function ShareButton() {
-  const shareData = {
-    title: "Svjetlostkomerc Webshop",
-    text: "Pogledaj ovo!",
-    url: window.location.href,
-  };
+ const shareData = {
+  title: "Bookstore.ba 📚✨",
+  text: "Nećeš vjerovati šta sam pronašao/la! Pogledaj ovu knjigu!",
+  url: window.location.href,
+};
+
 
   const handleNativeShare = async () => {
     if (navigator.share) {
