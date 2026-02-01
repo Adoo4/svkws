@@ -37,89 +37,110 @@ import useCart from "../Utils.js/useCart";
 import SEO from "../Utils.js/SEO";
 import useBookBySlug from "../Utils.js/useBookBySlug";
 
-
-
 export default function BookDetail() {
+  const { slug } = useParams();
+  const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
 
- const { slug } = useParams();
-const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
+  const { data: book, isLoading } = useBookBySlug(!isObjectId ? slug : null);
 
-const { data: book, isLoading } = useBookBySlug(!isObjectId ? slug : null);
+ 
 
-// Redirect old ID URLs → slug
-useEffect(() => {
-  
-  if (isObjectId) {
-    axios
-      .get(`https://backendsvkwbshp.onrender.com/api/books/redirect/${slug}`)
-      .then((res) => {
-        if (res.data?.url) window.location.replace(res.data.url);
-      })
-      .catch(() => {});
-  }
-}, [slug, isObjectId]);
-
-
+  // Redirect old ID URLs → slug
+  useEffect(() => {
+    if (isObjectId) {
+      axios
+        .get(`https://backendsvkwbshp.onrender.com/api/books/redirect/${slug}`)
+        .then((res) => {
+          if (res.data?.url) window.location.replace(res.data.url);
+        })
+        .catch(() => {});
+    }
+  }, [slug, isObjectId]);
 
   const { cart, addToCart: addToCartFromHook } = useCart();
   const { isSignedIn } = useUser();
   const { enqueueSnackbar } = useSnackbar();
-  const { wishlist, addToWishlist, removeFromWishlist, isLoading: wishlistLoading } = useWishlist();
- 
-
+  const {
+    wishlist,
+    addToWishlist,
+    removeFromWishlist,
+    isLoading: wishlistLoading,
+  } = useWishlist();
 
   if (!book) return null;
 
+  const LOW_STOCK_THRESHOLD = 5;
+
+const stockState =
+  book.onlineQuantity === 0
+    ? "none"
+    : book.onlineQuantity <= LOW_STOCK_THRESHOLD
+    ? "low"
+    : "ok";
+
   const finalPrice =
-  book.discountAmount > 0
-    ? book.discountedPrice // already calculated on backend
-    : book.mpc;           // use MPC as fallback
+    book.discountAmount > 0
+      ? book.discountedPrice // already calculated on backend
+      : book.mpc; // use MPC as fallback
 
   // JSON-LD structured data for the book
   const jsonLdBook = {
-  "@context": "https://schema.org",
-  "@type": "Book",
-  name: book.title,
-  author: book.author,
-  isbn: book.isbn,
-  image: book.coverImage || "/og-image.png",
-  publisher: book.publisher,
-  datePublished: book.publicationYear,
-  numberOfPages: book.pages,
-  inLanguage: book.language,
-  offers: {
-    "@type": "Offer",
-    price: finalPrice,   // now using MPC/discountedPrice
-    priceCurrency: "BAM",
-    availability:
-      book.quantity > 0
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-    url: window.location.href,
-  },
-};
+    "@context": "https://schema.org",
+    "@type": "Book",
+    name: book.title,
+    author: book.author,
+    isbn: book.isbn,
+    image: book.coverImage || "/og-image.png",
+    publisher: book.publisher,
+    datePublished: book.publicationYear,
+    numberOfPages: book.pages,
+    inLanguage: book.language,
+    offers: {
+      "@type": "Offer",
+      price: finalPrice, // now using MPC/discountedPrice
+      priceCurrency: "BAM",
+      availability:
+        book.onlineQuantity > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+    },
+  };
 
   // Breadcrumb JSON-LD for SEO
   const jsonLdBreadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${window.location.origin}/` },
-      { "@type": "ListItem", position: 2, name: "Books", item: `${window.location.origin}/books` },
-      { "@type": "ListItem", position: 3, name: book.title, item: window.location.href },
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: `${window.location.origin}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Books",
+        item: `${window.location.origin}/books`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: book.title,
+        item: window.location.href,
+      },
     ],
   };
-
- 
 
   const handleAddToCart = () => {
     const cartItem = cart.items.find((i) => i.book._id === book._id);
     const cartQuantity = cartItem?.quantity || 0;
 
-    if (cartQuantity + 1 > book.quantity) {
-      enqueueSnackbar(`Ne možete dodati više od ${book.quantity} jedinica u korpu`, {
-        variant: "warning",
-      });
+    if (cartQuantity + 1 > book.onlineQuantity) {
+      enqueueSnackbar(
+        `Ne možete dodati više od ${book.onlineQuantity} primjeraka u korpu`,
+        { variant: "warning" },
+      );
       return;
     }
 
@@ -160,19 +181,32 @@ useEffect(() => {
               bgcolor: "#313131",
             }}
           >
-            <Skeleton variant="rectangular" height={500} sx={{ width: { xs: "100%", md: 350 } }} />
+            <Skeleton
+              variant="rectangular"
+              height={500}
+              sx={{ width: { xs: "100%", md: 350 } }}
+            />
             <CardContent sx={{ flex: 1, p: { xs: 2, md: 4 } }}>
               <Skeleton variant="text" sx={{ width: "60%", height: 40 }} />
               <Skeleton variant="text" sx={{ width: "40%", height: 30 }} />
-              <Skeleton variant="rectangular" sx={{ width: "100%", height: 200, mt: 2 }} />
+              <Skeleton
+                variant="rectangular"
+                sx={{ width: "100%", height: 200, mt: 2 }}
+              />
               <Grid container spacing={2} sx={{ mt: 2 }}>
                 {Array.from({ length: 6 }).map((_, i) => (
                   <Grid item xs={6} md={4} key={i}>
-                    <Skeleton variant="text" sx={{ width: "100%", height: 20 }} />
+                    <Skeleton
+                      variant="text"
+                      sx={{ width: "100%", height: 20 }}
+                    />
                   </Grid>
                 ))}
               </Grid>
-              <Skeleton variant="rectangular" sx={{ width: "100%", height: 50, mt: 2 }} />
+              <Skeleton
+                variant="rectangular"
+                sx={{ width: "100%", height: 50, mt: 2 }}
+              />
             </CardContent>
           </Card>
         ) : (
@@ -207,24 +241,76 @@ useEffect(() => {
             {/* Book Content */}
             <CardContent sx={{ flex: 1, p: { xs: 2, md: 4 } }}>
               {/* Title & Chips */}
-              <Box display="flex" alignItems="center" gap={2} flexWrap="wrap" mb={2}>
-                <Typography variant="h5" fontWeight="bold" sx={{ fontSize: { xs: "1.3rem", md: "2rem" } }}>
+              <Box
+                display="flex"
+                alignItems="center"
+                gap={2}
+                flexWrap="wrap"
+                mb={2}
+              >
+                <Typography
+                  variant="h5"
+                  fontWeight="bold"
+                  sx={{ fontSize: { xs: "1.3rem", md: "2rem" } }}
+                >
                   {book.title}
                 </Typography>
-                {book.isNew && <Chip label="Novo" sx={{ bgcolor: "green", color: "#fff", fontWeight: "bold" }} />}
+                {book.isNew && (
+                  <Chip
+                    label="Novo"
+                    sx={{ bgcolor: "green", color: "#fff", fontWeight: "bold" }}
+                  />
+                )}
                 {book.discountAmount > 0 && (
-                  <Chip label={`${book.discountAmount}% Off`} sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold" }} />
+                  <Chip
+                    label={`${book.discountAmount}% Off`}
+                    sx={{ bgcolor: "red", color: "#fff", fontWeight: "bold" }}
+                  />
                 )}
                 <ShareButton />
+
+                <Chip
+                  label={
+                    stockState === "ok"
+                      ? "Dostupno"
+                      : stockState === "low"
+                        ? "Niske zalihe"
+                        : "Nema"
+                  }
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontSize: "0.7rem",
+                    fontWeight: 600,
+                    color: "#fff",
+                    bgcolor:
+                      stockState === "ok"
+                        ? "success.main"
+                        : stockState === "low"
+                          ? "warning.main"
+                          : "error.main",
+                  }}
+                />
               </Box>
 
               {/* Author */}
-              <Typography variant="subtitle1" sx={{ fontSize: { xs: "0.9rem", md: "1rem" }, color: "#ccc" }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontSize: { xs: "0.9rem", md: "1rem" }, color: "#ccc" }}
+              >
                 Autor: {book.author}
               </Typography>
 
               {/* Description */}
-              <Typography variant="body2" sx={{ mt: 1, mb: 3, fontSize: { xs: "0.75rem", md: "0.85rem" }, color: "#ddd" }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  mt: 1,
+                  mb: 3,
+                  fontSize: { xs: "0.75rem", md: "0.85rem" },
+                  color: "#ddd",
+                }}
+              >
                 {book.description}
               </Typography>
 
@@ -236,29 +322,82 @@ useEffect(() => {
                 {[
                   { icon: MenuBookIcon, label: "Format", value: book.format },
                   { icon: LanguageIcon, label: "Jezik", value: book.language },
-                  { icon: CalendarTodayIcon, label: "Godina izdanja", value: book.publicationYear },
-                  { icon: PeopleAltIcon, label: "Izdavač", value: book.publisher },
-                  { icon: LocalLibraryIcon, label: "Stranica", value: book.pages },
-                  { icon: ConfirmationNumberIcon, label: "ISBN", value: book.isbn },
+                  {
+                    icon: CalendarTodayIcon,
+                    label: "Godina izdanja",
+                    value: book.publicationYear,
+                  },
+                  {
+                    icon: PeopleAltIcon,
+                    label: "Izdavač",
+                    value: book.publisher,
+                  },
+                  {
+                    icon: LocalLibraryIcon,
+                    label: "Stranica",
+                    value: book.pages,
+                  },
+                  {
+                    icon: ConfirmationNumberIcon,
+                    label: "ISBN",
+                    value: book.isbn,
+                  },
                   { icon: LocalOfferIcon, label: "TR", value: book.TR },
-                  { icon: ConfirmationNumberIcon, label: "Barcode", value: book.barcode },
-                  { icon: AspectRatioIcon, label: "Dimenzije", value: book.dimensions },
+                  {
+                    icon: ConfirmationNumberIcon,
+                    label: "Barcode",
+                    value: book.barcode,
+                  },
+                  {
+                    icon: AspectRatioIcon,
+                    label: "Dimenzije",
+                    value: book.dimensions,
+                  },
                 ].map((item, index) => (
-                  <Grid item xs={12} sm={4} display="flex" alignItems="center" gap={1} key={index}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                    key={index}
+                  >
                     <item.icon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">{item.label}: {item.value}</Typography>
+                    <Typography variant="body2">
+                      {item.label}: {item.value}
+                    </Typography>
                   </Grid>
                 ))}
               </Grid>
 
               {/* Price & Actions */}
-              <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between" gap={2} mt={2}>
+              <Box
+                display="flex"
+                flexDirection={{ xs: "column", sm: "row" }}
+                alignItems={{ xs: "flex-start", sm: "center" }}
+                justifyContent="space-between"
+                gap={2}
+                mt={2}
+              >
                 <Box display="flex" gap={1} alignItems="center">
-                  <Typography sx={{ fontWeight: "bold", color: "#f33600", fontSize: { xs: "1.2rem", md: "1.5rem" } }}>
+                  <Typography
+                    sx={{
+                      fontWeight: "bold",
+                      color: "#f33600",
+                      fontSize: { xs: "1.2rem", md: "1.5rem" },
+                    }}
+                  >
                     {finalPrice.toFixed(2)} KM
                   </Typography>
                   {book.discountAmount > 0 && (
-                    <Typography sx={{ textDecoration: "line-through", color: "#999", fontSize: { xs: "0.9rem", md: "1rem" } }}>
+                    <Typography
+                      sx={{
+                        textDecoration: "line-through",
+                        color: "#999",
+                        fontSize: { xs: "0.9rem", md: "1rem" },
+                      }}
+                    >
                       {book.mpc?.toFixed(2)} KM
                     </Typography>
                   )}
@@ -280,41 +419,65 @@ useEffect(() => {
                     fullWidth
                     disabled={!isSignedIn || wishlistLoading}
                     onClick={() => {
-                      const alreadyInWishlist = wishlist.some((b) => b._id === book._id);
+                      const alreadyInWishlist = wishlist.some(
+                        (b) => b._id === book._id,
+                      );
                       if (alreadyInWishlist) removeFromWishlist(book._id);
                       else addToWishlist(book);
                     }}
                   >
-                    {wishlist.some((b) => b._id === book._id) ? "Ukloni iz liste želja" : "Dodaj u listu želja"}
+                    {wishlist.some((b) => b._id === book._id)
+                      ? "Ukloni iz liste želja"
+                      : "Dodaj u listu želja"}
                   </Button>
 
                   <Tooltip
                     title={
                       !isSignedIn
-                        ? "Morate biti prijavljeni da biste dodavali knjige u korpu"
-                        : book.quantity <= 0
-                        ? "Nema dovoljno na stanju"
-                        : ""
+                        ? "Morate biti prijavljeni"
+                        : stockState === "none"
+                          ? "Trenutno nema dostupnih primjeraka"
+                          : ""
                     }
                     arrow
                   >
                     <span>
                       <Button
                         variant="contained"
-                        startIcon={book.quantity > 0 ? <ShoppingCartIcon /> : <NotInterestedIcon />}
+                        startIcon={
+                          stockState !== "none" ? (
+                            <ShoppingCartIcon />
+                          ) : (
+                            <NotInterestedIcon />
+                          )
+                        }
+                        disabled={!isSignedIn || stockState === "none"}
                         sx={{
                           borderRadius: "12px",
                           textTransform: "none",
-                          flex: { xs: 1, sm: "unset" },
                           fontSize: { xs: "0.60rem", sm: "0.7rem" },
-                          bgcolor: book.quantity > 0 ? "#f33600" : "#888",
-                          "&:hover": { bgcolor: book.quantity > 0 ? "#d62d00" : "#888" },
+                          bgcolor:
+                            stockState === "ok"
+                              ? "#f33600"
+                              : stockState === "low"
+                                ? "#ff9800"
+                                : "#888",
+                          "&:hover": {
+                            bgcolor:
+                              stockState === "ok"
+                                ? "#d62d00"
+                                : stockState === "low"
+                                  ? "#fb8c00"
+                                  : "#888",
+                          },
                         }}
-                        fullWidth
-                        disabled={!isSignedIn || book.quantity <= 0}
                         onClick={handleAddToCart}
                       >
-                        {book.quantity > 0 ? "Dodaj u korpu" : "Nema na stanju"}
+                        {stockState === "ok"
+                          ? "Dodaj u korpu"
+                          : stockState === "low"
+                            ? "Požuri – malo na stanju"
+                            : "Nema na stanju"}
                       </Button>
                     </span>
                   </Tooltip>
@@ -326,10 +489,21 @@ useEffect(() => {
 
         {/* Related Books */}
         <Divider sx={{ my: 4, borderColor: "#444" }} />
-        <Typography variant="subtitle1" mb={2} sx={{ color: "#ccc", textAlign: "center" }}>
+        <Typography
+          variant="subtitle1"
+          mb={2}
+          sx={{ color: "#ccc", textAlign: "center" }}
+        >
           Možda će vam se i ovo svidjeti
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
           <RelatedBooks book={book} />
         </Box>
       </Box>

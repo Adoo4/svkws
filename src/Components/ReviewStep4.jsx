@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { useTempOrder } from "../Utils.js/useTempOrder";
 import { useAuth } from "@clerk/clerk-react";
+import { Checkbox, FormControlLabel, Link } from "@mui/material";
+import { useState } from "react";
 
 export default function ReviewStep({
   cart = { items: [] },
@@ -26,6 +28,7 @@ export default function ReviewStep({
 }) {
   const { user } = useAuth();
   const { createTempOrder, isCreating } = useTempOrder();
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   /* ----------------------------------
      Memoized labels (performance-safe)
@@ -285,24 +288,84 @@ export default function ReviewStep({
         </Grid>
       </Paper>
 
+      {/* TERMS & CONDITIONS (CLICKWRAP) */}
+<FormControlLabel
+  sx={{ mt: 2 }}
+  control={
+    <Checkbox
+      checked={acceptedTerms}
+      onChange={(e) => setAcceptedTerms(e.target.checked)}
+      color="primary"
+    />
+  }
+  label={
+    <Typography fontSize="0.85rem">
+      Slažem se sa{" "}
+      <Link
+        href="/OpštiUsloviPoslovanja"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Opštim uslovima poslovanja
+      </Link>{" "}
+      i pravilima kupovine
+    </Typography>
+  }
+/>
+
+
       {/* CHECKOUT BUTTON */}
       <Button
-        fullWidth
-        variant="contained"
-        aria-label="Završi kupovinu"
-        onClick={handleCheckout}
-        disabled={!isValidOrder || isCreating}
-        sx={{ mt: 2, bgcolor: "#f33600", py: 1.5 }}
-      >
-        {isCreating ? (
-          <>
-            <CircularProgress size={22} color="inherit" sx={{ mr: 1 }} />
-            Obrada...
-          </>
-        ) : (
-          "Završi kupovinu"
-        )}
-      </Button>
+  fullWidth
+  variant="contained"
+  aria-label="Završi kupovinu"
+  onClick={handleCheckout}
+  disabled={!isValidOrder || !acceptedTerms || isCreating}
+  sx={{
+    mt: 2.5,
+    py: 1.6,
+    borderRadius: 3,
+    fontSize: "1rem",
+    fontWeight: 600,
+    textTransform: "none",
+    bgcolor: "#f33600",
+    boxShadow: "0 8px 20px rgba(243, 54, 0, 0.35)",
+    position: "relative",
+    overflow: "hidden",
+
+    "&:hover": {
+      bgcolor: "#d92f00",
+      boxShadow: "0 10px 24px rgba(243, 54, 0, 0.45)",
+    },
+
+    "&:disabled": {
+      bgcolor: "#f5b3a3",
+      boxShadow: "none",
+      cursor: "not-allowed",
+    },
+  }}
+>
+  {/* TEXT */}
+  <Box sx={{ opacity: isCreating ? 0 : 1 }}>
+    Završi kupovinu
+  </Box>
+
+  {/* SPINNER OVERLAY */}
+  {isCreating && (
+    <Box
+      sx={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress size={26} sx={{ color: "#fff" }} />
+    </Box>
+  )}
+</Button>
+
     </Box>
   );
 }
