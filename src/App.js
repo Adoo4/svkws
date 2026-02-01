@@ -14,7 +14,6 @@ import BookDetail from "./Pages/BookDetail";
 import CompleteProfile from "./Pages/CompleteProfile";
 import AuthRedirect from "./Components/AuthRedirect";
 import CartMenu from "./Components/CartMenu";
-
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import WishlistDrawer from "./Components/WishlistDrawer";
 import { SnackbarProvider } from "notistack";
@@ -47,10 +46,8 @@ function App() {
 
   const [wishlistOpen, setWishlistOpen] = useState(false);
 
- 
-  
 
-  
+
   return (
     <SnackbarProvider
       maxSnack={3}

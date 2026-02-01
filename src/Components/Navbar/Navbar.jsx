@@ -27,6 +27,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import MobileMenu from "../Menu/MobileMenu";
 import useCart from "../../Utils.js/useCart";
 import { useWishlist } from "../../Utils.js/useWishlist";
+import {useMemo} from 'react'
 
 const NAV_LINKS = [
   {
@@ -61,8 +62,6 @@ const shopRoutes = [
 ];
 
 const ButtonAppBar = ({ cart,
-  cartMenu,
-  wishlistOpen,
   setCartMenu,
   setWishlistOpen, }) => {
   const location = useLocation();
@@ -89,7 +88,16 @@ const ButtonAppBar = ({ cart,
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isShopOrCheckout = shopRoutes.includes(location.pathname);
+  const cartItemCount = useMemo(
+  () => cart?.items?.reduce((sum, i) => sum + i.quantity, 0) || 0,
+  [cart?.items]
+);
+
+  const isShopOrCheckout = useMemo(
+  () => shopRoutes.includes(location.pathname),
+  [location.pathname]
+);
+
 
   // ---------------- REUSABLE NAV BUTTON ----------------
   const NavButton = ({ label, path, icon, isSelected = false }) => (
@@ -209,7 +217,7 @@ const ButtonAppBar = ({ cart,
                   ) : (
                     <Badge
                       badgeContent={
-                        cart?.items?.reduce((sum, i) => sum + i.quantity, 0) || 0
+                        cartItemCount
                       }
                       invisible={isLoadingCart}
                       sx={{

@@ -84,11 +84,11 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
                   variant="square"
                   src={book.coverImage}
                   alt={book.title}
-                    onClick={() => {
-    navigate(`/books/${book.slug}${window.location.search}`, {
-      state: { book, category: book.subCategory },
-    });
-  }}
+                  onClick={() => {
+                    navigate(`/books/${book.slug}${window.location.search}`, {
+                      state: { book, category: book.subCategory },
+                    });
+                  }}
                   sx={{
                     width: { xs: 80, sm: 100, md: 130 },
                     height: { xs: 100, sm: 130, md: 150 },
@@ -149,12 +149,22 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
                       <Typography
                         variant="caption"
                         sx={{
-                          color: book.quantity > 0 ? "#4caf50" : "#f44336",
+                          color:
+                            book.quantity === 0
+                              ? "#f44336"
+                              : book.onlineQuantity === 0
+                                ? "#ff9800"
+                                : "#4caf50",
                         }}
                       >
-                        {book.quantity > 0
-                          ? `Dostupno: ${book.quantity}`
-                          : "Nema na lageru"}
+                        {book.quantity === 0 && "Nema na lageru"}
+
+                        {book.quantity > 0 &&
+                          book.onlineQuantity === 0 &&
+                          "Dostupno u knjižari (Upit)"}
+
+                        {book.onlineQuantity > 0 &&
+                          `Dostupno online: ${book.onlineQuantity}`}
                       </Typography>
                     </Box>
                   </Box>
@@ -187,19 +197,32 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip title="Prebaci ovu knjigu u korpu" arrow>
+                <Tooltip
+                  title={
+                    book.quantity === 0
+                      ? "Knjiga trenutno nije na stanju"
+                      : book.onlineQuantity === 0
+                        ? "Knjiga nije dostupna online – pošaljite upit knjižari"
+                        : "Prebaci ovu knjigu u korpu"
+                  }
+                  arrow
+                >
                   <span>
                     <IconButton
                       size="small"
-                      disabled={book.quantity === 0}
+                      disabled={book.onlineQuantity === 0}
                       onClick={() => handleAddToCart(book)}
                       sx={{
                         color: "#fff",
                         bgcolor: "#313131",
-                        "&:hover": { bgcolor: "#388e3c" },
+                        "&:hover": {
+                          bgcolor:
+                            book.onlineQuantity > 0 ? "#388e3c" : "#313131",
+                        },
                         borderRadius: 1.25,
-                        opacity: book.quantity === 0 ? 0.5 : 1,
-                        cursor: book.quantity === 0 ? "not-allowed" : "pointer",
+                        opacity: book.onlineQuantity === 0 ? 0.5 : 1,
+                        cursor:
+                          book.onlineQuantity === 0 ? "not-allowed" : "pointer",
                       }}
                     >
                       <ShoppingCartIcon />
@@ -241,8 +264,8 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
             alignItems: "center",
             justifyContent: "space-between",
             mb: 2,
-             p: 1,  
-            mt: {xs:5, md:8},
+            p: 1,
+            mt: { xs: 5, md: 8 },
           }}
         >
           <Typography variant="h6" fontWeight="bold">

@@ -80,35 +80,20 @@ const BookCardContent = memo( ({
         </Box>
       </Box>
 
-      {/* Categories */}
-      {/* Categories + Right-side Icons */}
       {/* Quantity message */}
+{/*<Box sx={{ mb: 0.5, display:"flex", justifyContent:"space-between", alignItems:"center" }}>*/}
+
 <Box sx={{ mb: 0.5, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-  {book.quantity === 0 && (
-    <Chip
-      label="Nema na stanju"
-      color="error"
-      size="small"
-      sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }}
-    />
-  )}
+ 
 
-  {book.quantity > 0 && book.quantity <= 5 && (
-    <Chip
-      label={`Samo ${book.quantity} na stanju`}
-      color="warning"
-      size="small"
-      sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }}
-    />
+   {book.onlineQuantity === 0 && (
+    <Chip label="Nema na stanju" color="error" size="small" sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }} />
   )}
-
-  {book.quantity > 5 && (
-    <Chip
-      label="Ima na stanju"
-      color="success"
-      size="small"
-      sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }}
-    />
+  {book.onlineQuantity > 0 && book.onlineQuantity <= 5 && (
+    <Chip label={`Samo ${book.onlineQuantity} na stanju`} color="warning" size="small" sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }} />
+  )}
+  {book.onlineQuantity > 5 && (
+    <Chip label="Ima na stanju" color="success" size="small" sx={{ fontSize: "0.70rem", height: 18, px: 0.5 }} />
   )}
 
    <WishlistButton

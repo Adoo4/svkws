@@ -17,16 +17,28 @@ const BookCardActionsBottom = ({
   clerk,
 }) => {
   const navigate = useNavigate();
- const outOfStock = useMemo(() => book.quantity <= 0, [book.quantity]);
+const outOfStock = useMemo(
+  () => book.onlineQuantity <= 0,
+  [book.onlineQuantity]
+);
 
-const cartIcon = useMemo(() => 
-  !outOfStock ? (
-    <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
-  ) : (
-    <RemoveShoppingCartIcon />
-  ),
+const cartIcon = useMemo(
+  () =>
+    !outOfStock ? (
+      <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
+    ) : (
+      <RemoveShoppingCartIcon />
+    ),
   [outOfStock]
 );
+
+const tooltipTitle = useMemo(() => {
+  if (!isSignedIn) return "Morate biti prijavljeni da dodate knjige u korpu";
+  if (book.onlineQuantity === 0 && book.quantity > 0)
+    return "Knjiga nije dostupna online — dostupna u knjižari";
+  if (book.quantity === 0) return "Knjiga trenutno nije na stanju";
+  return "";
+}, [isSignedIn, book.onlineQuantity, book.quantity]);
 
 
 const handleDetailsClick = useCallback(() => {
@@ -83,34 +95,31 @@ const handleAddToCartClick = useCallback(() => {
       </Button>
 
       {/* Add to Cart Button with Tooltip */}
-      <Tooltip
-        title={
-          isSignedIn ? "" : "Morate biti prijavljeni da dodate knjige u korpu"
-        }
-        arrow
-      >
-        <Button
-  variant="contained"
-  disabled={isAdding || outOfStock}
-  size="small"
-  onClick={handleAddToCartClick}
-  startIcon={cartIcon}
-  sx={{
-  flex: 1,
-  px: { xs: 1, sm: 1.5 },
-  fontSize: { xs: "0.60rem", sm: "0.7rem" },
-  borderRadius: "12px",
-  textTransform: "none",
-  bgcolor: "#313131",
-  color: "#fff",
-  "&:hover": { bgcolor: "#d62d00" },
-  boxShadow: "none",
-}}
->
-  Dodaj
-</Button>
+      <Tooltip title={tooltipTitle} arrow>
+  <span>
+    <Button
+      variant="contained"
+      disabled={isAdding || outOfStock}
+      size="small"
+      onClick={handleAddToCartClick}
+      startIcon={cartIcon}
+      sx={{
+        flex: 1,
+        px: { xs: 1, sm: 1.5 },
+        fontSize: { xs: "0.60rem", sm: "0.7rem" },
+        borderRadius: "12px",
+        textTransform: "none",
+        bgcolor: "#313131",
+        color: "#fff",
+        "&:hover": { bgcolor: "#d62d00" },
+        boxShadow: "none",
+      }}
+    >
+      Dodaj
+    </Button>
+  </span>
+</Tooltip>
 
-      </Tooltip>
     </CardActions>
   );
 };

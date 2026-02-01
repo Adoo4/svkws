@@ -19,7 +19,6 @@ import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CloseIcon from "@mui/icons-material/Close";
 
-
 export default function CartMenu({
   cart,
   cartMenu,
@@ -35,6 +34,9 @@ export default function CartMenu({
   );
 
   const { enqueueSnackbar } = useSnackbar(); // initialize snackbar
+  const isOutOfStock = cart?.items?.some(
+    (item) => item.quantity > item.book.onlineQuantity,
+  );
 
   const handleClearCart = () => {
     clearCart(); // your function to empty the cart
@@ -49,7 +51,7 @@ export default function CartMenu({
         background: "#1f1f1f",
         height: "100%",
         overflowY: "auto",
-        zIndex:999
+        zIndex: 999,
       }}
       role="presentation"
       onKeyDown={() => setCartMenu(false)}
@@ -63,7 +65,7 @@ export default function CartMenu({
           p: 1,
           borderRadius: 2,
           backgroundColor: "transparent", // semi-transparent background
-          mt: {xs:5, md:8},
+          mt: { xs: 5, md: 8 },
         }}
       >
         <Typography variant="h6" sx={{ color: "#f9f9f9", fontWeight: "bold" }}>
@@ -87,8 +89,7 @@ export default function CartMenu({
         ) : (
           cart?.items.map(({ book, quantity, itemTotal }) => {
             const hasDiscount =
-              book.discount?.amount > 0 &&
-              book.discountedPrice < book.mpc;
+              book.discount?.amount > 0 && book.discountedPrice < book.mpc;
 
             return (
               <ListItem
@@ -102,11 +103,11 @@ export default function CartMenu({
                     variant="square"
                     src={book.coverImage}
                     alt={book.title}
-                      onClick={() => {
-    navigate(`/books/${book.slug}${window.location.search}`, {
-      state: { book, category: book.subCategory },
-    });
-  }}
+                    onClick={() => {
+                      navigate(`/books/${book.slug}${window.location.search}`, {
+                        state: { book, category: book.subCategory },
+                      });
+                    }}
                     sx={{
                       width: { xs: 80, sm: 100, md: 130 },
                       height: { xs: 100, sm: 130, md: 150 },
@@ -118,8 +119,8 @@ export default function CartMenu({
 
                 <ListItemText
                   sx={{ ml: 1, mr: 1 }}
-                    primaryTypographyProps={{ component: "div" }}
-  secondaryTypographyProps={{ component: "div" }}
+                  primaryTypographyProps={{ component: "div" }}
+                  secondaryTypographyProps={{ component: "div" }}
                   primary={
                     <Typography
                       variant="subtitle1"
@@ -156,13 +157,19 @@ export default function CartMenu({
                           {quantity}
                         </Typography>
                       </Typography>
-                      {book.quantity > 0 && book.quantity <= 5 && (
+                      {book.onlineQuantity === 0 ? (
+                        <Typography
+                          sx={{ color: "#ff0000", fontSize: "0.75rem" }}
+                        >
+                          Nema na stanju online!
+                        </Typography>
+                      ) : book.onlineQuantity <= 5 ? (
                         <Typography
                           sx={{ color: "#ff9800", fontSize: "0.75rem" }}
                         >
-                          Samo {book.quantity} na stanju!
+                          Samo {book.onlineQuantity} na stanju!
                         </Typography>
-                      )}
+                      ) : null}
 
                       <Box
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
@@ -233,13 +240,12 @@ export default function CartMenu({
                   >
                     <IconButton
                       size="small"
-                      disabled={quantity >= book.quantity} // visually disables button //////////////////KVANITET dodati +2
+                      disabled={quantity >= book.onlineQuantity}
+                      // visually disables button //////////////////KVANITET dodati +2
                       onClick={() => {
                         // ⚠️ Logical check: do nothing if quantity >= stock
-                        if (quantity >= book.quantity) return;
-
-                        // Only update cart if we are below stock
-                        updateCartItem(book._id, quantity + 1);
+                        if (quantity >= book.onlineQuantity) return;
+                        updateCartItem(book._id, quantity + 1); // povečavanje u suprotnom
 
                         enqueueSnackbar(`Povećana količina: ${book.title}`, {
                           variant: "success",
@@ -353,7 +359,7 @@ export default function CartMenu({
                   bgcolor: "#d62d00",
                 },
               }}
-              disabled={!cart?.items?.length}
+              disabled={!cart?.items?.length || isOutOfStock}
               onClick={() => {
                 if (!cart?.items?.length) return;
                 navigate("/checkout");
