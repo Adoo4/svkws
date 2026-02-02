@@ -5,7 +5,7 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.39.0",
     "@clerk/localizations": "^3.35.2",
-    "@clerk/react-router": "^1.8.10",
+    "@emotion/is-prop-valid": "^1.4.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/anton": "^5.2.6",
@@ -15,35 +15,25 @@
     "@mui/styled-engine-sc": "^7.0.2",
     "@mui/x-data-grid": "^7.29.12",
     "@tanstack/react-query": "^5.87.4",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^1.12.2",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "eslint-config-react-app": "^7.0.1",
     "framer-motion": "^12.23.12",
-    "fuse.js": "^7.1.0",
     "hamburger-react": "^2.5.2",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.507.0",
     "notistack": "^3.0.2",
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
     "react-helmet-async": "^2.0.5",
-    "react-loadable": "^5.5.0",
-    "react-router": "^7.8.0",
     "react-router-dom": "^7.5.3",
     "react-scripts": "^5.0.1",
-    "react-virtualized-auto-sizer": "^1.0.26",
-    "react-window": "^1.8.11",
-    "styled-components": "^6.1.17",
-    "swiper": "^11.2.10",
-    "web-vitals": "^2.1.4"
+    "swiper": "^11.2.10"
   },
   "devDependencies": {
-    "cross-env": "^10.1.0",
+    "@fullhuman/postcss-purgecss": "^8.0.0",
     "sitemap": "^9.0.0",
     "source-map-explorer": "^2.5.3"
   },
@@ -53,10 +43,9 @@
     "generate-sitemap": "node scripts/generateSitemap.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:analyze": "cross-env ANALYZE=true react-scripts build"
-    
-  }, 
-  
+    "build:analyze": "cross-env ANALYZE=true react-scripts build",
+    "check-unused": "depcheck"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
