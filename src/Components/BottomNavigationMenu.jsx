@@ -13,7 +13,7 @@ import Badge from '@mui/material/Badge';
 
 
 
-export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen, setLeftDrawerOpen, setCartMenu, CartMenu, toggleDrawer, cart }) {
+export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen,  setCartMenu,  cart }) {
   const [value, setValue] = React.useState(0);
   const ref = React.useRef(null);
   const navigate = useNavigate();

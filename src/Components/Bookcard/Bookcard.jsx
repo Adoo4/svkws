@@ -4,10 +4,10 @@ import { memo, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { useUser, useClerk } from "@clerk/clerk-react";
+import { kategorijeMap } from "../../Utils.js/kategorijeMap"; // ✅ only this
 
 import { useWishlist } from "../../Utils.js/useWishlist";
 import useCart from "../../Utils.js/useCart";
-import kategorije from "../../Utils.js/kategorije";
 import { cardStyle } from "./cardstyle";
 
 import BookCardDesktop from "./BookCardDesktop";
@@ -24,8 +24,10 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   const clerk = useClerk();
   const navigate = useNavigate();
 
-  const inWishlist = useMemo(() => wishlist.some(item => item._id === book._id), [wishlist, book._id]);
-
+  const inWishlist = useMemo(
+    () => wishlist.some((item) => item._id === book._id),
+    [wishlist, book._id]
+  );
 
   /* ---------------- Handlers ---------------- */
   const handleWishlistClick = useCallback(
@@ -43,75 +45,69 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   );
 
   const openDetails = useCallback(() => {
-   navigate(`/books/${book.slug}${window.location.search}`, {
-  state: { book, category: book.subCategory },
-});
+    navigate(`/books/${book.slug}${window.location.search}`, {
+      state: { book, category: book.subCategory },
+    });
   }, [book, navigate]);
 
   /* ---------------- Derived state ---------------- */
   const hasDiscount = useMemo(() => {
-  return (
-    book.discount?.amount > 0 &&
-    (!book.discount?.validUntil || new Date(book.discount.validUntil) > new Date())
-  );
-}, [book.discount]);
+    return (
+      book.discount?.amount > 0 &&
+      (!book.discount?.validUntil || new Date(book.discount.validUntil) > new Date())
+    );
+  }, [book.discount]);
 
   const categoryMatch = useMemo(
     () =>
-      kategorije.find(
-        (k) =>
-          k.naziv === book.mainCategory ||
-          k.podkategorije?.includes(book.subCategory)
-      ),
+      kategorijeMap[book.mainCategory?.toLowerCase()] ||
+      kategorijeMap[book.subCategory?.toLowerCase()] ||
+      null,
     [book.mainCategory, book.subCategory]
   );
 
   const mainCategory = useMemo(
-    () =>
-      kategorije.find(
-        (k) => k.naziv.toLowerCase() === book.mainCategory?.toLowerCase()
-      ),
+    () => kategorijeMap[book.mainCategory?.toLowerCase()] || null,
     [book.mainCategory]
   );
 
   /* ---------------- Shared props ---------------- */
- const sharedProps = useMemo(() => ({
-  book,
-  inWishlist,
-  hasDiscount,
-  categoryMatch,
-  mainCategory,
-  handleWishlistClick,
-  openDetails,
-  setDrawerData,
-  toggleDrawer,
-  isSignedIn,
-  addToCart,
-  isAdding,
-  clerk,
-}), [
-  book,
-  inWishlist,
-  hasDiscount,
-  categoryMatch,
-  mainCategory,
-  handleWishlistClick,
-  openDetails,
-  setDrawerData,
-  toggleDrawer,
-  isSignedIn,
-  addToCart,
-  isAdding,
-  clerk
-]);
+  const sharedProps = useMemo(
+    () => ({
+      book,
+      inWishlist,
+      hasDiscount,
+      categoryMatch,
+      mainCategory,
+      handleWishlistClick,
+      openDetails,
+      setDrawerData,
+      toggleDrawer,
+      isSignedIn,
+      addToCart,
+      isAdding,
+      clerk,
+    }),
+    [
+      book,
+      inWishlist,
+      hasDiscount,
+      categoryMatch,
+      mainCategory,
+      handleWishlistClick,
+      openDetails,
+      setDrawerData,
+      toggleDrawer,
+      isSignedIn,
+      addToCart,
+      isAdding,
+      clerk,
+    ]
+  );
 
   return (
     <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
-      {isMobile ? (
-        <BookCardMobile {...sharedProps} />
-      ) : (
-        <BookCardDesktop {...sharedProps} />
-      )}
+      {isMobile ? <BookCardMobile {...sharedProps} /> : <BookCardDesktop {...sharedProps} />}
     </Card>
   );
 };
