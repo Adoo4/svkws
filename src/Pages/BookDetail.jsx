@@ -258,71 +258,80 @@ const stockState =
 
   {/* Common chip style */}
   {book.isNew && (
-    <Chip
-      label="Novo"
-      size="small"
-      sx={{
-        bgcolor: "green",
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: "0.75rem",
-        height: 26,
-        px: 1.5,
-        borderRadius: "12px",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
-      }}
-    />
-  )}
-
-  {book.discountAmount > 0 && (
-    <Chip
-      label={`${book.discountAmount}% Off`}
-      size="small"
-      sx={{
-        bgcolor: "red",
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: "0.75rem",
-        height: 26,
-        px: 1.5,
-        borderRadius: "12px",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
-      }}
-    />
-  )}
-
   <Chip
-    label={
-      stockState === "ok"
-        ? "Dostupno"
-        : stockState === "low"
-          ? "Niske zalihe"
-          : "Nema na stanju"
-    }
+    label="Novo"
     size="small"
+    variant="outlined"
     sx={{
-      height: 26,
+      borderColor: "green",
+      color: "green",
+      fontWeight: "bold",
       fontSize: "0.75rem",
-      fontWeight: 600,
-      color: "#fff",
+      height: 26,
       px: 1.5,
       borderRadius: "12px",
-      boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
-      bgcolor:
-        stockState === "ok"
-          ? "success.main"
-          : stockState === "low"
-            ? "warning.main"
-            : "error.main",
+      boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
     }}
   />
+)}
+
+{book.discountAmount > 0 && (
+  <Chip
+    label={`${book.discountAmount}% Sniženje`}
+    size="small"
+    variant="outlined"
+    sx={{
+      borderColor: "red",
+      color: "red",
+      fontWeight: "bold",
+      fontSize: "0.75rem",
+      height: 26,
+      px: 1.5,
+      borderRadius: "12px",
+      boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+    }}
+  />
+)}
+
+<Chip
+  label={
+    stockState === "ok"
+      ? "Dostupno"
+      : stockState === "low"
+        ? "Niske zalihe"
+        : "Nema na stanju"
+  }
+  size="small"
+  variant="outlined"
+  sx={{
+    height: 26,
+    fontSize: "0.75rem",
+    fontWeight: 600,
+    color:
+      stockState === "ok"
+        ? "success.main"
+        : stockState === "low"
+          ? "warning.main"
+          : "error.main",
+    borderColor:
+      stockState === "ok"
+        ? "success.main"
+        : stockState === "low"
+          ? "warning.main"
+          : "error.main",
+    px: 1.5,
+    borderRadius: "12px",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+  }}
+/>
+
 
 
                 
-                <ShareButton />
+               
 
               </Box>
-
+ <ShareButton />
               {/* Author */}
               <Typography
                 variant="subtitle1"
@@ -350,7 +359,7 @@ const stockState =
               <Grid container spacing={2} sx={{ mb: 3 }}>
                 {/* Format, Language, Year, Publisher, Pages, ISBN, TR, Barcode, Dimensions */}
                 {[
-                  { icon: MenuBookIcon, label: "Format", value: book.format },
+                  { icon: MenuBookIcon, label: "Uvez", value: book.format },
                   { icon: LanguageIcon, label: "Jezik", value: book.language },
                   {
                     icon: CalendarTodayIcon,
@@ -393,8 +402,9 @@ const stockState =
                     gap={1}
                     key={index}
                   >
-                    <item.icon sx={{ color: "#f9f9f9" }} />
-                    <Typography variant="body2">
+                    <item.icon sx={{ color: "#505050" }} />
+
+                    <Typography variant="body2" sx={{ color: "#9c9c9c" }}>
                       {item.label}: {item.value}
                     </Typography>
                   </Grid>
@@ -506,7 +516,7 @@ const stockState =
                         {stockState === "ok"
                           ? "Dodaj u korpu"
                           : stockState === "low"
-                            ? "Požuri – malo na stanju"
+                            ? "Požuri – malo je ostalo "
                             : "Nema na stanju"}
                       </Button>
                     </span>
