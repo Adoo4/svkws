@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.944e35e4.css",
+    "main.js": "/static/js/main.03d473eb.js",
+    "static/media/anton-latin-ext-400-normal.woff2": "/static/media/anton-latin-ext-400-normal.6e1938b75b8a63a00ed5.woff2",
+    "static/media/anton-latin-ext-400-normal.woff": "/static/media/anton-latin-ext-400-normal.80d68c162e6242ad158f.woff",
+    "static/media/playfair-display-latin-400-italic.woff": "/static/media/playfair-display-latin-400-italic.a14ee6423fd460157731.woff",
+    "static/media/playfair-display-latin-400-italic.woff2": "/static/media/playfair-display-latin-400-italic.e39bf2c1bfe2f12bfb36.woff2",
+    "static/media/anton-latin-400-normal.woff2": "/static/media/anton-latin-400-normal.3d62441680a12bbe4cde.woff2",
+    "static/media/playfair-display-latin-ext-400-italic.woff": "/static/media/playfair-display-latin-ext-400-italic.2f7148821f8f8ad63648.woff",
+    "static/media/anton-latin-400-normal.woff": "/static/media/anton-latin-400-normal.985e9e5ffc0621b1c530.woff",
+    "static/media/playfair-display-cyrillic-400-italic.woff": "/static/media/playfair-display-cyrillic-400-italic.b9342d23725d00988368.woff",
+    "static/media/playfair-display-latin-ext-400-italic.woff2": "/static/media/playfair-display-latin-ext-400-italic.1d59d6df84aa664e8cef.woff2",
+    "static/media/playfair-display-cyrillic-400-italic.woff2": "/static/media/playfair-display-cyrillic-400-italic.ef41ec74c2ca63578e64.woff2",
+    "static/media/anton-vietnamese-400-normal.woff2": "/static/media/anton-vietnamese-400-normal.9e4e331fa70645dcde3d.woff2",
+    "static/media/playfair-display-vietnamese-400-italic.woff": "/static/media/playfair-display-vietnamese-400-italic.f437fea3ca3c42b51072.woff",
+    "static/media/anton-vietnamese-400-normal.woff": "/static/media/anton-vietnamese-400-normal.bf196a55cc024de9d811.woff",
+    "static/media/playfair-display-vietnamese-400-italic.woff2": "/static/media/playfair-display-vietnamese-400-italic.2b6e5cdbc7355a3a7197.woff2",
+    "index.html": "/index.html",
+    "main.944e35e4.css.map": "/static/css/main.944e35e4.css.map",
+    "main.03d473eb.js.map": "/static/js/main.03d473eb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.944e35e4.css",
+    "static/js/main.03d473eb.js"
+  ]
+}

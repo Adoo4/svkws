@@ -1,7 +1,11 @@
 // BookCardSkeleton.jsx
-import { Box, Card, CardContent, Skeleton } from "@mui/material";
+import { Card, CardContent, Skeleton, Stack } from "@mui/material";
 
 const BookCardSkeleton = () => {
+  const badges = [8, 34]; // top positions for badges
+  const textLines = [0.9, 0.75]; // width ratios for title
+  const descLines = [0.95, 0.85]; // width ratios for description
+
   return (
     <Card
       elevation={0}
@@ -10,81 +14,62 @@ const BookCardSkeleton = () => {
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
-        position: "relative",
         background: "transparent",
+        position: "relative",
       }}
     >
       {/* Badges */}
-      <Skeleton
-        variant="rounded"
-        width={44}
-        height={18}
-        sx={{ position: "absolute", top: 8, left: 8, borderRadius: 9, zIndex: 2 }}
-      />
-      <Skeleton
-        variant="rounded"
-        width={44}
-        height={18}
-        sx={{ position: "absolute", top: 34, left: 8, borderRadius: 9, zIndex: 2 }}
-      />
+      {badges.map((top, idx) => (
+        <Skeleton
+          key={idx}
+          variant="rounded"
+          width={44}
+          height={18}
+          sx={{ position: "absolute", top, left: 8, borderRadius: 9, zIndex: 2 }}
+        />
+      ))}
 
       {/* Image */}
       <Skeleton
         variant="rectangular"
-        sx={{
-          width: "100%",
-          height: { xs: 250, sm: 200, md: 290 },
-          aspectRatio: "3 / 4",
-        }}
+        sx={{ width: "100%", height: { xs: 250, sm: 200, md: 290 }, aspectRatio: "3/4" }}
       />
 
-      <Box sx={{ px: 1, py: 1, flexGrow: 1 }}>
-        <CardContent sx={{ p: 0 }}>
-          {/* Title */}
-          <Skeleton variant="text" height={22} width="90%" />
-          <Skeleton variant="text" height={22} width="75%" />
+      <CardContent sx={{ p: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+        {/* Title */}
+        {textLines.map((w, idx) => (
+          <Skeleton key={idx} variant="text" height={22} width={`${w * 100}%`} />
+        ))}
 
-          {/* Author */}
-          <Skeleton variant="text" height={14} width="60%" sx={{ mb: 0.5 }} />
+        {/* Author */}
+        <Skeleton variant="text" height={14} width="60%" />
 
-          {/* Stock + Wishlist */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 0.5,
-            }}
-          >
-            <Skeleton variant="rounded" width={90} height={18} />
-            <Skeleton variant="circular" width={26} height={26} />
-          </Box>
+        {/* Stock + Wishlist */}
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Skeleton variant="rounded" width={90} height={18} />
+          <Skeleton variant="circular" width={26} height={26} />
+        </Stack>
 
-          {/* Category chip */}
-          <Skeleton
-            variant="rounded"
-            width={110}
-            height={20}
-            sx={{ mb: 0.8 }}
-          />
+        {/* Category chip */}
+        <Skeleton variant="rounded" width={110} height={20} />
 
-          {/* Description (desktop only mimic) */}
-          <Skeleton variant="text" height={14} width="95%" />
-          <Skeleton variant="text" height={14} width="85%" />
+        {/* Description */}
+        {descLines.map((w, idx) => (
+          <Skeleton key={idx} variant="text" height={14} width={`${w * 100}%`} />
+        ))}
 
-          {/* Price */}
-          <Box sx={{ mt: 1 }}>
-            <Skeleton variant="text" height={26} width="45%" />
-            <Skeleton variant="text" height={12} width="60%" />
-          </Box>
-        </CardContent>
+        {/* Price */}
+        <Stack spacing={0.5} mt={1}>
+          <Skeleton variant="text" height={26} width="45%" />
+          <Skeleton variant="text" height={12} width="60%" />
+        </Stack>
 
         {/* Action buttons */}
-        <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
+        <Stack direction="row" spacing={1} mt={1}>
           <Skeleton variant="rounded" height={36} width="100%" />
           <Skeleton variant="rounded" height={36} width="100%" />
-        </Box>
-      </Box>
+        </Stack>
+      </CardContent>
     </Card>
   );
 };
