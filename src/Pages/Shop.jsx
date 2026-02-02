@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { useSearchParams } from "react-router-dom";
+
 import ProductGallery from "../Components/ProductGallery";
 import Menu from "../Components/Menu/Menu";
 import SearchBarTop from "../Components/SearchBarTop";
@@ -9,13 +11,59 @@ import LeftDrawerMenu from "../Components/LeftDrawerMenu";
 import AnchorTemporaryDrawer from "../Components/CardPreviewComponent";
 import CartMenu from "../Components/CartMenu";
 import BottomNavigationMenu from "../Components/BottomNavigationMenu";
-import useBooks from "../Utils.js/useBooks";
-import { useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
-import SEO from "../Utils.js/SEO";
 import BookSortBar from "../Components/BookSortBar";
 
-let CategoryMenu = ({
+import useBooks from "../Utils.js/useBooks";
+import SEO from "../Utils.js/SEO";
+
+/* =========================
+   SX OBJECTS (OUTSIDE)
+   ========================= */
+
+const rootBoxSx = {
+  minHeight: "100lvh",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  background: "#262626",
+  alignItems: "center",
+};
+
+const topBarSx = {
+  width: "100%",
+  background: "#262626",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  flexDirection: { xs: "column", lg: "row" },
+};
+
+const contentWrapperSx = {
+  marginTop: "1rem",
+  marginBottom: "1rem",
+  width: "100%",
+  display: "flex",
+  gap: "0.25rem",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "start",
+};
+
+const sideMenuSx = {
+  width: { xs: "25%", md: "30%", lg: "23%" },
+  minWidth: { xs: 350, lg: 350 },
+  borderRight: "1px solid #262626",
+  paddingBottom: "1rem",
+  display: { xs: "none", lg: "flex" },
+  background: "#262626",
+  minHeight: "100lvh",
+};
+
+/* =========================
+   COMPONENT
+   ========================= */
+
+const CategoryMenu = ({
   cart,
   cartMenu,
   setCartMenu,
@@ -27,7 +75,10 @@ let CategoryMenu = ({
   removeFromWishlist,
 }) => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"), {
+    noSsr: true,
+  });
+
   const [drawerData, setDrawerData] = useState(null);
   const [open, setOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
@@ -42,30 +93,67 @@ let CategoryMenu = ({
   });
 
   const [sort, setSort] = useState("");
-const [order, setOrder] = useState("asc");
-
-
-
-
+  const [order, setOrder] = useState("asc");
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
-useEffect(() => {
-  const params = new URLSearchParams();
+  /* =========================
+     URL SYNC
+     ========================= */
 
-  if (filter.mainCategory) params.set("mainCategory", filter.mainCategory);
-  if (filter.subCategory) params.set("subCategory", filter.subCategory);
-  if (filter.language) params.set("language", filter.language);
-  if (filter.isNew) params.set("isNew", "true");
-  if (filter.discount) params.set("discount", "true");
-  params.set("page", page.toString());
+  useEffect(() => {
+    const params = new URLSearchParams();
 
-  if (params.toString() !== searchParams.toString()) {
-    setSearchParams(params, { replace: true });
-  }
-}, [filter, page, searchParams, setSearchParams]);
-  const { books, isLoading, totalPages } = useBooks(filter, page, 20, sort, order);
+    if (filter.mainCategory) params.set("mainCategory", filter.mainCategory);
+    if (filter.subCategory) params.set("subCategory", filter.subCategory);
+    if (filter.language) params.set("language", filter.language);
+    if (filter.isNew) params.set("isNew", "true");
+    if (filter.discount) params.set("discount", "true");
+    params.set("page", page.toString());
 
+    if (params.toString() !== searchParams.toString()) {
+      setSearchParams(params, { replace: true });
+    }
+  }, [filter, page, searchParams, setSearchParams]);
 
+  /* =========================
+     DATA
+     ========================= */
+
+  const { books, isLoading, totalPages } = useBooks(
+    filter,
+    page,
+    20,
+    sort,
+    order
+  );
+
+  /* =========================
+     SEO (MEMOIZED)
+     ========================= */
+
+  const seoData = useMemo(() => {
+    const title =
+      filter.mainCategory || filter.subCategory
+        ? `${filter.mainCategory ? filter.mainCategory + " - " : ""}${
+            filter.subCategory || ""
+          } | Bookstore.ba`
+        : "Bookstore.ba";
+
+    const description = `Pronađite najbolje knjige iz ${
+      filter.mainCategory || "raznih kategorija"
+    }${filter.subCategory ? `, posebno ${filter.subCategory}` : ""}.`;
+
+    return {
+      title,
+      description,
+      url: window.location.href,
+      ogImage: "/og-image.png",
+    };
+  }, [filter.mainCategory, filter.subCategory]);
+
+  /* =========================
+     CALLBACKS
+     ========================= */
 
   const toggleDrawer = useCallback(
     (open) => (event) => {
@@ -76,7 +164,7 @@ useEffect(() => {
         return;
       setOpen(open);
     },
-    [],
+    []
   );
 
   const toggleDrawer2 = useCallback(
@@ -84,96 +172,44 @@ useEffect(() => {
       if (
         event.type === "keydown" &&
         (event.key === "Tab" || event.key === "Shift")
-      ) {
+      )
         return;
-      }
       setLeftDrawerOpen(open);
     },
-    [], // empty dependency array if setLeftDrawerOpen is stable (from useState)
+    []
   );
 
-  const handleSetDrawerData = useCallback(
-    (data) => setDrawerData(data),
-    [], // no dependencies because setDrawerData is stable
-  );
+  const handleSetDrawerData = useCallback((data) => {
+    setDrawerData(data);
+  }, []);
+
+  /* =========================
+     RENDER
+     ========================= */
+
   return (
     <>
-      
+      <SEO {...seoData} />
 
-
-<SEO
-  title={
-    filter.mainCategory || filter.subCategory
-      ? `${filter.mainCategory ? filter.mainCategory + " - " : ""}${
-          filter.subCategory || ""
-        } | Bookstore.ba`
-      : "Bookstore.ba"
-  }
-  description={`Pronađite najbolje knjige iz ${filter.mainCategory || "raznih kategorija"}${
-    filter.subCategory ? `, posebno ${filter.subCategory}` : ""
-  }. Novi naslovi, popusti i popularne knjige.`}
-  url={window.location.href}
-  ogImage="/og-image.png"
-/>
-
-
-      <Box
-        sx={{
-          minHeight: "100lvh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          background: "#262626",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          sx={{
-            width: "100%",
-           
-            background: "#262626",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection:{xs:"column", lg:"row"}
-          }}
-        >
-          
+      <Box sx={rootBoxSx}>
+        <Box sx={topBarSx}>
           <SearchBarTop
             booksCopy={books}
             setCart={addToCart}
             toggleDrawer={toggleDrawer}
             setDrawerData={setDrawerData}
-            
           />
-        
-        <BookSortBar sort={sort} setSort={setSort} order ={order} setOrder={setOrder} />
-        
-</Box>
-        <Box
-          sx={{
-            marginTop: "1rem",
-            marginBottom: "1rem",
-            width: "100%",
-            display: "flex",
-            gap: "0.25rem",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "start",
-          }}
-        >
-          <Box
-            sx={{
-              width: { xs: "25%", md: "30%", lg: "23%" },
-              minWidth: { xs: 350, lg: 350 },
-              borderRight: "1px solid #262626",
-              paddingBottom: "1rem",
-              display: { xs: "none", lg: "flex" },
-              background: "#262626",
 
-              minHeight: "100lvh",
-            }}
-          >
+          <BookSortBar
+            sort={sort}
+            setSort={setSort}
+            order={order}
+            setOrder={setOrder}
+          />
+        </Box>
+
+        <Box sx={contentWrapperSx}>
+          <Box sx={sideMenuSx}>
             <Menu
               setFilter={setFilter}
               filter={filter}
@@ -203,38 +239,50 @@ useEffect(() => {
           />
         </Box>
 
-        <LeftDrawerMenu
-          open={leftDrawerOpen}
-          setOpen={setLeftDrawerOpen}
-          setFilter={setFilter}
-          filter={filter}
-          
-          books={books}
+        {/* =========================
+            CONDITIONAL OVERLAYS
+           ========================= */}
 
-          page={page}
-          setPage={setPage}
-        />
-        <AnchorTemporaryDrawer
-          open={open}
-          setOpen={setOpen}
-          toggleDrawer={toggleDrawer}
-          drawerData={drawerData}
-        />
-        <CartMenu
-          open={cartMenu}
-          cart={cart}
-          setCart={addToCart}
-          updateCartItem={updateCartItem}
-          cartMenu={cartMenu}
-          setCartMenu={setCartMenu}
-          removeCartItem={removeCartItem}
-        />
-        <BottomNavigationMenu
-          leftDrawerOpen={leftDrawerOpen}
-          setLeftDrawerOpen={setLeftDrawerOpen}
-          toggleDrawer2={toggleDrawer2}
-          setCartMenu={setCartMenu}
-        />
+        {leftDrawerOpen && (
+          <LeftDrawerMenu
+            open={leftDrawerOpen}
+            setOpen={setLeftDrawerOpen}
+            setFilter={setFilter}
+            filter={filter}
+            books={books}
+            page={page}
+            setPage={setPage}
+          />
+        )}
+
+        {open && (
+          <AnchorTemporaryDrawer
+            open={open}
+            setOpen={setOpen}
+            toggleDrawer={toggleDrawer}
+            drawerData={drawerData}
+          />
+        )}
+
+        {cartMenu && (
+          <CartMenu
+            open={cartMenu}
+            cart={cart}
+            setCart={addToCart}
+            updateCartItem={updateCartItem}
+            setCartMenu={setCartMenu}
+            removeCartItem={removeCartItem}
+          />
+        )}
+
+        {isSmallScreen && (
+          <BottomNavigationMenu
+            leftDrawerOpen={leftDrawerOpen}
+            setLeftDrawerOpen={setLeftDrawerOpen}
+            toggleDrawer2={toggleDrawer2}
+            setCartMenu={setCartMenu}
+          />
+        )}
       </Box>
     </>
   );
