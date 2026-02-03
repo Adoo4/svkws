@@ -131,7 +131,7 @@ const ButtonAppBar = ({ cart, setCartMenu, setWishlistOpen }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 1300 }}>
+    <Box sx={{ flexGrow: 1, position: "fixed", width: "100%", zIndex: 1300, height: 80 }}>
       <AppBar position="fixed" elevation={0} sx={appBarSx}>
         <Toolbar disableGutters sx={{ px: { xs: 2, sm: 4 }, height: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           
@@ -156,39 +156,132 @@ const ButtonAppBar = ({ cart, setCartMenu, setWishlistOpen }) => {
             ))}
 
             <SignedIn>
-              {/* Cart */}
-              {setCartMenu && (
-                <IconButton aria-label="cart" onClick={toggleCart}>
-                  {loadingCart ? <CircularProgress size={20} sx={{ color: "#f9f9f9" }} /> :
-                    <Badge badgeContent={cartItemCount} invisible={loadingCart} sx={{ "& .MuiBadge-badge": { backgroundColor: "#d62d00", color: "#fff", fontWeight: "bold", minWidth: 18, height: 18 } }}>
-                      <ShoppingCartOutlined sx={{ fontSize: { xs: "1.3rem", sm: "1.5rem" }, color: "#fff", "&:hover": { color: "#d62d00" } }} />
-                    </Badge>
-                  }
-                </IconButton>
-              )}
+  {/* Cart */}
+  {setCartMenu && (
+    <IconButton
+      aria-label="cart"
+      onClick={toggleCart}
+      sx={{ width: 40, height: 40 }} // reserve space
+    >
+      <Badge
+        badgeContent={cartItemCount || 0} // always reserve space
+        invisible={false} // never remove badge, just show 0
+        sx={{
+          "& .MuiBadge-badge": {
+            backgroundColor: "#d62d00",
+            color: "#fff",
+            fontWeight: "bold",
+            minWidth: 18,
+            height: 18,
+          },
+        }}
+      >
+        <Box
+          sx={{
+            width: 24,
+            height: 24,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {loadingCart ? (
+            <CircularProgress size={20} sx={{ color: "#f9f9f9" }} />
+          ) : (
+            <ShoppingCartOutlined
+              sx={{
+                fontSize: { xs: "1.3rem", sm: "1.5rem" },
+                color: "#fff",
+                "&:hover": { color: "#d62d00" },
+              }}
+            />
+          )}
+        </Box>
+      </Badge>
+    </IconButton>
+  )}
 
-              {/* Wishlist */}
-              <IconButton aria-label="wishlist" onClick={toggleWishlist}>
-                {loadingWishlist ? <CircularProgress size={20} sx={{ color: "#fff" }} /> :
-                  <Badge badgeContent={wishlist.length} invisible={wishlist.length === 0} sx={{ "& .MuiBadge-badge": { backgroundColor: "#464646", color: "#fff", fontWeight: "bold", minWidth: 18, height: 18 } }}>
-                    {wishlist.length > 0 ? <Bookmark sx={{ fontSize: { xs: "1.3rem", sm: "1.5rem" }, color: "#fff", "&:hover": { color: "#d62d00" } }} /> :
-                      <BookmarkBorder sx={{ fontSize: { xs: "1.3rem", sm: "1.5rem" }, color: "#fff", "&:hover": { color: "#d62d00" } }} />}
-                  </Badge>
-                }
-              </IconButton>
+  {/* Wishlist */}
+  <IconButton aria-label="wishlist" onClick={toggleWishlist} sx={{ width: 40, height: 40 }}>
+    <Badge
+      badgeContent={wishlist.length || 0} // reserve space
+      invisible={false} // never remove badge
+      sx={{
+        "& .MuiBadge-badge": {
+          backgroundColor: "#464646",
+          color: "#fff",
+          fontWeight: "bold",
+          minWidth: 18,
+          height: 18,
+        },
+      }}
+    >
+      <Box sx={{ position: "relative", width: 24, height: 24 }}>
+        <Bookmark
+          sx={{
+            fontSize: { xs: "1.3rem", sm: "1.5rem" },
+            color: "#fff",
+            visibility: wishlist.length > 0 ? "visible" : "hidden",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            "&:hover": { color: "#d62d00" },
+          }}
+        />
+        <BookmarkBorder
+          sx={{
+            fontSize: { xs: "1.3rem", sm: "1.5rem" },
+            color: "#fff",
+            visibility: wishlist.length === 0 ? "visible" : "hidden",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            "&:hover": { color: "#d62d00" },
+          }}
+        />
+        {loadingWishlist && (
+          <CircularProgress
+            size={20}
+            sx={{
+              color: "#fff",
+              position: "absolute",
+              top: 2,
+              left: 2,
+            }}
+          />
+        )}
+      </Box>
+    </Badge>
+  </IconButton>
 
-              <Box sx={{ ml: 0.5 }}>
-                <UserButton />
-              </Box>
-            </SignedIn>
+  {/* User */}
+  <Box sx={{ ml: 0.5, width: 40, minWidth: 40 }}>
+    <UserButton />
+  </Box>
+</SignedIn>
 
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button startIcon={<Login />} sx={{ borderRadius: "50px", px: { xs: 1.5, sm: 3 }, fontSize: { xs: "0.65rem", sm: "0.7rem" }, fontWeight: 600, color: "#fff", backgroundColor: "transparent", "&:hover": { backgroundColor: "#ff3c1a" } }}>
-                  <Typography sx={{ display: { xs: "none", md: "block" }, fontWeight: "bold", fontSize: "0.7rem" }}>PRIJAVA</Typography>
-                </Button>
-              </SignInButton>
-            </SignedOut>
+<SignedOut>
+  <SignInButton mode="modal">
+    <Button
+      startIcon={<Login />}
+      sx={{
+        borderRadius: "50px",
+        px: { xs: 1.5, sm: 3 },
+        fontSize: { xs: "0.65rem", sm: "0.7rem" },
+        fontWeight: 600,
+        color: "#fff",
+        backgroundColor: "transparent",
+        "&:hover": { backgroundColor: "#ff3c1a" },
+      }}
+    >
+      <Typography
+        sx={{ display: { xs: "none", md: "block" }, fontWeight: "bold", fontSize: "0.7rem" }}
+      >
+        PRIJAVA
+      </Typography>
+    </Button>
+  </SignInButton>
+</SignedOut>
 
           </Box>
         </Toolbar>

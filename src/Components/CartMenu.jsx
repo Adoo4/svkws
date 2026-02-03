@@ -402,6 +402,9 @@ export default function CartMenu({
       anchor="right"
       open={cartMenu}
       onClose={() => setCartMenu(false)}
+       ModalProps={{
+    keepMounted: true,   // 🔥 prevents layout shift
+  }}
       PaperProps={{
         sx: {
           backgroundColor: "#1f1f1f",

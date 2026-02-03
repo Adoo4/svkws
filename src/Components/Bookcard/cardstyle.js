@@ -3,6 +3,12 @@
 export const cardStyle = (inWishlist, theme) => ({
   minWidth: { xs: "175px", sm: "210px" },
   maxWidth: { xs: "29vw", sm: "220px", md: "260px" },
+  minHeight: {
+  xs: 360,
+  sm: 420,
+  md: 520,
+},
+
   flexGrow: 1,
   borderRadius: 4,
   cursor: "pointer",
@@ -13,6 +19,7 @@ export const cardStyle = (inWishlist, theme) => ({
   border: "0px solid transparent",
   transition: "background-color .3s, transform .3s, box-shadow .3s",
   boxShadow: 2,
+  
   
   [theme.breakpoints.up("sm")]: {
     "&:hover": {

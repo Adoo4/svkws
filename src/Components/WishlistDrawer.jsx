@@ -248,6 +248,9 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
       anchor="right"
       open={open}
       onClose={onClose}
+       ModalProps={{
+    keepMounted: true,   // 🔥 prevents layout shift
+  }}
       PaperProps={{
         sx: {
           backgroundColor: "#1f1f1f",
