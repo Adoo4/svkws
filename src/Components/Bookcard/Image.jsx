@@ -13,7 +13,8 @@ import Box from "@mui/material/Box";
       component="img"
       image={book?.coverImage}
       alt={book.title}
-      loading="lazy"
+      loading="eager"       // Ensure it's not lazy-loaded
+      fetchpriority="high"
       sx={{
         height: { xs: 250, sm: 200, md: 290 },
         objectFit: "contain",
