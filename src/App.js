@@ -4,92 +4,106 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useEffect, useState, lazy, Suspense } from "react";
-import { SignIn, SignUp } from "@clerk/clerk-react";
-import { SnackbarProvider } from "notistack";
-
+import { useEffect, useState } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Footer from "./Components/Footer";
-import CartMenu from "./Components/CartMenu";
-import WishlistDrawer from "./Components/WishlistDrawer";
+import Home from "./Pages/Home";
+import Shop from "./Pages/Shop";
+import CheckoutPage from "./Pages/Checkout";
+import BookDetail from "./Pages/BookDetail";
+import CompleteProfile from "./Pages/CompleteProfile";
 import AuthRedirect from "./Components/AuthRedirect";
-import AuthNotifier from "./Components/SignIn/AuthNotifier.jsx";
+import CartMenu from "./Components/CartMenu";
+import { SignIn, SignUp } from "@clerk/clerk-react";
+import WishlistDrawer from "./Components/WishlistDrawer";
+import { SnackbarProvider } from "notistack";
+import AuthNotifier from "./Components/SignIn/AuthNotifier.jsx"; // <-- import it
+import Uslovikupovine from "./Pages/Uslovikupovine.jsx";
+import Privatnost from "./Pages/Privatnost.jsx";
+import OpštiUsloviPoslovanja from "./Pages/OpštiUsloviPoslovanja.jsx";
+import PolitikaPovrataiReklamacije from "./Pages/PolitikaPovrata.jsx";
+import Sigurnost from "./Pages/Sigurnost.jsx";
+import PolitikaKolačića from "./Pages/Politikekolačića.jsx";
+import PaymentSuccess from "./Pages/PaymentSuccess.jsx";
 import AdminRoute from "./admin/AdminRoute";
+import AdminDashboard from "./admin/AdminDashboard";
+import PaymentCancel from "./Pages/PaymentCancel.jsx";
 
 import useCart from "./Utils.js/useCart.js";
-import useWishlist from "./Utils.js/useWishlist.js";
-
-/* =======================
-   🔥 LAZY-LOADED PAGES
-   ======================= */
-const Home = lazy(() => import("./Pages/Home"));
-const Shop = lazy(() => import("./Pages/Shop"));
-const CheckoutPage = lazy(() => import("./Pages/Checkout"));
-const BookDetail = lazy(() => import("./Pages/BookDetail"));
-const CompleteProfile = lazy(() => import("./Pages/CompleteProfile"));
-const PaymentSuccess = lazy(() => import("./Pages/PaymentSuccess.jsx"));
-const PaymentCancel = lazy(() => import("./Pages/PaymentCancel.jsx"));
-
-const Uslovikupovine = lazy(() => import("./Pages/Uslovikupovine.jsx"));
-const Privatnost = lazy(() => import("./Pages/Privatnost.jsx"));
-const OpštiUsloviPoslovanja = lazy(() =>
-  import("./Pages/OpštiUsloviPoslovanja.jsx")
-);
-const PolitikaPovrataiReklamacije = lazy(() =>
-  import("./Pages/PolitikaPovrata.jsx")
-);
-const Sigurnost = lazy(() => import("./Pages/Sigurnost.jsx"));
-const PolitikaKolačića = lazy(() =>
-  import("./Pages/Politikekolačića.jsx")
-);
-
-const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
+import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
 
 function App() {
   const { cart, addToCart, updateCartItem, removeCartItem, clearCart } =
     useCart();
   const { wishlist, addToWishlist, removeFromWishlist, clearWishlist } =
     useWishlist();
-
   const [cartMenu, setCartMenu] = useState(false);
-  const [wishlistOpen, setWishlistOpen] = useState(false);
 
+  // Keep localStorage in sync when wishlist changes
   useEffect(() => {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
   }, [wishlist]);
+
+  const [wishlistOpen, setWishlistOpen] = useState(false);
+
+
 
   return (
     <SnackbarProvider
       maxSnack={3}
       autoHideDuration={2500}
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      Components={{
+        Snackbar: (props) => (
+          <div
+            style={{
+              zIndex: 100000, // higher than BottomNavigation (9999)
+              marginBottom: "60px", // lift above bottom nav
+            }}
+          >
+            <props.Component {...props} />
+          </div>
+        ),
+      }}
     >
       <Router>
-        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-          <Navbar
-            wishlist={wishlist}
-            addToWishlist={addToWishlist}
-            removeFromWishlist={removeFromWishlist}
-            cart={cart}
-            cartMenu={cartMenu}
-            setCartMenu={setCartMenu}
-            addToCart={addToCart}
-            updateCartItem={updateCartItem}
-            removeCartItem={removeCartItem}
-            wishlistOpen={wishlistOpen}
-            setWishlistOpen={setWishlistOpen}
-          />
+      
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "100vh",
+              
+            }}
+          >
+            {/* Navbar */}
+            <Navbar
+              wishlist={wishlist}
+              addToWishlist={addToWishlist}
+              removeFromWishlist={removeFromWishlist}
+              cart={cart}
+              cartMenu={cartMenu}
+              setCartMenu={setCartMenu}
+              addToCart={addToCart}
+              updateCartItem={updateCartItem}
+              removeCartItem={removeCartItem}
+              wishlistOpen={wishlistOpen}
+              setWishlistOpen={setWishlistOpen}
+            />
 
-          <AuthNotifier />
+            <AuthNotifier />
+            {/* Main content */}
+            <main style={{ flex: 1, overflow: "hidden", background: "white" }}>
+              <AuthRedirect />
 
-          <main style={{ flex: 1, overflow: "hidden", background: "white" }}>
-            <AuthRedirect />
-
-            {/* 🚀 ROUTE-LEVEL CODE SPLITTING */}
-            <Suspense fallback={null}>
               <Routes>
-                <Route path="/home" element={<Home setCartMenu={setCartMenu} />} />
-
+                <Route
+                  path="/home"
+                  element={<Home setCartMenu={setCartMenu} />}
+                />
                 <Route
                   path="/shop"
                   element={
@@ -107,18 +121,19 @@ function App() {
                     />
                   }
                 />
+                <Route
+                  path="/checkout"
+                  element={<CheckoutPage cart={cart} />}
+                />
 
-                <Route path="/checkout" element={<CheckoutPage cart={cart} />} />
                 <Route path="/success" element={<PaymentSuccess />} />
                 <Route path="/payment-cancel" element={<PaymentCancel />} />
-
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route
                   path="/sign-up"
                   element={<SignUp afterSignUpUrl="/complete-profile" />}
                 />
                 <Route path="/complete-profile" element={<CompleteProfile />} />
-
                 <Route
                   path="/books/:slug"
                   element={
@@ -135,7 +150,6 @@ function App() {
                     />
                   }
                 />
-
                 <Route path="/UsloviKupovine" element={<Uslovikupovine />} />
                 <Route path="/Privatnost" element={<Privatnost />} />
                 <Route
@@ -147,11 +161,13 @@ function App() {
                   element={<PolitikaPovrataiReklamacije />}
                 />
                 <Route path="/Sigurnost" element={<Sigurnost />} />
-                <Route path="/PolitikaKolačića" element={<PolitikaKolačića />} />
+                <Route
+                  path="/PolitikaKolačića"
+                  element={<PolitikaKolačića />}
+                />
 
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="*" element={<Navigate to="/home" replace />} />
-
                 <Route
                   path="/admin"
                   element={
@@ -161,12 +177,14 @@ function App() {
                   }
                 />
               </Routes>
-            </Suspense>
-          </main>
+            </main>
 
-          <Footer />
-        </div>
+            {/* Footer */}
+            <Footer />
+          </div>
+        
 
+        {/* Cart overlay */}
         <CartMenu
           cart={cart}
           cartMenu={cartMenu}

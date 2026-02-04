@@ -1,8 +1,19 @@
-import { CardContent, Typography, Box, Chip } from "@mui/material";
+// React
+import React, { memo, useMemo } from "react";
+
+// MUI components (direct imports)
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+
+// MUI icons (direct imports)
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+
+// Local components/utilities
 import WishlistButton from "./WishlistButton";
 import kategorije from "../../Utils.js/kategorije";
-import React, { memo, useMemo } from "react";
+
 
 /* =========================
    STYLE CONSTANTS

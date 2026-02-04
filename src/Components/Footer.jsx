@@ -1,6 +1,18 @@
-import { Box, Typography, Link, Grid, Stack, Button } from "@mui/material";
-import { Facebook, Instagram } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+// MUI components (direct imports)
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
+// MUI icons (direct imports)
+import Facebook from '@mui/icons-material/Facebook';
+import Instagram from '@mui/icons-material/Instagram';
+
+// React Router
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 const navLinks = [
   { label: "Opšti Uslovi Poslovanja", path: "/OpštiUsloviPoslovanja" },

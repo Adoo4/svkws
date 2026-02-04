@@ -1,10 +1,9 @@
-import {
-  Stack,
-  FormControl,
-  Select,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import Stack from '@mui/material/Stack';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+
 
 
 import { alpha } from "@mui/material/styles";

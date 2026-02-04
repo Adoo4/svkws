@@ -1,22 +1,33 @@
-import React,{ useState, useCallback, useMemo } from "react";
-import {
-  TextField,
-  InputAdornment,
-  Box,
-  Paper,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Avatar,
-  IconButton,
-} from "@mui/material";
-import { Close, Search, Visibility, AddShoppingCart } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useDebounce } from "../Utils.js/useDebounce";
-import { SignedIn } from "@clerk/clerk-react";
-import useCart from "../Utils.js/useCart";
+// React
+import React, { useState, useCallback, useMemo } from 'react';
+
+// MUI components (direct imports)
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+
+// MUI icons (direct imports)
+import Close from '@mui/icons-material/Close';
+import Search from '@mui/icons-material/Search';
+import Visibility from '@mui/icons-material/Visibility';
+import AddShoppingCart from '@mui/icons-material/AddShoppingCart';
+
+// React Router
+import { useNavigate } from 'react-router-dom';
+
+// Other libraries/hooks
+import axios from 'axios';
+import { useDebounce } from '../Utils.js/useDebounce';
+import { SignedIn } from '@clerk/clerk-react';
+import useCart from '../Utils.js/useCart';
+
 
 const ICON_BOX_SX = {
   display: "flex",

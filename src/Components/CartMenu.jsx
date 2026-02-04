@@ -1,23 +1,29 @@
-import { useMemo } from "react";
-import {
-  Box,
-  Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  Button,
-  Drawer,
-  IconButton,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack"; // add this at the top
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import CloseIcon from "@mui/icons-material/Close";
+// React
+import { useMemo } from 'react';
+
+// MUI components (direct imports)
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+
+// MUI icons (direct imports)
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import CloseIcon from '@mui/icons-material/Close';
+
+// Other libraries/hooks
+import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+
 
 export default function CartMenu({
   cart,

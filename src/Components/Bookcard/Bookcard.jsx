@@ -1,17 +1,32 @@
-import { Card, useMediaQuery } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { memo, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
-import { useUser, useClerk } from "@clerk/clerk-react";
-import { kategorijeMap } from "../../Utils.js/kategorijeMap"; // ✅ only this
+// React
+import React, { memo, useMemo, useCallback, lazy, Suspense } from "react";
 
+// MUI components (direct imports)
+import Card from "@mui/material/Card";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+
+// Router
+import { useNavigate } from "react-router-dom";
+
+// Notifications
+import { useSnackbar } from "notistack";
+
+// Auth
+import { useUser, useClerk } from "@clerk/clerk-react";
+
+// Utilities
+import { kategorijeMap } from "../../Utils.js/kategorijeMap";
 import { useWishlist } from "../../Utils.js/useWishlist";
 import useCart from "../../Utils.js/useCart";
-import { cardStyle } from "./cardstyle";
 
-import BookCardDesktop from "./BookCardDesktop";
-import BookCardMobile from "./BookcardMobile";
+// Local components/styles
+import { cardStyle } from "./cardstyle";
+import BookCardSkeleton from "./BookCardSkeleton";
+
+
+const BookCardDesktop = lazy(() => import("./BookCardDesktop"));
+const BookCardMobile = lazy(() => import("./BookcardMobile"));
 
 const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   const theme = useTheme();
@@ -29,7 +44,6 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
     [wishlist, book._id]
   );
 
-  /* ---------------- Handlers ---------------- */
   const handleWishlistClick = useCallback(
     (e) => {
       e.stopPropagation();
@@ -50,7 +64,6 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
     });
   }, [book, navigate]);
 
-  /* ---------------- Derived state ---------------- */
   const hasDiscount = useMemo(() => {
     return (
       book.discount?.amount > 0 &&
@@ -71,7 +84,6 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
     [book.mainCategory]
   );
 
-  /* ---------------- Shared props ---------------- */
   const sharedProps = useMemo(
     () => ({
       book,
@@ -106,9 +118,12 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
   );
 
   return (
-    <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
-      {isMobile ? <BookCardMobile {...sharedProps} /> : <BookCardDesktop {...sharedProps} />}
-    </Card>
+   <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
+  <Suspense fallback={<BookCardSkeleton />}>
+    {isMobile ? <BookCardMobile {...sharedProps} /> : <BookCardDesktop {...sharedProps} />}
+  </Suspense>
+</Card>
+
   );
 };
 

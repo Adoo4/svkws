@@ -1,14 +1,22 @@
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import Typography from "@mui/material/Typography";
-import { Grid, Chip, Divider, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import PersonIcon from "@mui/icons-material/Person";
+// MUI components (direct imports)
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
 
+// MUI icons (direct imports)
+import PersonIcon from '@mui/icons-material/Person';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import LanguageIcon from "@mui/icons-material/Language";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import CorporateFareIcon from "@mui/icons-material/CorporateFare";
+import LanguageIcon from '@mui/icons-material/Language';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+
+// React Router
+import { useNavigate } from 'react-router-dom';
+
 
 
 export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }) {

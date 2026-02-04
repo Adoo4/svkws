@@ -218,6 +218,9 @@ const CategoryMenu = ({
             />
           </Box>
 
+
+          
+
           <ProductGallery
             books={books}
             loading={isLoading}

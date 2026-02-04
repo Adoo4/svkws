@@ -1,23 +1,31 @@
-import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  Skeleton,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "../Style/RelatedBooksSwiper.css";
-import useRelatedBooks from "../Utils.js/useRelatedBooks";
-import { memo } from "react";
+// React
+import { memo } from 'react';
+
+// React Router
+import { useNavigate } from 'react-router-dom';
+
+// MUI components/hooks (direct imports)
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import Skeleton from '@mui/material/Skeleton';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+// Swiper
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+// Local
+import '../Style/RelatedBooksSwiper.css';
+import useRelatedBooks from '../Utils.js/useRelatedBooks';
+
 
 // ----------------------
 // Skeleton Loader Card

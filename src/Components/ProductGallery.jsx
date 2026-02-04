@@ -1,16 +1,20 @@
+// React hooks
+import { memo, useMemo, useCallback } from "react";
+
+// MUI components (direct imports)
 import Box from "@mui/material/Box";
-import {
-  Grid,
-  Typography,
-  Pagination,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+
+// MUI icon (direct import)
 import SearchIcon from "@mui/icons-material/Search";
+
+// Local components
 import BookCard from "./Bookcard/Bookcard";
 import BookCardSkeleton from "./Bookcard/BookCardSkeleton";
-
-
 
 
 const ProductGallery = ({
@@ -25,7 +29,7 @@ const ProductGallery = ({
   removeCartItem,
   totalPages = 1,
   currentPage = 1,
-  setPage, // <- use this from parent
+  setPage,
   wishlist,
   addToWishlist,
   removeFromWishlist,
@@ -35,9 +39,47 @@ const ProductGallery = ({
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  
+  const displayedBooks = useMemo(() => books || [], [books]);
 
- const displayedBooks = books || [];
+  const renderBookCard = useCallback(
+    (book) => (
+      <Grid
+        item
+        xs={2}
+        sm={4}
+        md={4}
+        lg={1}
+        key={book._id}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "stretch" }}
+      >
+        <BookCard
+          book={book}
+          toggleDrawer={toggleDrawer}
+          setDrawerData={setDrawerData}
+          drawerData={drawerData}
+          cart={cart}
+          addToCart={addToCart}
+          updateCartItem={updateCartItem}
+          removeCartItem={removeCartItem}
+          wishlist={wishlist}
+          addToWishlist={addToWishlist}
+          removeFromWishlist={removeFromWishlist}
+        />
+      </Grid>
+    ),
+    [
+      toggleDrawer,
+      setDrawerData,
+      drawerData,
+      cart,
+      addToCart,
+      updateCartItem,
+      removeCartItem,
+      wishlist,
+      addToWishlist,
+      removeFromWishlist,
+    ]
+  );
 
   return (
     <Box
@@ -54,8 +96,6 @@ const ProductGallery = ({
         boxShadow: "1px 0 10px rgba(0, 0, 0, 0.1)",
       }}
     >
-
-
       {/* Loading Skeleton */}
       {loading && (
         <Grid container spacing={1} justifyContent="center">
@@ -93,49 +133,18 @@ const ProductGallery = ({
       )}
 
       {/* Book Grid */}
-     {/* Book Grid */}
-<Box sx={{ flexGrow: 1, width: "100%" }}>
-  <Grid
-    container
-    spacing={{ xs: "3vw", sm: 2, md: 3 }}
-    columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
-    justifyContent="center"
-  >
-    {!loading && displayedBooks.length > 0 &&
-      displayedBooks.map((book) => (
+      <Box sx={{ flexGrow: 1, width: "100%" }}>
         <Grid
-          item
-          xs={2}  // ✅ two per row on mobile
-          sm={4}  // ✅ two per row on tablet
-          md={4}  // ✅ four per row on desktop
-          lg={1}  // ✅ four per row on desktop
-          key={book._id}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "stretch",
-          }}
+          container
+          spacing={{ xs: "3vw", sm: 2, md: 3 }}
+          columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
+          justifyContent="center"
         >
-          <BookCard
-            book={book}
-            toggleDrawer={toggleDrawer}
-            setDrawerData={setDrawerData}
-            drawerData={drawerData}
-            cart={cart}
-            addToCart={addToCart}
-            updateCartItem={updateCartItem}
-            removeCartItem={removeCartItem}
-            wishlist={wishlist}
-            addToWishlist={addToWishlist}
-            removeFromWishlist={removeFromWishlist}
-          />
+          {!loading && displayedBooks.length > 0 &&
+            displayedBooks.map(renderBookCard)
+          }
         </Grid>
-      ))}
-  </Grid>
-</Box>
-
-
-
+      </Box>
 
       {/* Pagination */}
       {!loading && totalPages > 1 && (
@@ -154,10 +163,7 @@ const ProductGallery = ({
           <Pagination
             count={totalPages}
             page={currentPage}
-            onChange={(e, value) => {
-              setPage(value);
-             
-            }}
+            onChange={(e, value) => setPage(value)}
             shape="rounded"
             variant="outlined"
             size={isSmallScreen ? "small" : "medium"}
@@ -191,4 +197,4 @@ const ProductGallery = ({
   );
 };
 
-export default ProductGallery;
+export default memo(ProductGallery);

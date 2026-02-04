@@ -1,8 +1,5 @@
- import {
-   CardMedia,
-   Box,
-
- } from "@mui/material";
+import CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
 
  import {
    SearchOutlined as SearchOutlinedIcon,

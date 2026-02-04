@@ -1,25 +1,31 @@
-import React, { useMemo, useCallback } from "react";
-import PropTypes from "prop-types";
-import {
-  Box,
-  Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  IconButton,
-  Drawer,
-  Button,
-  Tooltip,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
-import { useWishlist } from "../Utils.js/useWishlist";
+// React
+import React, { useMemo, useCallback } from 'react';
+import PropTypes from 'prop-types';
+
+// MUI components (direct imports)
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ListItemText from '@mui/material/ListItemText';
+import IconButton from '@mui/material/IconButton';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+
+// MUI icons (direct imports)
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+// Other libraries/hooks
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
+import { useWishlist } from '../Utils.js/useWishlist';
+
 
 const WishlistDrawer = ({ open, onClose, addToCart }) => {
   const { wishlist, isLoading, removeFromWishlist, clearWishlist } =

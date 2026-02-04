@@ -1,9 +1,15 @@
-import { Box, Chip } from "@mui/material";
-import React from 'react'
+// React
+import React, { memo } from "react";
+
+// MUI components (direct imports)
+import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
+
+// Local components
 import CardImage from "../Bookcard/Image";
 import BookCardContent from "../Bookcard/BookCardContent";
 import BookCardActionsBottom from "./BookcardActionButtons";
-import  { memo } from "react";
+
 
 const BookCardDesktop = React.memo(({
   book,

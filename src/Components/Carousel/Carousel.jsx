@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { Box, Typography, Button, Stack, Link } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Link from "@mui/material/Link";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import { Facebook, Instagram } from "@mui/icons-material";
-import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { DotButton, useDotButton } from "./Carousel-accessory";
 import "./Carousel-style.css";

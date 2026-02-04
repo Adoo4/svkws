@@ -1,5 +1,9 @@
 // BookCardSkeleton.jsx
-import { Card, CardContent, Skeleton, Stack } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+
 
 const BookCardSkeleton = () => {
   const badges = [8, 34]; // top positions for badges

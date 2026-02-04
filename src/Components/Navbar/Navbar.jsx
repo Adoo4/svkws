@@ -1,34 +1,33 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  Button,
-  IconButton,
-  Badge,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  useUser,
-} from "@clerk/clerk-react";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-  HomeOutlined,
-  StoreMallDirectoryOutlined,
-  GridViewOutlined,
-  ShoppingCartOutlined,
-  Bookmark,
-  BookmarkBorder,
-  Login,
-} from "@mui/icons-material";
-import MobileMenu from "../Menu/MobileMenu";
-import useCart from "../../Utils.js/useCart";
-import { useWishlist } from "../../Utils.js/useWishlist";
+// MUI components (direct imports for tree-shaking)
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+
+// Clerk
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
+
+// React Router
+import { useNavigate, useLocation } from 'react-router-dom';
+
+// MUI icons (direct imports)
+import HomeOutlined from '@mui/icons-material/HomeOutlined';
+import StoreMallDirectoryOutlined from '@mui/icons-material/StoreMallDirectoryOutlined';
+import GridViewOutlined from '@mui/icons-material/GridViewOutlined';
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
+import Bookmark from '@mui/icons-material/Bookmark';
+import BookmarkBorder from '@mui/icons-material/BookmarkBorder';
+import Login from '@mui/icons-material/Login';
+
+// Local components/hooks
+import MobileMenu from '../Menu/MobileMenu';
+import useCart from '../../Utils.js/useCart';
+import { useWishlist } from '../../Utils.js/useWishlist';
 
 // ------------------------ Constants ------------------------
 const NAV_LINKS = [

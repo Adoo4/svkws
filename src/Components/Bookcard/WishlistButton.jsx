@@ -1,7 +1,11 @@
-import { Box, IconButton, Tooltip } from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import { SignedIn } from "@clerk/clerk-react";
 import { BookmarkBorder, Bookmark } from "@mui/icons-material";
 import { motion } from "framer-motion";
+
+
 
 const WishlistButton = ({
   inWishlist,
