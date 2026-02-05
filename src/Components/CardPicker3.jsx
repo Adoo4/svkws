@@ -14,7 +14,7 @@ const CardPicker = ({
     {
       id: "card",
       label: "Kartično plaćanje",
-      description: "Visa, Visa Electron, MasterCard ili Maestro",
+      description: "Visa, MasterCard ili Maestro",
       disabled: false,
     },
     {
@@ -33,21 +33,13 @@ const CardPicker = ({
   ];
 
 const cardLogos = [
-  {
-    src: "/Cards/Diners50.gif",
-    href: "https://www.dinersclub.com",
-    alt: "Diners Club",
-  },
+ 
   {
     src: "/Cards/Visa 2015 50.gif",
     href: "https://www.visa.com",
     alt: "Visa",
   },
-  {
-    src: "/Cards/Discover50.gif",
-    href: "https://www.discover.com",
-    alt: "Discover",
-  },
+ 
   {
     src: "/Cards/ms_vrt_opt_pos_53_2x.png",
     href: "https://brand.mastercard.com/brandcenter/more-about-our-brands.html",
@@ -62,10 +54,7 @@ const cardLogos = [
 
 
 const securityLogos = [
-  {
-    src: "/Payment Security logo/diners_sigurna kupnja.png",
-    alt: "Diners Sigurna Kupnja",
-  },
+  
   {
     src: "/Payment Security logo/mc_idcheck_hrz_rgb_pos.png",
     alt: "Mastercard ID Check",
@@ -75,7 +64,7 @@ const securityLogos = [
     alt: "Visa Secure",
   },
   {
-    src: "/Payment Security logo/monri_badge.png",
+    src: "/Payment Security logo/PayWeb e-kupovina_logo.png",
     alt: "Monri Secure Payment",
   },
 ];
@@ -171,9 +160,11 @@ const securityLogos = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      width:"100%",
       gap: { xs: 1, sm: 1.5, lg: 2 },
       flexWrap: { xs: "wrap", lg: "nowrap" },
       mt: 1,
+      justifyContent:"flex-end"
     }}
   >
     {cardLogos.map((logo) => (
@@ -186,7 +177,7 @@ const securityLogos = [
         onClick={(e) => e.stopPropagation()}
         sx={{
           display: "inline-flex",
-          alignItems: "center",
+          alignItems: "flex-end",
           cursor: "pointer",
         }}
       >
@@ -252,17 +243,7 @@ const securityLogos = [
         alignItems: "center",
       }}
     >
-      {/* Diners */}
-      <Box
-        component="img"
-        src={securityLogos.find((logo) => logo.alt.includes("Diners")).src}
-        alt="Diners secure online shopping"
-        sx={{
-          height: { xs: 35, sm: 50 },
-          objectFit: "contain",
-          m: 0.5, // bel prostor oko loga
-        }}
-      />
+     
 
       {/* Mastercard® Identity Check™ */}
       <Box
@@ -301,7 +282,7 @@ const securityLogos = [
           src={securityLogos.find((logo) => logo.alt.includes("Monri")).src}
           alt="Monri Payments"
           sx={{
-            height: { xs: 35, sm: 50 },
+            height: { xs: 60, sm: 80 },
             objectFit: "contain",
           }}
         />

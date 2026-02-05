@@ -86,18 +86,27 @@ const SimpleFooter = () => {
 
           {/* Payment Gateway Logo */}
           <Box
-            component="img"
-            src="/monri_footer_negativ.png"
-            alt="Monri Payment Logo"
-            width={250}
-            height={60}
-            sx={{
-              maxWidth: "100%",
-              objectFit: "contain",
-              aspectRatio: "250/60",
-              display: "block",
-            }}
-          />
+  component="a"
+  href="https://monri.com/"
+  target="_blank"
+  rel="noopener noreferrer"
+  sx={{ display: "inline-block" }}
+>
+  <Box
+    component="img"
+    src="/Payment Security logo/PayWeb e-kupovina_logo.png"
+    alt="Monri Payment Logo"
+    width={250}
+    height={90}
+    sx={{
+      maxWidth: "100%",
+      objectFit: "contain",
+      aspectRatio: "250 / 90",
+      display: "block",
+    }}
+  />
+</Box>
+
         </Grid>
 
         {/* Company Info */}

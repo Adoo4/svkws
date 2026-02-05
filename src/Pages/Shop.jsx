@@ -1,24 +1,23 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Box from "@mui/material/Box";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { useSearchParams } from "react-router-dom";
-
 import ProductGallery from "../Components/ProductGallery";
 import Menu from "../Components/Menu/Menu";
 import SearchBarTop from "../Components/SearchBarTop";
-import LeftDrawerMenu from "../Components/LeftDrawerMenu";
 import AnchorTemporaryDrawer from "../Components/CardPreviewComponent";
-import CartMenu from "../Components/CartMenu";
-import BottomNavigationMenu from "../Components/BottomNavigationMenu";
 import BookSortBar from "../Components/BookSortBar";
-
 import useBooks from "../Utils.js/useBooks";
 import SEO from "../Utils.js/SEO";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { lazy, Suspense } from "react";
 
 /* =========================
    SX OBJECTS (OUTSIDE)
    ========================= */
+   
+
+  
 
 const rootBoxSx = {
   minHeight: "100lvh",
@@ -65,7 +64,6 @@ const sideMenuSx = {
 
 const CategoryMenu = ({
   cart,
-  cartMenu,
   setCartMenu,
   wishlist,
   addToCart,
@@ -126,6 +124,22 @@ const CategoryMenu = ({
     sort,
     order
   );
+
+   const LeftDrawerMenu = lazy(() => import("../Components/LeftDrawerMenu"));
+   const BottomNavigationMenu = lazy(() =>
+  import("../Components/BottomNavigationMenu")
+);
+
+const isMobile = useMediaQuery(theme.breakpoints.down("sm"), {
+  noSsr: true,
+});
+
+
+useEffect(() => {
+  if (!isMobile) {
+    setLeftDrawerOpen(false);
+  }
+}, [isMobile]);
 
   /* =========================
      SEO (MEMOIZED)
@@ -246,17 +260,20 @@ const CategoryMenu = ({
             CONDITIONAL OVERLAYS
            ========================= */}
 
-        {leftDrawerOpen && (
-          <LeftDrawerMenu
-            open={leftDrawerOpen}
-            setOpen={setLeftDrawerOpen}
-            setFilter={setFilter}
-            filter={filter}
-            books={books}
-            page={page}
-            setPage={setPage}
-          />
-        )}
+       {isMobile && leftDrawerOpen && (
+  <Suspense fallback={null}>
+    <LeftDrawerMenu
+      open={leftDrawerOpen}
+      setOpen={setLeftDrawerOpen}
+      setFilter={setFilter}
+      filter={filter}
+      books={books}
+      page={page}
+      setPage={setPage}
+    />
+  </Suspense>
+)}
+
 
         {open && (
           <AnchorTemporaryDrawer
@@ -267,25 +284,18 @@ const CategoryMenu = ({
           />
         )}
 
-        {cartMenu && (
-          <CartMenu
-            open={cartMenu}
-            cart={cart}
-            setCart={addToCart}
-            updateCartItem={updateCartItem}
-            setCartMenu={setCartMenu}
-            removeCartItem={removeCartItem}
-          />
-        )}
+     
 
-        {isSmallScreen && (
-          <BottomNavigationMenu
-            leftDrawerOpen={leftDrawerOpen}
-            setLeftDrawerOpen={setLeftDrawerOpen}
-            toggleDrawer2={toggleDrawer2}
-            setCartMenu={setCartMenu}
-          />
-        )}
+       {isMobile && (
+  <Suspense fallback={null}>
+    <BottomNavigationMenu
+      leftDrawerOpen={leftDrawerOpen}
+      setLeftDrawerOpen={setLeftDrawerOpen}
+      toggleDrawer2={toggleDrawer2}
+      setCartMenu={setCartMenu}
+    />
+  </Suspense>
+)}
       </Box>
     </>
   );
