@@ -126,9 +126,9 @@ const CategoryMenu = ({
   );
 
    const LeftDrawerMenu = lazy(() => import("../Components/LeftDrawerMenu"));
-   const BottomNavigationMenu = lazy(() =>
-  import("../Components/BottomNavigationMenu")
-);
+  // const BottomNavigationMenu = lazy(() =>import("../Components/BottomNavigationMenu"))
+
+const FloatingMenuButton = lazy(()=> import("../Components/FloatingMenuButton"))
 
 const isMobile = useMediaQuery(theme.breakpoints.down("sm"), {
   noSsr: true,
@@ -284,9 +284,19 @@ useEffect(() => {
           />
         )}
 
+       {isMobile && (
+  <Suspense fallback={null}>
+    <FloatingMenuButton
+      leftDrawerOpen={leftDrawerOpen}
+      setLeftDrawerOpen={setLeftDrawerOpen}
+      toggleDrawer2={toggleDrawer2}
+      setCartMenu={setCartMenu}
+    />
+  </Suspense>)}
+
      
 
-       {isMobile && (
+{/*       {isMobile && (
   <Suspense fallback={null}>
     <BottomNavigationMenu
       leftDrawerOpen={leftDrawerOpen}
@@ -295,7 +305,7 @@ useEffect(() => {
       setCartMenu={setCartMenu}
     />
   </Suspense>
-)}
+)}*/}
       </Box>
     </>
   );
