@@ -19,25 +19,19 @@ const ProductGallery = ({
   books = [],
   loading = false,
   toggleDrawer,
-  cart,
-  drawerData,
   setDrawerData,
-  addToCart,
-  updateCartItem,
-  removeCartItem,
   totalPages = 1,
   currentPage = 1,
   setPage,
-  wishlist,
-  addToWishlist,
-  removeFromWishlist,
 }) => {
   const itemsPerPage = 20;
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  // Memoized list of books
   const displayedBooks = useMemo(() => books || [], [books]);
 
+  // Callback to render a single book card
   const renderBookCard = useCallback(
     (book) => (
       <Grid
@@ -54,30 +48,10 @@ const ProductGallery = ({
           loading={loading}
           toggleDrawer={toggleDrawer}
           setDrawerData={setDrawerData}
-          drawerData={drawerData}
-          cart={cart}
-          addToCart={addToCart}
-          updateCartItem={updateCartItem}
-          removeCartItem={removeCartItem}
-          wishlist={wishlist}
-          addToWishlist={addToWishlist}
-          removeFromWishlist={removeFromWishlist}
         />
       </Grid>
     ),
-    [
-      loading,
-      toggleDrawer,
-      setDrawerData,
-      drawerData,
-      cart,
-      addToCart,
-      updateCartItem,
-      removeCartItem,
-      wishlist,
-      addToWishlist,
-      removeFromWishlist,
-    ]
+    [loading, toggleDrawer, setDrawerData]
   );
 
   return (

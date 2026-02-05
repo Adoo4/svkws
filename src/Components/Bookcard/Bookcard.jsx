@@ -1,7 +1,7 @@
 // React
 import React, { memo, useMemo, useCallback, lazy, Suspense } from "react";
 
-// MUI components (direct imports)
+// MUI components
 import Card from "@mui/material/Card";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -27,10 +27,9 @@ import BookCardSkeleton from "./BookCardSkeleton";
 const BookCardDesktop = lazy(() => import("./BookCardDesktop"));
 const BookCardMobile = lazy(() => import("./BookcardMobile"));
 
-const BookCard = ({ book, setDrawerData, toggleDrawer, loading = false }) => {
+const BookCard = ({ book, loading = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   const { isSignedIn } = useUser();
   const { enqueueSnackbar } = useSnackbar();
   const { isAdding, addToCart } = useCart();
@@ -38,11 +37,13 @@ const BookCard = ({ book, setDrawerData, toggleDrawer, loading = false }) => {
   const clerk = useClerk();
   const navigate = useNavigate();
 
-  const inWishlist = useMemo(
-    () => wishlist.some((item) => item._id === book._id),
-    [wishlist, book._id]
-  );
+  // Check if the book is in the wishlist
+  const inWishlist = useMemo(() => wishlist.some((item) => item._id === book._id), [
+    wishlist,
+    book._id,
+  ]);
 
+  // Wishlist handler
   const handleWishlistClick = useCallback(
     (e) => {
       e.stopPropagation();
@@ -57,66 +58,45 @@ const BookCard = ({ book, setDrawerData, toggleDrawer, loading = false }) => {
     [inWishlist, book, addToWishlist, removeFromWishlist, enqueueSnackbar]
   );
 
+  // Navigate to book details
   const openDetails = useCallback(() => {
     navigate(`/books/${book.slug}${window.location.search}`, {
       state: { book, category: book.subCategory },
     });
   }, [book, navigate]);
 
-  const hasDiscount = useMemo(() => {
-    return (
-      book.discount?.amount > 0 &&
-      (!book.discount?.validUntil || new Date(book.discount.validUntil) > new Date())
-    );
-  }, [book.discount]);
-
-  const categoryMatch = useMemo(
+  // Discount check
+  const hasDiscount = useMemo(
     () =>
-      kategorijeMap[book.mainCategory?.toLowerCase()] ||
-      kategorijeMap[book.subCategory?.toLowerCase()] ||
-      null,
-    [book.mainCategory, book.subCategory]
+      book.discount?.amount > 0 &&
+      (!book.discount?.validUntil || new Date(book.discount.validUntil) > new Date()),
+    [book.discount]
   );
 
-  const mainCategory = useMemo(
-    () => kategorijeMap[book.mainCategory?.toLowerCase()] || null,
-    [book.mainCategory]
-  );
+  // Category mapping
+  const categoryMatch =
+    kategorijeMap[book.mainCategory?.toLowerCase()] ||
+    kategorijeMap[book.subCategory?.toLowerCase()] ||
+    null;
 
-  const sharedProps = useMemo(
-    () => ({
-      book,
-      inWishlist,
-      hasDiscount,
-      categoryMatch,
-      mainCategory,
-      handleWishlistClick,
-      openDetails,
-      setDrawerData,
-      toggleDrawer,
-      isSignedIn,
-      addToCart,
-      isAdding,
-      clerk,
-    }),
-    [
-      book,
-      inWishlist,
-      hasDiscount,
-      categoryMatch,
-      mainCategory,
-      handleWishlistClick,
-      openDetails,
-      setDrawerData,
-      toggleDrawer,
-      isSignedIn,
-      addToCart,
-      isAdding,
-      clerk,
-    ]
-  );
+  const mainCategory = kategorijeMap[book.mainCategory?.toLowerCase()] || null;
 
-  // If parent is loading, render skeleton immediately
+  // Shared props for Desktop/Mobile
+  const sharedProps = {
+    book,
+    inWishlist,
+    hasDiscount,
+    categoryMatch,
+    mainCategory,
+    handleWishlistClick,
+    openDetails,
+    isSignedIn,
+    addToCart,
+    isAdding,
+    clerk,
+  };
+
+  // Render skeleton if loading
   if (loading) return <BookCardSkeleton />;
 
   return (
