@@ -20,6 +20,7 @@ const BookCardSkeleton = () => {
         flexDirection: "column",
         background: "transparent",
         position: "relative",
+        padding: 2
       }}
     >
       {/* Badges */}
@@ -27,7 +28,7 @@ const BookCardSkeleton = () => {
         <Skeleton
           key={idx}
           variant="rounded"
-          width={44}
+          width={43}
           height={18}
           sx={{ position: "absolute", top, left: 8, borderRadius: 9, zIndex: 2 }}
         />
@@ -39,7 +40,7 @@ const BookCardSkeleton = () => {
         sx={{ width: "100%", height: { xs: 250, sm: 200, md: 290 }, aspectRatio: "3/4" }}
       />
 
-      <CardContent sx={{ p: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+      <CardContent sx={{ p: 1, display: "flex", flexDirection: "column", gap: 0 }}>
         {/* Title */}
         {textLines.map((w, idx) => (
           <Skeleton key={idx} variant="text" height={22} width={`${w * 100}%`} />
@@ -49,7 +50,7 @@ const BookCardSkeleton = () => {
         <Skeleton variant="text" height={14} width="60%" />
 
         {/* Stock + Wishlist */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Stack direction="row" justifyContent="space-between" alignItems="center"  sx={{marginTop:2}}>
           <Skeleton variant="rounded" width={90} height={18} />
           <Skeleton variant="circular" width={26} height={26} />
         </Stack>

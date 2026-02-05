@@ -24,11 +24,10 @@ import useCart from "../../Utils.js/useCart";
 import { cardStyle } from "./cardstyle";
 import BookCardSkeleton from "./BookCardSkeleton";
 
-
 const BookCardDesktop = lazy(() => import("./BookCardDesktop"));
 const BookCardMobile = lazy(() => import("./BookcardMobile"));
 
-const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
+const BookCard = ({ book, setDrawerData, toggleDrawer, loading = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -117,13 +116,15 @@ const BookCard = ({ book, setDrawerData, toggleDrawer }) => {
     ]
   );
 
-  return (
-   <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
-  <Suspense fallback={<BookCardSkeleton />}>
-    {isMobile ? <BookCardMobile {...sharedProps} /> : <BookCardDesktop {...sharedProps} />}
-  </Suspense>
-</Card>
+  // If parent is loading, render skeleton immediately
+  if (loading) return <BookCardSkeleton />;
 
+  return (
+    <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
+      <Suspense fallback={<BookCardSkeleton />}>
+        {isMobile ? <BookCardMobile {...sharedProps} /> : <BookCardDesktop {...sharedProps} />}
+      </Suspense>
+    </Card>
   );
 };
 

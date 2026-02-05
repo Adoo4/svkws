@@ -9,7 +9,7 @@ export const cardStyle = (inWishlist, theme) => ({
   md: 520,
 },
 
-  flexGrow: 1,
+  
   borderRadius: 4,
   cursor: "pointer",
   overflow: "hidden",
