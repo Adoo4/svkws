@@ -1,7 +1,6 @@
-// React hooks
 import { memo, useMemo, useCallback } from "react";
 
-// MUI components (direct imports)
+// MUI components
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -9,7 +8,7 @@ import Pagination from "@mui/material/Pagination";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
-// MUI icon (direct import)
+// MUI icon
 import SearchIcon from "@mui/icons-material/Search";
 
 // Local components
@@ -32,7 +31,6 @@ const ProductGallery = ({
   wishlist,
   addToWishlist,
   removeFromWishlist,
-  filter
 }) => {
   const itemsPerPage = 20;
   const theme = useTheme();
@@ -53,7 +51,7 @@ const ProductGallery = ({
       >
         <BookCard
           book={book}
-          loading={loading} // <-- pass loading to BookCard
+          loading={loading}
           toggleDrawer={toggleDrawer}
           setDrawerData={setDrawerData}
           drawerData={drawerData}
@@ -68,7 +66,7 @@ const ProductGallery = ({
       </Grid>
     ),
     [
-      loading, // <-- include loading in deps
+      loading,
       toggleDrawer,
       setDrawerData,
       drawerData,
@@ -99,28 +97,27 @@ const ProductGallery = ({
     >
       {/* Loading Skeleton */}
       {loading && (
-  <Grid
-    container
-    spacing={{ xs: "3vw", sm: 2, md: 3 }}
-    columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
-    justifyContent="center"
-  >
-    {Array.from({ length: itemsPerPage }).map((_, index) => (
-      <Grid
-        item
-        xs={2}
-        sm={4}
-        md={4}
-        lg={1}
-        key={index}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "stretch" }}
-      >
-        <BookCardSkeleton />
-      </Grid>
-    ))}
-  </Grid>
-)}
-
+        <Grid
+          container
+          spacing={{ xs: "3vw", sm: 2, md: 3 }}
+          columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
+          justifyContent="center"
+        >
+          {Array.from({ length: itemsPerPage }).map((_, index) => (
+            <Grid
+              item
+              xs={2}
+              sm={4}
+              md={4}
+              lg={1}
+              key={index}
+              sx={{ display: "flex", justifyContent: "center", alignItems: "stretch" }}
+            >
+              <BookCardSkeleton />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       {/* Empty State */}
       {!loading && displayedBooks.length === 0 && (
@@ -141,9 +138,7 @@ const ProductGallery = ({
           <Typography variant="h6" fontWeight={500}>
             U odabranoj kategoriji ne postoje proizvodi
           </Typography>
-          <Typography variant="body2">
-            Pokušaj promijeniti filter ili pretragu.
-          </Typography>
+          <Typography variant="body2">Pokušaj promijeniti filter ili pretragu.</Typography>
         </Box>
       )}
 
@@ -155,9 +150,7 @@ const ProductGallery = ({
           columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
           justifyContent="center"
         >
-          {!loading && displayedBooks.length > 0 &&
-            displayedBooks.map(renderBookCard)
-          }
+          {!loading && displayedBooks.length > 0 && displayedBooks.map(renderBookCard)}
         </Grid>
       </Box>
 

@@ -11,6 +11,7 @@ import useBooks from "../Utils.js/useBooks";
 import SEO from "../Utils.js/SEO";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { lazy, Suspense } from "react";
+import LeftDrawerMenu from "../Components/LeftDrawerMenu"
 
 /* =========================
    SX OBJECTS (OUTSIDE)
@@ -99,19 +100,48 @@ const CategoryMenu = ({
      ========================= */
 
   useEffect(() => {
-    const params = new URLSearchParams();
+  const params = new URLSearchParams(searchParams); // start from current
+  let changed = false;
 
-    if (filter.mainCategory) params.set("mainCategory", filter.mainCategory);
-    if (filter.subCategory) params.set("subCategory", filter.subCategory);
-    if (filter.language) params.set("language", filter.language);
+  if (filter.mainCategory && params.get("mainCategory") !== filter.mainCategory) {
+    params.set("mainCategory", filter.mainCategory);
+    changed = true;
+  } else if (!filter.mainCategory && params.has("mainCategory")) {
+    params.delete("mainCategory");
+    changed = true;
+  }
+
+  if (filter.subCategory && params.get("subCategory") !== filter.subCategory) {
+    params.set("subCategory", filter.subCategory);
+    changed = true;
+  } else if (!filter.subCategory && params.has("subCategory")) {
+    params.delete("subCategory");
+    changed = true;
+  }
+
+  // repeat for language, isNew, discount, page...
+  if (filter.isNew.toString() !== params.get("isNew")) {
     if (filter.isNew) params.set("isNew", "true");
-    if (filter.discount) params.set("discount", "true");
-    params.set("page", page.toString());
+    else params.delete("isNew");
+    changed = true;
+  }
 
-    if (params.toString() !== searchParams.toString()) {
-      setSearchParams(params, { replace: true });
-    }
-  }, [filter, page, searchParams, setSearchParams]);
+  if (filter.discount.toString() !== params.get("discount")) {
+    if (filter.discount) params.set("discount", "true");
+    else params.delete("discount");
+    changed = true;
+  }
+
+  if (page.toString() !== params.get("page")) {
+    params.set("page", page.toString());
+    changed = true;
+  }
+
+  if (changed) {
+    setSearchParams(params, { replace: true });
+  }
+}, [filter, page, searchParams, setSearchParams]);
+
 
   /* =========================
      DATA
@@ -125,7 +155,7 @@ const CategoryMenu = ({
     order
   );
 
-   const LeftDrawerMenu = lazy(() => import("../Components/LeftDrawerMenu"));
+
   // const BottomNavigationMenu = lazy(() =>import("../Components/BottomNavigationMenu"))
 
 const FloatingMenuButton = lazy(()=> import("../Components/FloatingMenuButton"))
@@ -252,7 +282,6 @@ useEffect(() => {
             addToCart={addToCart}
             updateCartItem={updateCartItem}
             removeCartItem={removeCartItem}
-            filter={filter}
           />
         </Box>
 
@@ -260,19 +289,17 @@ useEffect(() => {
             CONDITIONAL OVERLAYS
            ========================= */}
 
-       {isMobile && leftDrawerOpen && (
-  <Suspense fallback={null}>
+     
     <LeftDrawerMenu
       open={leftDrawerOpen}
       setOpen={setLeftDrawerOpen}
-      setFilter={setFilter}
-      filter={filter}
-      books={books}
-      page={page}
-      setPage={setPage}
+       setFilter={setFilter}
+              filter={filter}
+              page={page}
+              setPage={setPage}
     />
-  </Suspense>
-)}
+ 
+
 
 
         {open && (

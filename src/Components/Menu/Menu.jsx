@@ -15,7 +15,6 @@ import { alpha } from "@mui/material/styles";
 import AdjustIcon from "@mui/icons-material/Adjust";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-
 import Language from "./LanguageSelect";
 import IsNewSwitch from "./IsNewSwitch";
 import DiscountSwitch from "./DiscountSwitch";
@@ -108,30 +107,30 @@ const SelectedListItem = ({ filter, setFilter, setPage }) => {
   // Callbacks
   // ----------------------------
   const handleCategoryClick = useCallback(
-    (kategorija) => {
-      if (kategorija.naziv.toLowerCase() === "sve kategorije") {
-        setFilter((prev) => ({ ...prev, mainCategory: "", subCategory: "" }));
-        setSelectedIndex(null);
-        setOpenCategory(null);
-        setPage(1);
-        return;
-      }
-
-      setFilter((prev) => ({
-        ...prev,
-        mainCategory: kategorija.naziv,
-        subCategory: "",
-      }));
-      setOpenCategory((prev) =>
-        prev === kategorija.naziv.toLowerCase()
-          ? null
-          : kategorija.naziv.toLowerCase()
-      );
+  (kategorija) => {
+    if (kategorija.naziv.toLowerCase() === "sve kategorije") {
+      setFilter((prev) => ({ ...prev, mainCategory: "", subCategory: "" }));
       setSelectedIndex(null);
+      setOpenCategory(null);
       setPage(1);
-    },
-    [setFilter, setPage]
-  );
+      return;
+    }
+
+    setFilter((prev) => ({
+      ...prev,
+      mainCategory: kategorija.naziv,
+      subCategory: "",
+    }));
+    setOpenCategory((prev) =>
+      prev === kategorija.naziv.toLowerCase()
+        ? null
+        : kategorija.naziv.toLowerCase()
+    );
+    setSelectedIndex(null);
+    setPage(1);
+  },
+  [setFilter, setPage]
+);
 
   const handleSubcategoryClick = useCallback(
     (kategorija, pod, idx) => {
