@@ -164,7 +164,7 @@ const securityLogos = [
       gap: { xs: 1, sm: 1.5, lg: 2 },
       flexWrap: { xs: "wrap", lg: "nowrap" },
       mt: 1,
-      justifyContent:"flex-end"
+      
     }}
   >
     {cardLogos.map((logo) => (
