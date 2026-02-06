@@ -1,4 +1,4 @@
-import * as React from "react";
+
 import {
   Box,
   InputLabel,
@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
 
-export default function LanguageSelect({ filter, setFilter, setPage, setSelectedLanguage }) {
+export default function LanguageSelect({ filter, setFilter, setPage }) {
  const handleChange = (event) => {
     const value = event.target.value;
     setFilter((prev) => ({

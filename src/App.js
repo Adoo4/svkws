@@ -35,7 +35,7 @@ import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
 function App() {
   const { cart, addToCart, updateCartItem, removeCartItem, clearCart } =
     useCart();
-  const { wishlist, addToWishlist, removeFromWishlist, clearWishlist } =
+  const { wishlist, addToWishlist, removeFromWishlist } =
     useWishlist();
   const [cartMenu, setCartMenu] = useState(false);
 
@@ -45,8 +45,6 @@ function App() {
   }, [wishlist]);
 
   const [wishlistOpen, setWishlistOpen] = useState(false);
-
-
 
   return (
     <SnackbarProvider
@@ -70,119 +68,99 @@ function App() {
       }}
     >
       <Router>
-      
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              minHeight: "100vh",
-              
-            }}
-          >
-            {/* Navbar */}
-            <Navbar
-              wishlist={wishlist}
-              addToWishlist={addToWishlist}
-              removeFromWishlist={removeFromWishlist}
-              cart={cart}
-              cartMenu={cartMenu}
-              setCartMenu={setCartMenu}
-              addToCart={addToCart}
-              updateCartItem={updateCartItem}
-              removeCartItem={removeCartItem}
-              wishlistOpen={wishlistOpen}
-              setWishlistOpen={setWishlistOpen}
-            />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
+        >
+          {/* Navbar */}
+          <Navbar
+            cart={cart}
+            setCartMenu={setCartMenu}
+            setWishlistOpen={setWishlistOpen}
+          />
 
-            <AuthNotifier />
-            {/* Main content */}
-            <main style={{ flex: 1, overflow: "hidden", background: "white" }}>
-              <AuthRedirect />
+          <AuthNotifier />
+          {/* Main content */}
+          <main style={{ flex: 1, overflow: "hidden", background: "white" }}>
+            <AuthRedirect />
 
-              <Routes>
-                <Route
-                  path="/home"
-                  element={<Home setCartMenu={setCartMenu} />}
-                />
-                <Route
-                  path="/shop"
-                  element={
-                    <Shop
-                      cart={cart}
-                      cartMenu={cartMenu}
-                      setCartMenu={setCartMenu}
-                      wishlist={wishlist}
-                      addToWishlist={addToWishlist}
-                      removeFromWishlist={removeFromWishlist}
-                      clearWishlist={clearWishlist}
-                      addToCart={addToCart}
-                      updateCartItem={updateCartItem}
-                      removeCartItem={removeCartItem}
-                    />
-                  }
-                />
-                <Route
-                  path="/checkout"
-                  element={<CheckoutPage cart={cart} />}
-                />
+            <Routes>
+              <Route
+                path="/home"
+                element={<Home setCartMenu={setCartMenu} />}
+              />
+              <Route
+                path="/shop"
+                element={
+                  <Shop
+                    cart={cart}
+                    setCartMenu={setCartMenu}
+                    wishlist={wishlist}
+                    addToWishlist={addToWishlist}
+                    removeFromWishlist={removeFromWishlist}
+                    addToCart={addToCart}
+                    updateCartItem={updateCartItem}
+                    removeCartItem={removeCartItem}
+                  />
+                }
+              />
+              <Route path="/checkout" element={<CheckoutPage cart={cart} />} />
 
-                <Route path="/success" element={<PaymentSuccess />} />
-                <Route path="/payment-cancel" element={<PaymentCancel />} />
-                <Route path="/sign-in" element={<SignIn />} />
-                <Route
-                  path="/sign-up"
-                  element={<SignUp afterSignUpUrl="/complete-profile" />}
-                />
-                <Route path="/complete-profile" element={<CompleteProfile />} />
-                <Route
-                  path="/books/:slug"
-                  element={
-                    <BookDetail
-                      cart={cart}
-                      cartMenu={cartMenu}
-                      setCartMenu={setCartMenu}
-                      wishlist={wishlist}
-                      addToWishlist={addToWishlist}
-                      removeFromWishlist={removeFromWishlist}
-                      clearWishlist={clearWishlist}
-                      addToCart={addToCart}
-                      updateCartItem={updateCartItem}
-                    />
-                  }
-                />
-                <Route path="/UsloviKupovine" element={<Uslovikupovine />} />
-                <Route path="/Privatnost" element={<Privatnost />} />
-                <Route
-                  path="/OpštiUsloviPoslovanja"
-                  element={<OpštiUsloviPoslovanja />}
-                />
-                <Route
-                  path="/PolitikaPovrataiReklamacije"
-                  element={<PolitikaPovrataiReklamacije />}
-                />
-                <Route path="/Sigurnost" element={<Sigurnost />} />
-                <Route
-                  path="/PolitikaKolačića"
-                  element={<PolitikaKolačića />}
-                />
+              <Route path="/success" element={<PaymentSuccess />} />
+              <Route path="/payment-cancel" element={<PaymentCancel />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route
+                path="/sign-up"
+                element={<SignUp afterSignUpUrl="/complete-profile" />}
+              />
+              <Route path="/complete-profile" element={<CompleteProfile />} />
+              <Route
+                path="/books/:slug"
+                element={
+                  <BookDetail
+                    cart={cart}
+                    cartMenu={cartMenu}
+                    setCartMenu={setCartMenu}
+                    wishlist={wishlist}
+                    addToWishlist={addToWishlist}
+                    removeFromWishlist={removeFromWishlist}
+                    addToCart={addToCart}
+                    updateCartItem={updateCartItem}
+                  />
+                }
+              />
+              <Route path="/UsloviKupovine" element={<Uslovikupovine />} />
+              <Route path="/Privatnost" element={<Privatnost />} />
+              <Route
+                path="/OpštiUsloviPoslovanja"
+                element={<OpštiUsloviPoslovanja />}
+              />
+              <Route
+                path="/PolitikaPovrataiReklamacije"
+                element={<PolitikaPovrataiReklamacije />}
+              />
+              <Route path="/Sigurnost" element={<Sigurnost />} />
+              <Route path="/PolitikaKolačića" element={<PolitikaKolačića />} />
 
-                <Route path="/" element={<Navigate to="/home" />} />
-                <Route path="*" element={<Navigate to="/home" replace />} />
-                <Route
-                  path="/admin"
-                  element={
-                    <AdminRoute>
-                      <AdminDashboard />
-                    </AdminRoute>
-                  }
-                />
-              </Routes>
-            </main>
+              <Route path="/" element={<Navigate to="/home" />} />
+              <Route path="*" element={<Navigate to="/home" replace />} />
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+            </Routes>
+          </main>
 
-            {/* Footer */}
-            <Footer />
-          </div>
-        
+          {/* Footer */}
+          <Footer />
+        </div>
 
         {/* Cart overlay */}
         <CartMenu
@@ -197,10 +175,6 @@ function App() {
         <WishlistDrawer
           open={wishlistOpen}
           onClose={() => setWishlistOpen(false)}
-          wishlist={wishlist}
-          addToWishlist={addToWishlist}
-          removeFromWishlist={removeFromWishlist}
-          clearWishlist={clearWishlist}
           addToCart={addToCart}
         />
       </Router>
