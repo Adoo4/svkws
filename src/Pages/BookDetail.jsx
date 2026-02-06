@@ -43,7 +43,10 @@ export default function BookDetail() {
 
   const { data: book, isLoading } = useBookBySlug(!isObjectId ? slug : null);
 
- 
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
 
   // Redirect old ID URLs → slug
   useEffect(() => {
