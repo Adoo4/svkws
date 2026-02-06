@@ -27,7 +27,7 @@ import BookCardSkeleton from "./BookCardSkeleton";
 const BookCardDesktop = lazy(() => import("./BookCardDesktop"));
 const BookCardMobile = lazy(() => import("./BookcardMobile"));
 
-const BookCard = ({ book, loading = false }) => {
+const BookCard = ({ book, loading = false, toggleDrawer, setDrawerData }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { isSignedIn } = useUser();
@@ -94,6 +94,8 @@ const BookCard = ({ book, loading = false }) => {
     addToCart,
     isAdding,
     clerk,
+    toggleDrawer, 
+    setDrawerData
   };
 
   // Render skeleton if loading
