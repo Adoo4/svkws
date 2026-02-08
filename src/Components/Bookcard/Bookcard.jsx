@@ -27,7 +27,7 @@ import BookCardSkeleton from "./BookCardSkeleton";
 const BookCardDesktop = lazy(() => import("./BookCardDesktop"));
 const BookCardMobile = lazy(() => import("./BookcardMobile"));
 
-const BookCard = ({ book, loading = false, toggleDrawer, setDrawerData }) => {
+const BookCard = ({ book, loading = false, toggleDrawer, setDrawerData, index }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { isSignedIn } = useUser();
@@ -84,6 +84,7 @@ const BookCard = ({ book, loading = false, toggleDrawer, setDrawerData }) => {
   // Shared props for Desktop/Mobile
   const sharedProps = {
     book,
+    index,
     inWishlist,
     hasDiscount,
     categoryMatch,

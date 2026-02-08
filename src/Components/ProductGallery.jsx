@@ -33,26 +33,31 @@ const ProductGallery = ({
 
   // Callback to render a single book card
   const renderBookCard = useCallback(
-    (book) => (
-      <Grid
-        item
-        xs={2}
-        sm={4}
-        md={4}
-        lg={1}
-        key={book._id}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "stretch" }}
-      >
-        <BookCard
-          book={book}
-          loading={loading}
-          toggleDrawer={toggleDrawer}
-          setDrawerData={setDrawerData}
-        />
-      </Grid>
-    ),
-    [loading, toggleDrawer, setDrawerData]
-  );
+  (book, index) => (
+    <Grid
+      item
+      xs={2}
+      sm={4}
+      md={4}
+      lg={1}
+      key={book._id}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "stretch",
+      }}
+    >
+      <BookCard
+        book={book}
+        toggleDrawer={toggleDrawer}
+        setDrawerData={setDrawerData}
+        index={index}
+      />
+    </Grid>
+  ),
+  [toggleDrawer, setDrawerData]
+);
+
 
   return (
     <Box
