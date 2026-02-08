@@ -1,38 +1,33 @@
 // React
-import { memo } from 'react';
+import { memo, lazy, Suspense } from "react";
 
 // React Router
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // MUI components/hooks (direct imports)
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Skeleton from '@mui/material/Skeleton';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-
-// Swiper
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 // Local
-import '../Style/RelatedBooksSwiper.css';
-import useRelatedBooks from '../Utils.js/useRelatedBooks';
+import useRelatedBooks from "../Utils.js/useRelatedBooks";
 
+const RelatedBooksSwiper = lazy(() => import("./RelatedBooksSwiper"));
 
 // ----------------------
 // Skeleton Loader Card
 // ----------------------
 const SkeletonCard = memo(() => (
   <Card sx={{ bgcolor: "#2a2a2a", borderRadius: 2, width: 230, mx: "auto" }}>
-    <Skeleton variant="rectangular" width="100%" height={300} />
+    <Box sx={{ width: "100%", aspectRatio: "3 / 4" }}>
+      <Skeleton variant="rectangular" width="100%" height="100%" />
+    </Box>
     <CardContent>
       <Skeleton variant="text" width="80%" height={24} />
       <Skeleton variant="text" width="60%" height={20} />
@@ -41,7 +36,7 @@ const SkeletonCard = memo(() => (
 ));
 
 // ----------------------
-// Single Book Card
+// Single Book Card (Grid fallback)
 // ----------------------
 const RelatedBookCard = memo(({ book, onClick }) => (
   <Card
@@ -66,14 +61,16 @@ const RelatedBookCard = memo(({ book, onClick }) => (
     tabIndex={0}
     aria-label={`Open details for ${book.title}`}
   >
-    <CardMedia
-      component="img"
-      image={book.coverImage || "/fallback-cover.jpg"}
-      alt={book.title || "Book cover"}
-      height={300}
-      loading="lazy"
-      sx={{ objectFit: "contain" }}
-    />
+    <Box sx={{ width: "100%", aspectRatio: "3 / 4" }}>
+      <CardMedia
+        component="img"
+        image={book.coverImage || "/fallback-cover.jpg"}
+        alt={book.title || "Book cover"}
+        loading="lazy"
+        imgProps={{ width: 260, height: 346, decoding: "async" }}
+        sx={{ width: "100%", height: "100%", objectFit: "contain" }}
+      />
+    </Box>
     <CardContent>
       <Typography variant="subtitle1" noWrap fontWeight="bold">
         {book.title}
@@ -94,30 +91,24 @@ export default function RelatedBooks({ book }) {
   const isBelowLg = useMediaQuery(theme.breakpoints.down("lg"));
   const isLgUp = useMediaQuery(theme.breakpoints.up("lg"));
 
-  // Fetch related books via React Query hook
   const { data: relatedBooks = [], isLoading, isError } = useRelatedBooks(book);
 
-  // Determine if Swiper should be used
   const useSwiper = isBelowLg || (isLgUp && relatedBooks.length > 6);
 
-  // ----------------------
-  // Loading state
-  // ----------------------
   if (isLoading) {
     return (
       <Grid container spacing={3}>
-        {Array.from({ length: Math.min(relatedBooks.length, 5) || 3 }).map((_, i) => (
-          <Grid item xs={12} sm={6} md={4} key={i} display="flex" justifyContent="center">
-            <SkeletonCard />
-          </Grid>
-        ))}
+        {Array.from({ length: Math.min(relatedBooks.length, 5) || 3 }).map(
+          (_, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i} display="flex" justifyContent="center">
+              <SkeletonCard />
+            </Grid>
+          )
+        )}
       </Grid>
     );
   }
 
-  // ----------------------
-  // Error or empty state
-  // ----------------------
   if (isError || !relatedBooks.length) {
     return (
       <Typography sx={{ color: "#ccc", textAlign: "center", mt: 2 }}>
@@ -126,42 +117,21 @@ export default function RelatedBooks({ book }) {
     );
   }
 
-  // ----------------------
-  // Render books
-  // ----------------------
   return useSwiper ? (
-    <Box className="related-swiper" sx={{ width: "100%" }}>
-      <Swiper
-        modules={[Navigation, Pagination]}
-        spaceBetween={16}
-        slidesPerView={1.5}
-        breakpoints={{
-          400: { slidesPerView: 2 },
-          600: { slidesPerView: 3 },
-          900: { slidesPerView: 5 },
-          1200: { slidesPerView: 5 },
-          1536: { slidesPerView: 7 },
-        }}
-        navigation
-        pagination={{ clickable: true }}
-      >
-        {relatedBooks.map((b) => (
-          <SwiperSlide key={b._id}>
-            <RelatedBookCard
-              book={b}
-              onClick={() => navigate(`/books/${b.slug}`, { state: { book: b, category: b.subCategory } })}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </Box>
+    <Suspense fallback={<div />}>
+      <RelatedBooksSwiper books={relatedBooks} />
+    </Suspense>
   ) : (
     <Grid container spacing={2}>
       {relatedBooks.map((b) => (
         <Grid item xs={12} sm={6} md={2} key={b._id}>
           <RelatedBookCard
             book={b}
-            onClick={() => navigate(`/books/${b.slug}`, { state: { book: b, category: b.subCategory } })}
+            onClick={() =>
+              navigate(`/books/${b.slug}`, {
+                state: { book: b, category: b.subCategory },
+              })
+            }
           />
         </Grid>
       ))}

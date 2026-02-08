@@ -4,39 +4,49 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Footer from "./Components/Footer";
-import Home from "./Pages/Home";
 import Shop from "./Pages/Shop";
-import CheckoutPage from "./Pages/Checkout";
-import BookDetail from "./Pages/BookDetail";
-import CompleteProfile from "./Pages/CompleteProfile";
 import AuthRedirect from "./Components/AuthRedirect";
 import CartMenu from "./Components/CartMenu";
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import WishlistDrawer from "./Components/WishlistDrawer";
 import { SnackbarProvider } from "notistack";
-import AuthNotifier from "./Components/SignIn/AuthNotifier.jsx"; // <-- import it
-import Uslovikupovine from "./Pages/Uslovikupovine.jsx";
-import Privatnost from "./Pages/Privatnost.jsx";
-import OpštiUsloviPoslovanja from "./Pages/OpštiUsloviPoslovanja.jsx";
-import PolitikaPovrataiReklamacije from "./Pages/PolitikaPovrata.jsx";
-import Sigurnost from "./Pages/Sigurnost.jsx";
-import PolitikaKolačića from "./Pages/Politikekolačića.jsx";
-import PaymentSuccess from "./Pages/PaymentSuccess.jsx";
+import AuthNotifier from "./Components/SignIn/AuthNotifier.jsx";
 import AdminRoute from "./admin/AdminRoute";
-import AdminDashboard from "./admin/AdminDashboard";
-import PaymentCancel from "./Pages/PaymentCancel.jsx";
 
 import useCart from "./Utils.js/useCart.js";
-import useWishlist from "./Utils.js/useWishlist.js"; // path to your hook
+import useWishlist from "./Utils.js/useWishlist.js";
+
+const Home = lazy(() => import("./Pages/Home"));
+const CheckoutPage = lazy(() => import("./Pages/Checkout"));
+const BookDetail = lazy(() => import("./Pages/BookDetail"));
+const CompleteProfile = lazy(() => import("./Pages/CompleteProfile"));
+const Uslovikupovine = lazy(() => import("./Pages/Uslovikupovine.jsx"));
+const Privatnost = lazy(() => import("./Pages/Privatnost.jsx"));
+const OpštiUsloviPoslovanja = lazy(() =>
+  import("./Pages/OpštiUsloviPoslovanja.jsx")
+);
+const PolitikaPovrataiReklamacije = lazy(() =>
+  import("./Pages/PolitikaPovrata.jsx")
+);
+const Sigurnost = lazy(() => import("./Pages/Sigurnost.jsx"));
+const Politikekolačića = lazy(() =>
+  import("./Pages/Politikekolačića.jsx")
+);
+const PaymentSuccess = lazy(() => import("./Pages/PaymentSuccess.jsx"));
+const AdminDashboard = lazy(() => import("./admin/AdminDashboard"));
+const PaymentCancel = lazy(() => import("./Pages/PaymentCancel.jsx"));
+
+const Lazy = ({ children }) => (
+  <Suspense fallback={null}>{children}</Suspense>
+);
 
 function App() {
-  const { cart, addToCart, updateCartItem, removeCartItem, clearCart } =
+  const { cart, addToCart, updateCartItem, removeCartItem, clearCart, isAdding } =
     useCart();
-  const { wishlist, addToWishlist, removeFromWishlist } =
-    useWishlist();
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const [cartMenu, setCartMenu] = useState(false);
 
   // Keep localStorage in sync when wishlist changes
@@ -58,8 +68,8 @@ function App() {
         Snackbar: (props) => (
           <div
             style={{
-              zIndex: 100000, // higher than BottomNavigation (9999)
-              marginBottom: "60px", // lift above bottom nav
+              zIndex: 100000,
+              marginBottom: "60px",
             }}
           >
             <props.Component {...props} />
@@ -75,7 +85,6 @@ function App() {
             minHeight: "100vh",
           }}
         >
-          {/* Navbar */}
           <Navbar
             cart={cart}
             setCartMenu={setCartMenu}
@@ -83,67 +92,134 @@ function App() {
           />
 
           <AuthNotifier />
-          {/* Main content */}
           <main style={{ flex: 1, overflow: "hidden", background: "white" }}>
             <AuthRedirect />
 
             <Routes>
               <Route
                 path="/home"
-                element={<Home setCartMenu={setCartMenu} />}
+                element={
+                  <Lazy>
+                    <Home setCartMenu={setCartMenu} />
+                  </Lazy>
+                }
               />
               <Route
                 path="/shop"
                 element={
                   <Shop
-                    cart={cart}
                     setCartMenu={setCartMenu}
                     wishlist={wishlist}
                     addToWishlist={addToWishlist}
                     removeFromWishlist={removeFromWishlist}
                     addToCart={addToCart}
-                    updateCartItem={updateCartItem}
-                    removeCartItem={removeCartItem}
+                    isAdding={isAdding}
                   />
                 }
               />
-              <Route path="/checkout" element={<CheckoutPage cart={cart} />} />
+              <Route
+                path="/checkout"
+                element={
+                  <Lazy>
+                    <CheckoutPage cart={cart} />
+                  </Lazy>
+                }
+              />
 
-              <Route path="/success" element={<PaymentSuccess />} />
-              <Route path="/payment-cancel" element={<PaymentCancel />} />
+              <Route
+                path="/success"
+                element={
+                  <Lazy>
+                    <PaymentSuccess />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/payment-cancel"
+                element={
+                  <Lazy>
+                    <PaymentCancel />
+                  </Lazy>
+                }
+              />
               <Route path="/sign-in" element={<SignIn />} />
               <Route
                 path="/sign-up"
                 element={<SignUp afterSignUpUrl="/complete-profile" />}
               />
-              <Route path="/complete-profile" element={<CompleteProfile />} />
+              <Route
+                path="/complete-profile"
+                element={
+                  <Lazy>
+                    <CompleteProfile />
+                  </Lazy>
+                }
+              />
               <Route
                 path="/books/:slug"
                 element={
-                  <BookDetail
-                    cart={cart}
-                    cartMenu={cartMenu}
-                    setCartMenu={setCartMenu}
-                    wishlist={wishlist}
-                    addToWishlist={addToWishlist}
-                    removeFromWishlist={removeFromWishlist}
-                    addToCart={addToCart}
-                    updateCartItem={updateCartItem}
-                  />
+                  <Lazy>
+                    <BookDetail
+                      cart={cart}
+                      cartMenu={cartMenu}
+                      setCartMenu={setCartMenu}
+                      wishlist={wishlist}
+                      addToWishlist={addToWishlist}
+                      removeFromWishlist={removeFromWishlist}
+                      addToCart={addToCart}
+                      updateCartItem={updateCartItem}
+                    />
+                  </Lazy>
                 }
               />
-              <Route path="/UsloviKupovine" element={<Uslovikupovine />} />
-              <Route path="/Privatnost" element={<Privatnost />} />
+              <Route
+                path="/UsloviKupovine"
+                element={
+                  <Lazy>
+                    <Uslovikupovine />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/Privatnost"
+                element={
+                  <Lazy>
+                    <Privatnost />
+                  </Lazy>
+                }
+              />
               <Route
                 path="/OpštiUsloviPoslovanja"
-                element={<OpštiUsloviPoslovanja />}
+                element={
+                  <Lazy>
+                    <OpštiUsloviPoslovanja />
+                  </Lazy>
+                }
               />
               <Route
                 path="/PolitikaPovrataiReklamacije"
-                element={<PolitikaPovrataiReklamacije />}
+                element={
+                  <Lazy>
+                    <PolitikaPovrataiReklamacije />
+                  </Lazy>
+                }
               />
-              <Route path="/Sigurnost" element={<Sigurnost />} />
-              <Route path="/PolitikaKolačića" element={<PolitikaKolačića />} />
+              <Route
+                path="/Sigurnost"
+                element={
+                  <Lazy>
+                    <Sigurnost />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/Politikekolačića"
+                element={
+                  <Lazy>
+                    <Politikekolačića />
+                  </Lazy>
+                }
+              />
 
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="*" element={<Navigate to="/home" replace />} />
@@ -151,18 +227,18 @@ function App() {
                 path="/admin"
                 element={
                   <AdminRoute>
-                    <AdminDashboard />
+                    <Lazy>
+                      <AdminDashboard />
+                    </Lazy>
                   </AdminRoute>
                 }
               />
             </Routes>
           </main>
 
-          {/* Footer */}
           <Footer />
         </div>
 
-        {/* Cart overlay */}
         <CartMenu
           cart={cart}
           cartMenu={cartMenu}

@@ -83,7 +83,12 @@ const SubcategoryItem = React.memo(
       },
     };
 
-    const textSx = { fontSize: { xs: "0.65rem", sm: "0.7rem" } };
+    const textSx = {
+      fontSize: { xs: "0.62rem", sm: "0.7rem" },
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    };
 
     return (
       <Grid item xs={6}>

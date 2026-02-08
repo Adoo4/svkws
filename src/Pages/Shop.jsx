@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-import { useSearchParams } from "react-router-dom";
 import ProductGallery from "../Components/ProductGallery";
 import Menu from "../Components/Menu/Menu";
 import SearchBarTop from "../Components/SearchBarTop";
@@ -11,14 +10,11 @@ import useBooks from "../Utils.js/useBooks";
 import SEO from "../Utils.js/SEO";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { lazy, Suspense } from "react";
-import LeftDrawerMenu from "../Components/LeftDrawerMenu"
+import LeftDrawerMenu from "../Components/LeftDrawerMenu";
 
 /* =========================
    SX OBJECTS (OUTSIDE)
    ========================= */
-   
-
-  
 
 const rootBoxSx = {
   minHeight: "100lvh",
@@ -64,112 +60,52 @@ const sideMenuSx = {
    ========================= */
 
 const CategoryMenu = ({
-  cart,
   setCartMenu,
   wishlist,
   addToCart,
-  updateCartItem,
-  removeCartItem,
+  isAdding,
   addToWishlist,
   removeFromWishlist,
 }) => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"), {
-    noSsr: true,
-  });
+  const {
+    books,
+    isLoading,
+    totalPages,
+    filters,
+    setFilters,
+    sort,
+    setSort,
+    order,
+    setOrder,
+    page,
+    setPage,
+  } = useBooks(); // no args unless you want initialFilters or limit
 
   const [drawerData, setDrawerData] = useState(null);
   const [open, setOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const [filter, setFilter] = useState({
-    mainCategory: searchParams.get("mainCategory") || "",
-    subCategory: searchParams.get("subCategory") || "",
-    language: searchParams.get("language") || "",
-    isNew: searchParams.get("isNew") === "true",
-    discount: searchParams.get("discount") === "true",
-  });
-
-  const [sort, setSort] = useState("");
-  const [order, setOrder] = useState("asc");
-  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
-
-  /* =========================
-     URL SYNC
-     ========================= */
-
-  useEffect(() => {
-  const params = new URLSearchParams(searchParams); // start from current
-  let changed = false;
-
-  if (filter.mainCategory && params.get("mainCategory") !== filter.mainCategory) {
-    params.set("mainCategory", filter.mainCategory);
-    changed = true;
-  } else if (!filter.mainCategory && params.has("mainCategory")) {
-    params.delete("mainCategory");
-    changed = true;
-  }
-
-  if (filter.subCategory && params.get("subCategory") !== filter.subCategory) {
-    params.set("subCategory", filter.subCategory);
-    changed = true;
-  } else if (!filter.subCategory && params.has("subCategory")) {
-    params.delete("subCategory");
-    changed = true;
-  }
-
-  // repeat for language, isNew, discount, page...
-  if (filter.isNew.toString() !== params.get("isNew")) {
-    if (filter.isNew) params.set("isNew", "true");
-    else params.delete("isNew");
-    changed = true;
-  }
-
-  if (filter.discount.toString() !== params.get("discount")) {
-    if (filter.discount) params.set("discount", "true");
-    else params.delete("discount");
-    changed = true;
-  }
-
-  if (page.toString() !== params.get("page")) {
-    params.set("page", page.toString());
-    changed = true;
-  }
-
-  if (changed) {
-    setSearchParams(params, { replace: true });
-  }
-}, [filter, page, searchParams, setSearchParams]);
-
+  // URL sync handled inside useBooks
 
   /* =========================
      DATA
      ========================= */
 
-  const { books, isLoading, totalPages } = useBooks(
-    filter,
-    page,
-    20,
-    sort,
-    order
-  );
-
-
   // const BottomNavigationMenu = lazy(() =>import("../Components/BottomNavigationMenu"))
 
-const FloatingMenuButton = lazy(()=> import("../Components/FloatingMenuButton"))
+  const FloatingMenuButton = lazy(
+    () => import("../Components/FloatingMenuButton"),
+  );
 
-const isMobile = useMediaQuery(theme.breakpoints.down("sm"), {
-  noSsr: true,
-});
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"), {
+    noSsr: true,
+  });
 
-
-useEffect(() => {
-  if (!isMobile) {
-    setLeftDrawerOpen(false);
-  }
-}, [isMobile]);
+  useEffect(() => {
+    if (!isMobile) {
+      setLeftDrawerOpen(false);
+    }
+  }, [isMobile]);
 
   /* =========================
      SEO (MEMOIZED)
@@ -177,15 +113,15 @@ useEffect(() => {
 
   const seoData = useMemo(() => {
     const title =
-      filter.mainCategory || filter.subCategory
-        ? `${filter.mainCategory ? filter.mainCategory + " - " : ""}${
-            filter.subCategory || ""
+      filters.mainCategory || filters.subCategory
+        ? `${filters.mainCategory ? filters.mainCategory + " - " : ""}${
+            filters.subCategory || ""
           } | Bookstore.ba`
         : "Bookstore.ba";
 
     const description = `Pronađite najbolje knjige iz ${
-      filter.mainCategory || "raznih kategorija"
-    }${filter.subCategory ? `, posebno ${filter.subCategory}` : ""}.`;
+      filters.mainCategory || "raznih kategorija"
+    }${filters.subCategory ? `, posebno ${filters.subCategory}` : ""}.`;
 
     return {
       title,
@@ -193,7 +129,7 @@ useEffect(() => {
       url: window.location.href,
       ogImage: "/og-image.png",
     };
-  }, [filter.mainCategory, filter.subCategory]);
+  }, [filters.mainCategory, filters.subCategory]);
 
   /* =========================
      CALLBACKS
@@ -208,7 +144,7 @@ useEffect(() => {
         return;
       setOpen(open);
     },
-    []
+    [],
   );
 
   const toggleDrawer2 = useCallback(
@@ -220,7 +156,7 @@ useEffect(() => {
         return;
       setLeftDrawerOpen(open);
     },
-    []
+    [],
   );
 
   const handleSetDrawerData = useCallback((data) => {
@@ -252,38 +188,29 @@ useEffect(() => {
           />
         </Box>
 
-        
-
         <Box sx={contentWrapperSx}>
           <Box sx={sideMenuSx}>
             <Menu
-              setFilter={setFilter}
-              filter={filter}
+              filter={filters} // from useBooks
+              setFilter={setFilters} // from useBoo
               page={page}
               setPage={setPage}
             />
           </Box>
-
-
-          
 
           <ProductGallery
             books={books}
             loading={isLoading}
             totalPages={totalPages}
             toggleDrawer={toggleDrawer}
-            drawerData={drawerData}
             setDrawerData={handleSetDrawerData}
-            isSmallScreen={isSmallScreen}
-            cart={cart}
             wishlist={wishlist}
             addToWishlist={addToWishlist}
             removeFromWishlist={removeFromWishlist}
             currentPage={page}
             setPage={setPage}
             addToCart={addToCart}
-            updateCartItem={updateCartItem}
-            removeCartItem={removeCartItem}
+            isAdding={isAdding}
           />
         </Box>
 
@@ -291,41 +218,34 @@ useEffect(() => {
             CONDITIONAL OVERLAYS
            ========================= */}
 
-     
-    <LeftDrawerMenu
-      open={leftDrawerOpen}
-      setOpen={setLeftDrawerOpen}
-       setFilter={setFilter}
-              filter={filter}
-              page={page}
-              setPage={setPage}
-    />
- 
+        <LeftDrawerMenu
+          open={leftDrawerOpen}
+          setOpen={setLeftDrawerOpen}
+          setFilter={setFilters}
+          filter={filters}
+          page={page}
+          setPage={setPage}
+        />
 
+        <AnchorTemporaryDrawer
+          open={open}
+          setOpen={setOpen}
+          toggleDrawer={toggleDrawer}
+          drawerData={drawerData}
+        />
 
-
-        {open && (
-          <AnchorTemporaryDrawer
-            open={open}
-            setOpen={setOpen}
-            toggleDrawer={toggleDrawer}
-            drawerData={drawerData}
-          />
+        {isMobile && (
+          <Suspense fallback={null}>
+            <FloatingMenuButton
+              leftDrawerOpen={leftDrawerOpen}
+              setLeftDrawerOpen={setLeftDrawerOpen}
+              toggleDrawer2={toggleDrawer2}
+              setCartMenu={setCartMenu}
+            />
+          </Suspense>
         )}
 
-       {isMobile && (
-  <Suspense fallback={null}>
-    <FloatingMenuButton
-      leftDrawerOpen={leftDrawerOpen}
-      setLeftDrawerOpen={setLeftDrawerOpen}
-      toggleDrawer2={toggleDrawer2}
-      setCartMenu={setCartMenu}
-    />
-  </Suspense>)}
-
-     
-
-{/*       {isMobile && (
+        {/*       {isMobile && (
   <Suspense fallback={null}>
     <BottomNavigationMenu
       leftDrawerOpen={leftDrawerOpen}

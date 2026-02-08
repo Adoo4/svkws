@@ -46,7 +46,10 @@ const SuggestionItem = React.memo(({ book, setDrawerData, toggleDrawer, navigate
     });
   };
 
-  const handleDrawer = (e) => toggleDrawer(true)(e) && setDrawerData(book);
+  const handleDrawer = (e) => {
+    setDrawerData(book);
+    toggleDrawer(true)(e);
+  };
 
   return (
     <ListItem button key={book._id || book.isbn} role="option" onClick={handleDrawer}>
@@ -54,8 +57,8 @@ const SuggestionItem = React.memo(({ book, setDrawerData, toggleDrawer, navigate
         <Avatar
           src={book.coverImage || "/placeholder.png"}
           variant="square"
-          sx={{ width: 40, height: "auto", objectFit: "contain" }}
-          imgProps={{ loading: "lazy" }}
+          sx={{ width: 40, height: 56, objectFit: "contain" }}
+          imgProps={{ loading: "lazy", width: 40, height: 56, decoding: "async" }}
         />
       </ListItemAvatar>
       <ListItemText

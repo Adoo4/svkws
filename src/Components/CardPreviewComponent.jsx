@@ -1,6 +1,7 @@
 // MUI components (direct imports)
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
+import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
@@ -31,6 +32,13 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
       anchor="right"
       open={open}
       onClose={toggleDrawer(false)}
+      TransitionComponent={Slide}
+      SlideProps={{
+        direction: "left",
+        timeout: { enter: 250, exit: 200 },
+      }}
+      ModalProps={{ keepMounted: true }}
+      transitionDuration={{ enter: 250, exit: 200 }}
       PaperProps={{
         sx: {
           width: { xs: 230, sm: 250, md: 300 },
@@ -58,7 +66,15 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
         <img
           src={drawerData.coverImage || "/fallback-cover.jpg"}
           alt={drawerData.title || "Book Cover"}
-          style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "top" }}
+          width="300"
+          height="450"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            objectPosition: "top",
+            display: "block",
+          }}
         />
         <Box
           sx={{
