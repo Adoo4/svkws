@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Footer from "./Components/Footer";
 import Shop from "./Pages/Shop";
@@ -16,6 +16,7 @@ import AdminRoute from "./admin/AdminRoute";
 
 import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js";
+import useUIStore from "./store/uiStore";
 
 const Home = lazy(() => import("./Pages/Home"));
 const CartMenu = lazy(() => import("./Components/CartMenu"));
@@ -51,6 +52,7 @@ function App() {
     removeCartItem,
     clearCart,
     isAdding,
+    isAddingBook,
     isLoading: isCartLoading,
   } = useCart();
   const {
@@ -59,14 +61,32 @@ function App() {
     removeFromWishlist,
     isLoading: isWishlistLoading,
   } = useWishlist();
-  const [cartMenu, setCartMenu] = useState(false);
+  const cartMenu = useUIStore((state) => state.cartMenu);
+  const wishlistOpen = useUIStore((state) => state.wishlistOpen);
+  const setCartMenu = useUIStore((state) => state.setCartMenu);
+  const setWishlistOpen = useUIStore((state) => state.setWishlistOpen);
+  const setCartItemCount = useUIStore((state) => state.setCartItemCount);
+  const setWishlistCount = useUIStore((state) => state.setWishlistCount);
+  const setLoadingCart = useUIStore((state) => state.setLoadingCart);
+  const setLoadingWishlist = useUIStore((state) => state.setLoadingWishlist);
 
   // Keep localStorage in sync when wishlist changes
   useEffect(() => {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
   }, [wishlist]);
-
-  const [wishlistOpen, setWishlistOpen] = useState(false);
+  useEffect(() => {
+    const total = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+    setCartItemCount(total);
+  }, [cart?.items, setCartItemCount]);
+  useEffect(() => {
+    setWishlistCount(wishlist?.length || 0);
+  }, [wishlist, setWishlistCount]);
+  useEffect(() => {
+    setLoadingCart(isCartLoading);
+  }, [isCartLoading, setLoadingCart]);
+  useEffect(() => {
+    setLoadingWishlist(isWishlistLoading);
+  }, [isWishlistLoading, setLoadingWishlist]);
 
   return (
     <SnackbarProvider
@@ -98,12 +118,7 @@ function App() {
           }}
         >
           <Navbar
-            cart={cart}
-            wishlist={wishlist}
-            loadingCart={isCartLoading}
-            loadingWishlist={isWishlistLoading}
             setCartMenu={setCartMenu}
-            setWishlistOpen={setWishlistOpen}
           />
 
           <AuthNotifier />
@@ -129,6 +144,7 @@ function App() {
                     removeFromWishlist={removeFromWishlist}
                     addToCart={addToCart}
                     isAdding={isAdding}
+                    isAddingBook={isAddingBook}
                   />
                 }
               />

@@ -14,6 +14,7 @@ const BookCardActionsBottom = ({
   isSignedIn,
   addToCart,
   isAdding,
+  isAddingBook,
   clerk,
 }) => {
   const navigate = useNavigate();
@@ -54,6 +55,8 @@ const handleAddToCartClick = useCallback(() => {
     addToCart(book);
   }
 }, [isSignedIn, clerk, addToCart, book]);
+
+const isThisBookAdding = isAddingBook ? isAddingBook(book._id) : isAdding;
 
   return (
     <CardActions
@@ -99,7 +102,7 @@ const handleAddToCartClick = useCallback(() => {
   <span>
     <Button
       variant="contained"
-      disabled={isAdding || outOfStock}
+      disabled={isThisBookAdding || outOfStock}
       size="small"
       onClick={handleAddToCartClick}
       startIcon={cartIcon}

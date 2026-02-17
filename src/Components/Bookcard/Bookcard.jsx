@@ -30,6 +30,7 @@ const DesktopBookCardContent = ({ sharedProps }) => {
       isSignedIn={isSignedIn}
       addToCart={sharedProps.addToCartFromParent}
       isAdding={sharedProps.isAddingFromParent}
+      isAddingBook={sharedProps.isAddingBookFromParent}
       clerk={clerk}
     />
   );
@@ -46,6 +47,7 @@ const BookCard = ({
   onWishlistToggle,
   addToCartFromParent,
   isAddingFromParent = false,
+  isAddingBookFromParent,
 }) => {
   const navigate = useNavigate();
   const inWishlist = Boolean(inWishlistFromParent);
@@ -92,6 +94,7 @@ const BookCard = ({
     isMobile,
     addToCartFromParent,
     isAddingFromParent,
+    isAddingBookFromParent,
   };
 
   if (loading) return <BookCardSkeleton />;

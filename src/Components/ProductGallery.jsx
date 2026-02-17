@@ -29,6 +29,7 @@ const ProductGallery = ({
   removeFromWishlist,
   addToCart,
   isAdding,
+  isAddingBook,
 }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -86,6 +87,7 @@ const ProductGallery = ({
         onWishlistToggle={handleWishlistToggle}
         addToCartFromParent={addToCart}
         isAddingFromParent={isAdding}
+        isAddingBookFromParent={isAddingBook}
       />
     </Grid>
   ),
@@ -97,6 +99,7 @@ const ProductGallery = ({
     handleWishlistToggle,
     addToCart,
     isAdding,
+    isAddingBook,
   ]
 );
 

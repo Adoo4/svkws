@@ -26,6 +26,7 @@ import Login from '@mui/icons-material/Login';
 
 // Local components/hooks
 import MobileMenu from '../Menu/MobileMenu';
+import useUIStore from '../../store/uiStore';
 
 // ------------------------ Constants ------------------------
 const NAV_LINKS = [
@@ -86,16 +87,16 @@ const NavButton = React.memo(({ label, path, icon, isSelected, onClick }) => {
 
 // ------------------------ Main Component ------------------------
 const ButtonAppBar = ({
-  cart,
-  wishlist = [],
-  loadingCart = false,
-  loadingWishlist = false,
   setCartMenu,
-  setWishlistOpen,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isLoaded } = useUser();
+  const cartItemCount = useUIStore((state) => state.cartItemCount);
+  const wishlistCount = useUIStore((state) => state.wishlistCount);
+  const loadingCart = useUIStore((state) => state.loadingCart);
+  const loadingWishlist = useUIStore((state) => state.loadingWishlist);
+  const setWishlistOpen = useUIStore((state) => state.setWishlistOpen);
   const [scrolled, setScrolled] = useState(false);
 
   // ------------------------ Scroll listener ------------------------
@@ -115,7 +116,6 @@ const ButtonAppBar = ({
   }, []);
 
   // ------------------------ Memoized values ------------------------
-  const cartItemCount = useMemo(() => cart?.items?.reduce((sum, i) => sum + i.quantity, 0) || 0, [cart?.items]);
   const isShopOrCheckout = useMemo(() => SHOP_ROUTES.includes(location.pathname), [location.pathname]);
 
   // ------------------------ Handlers ------------------------
@@ -206,7 +206,7 @@ const ButtonAppBar = ({
   {/* Wishlist */}
   <IconButton aria-label="wishlist" onClick={toggleWishlist} sx={{ width: 40, height: 40 }}>
     <Badge
-      badgeContent={wishlist.length || 0} // reserve space
+      badgeContent={wishlistCount || 0} // reserve space
       invisible={false} // never remove badge
       sx={{
         "& .MuiBadge-badge": {
@@ -223,7 +223,7 @@ const ButtonAppBar = ({
           sx={{
             fontSize: { xs: "1.3rem", sm: "1.5rem" },
             color: "#fff",
-            visibility: wishlist.length > 0 ? "visible" : "hidden",
+            visibility: wishlistCount > 0 ? "visible" : "hidden",
             position: "absolute",
             top: 0,
             left: 0,
@@ -234,7 +234,7 @@ const ButtonAppBar = ({
           sx={{
             fontSize: { xs: "1.3rem", sm: "1.5rem" },
             color: "#fff",
-            visibility: wishlist.length === 0 ? "visible" : "hidden",
+            visibility: wishlistCount === 0 ? "visible" : "hidden",
             position: "absolute",
             top: 0,
             left: 0,

@@ -67,6 +67,7 @@ const CategoryMenu = ({
   wishlist,
   addToCart,
   isAdding,
+  isAddingBook,
   addToWishlist,
   removeFromWishlist,
 }) => {
@@ -214,6 +215,7 @@ const CategoryMenu = ({
             setPage={setPage}
             addToCart={addToCart}
             isAdding={isAdding}
+            isAddingBook={isAddingBook}
           />
         </Box>
 

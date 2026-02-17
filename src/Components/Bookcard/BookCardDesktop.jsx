@@ -25,6 +25,7 @@ const BookCardDesktop = React.memo(({
   isSignedIn,
   addToCart,
   isAdding,
+  isAddingBook,
   clerk,
 }) => {
 
@@ -67,6 +68,7 @@ const BookCardDesktop = React.memo(({
           isSignedIn={isSignedIn}
           addToCart={addToCart}
           isAdding={isAdding}
+          isAddingBook={isAddingBook}
           clerk={clerk}
         />
       </Box>
