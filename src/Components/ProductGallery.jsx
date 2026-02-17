@@ -24,9 +24,9 @@ const ProductGallery = ({
   currentPage = 1,
   setPage,
 }) => {
-  const itemsPerPage = 20;
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const itemsPerPage = isSmallScreen ? 12 : 20;
 
   // Memoized list of books
   const displayedBooks = useMemo(() => books || [], [books]);
@@ -52,10 +52,11 @@ const ProductGallery = ({
         toggleDrawer={toggleDrawer}
         setDrawerData={setDrawerData}
         index={index}
+        isMobile={isSmallScreen}
       />
     </Grid>
   ),
-  [toggleDrawer, setDrawerData]
+  [toggleDrawer, setDrawerData, isSmallScreen]
 );
 
 

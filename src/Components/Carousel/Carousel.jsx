@@ -124,7 +124,7 @@ const Home = () => {
   return (
     <Box sx={{ position: "relative" }}>
       <div className="embla" ref={emblaRef}>
-  <div className="embla__container" style={{ height: containerHeight }}>
+ <div className="embla__container" style={{ height: "100lvh" }}>
 
     {/* Slide 1 — VIDEO (not LCP) */}
     <div className="embla__slide">

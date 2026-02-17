@@ -10,6 +10,7 @@ import Battery5BarOutlinedIcon from "@mui/icons-material/Battery5BarOutlined";
 
 const BookCardMobile = ({
   book,
+  index,
   inWishlist,
   hasDiscount,
   categoryMatch,
@@ -74,6 +75,8 @@ const BookCardMobile = ({
       {/* Cover */}
       <CardImage
         book={book}
+        index={index}
+        isMobile
         toggleDrawer={toggleDrawer}
         setDrawerData={setDrawerData}
       />
@@ -220,58 +223,64 @@ const BookCardMobile = ({
                 *sa PDV-om
               </Typography>
             </Box>
-            <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-            <Typography sx={{fontSize:"0.7rem"}}>Zalihe:</Typography>
-            <Chip
-              label={
-                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                  <Typography sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
-                    {stockState === "ok"
-                      ? "OK"
-                      : stockState === "low"
-                        ? "Niske"
-                        : "Nema"}
-                  </Typography>
-
-                  {stockState === "ok" && (
-                    <Battery5BarOutlinedIcon
-                      sx={{ fontSize: 18, transform: "rotate(-90deg)" }}
-                    />
-                  )}
-
-                  {stockState === "low" && (
-                    <Battery2BarOutlinedIcon
-                      sx={{ fontSize: 18, transform: "rotate(-90deg)" }}
-                    />
-                  )}
-
-                  {stockState === "none" && (
-                    <Battery0BarOutlinedIcon
-                      sx={{ fontSize: 18, transform: "rotate(-90deg)" }}
-                    />
-                  )}
-                </Box>
-              }
-              size="small"
+            <Box
               sx={{
-                height: 22,
-                px: 0.5,
-                fontSize: "0.65rem",
-                fontWeight: 600,
-                color: (theme) =>
-                  stockState === "ok"
-                    ? theme.palette.success.contrastText
-                    : stockState === "low"
-                      ? theme.palette.warning.contrastText
-                      : theme.palette.error.contrastText,
-                bgcolor: (theme) =>
-                  stockState === "ok"
-                    ? theme.palette.success.main
-                    : stockState === "low"
-                      ? theme.palette.warning.main
-                      : theme.palette.error.main,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
-            />
+            >
+              <Typography sx={{ fontSize: "0.7rem" }}>Zalihe:</Typography>
+              <Chip
+                label={
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    <Typography sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
+                      {stockState === "ok"
+                        ? "OK"
+                        : stockState === "low"
+                          ? "Niske"
+                          : "Nema"}
+                    </Typography>
+
+                    {stockState === "ok" && (
+                      <Battery5BarOutlinedIcon
+                        sx={{ fontSize: 18, transform: "rotate(-90deg)" }}
+                      />
+                    )}
+
+                    {stockState === "low" && (
+                      <Battery2BarOutlinedIcon
+                        sx={{ fontSize: 18, transform: "rotate(-90deg)" }}
+                      />
+                    )}
+
+                    {stockState === "none" && (
+                      <Battery0BarOutlinedIcon
+                        sx={{ fontSize: 18, transform: "rotate(-90deg)" }}
+                      />
+                    )}
+                  </Box>
+                }
+                size="small"
+                sx={{
+                  height: 22,
+                  px: 0.5,
+                  fontSize: "0.65rem",
+                  fontWeight: 600,
+                  color: (theme) =>
+                    stockState === "ok"
+                      ? theme.palette.success.contrastText
+                      : stockState === "low"
+                        ? theme.palette.warning.contrastText
+                        : theme.palette.error.contrastText,
+                  bgcolor: (theme) =>
+                    stockState === "ok"
+                      ? theme.palette.success.main
+                      : stockState === "low"
+                        ? theme.palette.warning.main
+                        : theme.palette.error.main,
+                }}
+              />
             </Box>
           </Box>
         </Box>

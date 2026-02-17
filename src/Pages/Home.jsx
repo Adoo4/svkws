@@ -4,8 +4,9 @@ import { Box } from '@mui/material';
 import Iconlist from '../Components/Home Components/Iconlist';
 import '@fontsource/anton';
 import '@fontsource/playfair-display/400-italic.css';
+import Loading from '../Components/Loading';
 
-const Carousel = lazy(() => import('../Components/Carousel/Carousel'));
+import Carousel from '../Components/Carousel/Carousel';
 
 
 
@@ -18,15 +19,10 @@ const Home = () => {
   })
   return(
     
-    <Box sx={{ minHeight:"100lvh", display:"flex", flexDirection:"column", gap:"0rem", background:"black"}}>
-   <Suspense fallback={null}>
-     <Carousel/>
-   </Suspense>
-    <Iconlist/>
-
-    
-
-  </Box>
+    <Box sx={{ minHeight: "100lvh", background: "black" }}>
+      <Carousel />
+      <Iconlist />
+    </Box>
   )
 };
 

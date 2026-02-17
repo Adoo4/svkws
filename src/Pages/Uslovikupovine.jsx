@@ -51,7 +51,7 @@ const termsData = [
   {
     title: "10. Opšte odredbe",
     content:
-      "Prodavac zadržava pravo izmjene uvjeta i pravila korištenja webshopa. Kupac je odgovoran za tačnost podataka unesenih prilikom kupovine. Troškovi pristupa internetu i korištenja računalne opreme nisu uključeni u cijenu usluga. Prodavac ne garantuje da će usluge uvijek biti dostupne bez grešaka, ali korisnik može prijaviti greške na info@COMPANY.com radi ispravke.",
+      "Prodavac zadržava pravo izmjene uvjeta i pravila korištenja webshopa. Kupac je odgovoran za tačnost podataka unesenih prilikom kupovine. Troškovi pristupa internetu i korištenja računalne opreme nisu uključeni u cijenu usluga. Prodavac ne garantuje da će usluge uvijek biti dostupne bez grešaka, ali korisnik može prijaviti greške na info@svjetlostkomerc.ba radi ispravke.",
   },
 ];
 

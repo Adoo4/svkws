@@ -3,56 +3,69 @@ import Box from "@mui/material/Box";
 
 import { SearchOutlined as SearchOutlinedIcon } from "@mui/icons-material";
 
-export default function cardImage({ book, toggleDrawer, setDrawerData, index }) {
+export default function CardImage({
+  book,
+  toggleDrawer,
+  setDrawerData,
+  index = 0,
+  isMobile = false,
+}) {
+  const eagerCount = isMobile ? 3 : 5;
+  const isEager = index < eagerCount;
 
-  const isAboveTheFold = index < 5;
+  const handleOpenPreview = (e) => {
+    setDrawerData(book);
+    toggleDrawer(true)(e);
+  };
+
   return (
     <Box sx={{ position: "relative" }}>
       <CardMedia
         component="img"
         image={book?.coverImage}
         alt={book.title}
-        loading={isAboveTheFold ? "eager" : "lazy"}
-        fetchpriority={isAboveTheFold ? "high" : "auto"}
+        loading={isEager ? "eager" : "lazy"}
+        fetchpriority={isEager ? "high" : "auto"}
+        decoding="async"
         sx={{
           height: { xs: 250, sm: 200, md: 290 },
           objectFit: "contain",
           width: "100%",
           aspectRatio: "3 / 4",
         }}
+        onClick={isMobile ? handleOpenPreview : undefined}
       />
 
       {/* Hover Overlay with Magnifier */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          bgcolor: "rgba(0,0,0,0.2)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: 0,
-          transition: "opacity 0.3s ease",
-          "&:hover": {
-            opacity: 1,
-          },
-          willChange: "opacity", // helps browser optimize animation
-        }}
-        onClick={(e) => {
-          setDrawerData(book);
-          toggleDrawer(true)(e);
-        }}
-      >
-        <SearchOutlinedIcon
+      {!isMobile && (
+        <Box
           sx={{
-            fontSize: "4rem",
-            color: "white",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            bgcolor: "rgba(0,0,0,0.2)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            opacity: 0,
+            transition: "opacity 0.3s ease",
+            "&:hover": {
+              opacity: 1,
+            },
+            willChange: "opacity",
           }}
-        />
-      </Box>
+          onClick={handleOpenPreview}
+        >
+          <SearchOutlinedIcon
+            sx={{
+              fontSize: "4rem",
+              color: "white",
+            }}
+          />
+        </Box>
+      )}
     </Box>
   );
 }

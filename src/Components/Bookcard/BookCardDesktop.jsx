@@ -1,5 +1,5 @@
 // React
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 
 // MUI components (direct imports)
 import Box from "@mui/material/Box";
@@ -9,6 +9,7 @@ import Chip from "@mui/material/Chip";
 import CardImage from "../Bookcard/Image";
 import BookCardContent from "../Bookcard/BookCardContent";
 import BookCardActionsBottom from "./BookcardActionButtons";
+
 
 
 const BookCardDesktop = React.memo(({
@@ -26,6 +27,10 @@ const BookCardDesktop = React.memo(({
   isAdding,
   clerk,
 }) => {
+
+  useEffect(() => {
+ console.log("isNew value:", book.isNew, typeof book.isNew);
+}, []);
   return (
     <>
       {/* Badges */}

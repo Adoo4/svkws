@@ -3,8 +3,6 @@ import React, { memo, useMemo, useCallback, lazy, Suspense } from "react";
 
 // MUI components
 import Card from "@mui/material/Card";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 
 // Router
 import { useNavigate } from "react-router-dom";
@@ -27,14 +25,32 @@ import BookCardSkeleton from "./BookCardSkeleton";
 const BookCardDesktop = lazy(() => import("./BookCardDesktop"));
 const BookCardMobile = lazy(() => import("./BookcardMobile"));
 
-const BookCard = ({ book, loading = false, toggleDrawer, setDrawerData, index }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+const DesktopBookCardContent = ({ sharedProps }) => {
   const { isSignedIn } = useUser();
-  const { enqueueSnackbar } = useSnackbar();
-  const { isAdding, addToCart } = useCart();
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const clerk = useClerk();
+  const { isAdding, addToCart } = useCart();
+
+  return (
+    <BookCardDesktop
+      {...sharedProps}
+      isSignedIn={isSignedIn}
+      addToCart={addToCart}
+      isAdding={isAdding}
+      clerk={clerk}
+    />
+  );
+};
+
+const BookCard = ({
+  book,
+  loading = false,
+  toggleDrawer,
+  setDrawerData,
+  index,
+  isMobile = false,
+}) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const navigate = useNavigate();
 
   // Check if the book is in the wishlist
@@ -91,12 +107,9 @@ const BookCard = ({ book, loading = false, toggleDrawer, setDrawerData, index })
     mainCategory,
     handleWishlistClick,
     openDetails,
-    isSignedIn,
-    addToCart,
-    isAdding,
-    clerk,
-    toggleDrawer, 
-    setDrawerData
+    toggleDrawer,
+    setDrawerData,
+    isMobile,
   };
 
   // Render skeleton if loading
@@ -105,7 +118,11 @@ const BookCard = ({ book, loading = false, toggleDrawer, setDrawerData, index })
   return (
     <Card elevation={0} sx={(theme) => cardStyle(inWishlist, theme)}>
       <Suspense fallback={<BookCardSkeleton />}>
-        {isMobile ? <BookCardMobile {...sharedProps} /> : <BookCardDesktop {...sharedProps} />}
+        {isMobile ? (
+          <BookCardMobile {...sharedProps} />
+        ) : (
+          <DesktopBookCardContent sharedProps={sharedProps} />
+        )}
       </Suspense>
     </Card>
   );

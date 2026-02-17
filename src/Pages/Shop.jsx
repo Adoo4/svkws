@@ -68,6 +68,10 @@ const CategoryMenu = ({
   removeFromWishlist,
 }) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"), {
+    noSsr: true,
+  });
+
   const {
     books,
     isLoading,
@@ -80,7 +84,7 @@ const CategoryMenu = ({
     setOrder,
     page,
     setPage,
-  } = useBooks(); // no args unless you want initialFilters or limit
+  } = useBooks({}, isMobile ? 12 : 20);
 
   const [drawerData, setDrawerData] = useState(null);
   const [open, setOpen] = useState(false);
@@ -96,10 +100,6 @@ const CategoryMenu = ({
   const FloatingMenuButton = lazy(
     () => import("../Components/FloatingMenuButton"),
   );
-
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"), {
-    noSsr: true,
-  });
 
   useEffect(() => {
     if (!isMobile) {

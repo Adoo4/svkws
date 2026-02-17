@@ -1,15 +1,59 @@
-// BookCardSkeleton.jsx
+// BookCardSkeletonResponsive.jsx
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import { useTheme, useMediaQuery } from "@mui/material";
 
+const BookCardSkeletonResponsive = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-const BookCardSkeleton = () => {
-  const badges = [8, 34]; // top positions for badges
-  const textLines = [0.9, 0.75]; // width ratios for title
-  const descLines = [0.95, 0.85]; // width ratios for description
+  if (isMobile) {
+    // Mobile skeleton matches BookCardMobile layout
+    return (
+      <Card
+        elevation={0}
+        sx={{
+          borderRadius: 2,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          background: "transparent",
+          position: "relative",
+          padding: 1,
+        }}
+      >
+        {/* Badges */}
+        <Box sx={{ position: "absolute", top: 8, left: 8, display: "flex", flexDirection: "column", gap: 0.5, zIndex: 2 }}>
+          <Skeleton variant="rounded" width={36} height={18} />
+          <Skeleton variant="rounded" width={36} height={18} />
+        </Box>
 
+        {/* Cover */}
+        <Skeleton variant="rectangular" sx={{ width: "100%", height: 200 }} />
+
+        {/* Content */}
+        <CardContent sx={{ p: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Skeleton variant="text" height={18} width="80%" />
+          <Skeleton variant="text" height={14} width="60%" />
+          <Skeleton variant="text" height={14} width="70%" />
+
+          {/* Price + Stock */}
+          <Stack direction="row" justifyContent="space-between" mt={1}>
+            <Skeleton variant="text" height={20} width="40%" />
+            <Skeleton variant="rounded" height={22} width={50} />
+          </Stack>
+
+          {/* Details Button */}
+          <Skeleton variant="rounded" height={36} width="100%" sx={{ mt: 1 }} />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Desktop skeleton
   return (
     <Card
       elevation={0}
@@ -20,11 +64,11 @@ const BookCardSkeleton = () => {
         flexDirection: "column",
         background: "transparent",
         position: "relative",
-        padding: 2
+        padding: 2,
       }}
     >
       {/* Badges */}
-      {badges.map((top, idx) => (
+      {[8, 34].map((top, idx) => (
         <Skeleton
           key={idx}
           variant="rounded"
@@ -41,35 +85,28 @@ const BookCardSkeleton = () => {
       />
 
       <CardContent sx={{ p: 1, display: "flex", flexDirection: "column", gap: 0 }}>
-        {/* Title */}
-        {textLines.map((w, idx) => (
+        {[0.9, 0.75].map((w, idx) => (
           <Skeleton key={idx} variant="text" height={22} width={`${w * 100}%`} />
         ))}
 
-        {/* Author */}
         <Skeleton variant="text" height={14} width="60%" />
 
-        {/* Stock + Wishlist */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center"  sx={{marginTop:2}}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: 2 }}>
           <Skeleton variant="rounded" width={90} height={18} />
           <Skeleton variant="circular" width={26} height={26} />
         </Stack>
 
-        {/* Category chip */}
         <Skeleton variant="rounded" width={110} height={20} />
 
-        {/* Description */}
-        {descLines.map((w, idx) => (
+        {[0.95, 0.85].map((w, idx) => (
           <Skeleton key={idx} variant="text" height={14} width={`${w * 100}%`} />
         ))}
 
-        {/* Price */}
         <Stack spacing={0.5} mt={1}>
           <Skeleton variant="text" height={26} width="45%" />
           <Skeleton variant="text" height={12} width="60%" />
         </Stack>
 
-        {/* Action buttons */}
         <Stack direction="row" spacing={1} mt={1}>
           <Skeleton variant="rounded" height={36} width="100%" />
           <Skeleton variant="rounded" height={36} width="100%" />
@@ -79,4 +116,4 @@ const BookCardSkeleton = () => {
   );
 };
 
-export default BookCardSkeleton;
+export default BookCardSkeletonResponsive;

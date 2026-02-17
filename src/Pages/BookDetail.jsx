@@ -167,7 +167,7 @@ const stockState =
         sx={{
           width: "100%",
           minHeight: "100vh",
-          background: "#313131",
+          background: "#262626",
           p: { xs: 2, md: 4 },
         }}
       >
@@ -222,7 +222,7 @@ const stockState =
               flexDirection: { xs: "column", md: "row" },
               borderRadius: "20px",
               overflow: "hidden",
-              bgcolor: "#313131",
+              bgcolor: "#262626",
               color: "#f9f9f9",
             }}
             elevation={0}
@@ -246,19 +246,22 @@ const stockState =
               {/* Title & Chips */}
             <Box
   display="flex"
-  alignItems="center"
+  flexDirection="column"
+ 
+  alignItems="start"
   gap={1.5}
   flexWrap="wrap"
-  mb={2}
+  mb={2}    
+  
 >
   <Typography
     variant="h5"
     fontWeight="bold"
-    sx={{ fontSize: { xs: "1.3rem", md: "2rem" } }}
+    sx={{  fontSize: { xs: "1.3rem", md: "2rem" } }}
   >
     {book.title}
   </Typography>
-
+<Box display="flex" gap={1} flexWrap="wrap" sx={{ mt: 1 }}>
   {/* Common chip style */}
   {book.isNew && (
   <Chip
@@ -327,7 +330,7 @@ const stockState =
     boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
   }}
 />
-
+</Box>
 
 
                 
@@ -338,7 +341,7 @@ const stockState =
               {/* Author */}
               <Typography
                 variant="subtitle1"
-                sx={{ fontSize: { xs: "0.9rem", md: "1rem" }, color: "#ccc" }}
+                sx={{ marginTop: 3, fontSize: { xs: "0.9rem", md: "1rem" }, color: "#ccc" }}
               >
                 Autor: {book.author}
               </Typography>
