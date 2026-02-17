@@ -36,6 +36,7 @@ import useCart from "../Utils.js/useCart";
 
 import SEO from "../Utils.js/SEO";
 import useBookBySlug from "../Utils.js/useBookBySlug";
+import { getImageUrl, getImageSrcSet, toHttpsUrl } from "../Utils.js/imageUrl";
 
 export default function BookDetail() {
   const { slug } = useParams();
@@ -71,6 +72,9 @@ export default function BookDetail() {
   } = useWishlist();
 
   if (!book) return null;
+  const bookCover = getImageUrl(book.coverImage, { width: 420 }) || "/fallback-cover.jpg";
+  const bookCoverSrcSet = getImageSrcSet(book.coverImage, [240, 360, 480, 640, 800]);
+  const seoImage = toHttpsUrl(book.coverImage) || "/og-image.png";
 
   const LOW_STOCK_THRESHOLD = 5;
 
@@ -93,7 +97,7 @@ const stockState =
     name: book.title,
     author: book.author,
     isbn: book.isbn,
-    image: book.coverImage || "/og-image.png",
+    image: seoImage,
     publisher: book.publisher,
     datePublished: book.publicationYear,
     numberOfPages: book.pages,
@@ -158,7 +162,7 @@ const stockState =
         title={`${book.title} - ${book.author} | MyBookStore`}
         description={`${book.title} od ${book.author}, ${book.pages} stranica, ${book.language}. Kupite online po najboljim cijenama!`}
         url={window.location.href}
-        ogImage={book.coverImage || "/og-image.png"}
+        ogImage={seoImage}
         type="book"
         jsonLd={[jsonLdBook, jsonLdBreadcrumb]}
       />
@@ -230,8 +234,13 @@ const stockState =
             {/* Cover */}
             <CardMedia
               component="img"
-              image={book.coverImage || "/fallback-cover.jpg"}
+              image={bookCover}
+              srcSet={bookCoverSrcSet}
+              sizes="(max-width: 900px) 92vw, 350px"
               alt={`Cover of "${book.title}" by ${book.author}`}
+              loading="eager"
+              fetchpriority="high"
+              imgProps={{ width: 350, height: 500, decoding: "async" }}
               sx={{
                 width: { xs: "100%", md: 350 },
                 height: { xs: 500, md: "auto" },

@@ -25,6 +25,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useWishlist } from '../Utils.js/useWishlist';
+import { getImageUrl } from '../Utils.js/imageUrl';
 
 
 const WishlistDrawer = ({ open, onClose, addToCart }) => {
@@ -69,6 +70,7 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
       <List sx={{ mt: 1 }}>
         {wishlist.map((book) => {
           const hasDiscount = book.discountAmount > 0;
+          const coverSrc = getImageUrl(book.coverImage, { width: 180 });
 
           return (
             <ListItem
@@ -88,7 +90,7 @@ const WishlistDrawer = ({ open, onClose, addToCart }) => {
               <ListItemAvatar>
                 <Avatar
                   variant="square"
-                  src={book.coverImage}
+                  src={coverSrc || "/fallback-cover.jpg"}
                   alt={book.title}
                   onClick={() => {
                     navigate(`/books/${book.slug}${window.location.search}`, {

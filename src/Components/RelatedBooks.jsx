@@ -17,6 +17,7 @@ import { useTheme } from "@mui/material/styles";
 
 // Local
 import useRelatedBooks from "../Utils.js/useRelatedBooks";
+import { getImageUrl, getImageSrcSet } from "../Utils.js/imageUrl";
 
 const RelatedBooksSwiper = lazy(() => import("./RelatedBooksSwiper"));
 
@@ -38,8 +39,12 @@ const SkeletonCard = memo(() => (
 // ----------------------
 // Single Book Card (Grid fallback)
 // ----------------------
-const RelatedBookCard = memo(({ book, onClick }) => (
-  <Card
+const RelatedBookCard = memo(({ book, onClick }) => {
+  const image = getImageUrl(book.coverImage, { width: 300 });
+  const srcSet = getImageSrcSet(book.coverImage, [160, 240, 320, 480]);
+
+  return (
+    <Card
     sx={{
       bgcolor: "#313131",
       color: "#fff",
@@ -64,7 +69,9 @@ const RelatedBookCard = memo(({ book, onClick }) => (
     <Box sx={{ width: "100%", aspectRatio: "3 / 4" }}>
       <CardMedia
         component="img"
-        image={book.coverImage || "/fallback-cover.jpg"}
+        image={image || "/fallback-cover.jpg"}
+        srcSet={srcSet}
+        sizes="(max-width: 600px) 44vw, (max-width: 1200px) 220px, 260px"
         alt={book.title || "Book cover"}
         loading="lazy"
         imgProps={{ width: 260, height: 346, decoding: "async" }}
@@ -79,8 +86,9 @@ const RelatedBookCard = memo(({ book, onClick }) => (
         {book.author}
       </Typography>
     </CardContent>
-  </Card>
-));
+    </Card>
+  );
+});
 
 // ----------------------
 // Main Component

@@ -13,6 +13,7 @@ import useCart from "../Utils.js/useCart";
 import CheckoutStepper from "../Components/CheckoutStepper";
 import axios from "axios";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
+import { getImageUrl } from "../Utils.js/imageUrl";
 
 export default function CheckoutPage() {
  
@@ -204,6 +205,7 @@ useEffect(() => {
               const { book, quantity } = item;
               const validDiscount =
                 book.discount?.amount > 0 && book.discountedPrice < book.price;
+              const coverSrc = getImageUrl(book.coverImage, { width: 140 });
 if (isLoading) {
   return <Typography sx={{ mt: 10, textAlign: "center" }}>Učitavanje korpe...</Typography>;
 }
@@ -224,7 +226,7 @@ if (isLoading) {
                   <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
                     <ListItemAvatar>
                       <Avatar
-                        src={book.coverImage}
+                        src={coverSrc || "/placeholder-book.png"}
                         variant="square"
                         sx={{
                           height: 110,

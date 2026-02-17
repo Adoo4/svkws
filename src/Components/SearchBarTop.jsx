@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDebounce } from '../Utils.js/useDebounce';
 import { SignedIn } from '@clerk/clerk-react';
+import { getImageUrl } from '../Utils.js/imageUrl';
 
 
 const ICON_BOX_SX = {
@@ -39,6 +40,7 @@ const ICON_BOX_SX = {
 };
 
 const SuggestionItem = React.memo(({ book, setDrawerData, toggleDrawer, navigate, addToCart }) => {
+  const thumbSrc = getImageUrl(book.coverImage, { width: 80 });
   const handleNavigate = () => {
     navigate(`/books/${book.slug}${window.location.search}`, {
       state: { book, category: book.subCategory },
@@ -54,7 +56,7 @@ const SuggestionItem = React.memo(({ book, setDrawerData, toggleDrawer, navigate
     <ListItem button key={book._id || book.isbn} role="option" onClick={handleDrawer}>
       <ListItemAvatar>
         <Avatar
-          src={book.coverImage || "/placeholder.png"}
+          src={thumbSrc || "/placeholder.png"}
           variant="square"
           sx={{ width: 40, height: 56, objectFit: "contain" }}
           imgProps={{ loading: "lazy", width: 40, height: 56, decoding: "async" }}

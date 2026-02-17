@@ -22,6 +22,8 @@ const BookCardSkeletonResponsive = () => {
           flexDirection: "column",
           background: "transparent",
           position: "relative",
+          minWidth: "175px",
+          maxWidth: "29vw",
           padding: 1,
         }}
       >

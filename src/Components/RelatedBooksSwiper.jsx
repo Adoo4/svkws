@@ -13,9 +13,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import "../Style/RelatedBooksSwiper.css";
+import { getImageUrl, getImageSrcSet } from "../Utils.js/imageUrl";
 
-const RelatedBookCard = memo(({ book, onClick }) => (
-  <Card
+const RelatedBookCard = memo(({ book, onClick }) => {
+  const image = getImageUrl(book.coverImage, { width: 300 });
+  const srcSet = getImageSrcSet(book.coverImage, [160, 240, 320, 480]);
+
+  return (
+    <Card
     sx={{
       bgcolor: "#313131",
       color: "#fff",
@@ -40,7 +45,9 @@ const RelatedBookCard = memo(({ book, onClick }) => (
     <Box sx={{ width: "100%", aspectRatio: "3 / 4" }}>
       <CardMedia
         component="img"
-        image={book.coverImage || "/fallback-cover.jpg"}
+        image={image || "/fallback-cover.jpg"}
+        srcSet={srcSet}
+        sizes="(max-width: 600px) 44vw, (max-width: 1200px) 220px, 260px"
         alt={book.title || "Book cover"}
         loading="lazy"
         imgProps={{ width: 260, height: 346, decoding: "async" }}
@@ -56,7 +63,8 @@ const RelatedBookCard = memo(({ book, onClick }) => (
       </Typography>
     </CardContent>
   </Card>
-));
+  );
+});
 
 const RelatedBooksSwiper = ({ books }) => {
   const navigate = useNavigate();

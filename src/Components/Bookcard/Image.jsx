@@ -2,6 +2,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Box from "@mui/material/Box";
 
 import { SearchOutlined as SearchOutlinedIcon } from "@mui/icons-material";
+import { getImageUrl, getImageSrcSet } from "../../Utils.js/imageUrl";
 
 export default function CardImage({
   book,
@@ -10,8 +11,10 @@ export default function CardImage({
   index = 0,
   isMobile = false,
 }) {
-  const eagerCount = isMobile ? 3 : 5;
+  const eagerCount = isMobile ? 1 : 2;
   const isEager = index < eagerCount;
+  const coverSrc = getImageUrl(book?.coverImage, { width: isMobile ? 320 : 420 });
+  const coverSrcSet = getImageSrcSet(book?.coverImage);
 
   const handleOpenPreview = (e) => {
     setDrawerData(book);
@@ -22,11 +25,17 @@ export default function CardImage({
     <Box sx={{ position: "relative" }}>
       <CardMedia
         component="img"
-        image={book?.coverImage}
+        image={coverSrc || "/fallback-cover.jpg"}
+        srcSet={coverSrcSet}
+        sizes="(max-width: 600px) 42vw, (max-width: 1200px) 220px, 260px"
         alt={book.title}
         loading={isEager ? "eager" : "lazy"}
         fetchpriority={isEager ? "high" : "auto"}
         decoding="async"
+        imgProps={{
+          width: isMobile ? 175 : 260,
+          height: isMobile ? 250 : 346,
+        }}
         sx={{
           height: { xs: 250, sm: 200, md: 290 },
           objectFit: "contain",

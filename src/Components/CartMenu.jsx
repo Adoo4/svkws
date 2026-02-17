@@ -23,6 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 // Other libraries/hooks
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { getImageUrl } from '../Utils.js/imageUrl';
 
 
 export default function CartMenu({
@@ -96,6 +97,7 @@ export default function CartMenu({
           cart?.items.map(({ book, quantity, itemTotal }) => {
             const hasDiscount =
               book.discount?.amount > 0 && book.discountedPrice < book.mpc;
+            const coverSrc = getImageUrl(book.coverImage, { width: 180 });
 
             return (
               <ListItem
@@ -107,7 +109,7 @@ export default function CartMenu({
                 <ListItemAvatar>
                   <Avatar
                     variant="square"
-                    src={book.coverImage}
+                    src={coverSrc || "/fallback-cover.jpg"}
                     alt={book.title}
                     onClick={() => {
                       navigate(`/books/${book.slug}${window.location.search}`, {

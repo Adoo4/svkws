@@ -14,6 +14,7 @@ import { useTempOrder } from "../Utils.js/useTempOrder";
 import { useAuth } from "@clerk/clerk-react";
 import { Checkbox, FormControlLabel, Link } from "@mui/material";
 import { useState } from "react";
+import { getImageUrl } from "../Utils.js/imageUrl";
 
 export default function ReviewStep({
   cart = { items: [] },
@@ -203,6 +204,7 @@ export default function ReviewStep({
             {cart.items.map((item, index) => {
               if (!item.book) return null;
               const book = item.book;
+              const coverSrc = getImageUrl(book.coverImage, { width: 120 });
 
               return (
                 <React.Fragment key={book._id}>
@@ -215,7 +217,7 @@ export default function ReviewStep({
 >
   <Box
     component="img"
-    src={book.coverImage || "/placeholder-book.png"}
+    src={coverSrc || "/placeholder-book.png"}
     alt={`Knjiga: ${book.title}`}
     sx={{
       width: "100px",        // fiksna širina

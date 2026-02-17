@@ -16,7 +16,7 @@ const Home = () => {
   useEffect(()=>{
     
      window.scrollTo(0, 0); // scroll to top
-  })
+  }, [])
   return(
     
     <Box sx={{ minHeight: "100lvh", background: "black" }}>
