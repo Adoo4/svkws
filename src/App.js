@@ -7,6 +7,7 @@ import {
 import { useEffect, useState, lazy, Suspense } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Footer from "./Components/Footer";
+import Shop from "./Pages/Shop";
 import AuthRedirect from "./Components/AuthRedirect";
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import { SnackbarProvider } from "notistack";
@@ -17,7 +18,6 @@ import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js";
 
 const Home = lazy(() => import("./Pages/Home"));
-const Shop = lazy(() => import("./Pages/Shop"));
 const CartMenu = lazy(() => import("./Components/CartMenu"));
 const WishlistDrawer = lazy(() => import("./Components/WishlistDrawer"));
 const CheckoutPage = lazy(() => import("./Pages/Checkout"));
@@ -107,16 +107,14 @@ function App() {
               <Route
                 path="/shop"
                 element={
-                  <Lazy>
-                    <Shop
-                      setCartMenu={setCartMenu}
-                      wishlist={wishlist}
-                      addToWishlist={addToWishlist}
-                      removeFromWishlist={removeFromWishlist}
-                      addToCart={addToCart}
-                      isAdding={isAdding}
-                    />
-                  </Lazy>
+                  <Shop
+                    setCartMenu={setCartMenu}
+                    wishlist={wishlist}
+                    addToWishlist={addToWishlist}
+                    removeFromWishlist={removeFromWishlist}
+                    addToCart={addToCart}
+                    isAdding={isAdding}
+                  />
                 }
               />
               <Route
