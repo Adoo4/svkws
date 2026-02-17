@@ -1,10 +1,10 @@
 
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import Iconlist from '../Components/Home Components/Iconlist';
 import '@fontsource/anton';
 import '@fontsource/playfair-display/400-italic.css';
-import Loading from '../Components/Loading';
+
 
 import Carousel from '../Components/Carousel/Carousel';
 
