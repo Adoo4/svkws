@@ -1,4 +1,5 @@
 import { memo, useMemo, useCallback } from "react";
+import { useSnackbar } from "notistack";
 
 // MUI components
 import Box from "@mui/material/Box";
@@ -23,13 +24,41 @@ const ProductGallery = ({
   totalPages = 1,
   currentPage = 1,
   setPage,
+  wishlist = [],
+  addToWishlist,
+  removeFromWishlist,
+  addToCart,
+  isAdding,
 }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const itemsPerPage = isSmallScreen ? 12 : 20;
+  const { enqueueSnackbar } = useSnackbar();
 
   // Memoized list of books
   const displayedBooks = useMemo(() => books || [], [books]);
+  const wishlistIds = useMemo(
+    () => new Set((wishlist || []).map((item) => item._id)),
+    [wishlist],
+  );
+
+  const handleWishlistToggle = useCallback(
+    (book, inWishlist) => {
+      if (!book?._id) return;
+      if (inWishlist) {
+        removeFromWishlist?.(book._id);
+        enqueueSnackbar(`${book.title} uklonjena iz liste zelja.`, {
+          variant: "info",
+        });
+      } else {
+        addToWishlist?.(book);
+        enqueueSnackbar(`${book.title} dodana u listu zelja!`, {
+          variant: "success",
+        });
+      }
+    },
+    [addToWishlist, removeFromWishlist, enqueueSnackbar],
+  );
 
   // Callback to render a single book card
   const renderBookCard = useCallback(
@@ -53,10 +82,22 @@ const ProductGallery = ({
         setDrawerData={setDrawerData}
         index={index}
         isMobile={isSmallScreen}
+        inWishlistFromParent={wishlistIds.has(book._id)}
+        onWishlistToggle={handleWishlistToggle}
+        addToCartFromParent={addToCart}
+        isAddingFromParent={isAdding}
       />
     </Grid>
   ),
-  [toggleDrawer, setDrawerData, isSmallScreen]
+  [
+    toggleDrawer,
+    setDrawerData,
+    isSmallScreen,
+    wishlistIds,
+    handleWishlistToggle,
+    addToCart,
+    isAdding,
+  ]
 );
 
 

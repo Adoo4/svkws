@@ -1,7 +1,10 @@
 import { Box, Chip, Typography, Button } from "@mui/material";
 import CardImage from "../Bookcard/Image";
-import WishlistButton from "./WishlistButton";
 import React, { memo } from "react";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import { SignedIn } from "@clerk/clerk-react";
+import { BookmarkBorder, Bookmark } from "@mui/icons-material";
 
 import Battery0BarOutlinedIcon from "@mui/icons-material/Battery0BarOutlined";
 import Battery2BarOutlinedIcon from "@mui/icons-material/Battery0BarOutlined";
@@ -108,12 +111,19 @@ const BookCardMobile = ({
             >
               {book.title}
             </Typography>
-            {/* Wishlist button */}
-            <WishlistButton
-              inWishlist={inWishlist}
-              handleWishlistClick={handleWishlistClick}
-              openDetails={openDetails}
-            />
+            <SignedIn>
+              <Tooltip
+                title={inWishlist ? "Ukloni iz liste zelja" : "Dodaj u listu zelja"}
+              >
+                <IconButton onClick={handleWishlistClick} size="small" sx={{ p: 0.5 }}>
+                  {inWishlist ? (
+                    <Bookmark sx={{ fontSize: "1.6rem" }} color="error" />
+                  ) : (
+                    <BookmarkBorder sx={{ fontSize: "1.6rem", color: "#262626" }} />
+                  )}
+                </IconButton>
+              </Tooltip>
+            </SignedIn>
           </Box>
 
           {/* Author */}

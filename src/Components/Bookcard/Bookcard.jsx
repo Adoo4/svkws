@@ -7,16 +7,11 @@ import Card from "@mui/material/Card";
 // Router
 import { useNavigate } from "react-router-dom";
 
-// Notifications
-import { useSnackbar } from "notistack";
-
 // Auth
 import { useUser, useClerk } from "@clerk/clerk-react";
 
 // Utilities
 import { kategorijeMap } from "../../Utils.js/kategorijeMap";
-import { useWishlist } from "../../Utils.js/useWishlist";
-import useCart from "../../Utils.js/useCart";
 
 // Local components/styles
 import { cardStyle } from "./cardstyle";
@@ -28,14 +23,13 @@ const BookCardMobile = lazy(() => import("./BookcardMobile"));
 const DesktopBookCardContent = ({ sharedProps }) => {
   const { isSignedIn } = useUser();
   const clerk = useClerk();
-  const { isAdding, addToCart } = useCart();
 
   return (
     <BookCardDesktop
       {...sharedProps}
       isSignedIn={isSignedIn}
-      addToCart={addToCart}
-      isAdding={isAdding}
+      addToCart={sharedProps.addToCartFromParent}
+      isAdding={sharedProps.isAddingFromParent}
       clerk={clerk}
     />
   );
@@ -48,48 +42,35 @@ const BookCard = ({
   setDrawerData,
   index,
   isMobile = false,
+  inWishlistFromParent = false,
+  onWishlistToggle,
+  addToCartFromParent,
+  isAddingFromParent = false,
 }) => {
-  const { enqueueSnackbar } = useSnackbar();
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const navigate = useNavigate();
+  const inWishlist = Boolean(inWishlistFromParent);
 
-  // Check if the book is in the wishlist
-  const inWishlist = useMemo(() => wishlist.some((item) => item._id === book._id), [
-    wishlist,
-    book._id,
-  ]);
-
-  // Wishlist handler
   const handleWishlistClick = useCallback(
     (e) => {
       e.stopPropagation();
-      if (inWishlist) {
-        removeFromWishlist(book._id);
-        enqueueSnackbar(`${book.title} uklonjena iz liste želja.`, { variant: "info" });
-      } else {
-        addToWishlist(book);
-        enqueueSnackbar(`${book.title} dodana u listu želja!`, { variant: "success" });
-      }
+      onWishlistToggle?.(book, inWishlist);
     },
-    [inWishlist, book, addToWishlist, removeFromWishlist, enqueueSnackbar]
+    [onWishlistToggle, book, inWishlist],
   );
 
-  // Navigate to book details
   const openDetails = useCallback(() => {
     navigate(`/books/${book.slug}${window.location.search}`, {
       state: { book, category: book.subCategory },
     });
   }, [book, navigate]);
 
-  // Discount check
   const hasDiscount = useMemo(
     () =>
       book.discount?.amount > 0 &&
       (!book.discount?.validUntil || new Date(book.discount.validUntil) > new Date()),
-    [book.discount]
+    [book.discount],
   );
 
-  // Category mapping
   const categoryMatch =
     kategorijeMap[book.mainCategory?.toLowerCase()] ||
     kategorijeMap[book.subCategory?.toLowerCase()] ||
@@ -97,7 +78,6 @@ const BookCard = ({
 
   const mainCategory = kategorijeMap[book.mainCategory?.toLowerCase()] || null;
 
-  // Shared props for Desktop/Mobile
   const sharedProps = {
     book,
     index,
@@ -110,9 +90,10 @@ const BookCard = ({
     toggleDrawer,
     setDrawerData,
     isMobile,
+    addToCartFromParent,
+    isAddingFromParent,
   };
 
-  // Render skeleton if loading
   if (loading) return <BookCardSkeleton />;
 
   return (
