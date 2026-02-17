@@ -7,11 +7,8 @@ import {
 import { useEffect, useState, lazy, Suspense } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import Footer from "./Components/Footer";
-import Shop from "./Pages/Shop";
 import AuthRedirect from "./Components/AuthRedirect";
-import CartMenu from "./Components/CartMenu";
 import { SignIn, SignUp } from "@clerk/clerk-react";
-import WishlistDrawer from "./Components/WishlistDrawer";
 import { SnackbarProvider } from "notistack";
 import AuthNotifier from "./Components/SignIn/AuthNotifier.jsx";
 import AdminRoute from "./admin/AdminRoute";
@@ -20,6 +17,9 @@ import useCart from "./Utils.js/useCart.js";
 import useWishlist from "./Utils.js/useWishlist.js";
 
 const Home = lazy(() => import("./Pages/Home"));
+const Shop = lazy(() => import("./Pages/Shop"));
+const CartMenu = lazy(() => import("./Components/CartMenu"));
+const WishlistDrawer = lazy(() => import("./Components/WishlistDrawer"));
 const CheckoutPage = lazy(() => import("./Pages/Checkout"));
 const BookDetail = lazy(() => import("./Pages/BookDetail"));
 const CompleteProfile = lazy(() => import("./Pages/CompleteProfile"));
@@ -107,14 +107,16 @@ function App() {
               <Route
                 path="/shop"
                 element={
-                  <Shop
-                    setCartMenu={setCartMenu}
-                    wishlist={wishlist}
-                    addToWishlist={addToWishlist}
-                    removeFromWishlist={removeFromWishlist}
-                    addToCart={addToCart}
-                    isAdding={isAdding}
-                  />
+                  <Lazy>
+                    <Shop
+                      setCartMenu={setCartMenu}
+                      wishlist={wishlist}
+                      addToWishlist={addToWishlist}
+                      removeFromWishlist={removeFromWishlist}
+                      addToCart={addToCart}
+                      isAdding={isAdding}
+                    />
+                  </Lazy>
                 }
               />
               <Route
@@ -239,20 +241,28 @@ function App() {
           <Footer />
         </div>
 
-        <CartMenu
-          cart={cart}
-          cartMenu={cartMenu}
-          setCartMenu={setCartMenu}
-          updateCartItem={updateCartItem}
-          removeCartItem={removeCartItem}
-          clearCart={clearCart}
-        />
+        {cartMenu && (
+          <Lazy>
+            <CartMenu
+              cart={cart}
+              cartMenu={cartMenu}
+              setCartMenu={setCartMenu}
+              updateCartItem={updateCartItem}
+              removeCartItem={removeCartItem}
+              clearCart={clearCart}
+            />
+          </Lazy>
+        )}
 
-        <WishlistDrawer
-          open={wishlistOpen}
-          onClose={() => setWishlistOpen(false)}
-          addToCart={addToCart}
-        />
+        {wishlistOpen && (
+          <Lazy>
+            <WishlistDrawer
+              open={wishlistOpen}
+              onClose={() => setWishlistOpen(false)}
+              addToCart={addToCart}
+            />
+          </Lazy>
+        )}
       </Router>
     </SnackbarProvider>
   );
