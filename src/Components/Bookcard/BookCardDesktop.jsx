@@ -28,9 +28,7 @@ const BookCardDesktop = React.memo(({
   clerk,
 }) => {
 
-  useEffect(() => {
- console.log("isNew value:", book.isNew, typeof book.isNew);
-}, []);
+
   return (
     <>
       {/* Badges */}
