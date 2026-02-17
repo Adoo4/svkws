@@ -1,4 +1,4 @@
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo, useCallback, useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 
 // MUI components
@@ -34,6 +34,7 @@ const ProductGallery = ({
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const itemsPerPage = isSmallScreen ? 12 : 20;
   const { enqueueSnackbar } = useSnackbar();
+  const [visibleMobileCount, setVisibleMobileCount] = useState(6);
 
   // Memoized list of books
   const displayedBooks = useMemo(() => books || [], [books]);
@@ -59,6 +60,41 @@ const ProductGallery = ({
     },
     [addToWishlist, removeFromWishlist, enqueueSnackbar],
   );
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!isSmallScreen) {
+      setVisibleMobileCount(displayedBooks.length);
+      return;
+    }
+
+    const initialCount = 6;
+    const chunkSize = 4;
+    const stepDelay = 60;
+
+    setVisibleMobileCount(Math.min(initialCount, displayedBooks.length));
+
+    if (displayedBooks.length <= initialCount) return;
+
+    let timeoutId;
+    const loadMore = (count) => {
+      if (count >= displayedBooks.length) return;
+      timeoutId = setTimeout(() => {
+        const next = Math.min(count + chunkSize, displayedBooks.length);
+        setVisibleMobileCount(next);
+        loadMore(next);
+      }, stepDelay);
+    };
+
+    loadMore(initialCount);
+
+    return () => clearTimeout(timeoutId);
+  }, [displayedBooks.length, isSmallScreen, loading]);
+
+  const booksToRender = isSmallScreen
+    ? displayedBooks.slice(0, visibleMobileCount)
+    : displayedBooks;
 
   // Callback to render a single book card
   const renderBookCard = useCallback(
@@ -171,7 +207,7 @@ const ProductGallery = ({
           columns={{ xs: 4, sm: 12, md: 12, lg: 4, xl: 5 }}
           justifyContent="center"
         >
-          {!loading && displayedBooks.length > 0 && displayedBooks.map(renderBookCard)}
+          {!loading && booksToRender.length > 0 && booksToRender.map(renderBookCard)}
         </Grid>
       </Box>
 

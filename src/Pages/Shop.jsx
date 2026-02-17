@@ -4,13 +4,16 @@ import { useTheme } from "@mui/material/styles";
 import ProductGallery from "../Components/ProductGallery";
 import Menu from "../Components/Menu/Menu";
 import SearchBarTop from "../Components/SearchBarTop";
-import AnchorTemporaryDrawer from "../Components/CardPreviewComponent";
 import BookSortBar from "../Components/BookSortBar";
 import useBooks from "../Utils.js/useBooks";
 import SEO from "../Utils.js/SEO";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { lazy, Suspense } from "react";
-import LeftDrawerMenu from "../Components/LeftDrawerMenu";
+
+const AnchorTemporaryDrawer = lazy(
+  () => import("../Components/CardPreviewComponent"),
+);
+const LeftDrawerMenu = lazy(() => import("../Components/LeftDrawerMenu"));
 
 /* =========================
    SX OBJECTS (OUTSIDE)
@@ -218,21 +221,29 @@ const CategoryMenu = ({
             CONDITIONAL OVERLAYS
            ========================= */}
 
-        <LeftDrawerMenu
-          open={leftDrawerOpen}
-          setOpen={setLeftDrawerOpen}
-          setFilter={setFilters}
-          filter={filters}
-          page={page}
-          setPage={setPage}
-        />
+        {(leftDrawerOpen || isMobile) && (
+          <Suspense fallback={null}>
+            <LeftDrawerMenu
+              open={leftDrawerOpen}
+              setOpen={setLeftDrawerOpen}
+              setFilter={setFilters}
+              filter={filters}
+              page={page}
+              setPage={setPage}
+            />
+          </Suspense>
+        )}
 
-        <AnchorTemporaryDrawer
-          open={open}
-          setOpen={setOpen}
-          toggleDrawer={toggleDrawer}
-          drawerData={drawerData}
-        />
+        {(open || drawerData) && (
+          <Suspense fallback={null}>
+            <AnchorTemporaryDrawer
+              open={open}
+              setOpen={setOpen}
+              toggleDrawer={toggleDrawer}
+              drawerData={drawerData}
+            />
+          </Suspense>
+        )}
 
         {isMobile && (
           <Suspense fallback={null}>
