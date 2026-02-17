@@ -1,5 +1,5 @@
 // React
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 
 // MUI components (direct imports)
 import Box from "@mui/material/Box";
