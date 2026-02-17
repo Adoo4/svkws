@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useAuth } from "@clerk/clerk-react";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import { useMemo } from "react";
 
 const useCart = () => {

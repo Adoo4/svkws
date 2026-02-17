@@ -44,9 +44,21 @@ const Lazy = ({ children }) => (
 );
 
 function App() {
-  const { cart, addToCart, updateCartItem, removeCartItem, clearCart, isAdding } =
-    useCart();
-  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const {
+    cart,
+    addToCart,
+    updateCartItem,
+    removeCartItem,
+    clearCart,
+    isAdding,
+    isLoading: isCartLoading,
+  } = useCart();
+  const {
+    wishlist,
+    addToWishlist,
+    removeFromWishlist,
+    isLoading: isWishlistLoading,
+  } = useWishlist();
   const [cartMenu, setCartMenu] = useState(false);
 
   // Keep localStorage in sync when wishlist changes
@@ -87,6 +99,9 @@ function App() {
         >
           <Navbar
             cart={cart}
+            wishlist={wishlist}
+            loadingCart={isCartLoading}
+            loadingWishlist={isWishlistLoading}
             setCartMenu={setCartMenu}
             setWishlistOpen={setWishlistOpen}
           />

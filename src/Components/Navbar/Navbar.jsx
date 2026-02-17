@@ -26,8 +26,6 @@ import Login from '@mui/icons-material/Login';
 
 // Local components/hooks
 import MobileMenu from '../Menu/MobileMenu';
-import useCart from '../../Utils.js/useCart';
-import { useWishlist } from '../../Utils.js/useWishlist';
 
 // ------------------------ Constants ------------------------
 const NAV_LINKS = [
@@ -87,12 +85,17 @@ const NavButton = React.memo(({ label, path, icon, isSelected, onClick }) => {
 });
 
 // ------------------------ Main Component ------------------------
-const ButtonAppBar = ({ cart, setCartMenu, setWishlistOpen }) => {
+const ButtonAppBar = ({
+  cart,
+  wishlist = [],
+  loadingCart = false,
+  loadingWishlist = false,
+  setCartMenu,
+  setWishlistOpen,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isLoaded } = useUser();
-  const { wishlist, isLoading: loadingWishlist } = useWishlist();
-  const { isLoading: loadingCart } = useCart();
   const [scrolled, setScrolled] = useState(false);
 
   // ------------------------ Scroll listener ------------------------

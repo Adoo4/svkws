@@ -26,7 +26,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDebounce } from '../Utils.js/useDebounce';
 import { SignedIn } from '@clerk/clerk-react';
-import useCart from '../Utils.js/useCart';
 
 
 const ICON_BOX_SX = {
@@ -87,11 +86,10 @@ const SuggestionItem = React.memo(({ book, setDrawerData, toggleDrawer, navigate
   );
 });
 
-const SearchBarTop = ({ setDrawerData, toggleDrawer }) => {
+const SearchBarTop = ({ setDrawerData, toggleDrawer, setCart }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
-  const { addToCart } = useCart();
 
   // ------------------- API call -------------------
   const fetchSuggestions = useCallback(async (value) => {
@@ -130,9 +128,9 @@ const SearchBarTop = ({ setDrawerData, toggleDrawer }) => {
       setDrawerData={setDrawerData}
       toggleDrawer={toggleDrawer}
       navigate={navigate}
-      addToCart={addToCart}
+      addToCart={setCart}
     />
-  )), [suggestions, setDrawerData, toggleDrawer, navigate, addToCart]);
+  )), [suggestions, setDrawerData, toggleDrawer, navigate, setCart]);
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", px: 2, mt: "4rem", flexDirection: "column", position: "relative" }}>
