@@ -116,22 +116,53 @@ const CategoryMenu = ({
      ========================= */
 
   const seoData = useMemo(() => {
+    const canonicalUrl = `${window.location.origin}/shop`;
     const title =
       filters.mainCategory || filters.subCategory
         ? `${filters.mainCategory ? filters.mainCategory + " - " : ""}${
             filters.subCategory || ""
-          } | Bookstore.ba`
-        : "Bookstore.ba";
+          } | Knjizare Bookstore.ba`
+        : "Online knjizara u BiH | Bookstore.ba";
 
-    const description = `Pronađite najbolje knjige iz ${
-      filters.mainCategory || "raznih kategorija"
-    }${filters.subCategory ? `, posebno ${filters.subCategory}` : ""}.`;
+    const description = `Kupite knjige online u Bosni i Hercegovini. ${
+      filters.mainCategory
+        ? `Pregledajte ponudu za kategoriju ${filters.mainCategory}.`
+        : "Brza dostava i sirok izbor naslova."
+    }${filters.subCategory ? ` Podkategorija: ${filters.subCategory}.` : ""}`;
+
+    const keywords = [
+      "knjizara bih",
+      "online knjizara bosna i hercegovina",
+      "kupovina knjiga online",
+      "bookstore ba",
+      filters.mainCategory,
+      filters.subCategory,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    const jsonLdCollection = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: title,
+      description,
+      inLanguage: "bs-BA",
+      url: canonicalUrl,
+      isPartOf: {
+        "@type": "WebSite",
+        name: "Bookstore.ba",
+        url: window.location.origin,
+      },
+      about: "Knjige i skolski pribor u Bosni i Hercegovini",
+    };
 
     return {
       title,
       description,
-      url: window.location.href,
+      keywords,
+      url: canonicalUrl,
       ogImage: "/og-image.png",
+      jsonLd: jsonLdCollection,
     };
   }, [filters.mainCategory, filters.subCategory]);
 

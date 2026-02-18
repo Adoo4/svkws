@@ -41,6 +41,7 @@ import { getImageUrl, getImageSrcSet, toHttpsUrl } from "../Utils.js/imageUrl";
 export default function BookDetail() {
   const { slug } = useParams();
   const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
+  const canonicalBookUrl = `${window.location.origin}/books/${slug}`;
 
   const { data: book, isLoading } = useBookBySlug(!isObjectId ? slug : null);
 
@@ -128,13 +129,13 @@ const stockState =
         "@type": "ListItem",
         position: 2,
         name: "Books",
-        item: `${window.location.origin}/books`,
+        item: `${window.location.origin}/shop`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: book.title,
-        item: window.location.href,
+        item: canonicalBookUrl,
       },
     ],
   };
@@ -161,7 +162,7 @@ const stockState =
       <SEO
         title={`${book.title} - ${book.author} | MyBookStore`}
         description={`${book.title} od ${book.author}, ${book.pages} stranica, ${book.language}. Kupite online po najboljim cijenama!`}
-        url={window.location.href}
+        url={canonicalBookUrl}
         ogImage={seoImage}
         type="book"
         jsonLd={[jsonLdBook, jsonLdBreadcrumb]}
