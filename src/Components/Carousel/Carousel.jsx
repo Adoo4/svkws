@@ -183,39 +183,62 @@ const Home = () => {
 
 
       {/* Social links: repositioned for better accessibility & predictable layout */}
-      <Stack
-        direction="column"
-        sx={{
-          position: "absolute",
-          top: "30%",
-          left: 0,
-          zIndex: 2,
-          color: "white",
-          p: 1,
-          borderRadius: "0 15px 15px 0",
-          backgroundColor: "#111",
-        }}
-        spacing={2}
-      >
-        <Link
-          href="https://www.facebook.com/knjizarasvjetlost"
-          target="_blank"
-          rel="noopener"
-          color="inherit"
-          aria-label="Facebook"
-        >
-          <Facebook />
-        </Link>
-        <Link
-          href="https://www.instagram.com/knjizaresvjetlost/"
-          target="_blank"
-          rel="noopener"
-          color="inherit"
-          aria-label="Instagram"
-        >
-          <Instagram />
-        </Link>
-      </Stack>
+    <Stack
+  direction="column"
+  sx={{
+    position: "absolute",
+    top: "30%",
+    left: 0,
+    zIndex: 2,
+    color: "white",
+    p: 1,
+    borderRadius: "0 15px 15px 0",
+    backgroundColor: "rgba(17, 17, 17, 0.8)", // semi-transparent
+  }}
+  spacing={2}
+>
+  <Link
+    href="https://www.facebook.com/knjizarasvjetlost"
+    target="_blank"
+    rel="noopener"
+    color="inherit"
+    aria-label="Facebook"
+  >
+    <Facebook
+      sx={{
+        fontSize: {xs:22, md: 25},
+        color: "#f9f9f9",
+        opacity: 0.7,
+        transition: "color 0.3s, opacity 0.3s",
+        "&:hover": {
+          color: "#1877F2", // Facebook blue
+          opacity: 1,
+        },
+      }}
+    />
+  </Link>
+
+  <Link
+    href="https://www.instagram.com/knjizaresvjetlost/"
+    target="_blank"
+    rel="noopener"
+    color="inherit"
+    aria-label="Instagram"
+  >
+    <Instagram
+      sx={{
+        fontSize: {xs:22, md: 25},
+        color: "#f9f9f9",
+        opacity: 0.7,
+        transition: "color 0.3s, opacity 0.3s",
+        "&:hover": {
+          color: "#E4405F", // Instagram pink/red
+          opacity: 1,
+        },
+      }}
+    />
+  </Link>
+</Stack>
 
       {/* Centered overlay text */}
       <Box

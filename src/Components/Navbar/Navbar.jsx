@@ -157,60 +157,21 @@ const ButtonAppBar = ({
               <NavButton key={link.path} {...link} isSelected={location.pathname === link.path} onClick={() => handleNav(link.path)} />
             ))}
 
-            <SignedIn>
+          <SignedIn>
   {/* Cart */}
-  {setCartMenu && (
-    <IconButton
-      aria-label="cart"
-      onClick={toggleCart}
-      sx={{ width: 40, height: 40 }} // reserve space
-    >
-      <Badge
-        badgeContent={cartItemCount || 0} // always reserve space
-        invisible={false} // never remove badge, just show 0
-        sx={{
-          "& .MuiBadge-badge": {
-            backgroundColor: "#d62d00",
-            color: "#fff",
-            fontWeight: "bold",
-            minWidth: 18,
-            height: 18,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            width: 24,
-            height: 24,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {loadingCart ? (
-            <CircularProgress size={20} sx={{ color: "#f9f9f9" }} />
-          ) : (
-            <ShoppingCartOutlined
-              sx={{
-                fontSize: { xs: "1.3rem", sm: "1.5rem" },
-                color: "#fff",
-                "&:hover": { color: "#d62d00" },
-              }}
-            />
-          )}
-        </Box>
-      </Badge>
-    </IconButton>
-  )}
-
-  {/* Wishlist */}
-  <IconButton aria-label="wishlist" onClick={toggleWishlist} sx={{ width: 40, height: 40 }}>
+ {/* Cart */}
+{setCartMenu && (
+  <IconButton
+    aria-label="cart"
+    onClick={toggleCart}
+    sx={{ width: 40, height: 40 }}
+  >
     <Badge
-      badgeContent={wishlistCount || 0} // reserve space
-      invisible={false} // never remove badge
+      badgeContent={cartItemCount || 0}
+      invisible={false}
       sx={{
         "& .MuiBadge-badge": {
-          backgroundColor: "#464646",
+          backgroundColor: "#d62d00",
           color: "#fff",
           fontWeight: "bold",
           minWidth: 18,
@@ -218,49 +179,83 @@ const ButtonAppBar = ({
         },
       }}
     >
-      <Box sx={{ position: "relative", width: 24, height: 24 }}>
-        <Bookmark
-          sx={{
-            fontSize: { xs: "1.3rem", sm: "1.5rem" },
-            color: "#fff",
-            visibility: wishlistCount > 0 ? "visible" : "hidden",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            "&:hover": { color: "#d62d00" },
-          }}
-        />
-        <BookmarkBorder
-          sx={{
-            fontSize: { xs: "1.3rem", sm: "1.5rem" },
-            color: "#fff",
-            visibility: wishlistCount === 0 ? "visible" : "hidden",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            "&:hover": { color: "#d62d00" },
-          }}
-        />
-        {loadingWishlist && (
-          <CircularProgress
-            size={20}
+      <Box
+        sx={{
+          width: 24,
+          height: 24,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {loadingCart ? (
+          <CircularProgress size={20} sx={{ color: "#f9f9f9" }} />
+        ) : (
+          <ShoppingCartOutlined
             sx={{
+              fontSize: { xs: "1.3rem", sm: "1.5rem" },
               color: "#fff",
-              position: "absolute",
-              top: 2,
-              left: 2,
+              "&:hover": { color: "#d62d00" },
             }}
           />
         )}
       </Box>
     </Badge>
   </IconButton>
+)}
+
+{/* Wishlist */}
+<IconButton aria-label="wishlist" onClick={toggleWishlist} sx={{ width: 40, height: 40 }}>
+  <Badge
+    badgeContent={wishlistCount || 0}
+    invisible={false}
+    sx={{
+      "& .MuiBadge-badge": {
+        backgroundColor: "#464646",
+        color: "#fff",
+        fontWeight: "bold",
+        minWidth: 18,
+        height: 18,
+      },
+    }}
+  >
+    <Box
+      sx={{
+        width: 24,
+        height: 24,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {loadingWishlist ? (
+        <CircularProgress size={20} sx={{ color: "#ffffff" }} />
+      ) : wishlistCount > 0 ? (
+        <Bookmark
+          sx={{
+            fontSize: { xs: "1.3rem", sm: "1.5rem" },
+            color: "#fff",
+            "&:hover": { color: "#d62d00" },
+          }}
+        />
+      ) : (
+        <BookmarkBorder
+          sx={{
+            fontSize: { xs: "1.3rem", sm: "1.5rem" },
+            color: "#fff",
+            "&:hover": { color: "#d62d00" },
+          }}
+        />
+      )}
+    </Box>
+  </Badge>
+</IconButton>
 
   {/* User */}
   <Box sx={{ ml: 0.5, width: 40, minWidth: 40 }}>
     <UserButton />
   </Box>
-</SignedIn>
+  </SignedIn>
 
 <SignedOut>
   <SignInButton mode="modal">

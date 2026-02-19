@@ -155,10 +155,49 @@ const SimpleFooter = () => {
           <Typography variant="body2" gutterBottom sx={{ color: "#f9f9f9", opacity: 0.7 }}>
             Pratite nas:
           </Typography>
-          <Stack direction="row" spacing={1.5}>
-            <Facebook sx={{ fontSize: 24, color: "#f9f9f9", opacity: 0.7 }} />
-            <Instagram sx={{ fontSize: 24, color: "#f9f9f9", opacity: 0.7 }} />
-          </Stack>
+       <Stack direction="row" spacing={1.5}>
+  <Link
+    href="https://www.facebook.com/knjizarasvjetlost"
+    target="_blank"
+    rel="noopener"
+    color="inherit"
+    aria-label="Facebook"
+  >
+    <Facebook
+      sx={{
+        fontSize: 24,
+        color: "#f9f9f9",
+        opacity: 0.7,
+        transition: "color 0.3s",
+        "&:hover": {
+          color: "#1877F2", // Facebook blue
+          opacity: 1,
+        },
+      }}
+    />
+  </Link>
+
+  <Link
+    href="https://www.instagram.com/knjizaresvjetlost/"
+    target="_blank"
+    rel="noopener"
+    color="inherit"
+    aria-label="Instagram"
+  >
+    <Instagram
+      sx={{
+        fontSize: 24,
+        color: "#f9f9f9",
+        opacity: 0.7,
+        transition: "color 0.3s",
+        "&:hover": {
+          color: "#E4405F", // Instagram pink/red
+          opacity: 1,
+        },
+      }}
+    />
+  </Link>
+</Stack>
         </Grid>
       </Grid>
 
