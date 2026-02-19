@@ -9,10 +9,9 @@ import useBooks from "../Utils.js/useBooks";
 import SEO from "../Utils.js/SEO";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { lazy, Suspense } from "react";
+import AnchorTemporaryDrawer from "../Components/CardPreviewComponent";
 
-const AnchorTemporaryDrawer = lazy(
-  () => import("../Components/CardPreviewComponent"),
-);
+
 const LeftDrawerMenu = lazy(() => import("../Components/LeftDrawerMenu"));
 
 /* =========================
@@ -268,14 +267,14 @@ const CategoryMenu = ({
         )}
 
         {(open || drawerData) && (
-          <Suspense fallback={null}>
+         
             <AnchorTemporaryDrawer
               open={open}
               setOpen={setOpen}
               toggleDrawer={toggleDrawer}
               drawerData={drawerData}
             />
-          </Suspense>
+          
         )}
 
         {isMobile && (

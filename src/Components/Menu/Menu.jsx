@@ -91,7 +91,7 @@ const SubcategoryItem = React.memo(
     };
 
     return (
-      <Grid item xs={6}>
+      <Grid item xs={6} >
         <ListItemButton sx={sx} selected={selectedIndex === idx} onClick={handleClick}>
           <ListItemText
             primary={<Typography sx={textSx}>{pod}</Typography>}
@@ -273,6 +273,7 @@ const SelectedListItem = ({ filter, setFilter, setPage }) => {
         pt: "1rem",
         pr: "0.5rem",
         background: "transparent",
+        zIndex: 200,
       }}
     >
       <Box sx={scrollBoxSx}>

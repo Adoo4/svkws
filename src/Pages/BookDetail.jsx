@@ -37,6 +37,10 @@ import useCart from "../Utils.js/useCart";
 import SEO from "../Utils.js/SEO";
 import useBookBySlug from "../Utils.js/useBookBySlug";
 import { getImageUrl, getImageSrcSet, toHttpsUrl } from "../Utils.js/imageUrl";
+import {
+  localBusinessJsonLd,
+  organizationJsonLd,
+} from "../Utils.js/seoBusinessData";
 
 export default function BookDetail() {
   const { slug } = useParams();
@@ -165,7 +169,7 @@ const stockState =
         url={canonicalBookUrl}
         ogImage={seoImage}
         type="book"
-        jsonLd={[jsonLdBook, jsonLdBreadcrumb]}
+        jsonLd={[organizationJsonLd, localBusinessJsonLd, jsonLdBook, jsonLdBreadcrumb]}
       />
 
       <Box

@@ -17,7 +17,6 @@ import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 
 // React Router
 import { useNavigate } from 'react-router-dom';
-import { getImageUrl, getImageSrcSet } from "../Utils.js/imageUrl";
 
 
 
@@ -25,8 +24,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
 
    const navigate = useNavigate()
   if (!drawerData) return null;
-  const coverSrc = getImageUrl(drawerData.coverImage, { width: 420 });
-  const coverSrcSet = getImageSrcSet(drawerData.coverImage, [240, 360, 480, 640]);
+ 
 
  
 
@@ -40,7 +38,7 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
         direction: "left",
         timeout: { enter: 250, exit: 200 },
       }}
-      ModalProps={{ keepMounted: true }}
+      
       transitionDuration={{ enter: 250, exit: 200 }}
       PaperProps={{
         sx: {
@@ -67,14 +65,12 @@ export default function AnchorTemporaryDrawer({ toggleDrawer, open, drawerData }
         }}
       >
         <img
-          src={coverSrc || "/fallback-cover.jpg"}
-          srcSet={coverSrcSet}
-          sizes="(max-width: 600px) 220px, 300px"
-          alt={drawerData.title || "Book Cover"}
-          width="300"
-          height="450"
-          loading="lazy"
-          decoding="async"
+        
+           src={drawerData.coverImage}
+
+         alt={drawerData.title || "Book Cover"}
+        
+      
           style={{
             width: "100%",
             height: "100%",
