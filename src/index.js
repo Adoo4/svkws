@@ -35,7 +35,7 @@ root.render(
   <HelmetProvider>
    <ClerkProvider
   publishableKey={clerkKey}
-  frontendApi={clerkFrontendApi}
+
   localization={customHr}
 >
       <QueryClientProvider
