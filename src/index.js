@@ -6,7 +6,7 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { hrHR } from "@clerk/localizations";
 import { HelmetProvider } from "react-helmet-async";
-c
+
 
 const clerkKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
