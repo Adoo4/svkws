@@ -7,15 +7,20 @@ import debounce from "lodash/debounce";
 import { useMemo, useState, useCallback } from "react";
 
 const useCart = () => {
+
+  
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { isSignedIn, getToken } = useAuth();
   const [pendingAddBookIds, setPendingAddBookIds] = useState(() => new Set());
 
+  
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["cart"],
     queryFn: async () => {
       const token = await getToken({ template: "backend" });
+      console.log("Cart fetch token:", token);
       const res = await axios.get(
         "https://backendsvkwbshp.onrender.com/api/cart",
         { headers: { Authorization: `Bearer ${token}` } },
@@ -27,6 +32,7 @@ const useCart = () => {
     refetchOnReconnect: false,
     enabled: isSignedIn,
   });
+  
 
   const addMutation = useMutation({
     mutationFn: async ({ book }) => {
