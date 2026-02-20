@@ -6,7 +6,7 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { hrHR } from "@clerk/localizations";
 import { HelmetProvider } from "react-helmet-async";
-
+const clerkFrontendApi = process.env.REACT_APP_CLERK_FRONTEND_API;
 
 const clerkKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
@@ -35,7 +35,7 @@ root.render(
   <HelmetProvider>
    <ClerkProvider
   publishableKey={clerkKey}
-
+  frontendApi={clerkFrontendApi}
   localization={customHr}
 >
       <QueryClientProvider
