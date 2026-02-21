@@ -28,7 +28,7 @@ if (!clerkKey) {
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
-console.log("CLERK KEY:", clerkKey);
+
 
 
 root.render(

@@ -13,7 +13,6 @@ export const useTempOrder = () => {
     mutationFn: async (tempOrder) => {
       // get Clerk JWT token for backend auth
       const token = await getToken({ template: "backend" });
-console.log("ORDER TOKEN:", token);
       const { data } = await axios.post(
         "https://backendsvkwbshp.onrender.com/api/order/create-temp",
         tempOrder,

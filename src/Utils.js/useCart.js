@@ -20,7 +20,6 @@ const useCart = () => {
     queryKey: ["cart"],
     queryFn: async () => {
       const token = await getToken({ template: "backend" });
-      console.log("Cart fetch token:", token);
       const res = await axios.get(
         "https://backendsvkwbshp.onrender.com/api/cart",
         { headers: { Authorization: `Bearer ${token}` } },
