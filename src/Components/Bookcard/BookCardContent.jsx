@@ -112,16 +112,27 @@ const BookCardContent = memo(({
 
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", width: "100%", gap: 0.5 }}>
         <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", alignItems: "center", maxWidth: { xs: "70%", sm: "80%", md: "85%" }, overflow: "hidden" }}>
-          {categoryMatch && (
-            <Box sx={xsCategoryBoxSx(categoryMatch.boja)}>
-              <Box sx={{ display: "flex", alignItems: "center", fontSize: { xs: "0.75rem", md: "0.85rem" }, color: categoryMatch.boja }}>
-                {matchedCategory?.ikona || <ImportContactsIcon sx={{ fontSize: "0.85rem" }} />}
-              </Box>
-              <Typography component="span" sx={xsCategoryTextSx}>
-                {book.subCategory?.split(" ")[0]}
-              </Typography>
-            </Box>
-          )}
+          {book.subCategory && (
+  <Typography
+    sx={{
+      fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.8rem" },
+      color: categoryMatch?.boja,
+      mb: 0.4,
+      fontWeight: 600,
+      lineHeight: 1.2,
+      display: "-webkit-box",
+      WebkitLineClamp: 1,
+      WebkitBoxOrient: "vertical",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      width: "100%",
+      whiteSpace: "normal",
+    }}
+    title={book.subCategory}
+  >
+    {book.subCategory}
+  </Typography>
+)}
 
           {mainCategory && (
             <Box sx={smCategoryWrapperSx}>

@@ -273,7 +273,7 @@ const SelectedListItem = ({ filter, setFilter, setPage }) => {
         pt: "1rem",
         pr: "0.5rem",
         background: "transparent",
-        zIndex: 200,
+       
       }}
     >
       <Box sx={scrollBoxSx}>

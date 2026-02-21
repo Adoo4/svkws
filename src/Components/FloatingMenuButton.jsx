@@ -39,7 +39,7 @@ const FloatingFilterButton = ({ toggleDrawer2, leftDrawerOpen }) => {
         position: "fixed",
         bottom: hidden ? "-80px" : "20px",
         right: "20px",
-        zIndex: 9999,
+        zIndex: 50,
         transition: "bottom 0.35s ease",
         display: { xs: "block", lg: "none" }, // mobile only
       }}

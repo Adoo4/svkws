@@ -54,7 +54,7 @@ export default function FixedBottomNavigation({ toggleDrawer2, leftDrawerOpen,  
 }, []);
 
   return (
-    <Box sx={{ pb: 3, zIndex: "99", display: { xs: "flex", lg: "none" } }} ref={ref}>
+    <Box sx={{ pb: 3, zIndex: "3", display: { xs: "flex", lg: "none" } }} ref={ref}>
       <CssBaseline />
 
     <Paper
