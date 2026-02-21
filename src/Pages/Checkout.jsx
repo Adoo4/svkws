@@ -116,7 +116,7 @@ useEffect(() => {
 
       const form = document.createElement("form");
       form.method = "POST";
-      form.action = "https://ipgtest.monri.com/v2/form";
+      form.action = "https://ipg.monri.com/v2/form";
 
       Object.entries(formData).forEach(([key, value]) => {
         const input = document.createElement("input");
