@@ -21,7 +21,7 @@ const CardPicker = ({
       id: "cash",
       label: "Pouzećem",
       description: "Plaćanje gotovinom pri preuzimanju paketa",
-      disabled: true,
+      disabled: false,
     },
 
     {
