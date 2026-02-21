@@ -199,7 +199,7 @@ export default function CheckoutStepper({
               id: "bhposta",
               label: "BH Pošta (BiH)",
               description: "Dostava putem BH pošte unutar BiH",
-              price: "7 KM",
+              price: "8 KM",
               disabled: false,
             },
             {
