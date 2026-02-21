@@ -215,7 +215,7 @@ export default function CheckoutStepper({
               description:
                 "Bez dodatnih troškova. Preuzmite pošiljku u jednoj od naših podružnica i to u vremenu od 8:00 do 16:00 radnim danom ili subotom",
               price: "USKORO",//"0,00 KM",
-              disabled: false,
+              disabled: true,
             },
           ].map((option) => (
             <Paper
