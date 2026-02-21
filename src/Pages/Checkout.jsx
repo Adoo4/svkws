@@ -43,7 +43,7 @@ const { user } = useUser();
 
 const deliveryPrices = useMemo(
   () => ({
-    bhposta: 7,
+    bhposta: 8,
     brzapošta: 10,
     storepickup: 0,
   }),
