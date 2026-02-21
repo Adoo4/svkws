@@ -7,12 +7,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 
-// MUI icons (direct imports)
-import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+
 
 // Local components/utilities
 import WishlistButton from "./WishlistButton";
-import kategorije from "../../Utils.js/kategorije";
+
 
 
 /* =========================
@@ -34,23 +33,7 @@ const titleSx = (inWishlist) => ({
 const authorSx = { display: "block", fontSize: { xs: "0.65rem", md: "0.75rem" }, color: "#555", fontWeight: 500, mb: 0.4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" };
 const rowSx = { display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", mt: 0.5 };
 const quantityChipSx = { fontSize: "0.70rem", height: 18, px: 0.5 };
-const xsCategoryBoxSx = (color) => ({
-  display: { xs: "flex", md: "none" },
-  alignItems: "center",
-  width: "fit-content",
-  maxWidth: "100%",
-  gap: 0.6,
-  px: 1,
-  py: 0.15,
-  borderRadius: "999px",
-  bgcolor: `${color}20`,
-  backdropFilter: "blur(4px)",
-  border: `1px solid ${color}50`,
-  color,
-  boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
-  overflow: "hidden",
-});
-const xsCategoryTextSx = { fontSize: "0.65rem", fontWeight: 300, color: "#262626", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 120 };
+
 const smCategoryWrapperSx = { display: { xs: "none", md: "flex" }, alignItems: "center", gap: 0.2, color: "white", flexWrap: "wrap" };
 const smCategoryTextSx = (inWishlist) => ({ fontWeight: 400, fontSize: "0.6rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", color: inWishlist ? "#f1f1f1" : "#262626" });
 const descriptionSx = (inWishlist) => ({
@@ -83,12 +66,7 @@ const BookCardContent = memo(({
 }) => {
   const displayPrice = useMemo(() => hasDiscount ? book.discountedPrice : book.mpc, [hasDiscount, book]);
 
-  const matchedCategory = useMemo(
-    () => kategorije.find(
-      (k) => k.naziv === book.mainCategory || k.podkategorije?.includes(book.subCategory)
-    ),
-    [book]
-  );
+ 
 
   return (
     <CardContent sx={cardContentSx}>
