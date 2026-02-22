@@ -270,7 +270,7 @@ const SelectedListItem = ({ filter, setFilter, setPage }) => {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        pt: "1rem",
+        pt: {xs: "1rem", md: "0rem"},
         pr: "0.5rem",
         background: "transparent",
        

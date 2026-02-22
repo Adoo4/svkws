@@ -81,6 +81,7 @@ const kategorije = ([
       "Astrofizika",
       "Religija i duhovnost",
       "Politika i društvo",
+      "Popularna psihologija",
     ],
   },
   {
