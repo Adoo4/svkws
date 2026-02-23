@@ -51,8 +51,8 @@ export default function BookDetail() {
 
   // Scroll to top on component mount
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, []);
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+}, [slug, ])
 
   // Redirect old ID URLs → slug
   useEffect(() => {
