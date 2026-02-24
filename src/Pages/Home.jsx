@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import Iconlist from '../Components/Home Components/Iconlist';
 import '@fontsource/anton';
 import '@fontsource/playfair-display/400-italic.css';
+import {RamadanPromotion} from '../Components/KurancasniPromo';
 
 
 import Carousel from '../Components/Carousel/Carousel';
@@ -37,6 +38,7 @@ const Home = () => {
       <Box sx={{ minHeight: "100lvh", background: "black" }}>
         <Carousel />
         <Iconlist />
+        <RamadanPromotion/>
       </Box>
     </>
   )
