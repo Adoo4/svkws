@@ -1,4 +1,4 @@
-import  { useState} from "react";
+import  { useState, useEffect} from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stepper from "@mui/material/Stepper";
@@ -18,6 +18,17 @@ import {
 import ReviewStep from "./ReviewStep4";
 import PersonalInfoAndData from "./PersonalInfoAndData1";
 
+
+
+  const patterns = {
+  fullName: /^[A-Za-zÀ-ž]+ [A-Za-zÀ-ž]+(?: [A-Za-zÀ-ž]+)*$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[0-9]{8,12}$/,
+  address: /^[A-Za-z0-9čšđžćČŠĐŽĆ\s,./-]{3,}$/,
+  city: /^[A-Za-zÀ-ž\s]{2,}$/,
+  zip: /^[0-9]{4,10}$/,
+};
+
 export default function CheckoutStepper({
   shipping,
   handleChange,
@@ -30,6 +41,9 @@ export default function CheckoutStepper({
   setTotals,
   orderNumber
 }) {
+
+ 
+
   const steps = [
     "Podaci za dostavu",
     "Načini dostave",
@@ -49,14 +63,22 @@ export default function CheckoutStepper({
   const [completed, setCompleted] = useState({});
 
   // Regex patterns for validation
-  const patterns = {
-    fullName: /^[A-Za-zÀ-ž]+ [A-Za-zÀ-ž]+(?: [A-Za-zÀ-ž]+)*$/,
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    phone: /^[0-9]{8,12}$/,
-    address: /^[A-Za-z0-9čšđžćČŠĐŽĆ\s,./-]{3,}$/,
-    city: /^[A-Za-zÀ-ž\s]{2,}$/,
-    zip: /^[0-9]{4,10}$/,
-  };
+
+
+ useEffect(() => {
+  const newValid = {};
+
+  Object.keys(patterns).forEach((field) => {
+    if (shipping[field]) {
+      newValid[field] = patterns[field].test(shipping[field]);
+    }
+  });
+
+  setValid((prev) => ({
+    ...prev,
+    ...newValid,
+  }));
+}, [shipping]);
 
  
 
@@ -215,7 +237,7 @@ export default function CheckoutStepper({
               description:
                 "Bez dodatnih troškova. Preuzmite pošiljku u jednoj od naših podružnica i to u vremenu od 8:00 do 16:00 radnim danom ili subotom",
               price: "USKORO",//"0,00 KM",
-              disabled: true,
+              disabled: false,
             },
           ].map((option) => (
             <Paper
