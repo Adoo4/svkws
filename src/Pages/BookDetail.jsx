@@ -176,7 +176,7 @@ const stockState =
         sx={{
           width: "100%",
           minHeight: "100vh",
-          background: "#262626",
+         background: "linear-gradient(360deg,#313131 0%, rgba(38, 38, 38, 1) 50%, rgb(0, 0, 0) 100%)",
           p: { xs: 2, md: 4 },
         }}
       >
@@ -231,7 +231,7 @@ const stockState =
               flexDirection: { xs: "column", md: "row" },
               borderRadius: "20px",
               overflow: "hidden",
-              bgcolor: "#262626",
+              bgcolor: "transparent",
               color: "#f9f9f9",
             }}
             elevation={0}

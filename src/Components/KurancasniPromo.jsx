@@ -86,7 +86,7 @@ export function RamadanPromotion() {
                 color: 'rgba(184, 134, 11, 0.7)',
                 fontSize: '0.75rem',
                 letterSpacing: '0.15em',
-                mb: {xs:2, md:4},
+                mb: {xs:0, md:2},
                 display: 'block',
               }}
             >

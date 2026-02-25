@@ -70,7 +70,7 @@ function ShareButton() {
   });
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="end" gap={0.5} backgroundColor="#212121" p={1} borderRadius="35px">
+    <Box display="flex" alignItems="center" width="100%" justifyContent="end" gap={0.3} backgroundColor="#111111" p={0.5} borderRadius="35px">
       {/* Native Share */}
       <Tooltip title="Share">
         <IconButton
