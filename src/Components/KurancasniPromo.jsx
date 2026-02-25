@@ -99,13 +99,13 @@ export function RamadanPromotion() {
               sx={{
                 color: '#fff',
                 mb: 1.5,
-                fontSize: { xs: '1.75rem', md: '3rem' },
+                fontSize: { xs: '1.55rem', md: '2rem' },
                 fontWeight: 400,
                 letterSpacing: '-0.01em',
                 lineHeight: 1.2,
               }}
             >
-              Kur'an Časni
+              Kur'an Časni, drugo izdanje
             </Typography>
 
             <Typography
