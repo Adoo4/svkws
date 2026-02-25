@@ -24,7 +24,7 @@ export function RamadanPromotion() {
         width: '100%',
         py: { xs: 10, md: 14 },
         position: 'relative',
-        background: 'radial-gradient(ellipse at center, rgb(10, 7, 3) 0%, rgba(0,0,0,1) 100%)',
+         background: "linear-gradient(360deg,#313131 0%, rgba(38, 38, 38, 1) 50%, rgb(0, 0, 0) 100%)",
       }}
     >
       <Container maxWidth="lg">
@@ -143,6 +143,7 @@ export function RamadanPromotion() {
               >
                 Prijevod s arapskog jezika
               </Typography>
+              <Box>
               <Typography
                 variant="h4"
                 sx={{
@@ -164,7 +165,9 @@ export function RamadanPromotion() {
               >
                 akademik, orijentalista
               </Typography>
+              </Box>
             </Box>
+
 
             {/* Description */}
             <Typography
