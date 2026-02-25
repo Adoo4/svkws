@@ -194,7 +194,7 @@ export function RamadanPromotion() {
               }}
             >
               Ovo nije samo prijevod, već svjedočanstvo jednog života posvećenog 
-              proučavanju i tumačenju Kur'ana — trajni doprinos bosanskoj kulturnoj i 
+              proučavanju i tumačenju Kur'ana, trajni doprinos bosanskoj kulturnoj i 
               duhovnoj baštini.
             </Typography>
 
