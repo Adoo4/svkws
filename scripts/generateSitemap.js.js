@@ -4,7 +4,8 @@ const path = require("path");
 const axios = require("axios");
 const { SitemapStream, streamToPromise } = require("sitemap");
 
-const BASE_URL = "https://www.bookstore.ba"; // Your live domain
+// ✅ Use non-www as canonical
+const BASE_URL = "https://bookstore.ba"; // preferred non-www domain
 
 // Static pages
 const staticPages = [
@@ -26,9 +27,9 @@ const staticPages = [
   "/admin"
 ];
 
-// Fetch all books from your API
+// Fetch all books from API
 async function fetchAllBooks() {
-  const limit = 1000; // max books per request
+  const limit = 1000;
   let page = 1;
   let allBooks = [];
   let totalPages = 1;
@@ -64,20 +65,23 @@ async function generateSitemap() {
         url,
         changefreq: "weekly",
         priority: 0.8,
-        lastmod: today // optional: static pages updated today
+        lastmod: today
       })),
 
-      // Books
+      // Dynamic book pages
       ...books
-        .filter((b) => b.slug) // skip books without slug
+        .filter((b) => b.slug)
         .map((book) => ({
           url: `/books/${book.slug}`,
           changefreq: "weekly",
           priority: 0.9,
-          lastmod: book.lastmod ? new Date(book.lastmod).toISOString() : today
+          lastmod: book.lastmod
+            ? new Date(book.lastmod).toISOString()
+            : today
         }))
     ];
 
+    // Generate sitemap
     const sitemap = new SitemapStream({ hostname: BASE_URL });
     urls.forEach((u) => sitemap.write(u));
     sitemap.end();
@@ -87,6 +91,7 @@ async function generateSitemap() {
 
     fs.writeFileSync(outputPath, sitemapOutput.toString());
     console.log(`🌐 sitemap.xml generated at ${outputPath}`);
+    console.log("✅ All URLs use non-www canonical version!");
   } catch (err) {
     console.error("❌ Error generating sitemap:", err);
     process.exit(1);
