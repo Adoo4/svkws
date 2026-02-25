@@ -27,13 +27,13 @@ export function RamadanPromotion() {
          background: "linear-gradient(360deg,#313131 0%, rgba(38, 38, 38, 1) 50%, rgb(0, 0, 0) 100%)",
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           spacing={{ xs: 6, md: 8 }}
           alignItems="center"
           sx={{
-            maxWidth: '1200px',
+            maxWidth: '1500px',
             mx: 'auto',
           }}
         >
@@ -113,7 +113,7 @@ export function RamadanPromotion() {
               sx={{
                 color: 'rgba(255, 255, 255, 0.7)',
                 mb: {xs:2, md:4},
-                fontSize: { xs: '0.9rem', md: '1.35rem' },
+                fontSize: { xs: '0.9rem', md: '1.10rem' },
                 fontWeight: 300,
               }}
             >
