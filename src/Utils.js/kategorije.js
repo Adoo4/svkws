@@ -50,7 +50,8 @@ const kategorije = ([
       "Enciklopedije i priručnici",
       "Slikovnice",
       "Vjerske knjige za djecu",
-      "Bojanke"
+      "Bojanke",
+      "Edukativne igre"
     ],
   },
   {
@@ -62,6 +63,7 @@ const kategorije = ([
       "Ekonomija i biznis",
       "Psihologija",
       "Medicina",
+      "Monografija",
       "Tehnika i IT",
       "Prirodne nauke",
       "Društvene nauke",
