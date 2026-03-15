@@ -311,7 +311,7 @@ export default function CheckoutStepper({
                     >
                       {option.description}
                       {option.note && (
-                        <Typography variant="body2" sx={{ color: "text.secondary", mt: 1, fontSize: "0.75rem", color:"coral" }}>
+                        <Typography variant="body2" sx={{  mt: 1, fontSize: "0.75rem", color:"coral" }}>
                           {option.note}
                         </Typography>
                       )}
