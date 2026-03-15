@@ -236,7 +236,8 @@ export default function CheckoutStepper({
               label: "Preuzimanje u trgovini",
               description:
                 "Bez dodatnih troškova. Preuzmite pošiljku u jednoj od naših podružnica i to u vremenu od 8:00 do 16:00 radnim danom ili subotom",
-              price: "USKORO",//"0,00 KM",
+              note:"Preuzimanje se vrši u našoj trgovini na adresi: Maršala Tita br. 54, Knjižara br.1, Sarajevo",  
+              price: "BEZ TROŠKOVA",//"0,00 KM",
               disabled: false,
             },
           ].map((option) => (
@@ -309,6 +310,11 @@ export default function CheckoutStepper({
                       }}
                     >
                       {option.description}
+                      {option.note && (
+                        <Typography variant="body2" sx={{ color: "text.secondary", mt: 1 }}>
+                          {option.note}
+                        </Typography>
+                      )}
                     </Typography>
                   </Box>
                 </Box>
