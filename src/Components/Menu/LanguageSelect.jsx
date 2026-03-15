@@ -88,6 +88,9 @@ export default function LanguageSelect({ filter, setFilter, setPage }) {
           <MenuItem sx={{ fontSize: "0.75rem" }} value={"Bosanski"}>
             Bosanski
           </MenuItem>
+          <MenuItem sx={{ fontSize: "0.75rem" }} value={"Njemački"}>
+            Njemački
+          </MenuItem>
         </Select>
       </FormControl>
     </Box>
