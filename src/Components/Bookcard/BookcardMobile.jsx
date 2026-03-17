@@ -37,42 +37,43 @@ const BookCardMobile = ({
     <>
       {/* Badges */}
       <Box
-        sx={{
-          position: "absolute",
-          top: 8,
-          left: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          gap: 0.5,
-          zIndex: 2,
-        }}
-      >
-        {book.isNew && (
-          <Chip
-            label="Novo"
-            color="success"
-            size="small"
-            sx={{
-              fontSize: "0.6rem",
-              fontWeight: 600,
-              height: 20,
-            }}
-          />
-        )}
+  sx={{
+    position: "absolute",
+    top: 8,
+    left: 8,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start", // ← was flex-end
+    gap: 0.5,
+    zIndex: 2,
+  }}
+>
+       {book.isNew && (
+  <Chip
+    label="Novo"
+    color="success"
+    size="small"
+    sx={{ fontSize: "0.6rem", fontWeight: 600, height: 20 }}
+  />
+)}
 
-        {hasDiscount && (
-          <Chip
-            label={`-${book.discount.amount}%`}
-            color="error"
-            size="small"
-            sx={{
-              fontSize: "0.6rem",
-              fontWeight: 700,
-              height: 20,
-            }}
-          />
-        )}
+{hasDiscount && (
+  <Chip
+    label={`-${book.discount.amount}%`}
+    color="error"
+    size="small"
+    sx={{ fontSize: "0.6rem", fontWeight: 700, height: 20 }}
+  />
+)}
+
+{book.stockStatus === "preorder" && (
+  <Chip
+    label="Prednarudžba"
+    color="warning"
+    size="small"
+    sx={{ fontSize: "0.6rem", fontWeight: 600, height: 20 }}
+  />
+)}
       </Box>
 
       {/* Cover */}

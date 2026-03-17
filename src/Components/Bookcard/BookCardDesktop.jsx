@@ -33,18 +33,32 @@ const BookCardDesktop = React.memo(({
   return (
     <>
       {/* Badges */}
-      {book.isNew && (
-        <Chip label="Novo" color="success" size="small" sx={{ position: "absolute", top: 8, left: 8, zIndex:2 }} />
-      )}
+{book.isNew && (
+  <Chip label="Novo" color="success" size="small" sx={{ position: "absolute", top: 8, left: 8, zIndex: 2 }} />
+)}
 
-      {hasDiscount && (
-        <Chip
-          label={`-${book.discount.amount}%`}
-          color="error"
-          size="small"
-          sx={{ position: "absolute", top: book.isNew ? 36 : 8, left: 8, zIndex:2 }}
-        />
-      )}
+{hasDiscount && (
+  <Chip
+    label={`-${book.discount.amount}%`}
+    color="error"
+    size="small"
+    sx={{ position: "absolute", top: book.isNew ? 36 : 8, left: 8, zIndex: 2 }}
+  />
+)}
+
+{book.stockStatus === "preorder" && (
+  <Chip
+    label="Prednarudžba"
+    color="warning"
+    size="small"
+    sx={{
+      position: "absolute",
+      top: [book.isNew, hasDiscount].filter(Boolean).length * 28 + 8,
+      left: 8,
+      zIndex: 2,
+    }}
+  />
+)}
 
      
 
