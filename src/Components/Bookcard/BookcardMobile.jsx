@@ -3,8 +3,8 @@ import CardImage from "../Bookcard/Image";
 import React, { memo } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import { SignedIn } from "@clerk/clerk-react";
-import { BookmarkBorder, Bookmark } from "@mui/icons-material";
+import { SignedIn, useClerk, useUser } from "@clerk/clerk-react";
+import { BookmarkBorder, Bookmark, ShoppingCart, RemoveShoppingCart } from "@mui/icons-material";
 
 import Battery0BarOutlinedIcon from "@mui/icons-material/Battery0BarOutlined";
 import Battery2BarOutlinedIcon from "@mui/icons-material/Battery0BarOutlined";
@@ -21,10 +21,19 @@ const BookCardMobile = ({
   openDetails,
   setDrawerData,
   toggleDrawer,
+  addToCartFromParent,
+  isAddingFromParent = false,
+  isAddingBookFromParent,
 }) => {
+  const { isSignedIn } = useUser();
+  const clerk = useClerk();
   const finalPrice = hasDiscount ? book.discountedPrice : book.mpc;
 
   const LOW_STOCK_THRESHOLD = 5;
+  const outOfStock = book.onlineQuantity <= 0;
+  const isThisBookAdding = isAddingBookFromParent
+    ? isAddingBookFromParent(book._id)
+    : isAddingFromParent;
 
   const stockState =
     book.quantity === 0
@@ -300,19 +309,59 @@ const BookCardMobile = ({
 
       <Box sx={{ display: "flex", gap: 1 }}>
         <Button
-          variant="contained"
+          variant="outlined"
           size="small"
           fullWidth
           sx={{
             mt: 0,
-            backgroundColor: "#262626",
+            color: "#262626",
+            borderColor: "#262626",
             fontSize: "0.65rem",
             p: 0.5,
+            textTransform: "none",
+            "&:hover": { borderColor: "#d62d00", color: "#d62d00" },
           }}
           onClick={openDetails}
         >
           Detalji
         </Button>
+        <Tooltip
+          title={
+            !isSignedIn
+              ? "Morate biti prijavljeni da dodate knjige u korpu"
+              : outOfStock
+                ? "Knjiga trenutno nije dostupna online"
+                : ""
+          }
+          arrow
+        >
+          <span style={{ flex: 1 }}>
+            <Button
+              variant="contained"
+              size="small"
+              fullWidth
+              startIcon={outOfStock ? <RemoveShoppingCart /> : <ShoppingCart />}
+              disabled={isThisBookAdding || outOfStock}
+              sx={{
+                mt: 0,
+                backgroundColor: "#262626",
+                fontSize: "0.65rem",
+                p: 0.5,
+                textTransform: "none",
+                "&:hover": { backgroundColor: "#d62d00" },
+              }}
+              onClick={() => {
+                if (!isSignedIn) {
+                  clerk.openSignIn();
+                  return;
+                }
+                addToCartFromParent?.(book);
+              }}
+            >
+              Dodaj
+            </Button>
+          </span>
+        </Tooltip>
       </Box>
     </>
   );

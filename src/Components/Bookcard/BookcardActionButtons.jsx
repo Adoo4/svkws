@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { memo } from "react";
 import { useMemo, useCallback } from "react";
 
-
-import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 
 const BookCardActionsBottom = ({
   book,
@@ -18,45 +17,44 @@ const BookCardActionsBottom = ({
   clerk,
 }) => {
   const navigate = useNavigate();
-const outOfStock = useMemo(
-  () => book.onlineQuantity <= 0,
-  [book.onlineQuantity]
-);
+  const outOfStock = useMemo(
+    () => book.onlineQuantity <= 0,
+    [book.onlineQuantity],
+  );
 
-const cartIcon = useMemo(
-  () =>
-    !outOfStock ? (
-      <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
-    ) : (
-      <RemoveShoppingCartIcon />
-    ),
-  [outOfStock]
-);
+  const cartIcon = useMemo(
+    () =>
+      !outOfStock ? (
+        <ShoppingCartIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
+      ) : (
+        <RemoveShoppingCartIcon />
+      ),
+    [outOfStock],
+  );
 
-const tooltipTitle = useMemo(() => {
-  if (!isSignedIn) return "Morate biti prijavljeni da dodate knjige u korpu";
-  if (book.onlineQuantity === 0 && book.quantity > 0)
-    return "Knjiga nije dostupna online — dostupna u knjižari";
-  if (book.quantity === 0) return "Knjiga trenutno nije na stanju";
-  return "";
-}, [isSignedIn, book.onlineQuantity, book.quantity]);
+  const tooltipTitle = useMemo(() => {
+    if (!isSignedIn) return "Morate biti prijavljeni da dodate knjige u korpu";
+    if (book.onlineQuantity === 0 && book.quantity > 0)
+      return "Knjiga nije dostupna online — dostupna u knjižari";
+    if (book.quantity === 0) return "Knjiga trenutno nije na stanju";
+    return "";
+  }, [isSignedIn, book.onlineQuantity, book.quantity]);
 
+  const handleDetailsClick = useCallback(() => {
+    navigate(`/books/${book.slug}${window.location.search}`, {
+      state: { book, category: book.subCategory },
+    });
+  }, [book, navigate]);
 
-const handleDetailsClick = useCallback(() => {
-  navigate(`/books/${book.slug}${window.location.search}`, {
-    state: { book, category: book.subCategory },
-  });
-}, [book, navigate]);
+  const handleAddToCartClick = useCallback(() => {
+    if (!isSignedIn) {
+      clerk.openSignIn();
+    } else {
+      addToCart(book);
+    }
+  }, [isSignedIn, clerk, addToCart, book]);
 
-const handleAddToCartClick = useCallback(() => {
-  if (!isSignedIn) {
-    clerk.openSignIn();
-  } else {
-    addToCart(book);
-  }
-}, [isSignedIn, clerk, addToCart, book]);
-
-const isThisBookAdding = isAddingBook ? isAddingBook(book._id) : isAdding;
+  const isThisBookAdding = isAddingBook ? isAddingBook(book._id) : isAdding;
 
   return (
     <CardActions
@@ -77,11 +75,9 @@ const isThisBookAdding = isAddingBook ? isAddingBook(book._id) : isAdding;
       <Button
         variant="outlined"
         size="small"
-     onClick={ handleDetailsClick}
+        onClick={handleDetailsClick}
         startIcon={
-          <InfoOutlinedIcon
-            sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }}
-          />
+          <InfoOutlinedIcon sx={{ fontSize: { xs: "0.9rem", sm: "1.2rem" } }} />
         }
         sx={{
           flex: 1,
@@ -99,30 +95,29 @@ const isThisBookAdding = isAddingBook ? isAddingBook(book._id) : isAdding;
 
       {/* Add to Cart Button with Tooltip */}
       <Tooltip title={tooltipTitle} arrow>
-  <span>
-    <Button
-      variant="contained"
-      disabled={isThisBookAdding || outOfStock}
-      size="small"
-      onClick={handleAddToCartClick}
-      startIcon={cartIcon}
-      sx={{
-        flex: 1,
-        px: { xs: 1, sm: 1.5 },
-        fontSize: { xs: "0.60rem", sm: "0.7rem" },
-        borderRadius: "12px",
-        textTransform: "none",
-        bgcolor: "#313131",
-        color: "#fff",
-        "&:hover": { bgcolor: "#d62d00" },
-        boxShadow: "none",
-      }}
-    >
-      Dodaj
-    </Button>
-  </span>
-</Tooltip>
-
+        <span>
+          <Button
+            variant="contained"
+            disabled={isThisBookAdding || outOfStock}
+            size="small"
+            onClick={handleAddToCartClick}
+            startIcon={cartIcon}
+            sx={{
+              flex: 1,
+              px: { xs: 1, sm: 1.5 },
+              fontSize: { xs: "0.60rem", sm: "0.7rem" },
+              borderRadius: "12px",
+              textTransform: "none",
+              bgcolor: "#313131",
+              color: "#fff",
+              "&:hover": { bgcolor: "#d62d00" },
+              boxShadow: "none",
+            }}
+          >
+            Dodaj
+          </Button>
+        </span>
+      </Tooltip>
     </CardActions>
   );
 };
